@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Typography, withStyles, CardMedia } from "@material-ui/core";
+import { Hidden, Typography, withStyles, CardMedia } from "@material-ui/core";
 
 import notifications from "../../../../../../../stores/notifications";
 import Button from "../../../../../../elements/Button";
@@ -10,9 +10,21 @@ import ChildDialog from "./ChildDialog";
 import Container from "../../Container";
 import Loader from "../../../../../../elements/loaders/Loader";
 import user from "../../../../../../../stores/user";
+import {
+	fontFamilyDemiBold,
+	secondaryHex
+} from "../../../../../../../config/theme";
 
 const styles = theme => ({
-	root: {}
+	root: {},
+	pageTitle: {
+		fontFamily: fontFamilyDemiBold,
+		fontSize: theme.typography.fontSize * 1.75
+	},
+	mobilePageTitleContainer: {
+		marginTop: theme.spacing.unit * 2,
+		marginBottom: theme.spacing.unit * 2
+	}
 });
 
 class ChildrenList extends Component {
@@ -92,6 +104,20 @@ class ChildrenList extends Component {
 		});
 	}
 
+	renderDesktopHeadings() {
+		const ths = [
+			"Name",
+			"Code",
+			"Status",
+			"Total Held",
+			"Claimed",
+			"Remaining",
+			"Action"
+		];
+
+		return <HoldRow heading>{ths}</HoldRow>;
+	}
+
 	renderList() {
 		const { children, hoverId } = this.state;
 		const { classes } = this.props;
@@ -101,16 +127,6 @@ class ChildrenList extends Component {
 		}
 
 		if (children && children.length > 0) {
-			const ths = [
-				"Name",
-				"Code",
-				"Status",
-				"Total Held",
-				"Claimed",
-				"Remaining",
-				"Action"
-			];
-
 			const onAction = (id, action) => {
 				// if (action === "Edit") {
 				// 	this.setState({ activeHoldId: id, showDialog: true, holdType: HOLD_TYPES.EDIT })
@@ -122,7 +138,7 @@ class ChildrenList extends Component {
 
 			return (
 				<div>
-					<HoldRow heading>{ths}</HoldRow>
+					<Hidden smDown>{this.renderDesktopHeadings()}</Hidden>
 					{children.map((ticket, index) => {
 						const { id, name, redemption_code, quantity, available } = ticket;
 
@@ -198,32 +214,66 @@ class ChildrenList extends Component {
 		);
 	}
 
-	render() {
-		const { showDialog, holdDetails } = this.state;
+	renderMobileContent(createButtonsArray) {
+		const { holdDetails } = this.state;
 		const { classes } = this.props;
+		return (
+			<Container
+				eventId={this.eventId}
+				subheading={"tools"}
+				layout={"childrenOutsideNoCard"}
+			>
+				<div className={classes.mobilePageTitleContainer}>
+					<Typography className={classes.pageTitle}>
+						{holdDetails.name}
+					</Typography>
+				</div>
+				<div style={{ display: "flex" }}>{createButtonsArray}</div>
+				{this.renderList()}
+			</Container>
+		);
+	}
 
+	renderDesktopContent(createButtonsArray) {
+		const { holdDetails } = this.state;
 		return (
 			<Container
 				eventId={this.eventId}
 				subheading={"tools"}
 				layout={"childrenInsideCard"}
 			>
-				{showDialog && this.renderDialog()}
-
 				<div style={{ display: "flex" }}>
 					<Typography variant="title">{holdDetails.name}</Typography>
 					<span style={{ flex: 1 }}/>
-					{user.hasScope("hold:write") ? (
-						<Button onClick={e => this.onAddHold()}>Assign Name To List</Button>
-					) : (
-						<span/>
-					)}
+					{createButtonsArray}
 				</div>
 
 				<Divider style={{ marginBottom: 40 }}/>
 
 				{this.renderList()}
 			</Container>
+		);
+	}
+
+	render() {
+		const { showDialog } = this.state;
+
+		const createButtonsArray = [
+			user.hasScope("hold:write") ? (
+				<Button onClick={e => this.onAddHold()} variant={"secondary"}>
+					Assign Name To List
+				</Button>
+			) : (
+				<span/>
+			)
+		];
+
+		return (
+			<div>
+				{showDialog && this.renderDialog()}
+				<Hidden smDown>{this.renderDesktopContent(createButtonsArray)}</Hidden>
+				<Hidden mdUp>{this.renderMobileContent(createButtonsArray)}</Hidden>
+			</div>
 		);
 	}
 }
