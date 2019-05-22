@@ -192,6 +192,15 @@ class EventDashboardContainer extends Component {
 				) : (
 					<span/>
 				)}
+				{user.hasScope("event:write") ? (
+					<Link to={`/admin/events/${event.id}/marketing/facebook`}>
+						<MenuItem onClick={this.handleToolsMenuClose.bind(this)}>
+							Marketing - Facebook
+						</MenuItem>
+					</Link>
+				) : (
+					<span/>
+				)}
 				{user.hasScope("org:users") ? (
 					<Link to={`/admin/events/${event.id}/external-access`}>
 						<MenuItem onClick={this.handleToolsMenuClose.bind(this)}>

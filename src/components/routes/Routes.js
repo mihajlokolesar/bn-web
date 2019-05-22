@@ -382,7 +382,7 @@ class Routes extends Component {
 								/>
 								<PrivateRoute
 									exact
-									path="/admin/events/:id/dashboard/marketing/:type"
+									path="/admin/events/:id/marketing/:type"
 									component={AdminEventDashboardMarketing}
 									isAuthenticated={isAuthenticated}
 								/>

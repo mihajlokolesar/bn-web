@@ -21,7 +21,8 @@ class FacebookEvents extends Component {
 			pages: [],
 			pageId: null,
 			facebookCategory: null,
-			isSubmitting: false
+			isSubmitting: false,
+			facebookLinked: false
 		};
 	}
 
@@ -29,7 +30,7 @@ class FacebookEvents extends Component {
 		const { eventId } = this.props;
 
 		Bigneon()
-			.external.facebook.pages()
+			.external.facebookPages()
 			.then(response => this.setState({ pages: response.data }))
 			.catch(error => {
 				console.error(error);

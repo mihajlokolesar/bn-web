@@ -49,10 +49,8 @@ class Marketing extends Component {
 		let content;
 
 		switch (type) {
-			case "fb-events":
-				content = (
-					<FacebookEvents eventId={eventId}>FB here</FacebookEvents>
-				);
+			case "facebook":
+				content = <FacebookEvents eventId={eventId}>FB here</FacebookEvents>;
 				break;
 			default:
 				content = <Typography>Marketing unavailable.</Typography>;
