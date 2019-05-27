@@ -82,7 +82,7 @@ class FacebookButtonDisplay extends Component {
 
 		if (authenticated) {
 			Bigneon()
-				.external.facebookLogin(authResponse)
+				.external.facebookLogin({ linkToUserId: true, ...authResponse })
 				.then(response => {
 					this.setState({ isAuthenticating: false });
 
@@ -127,7 +127,7 @@ class FacebookButtonDisplay extends Component {
 	}
 
 	render() {
-		const { classes, children } = this.props;
+		const { classes, children, scopes } = this.props;
 		const { authenticated, isAuthenticating } = this.state;
 
 		let text = children || "Continue with facebook";
@@ -135,7 +135,7 @@ class FacebookButtonDisplay extends Component {
 		let onClick = () => {
 			this.setState({ isAuthenticating: true });
 			window.FB.login(this.onFBSignIn.bind(this), {
-				scope: "email"
+				scope: scopes || "email"
 			});
 		};
 
@@ -173,7 +173,9 @@ class FacebookButtonDisplay extends Component {
 FacebookButtonDisplay.propTypes = {
 	classes: PropTypes.object.isRequired,
 	children: PropTypes.string,
-	onSuccess: PropTypes.func.isRequired
+	onSuccess: PropTypes.func.isRequired,
+	scopes: PropTypes.string,
+	linkToUserId: PropTypes.bool
 };
 
 export const FacebookButton = withStyles(styles)(FacebookButtonDisplay);

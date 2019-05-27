@@ -8,6 +8,9 @@ import Loader from "../../../../../elements/loaders/Loader";
 import SelectGroup from "../../../../../common/form/SelectGroup";
 import Button from "../../../../../elements/Button";
 
+import notifications from "../../../../../../stores/notifications";
+import { FacebookButton } from "../../../../authentication/social/FacebookButton";
+
 const styles = theme => ({
 	root: {}
 });
@@ -22,18 +25,33 @@ class FacebookEvents extends Component {
 			pageId: null,
 			facebookCategory: null,
 			isSubmitting: false,
+			isRefreshing: true,
 			facebookLinked: false
 		};
 	}
 
 	componentDidMount() {
-		const { eventId } = this.props;
+		//const { eventId } = this.props;
+		this.onRefreshPages();
+	}
 
+	onRefreshPages() {
+		this.setState({ isRefreshing: true });
 		Bigneon()
 			.external.facebookPages()
-			.then(response => this.setState({ pages: response.data }))
+			.then(response =>
+				this.setState({
+					facebookLinked: true,
+					pages: response.data,
+					isRefreshing: false
+				})
+			)
 			.catch(error => {
-				console.error(error);
+				notifications.showFromErrorResponse({
+					defaultMessage: "Could not get pages.",
+					variant: "error"
+				});
+				this.setState({ facebookLinked: false, isRefreshing: false });
 			});
 		//If you need event details, use the eventId prop
 		// Bigneon()
@@ -57,33 +75,60 @@ class FacebookEvents extends Component {
 	}
 
 	render() {
-		const { pages, pageId, facebookCategory, isSubmitting } = this.state;
+		const {
+			pages,
+			pageId,
+			facebookCategory,
+			isSubmitting,
+			isRefreshing,
+			facebookLinked
+		} = this.state;
 
 		return (
 			<div>
-				<SelectGroup
-					items={pages.map(page => ({
-						value: page.id,
-						name: page.name
-					}))}
-					value={pageId}
-					onChange={e => this.setState({ pageId: e.target.value })}
-				/>
+				{isRefreshing ? (
+					<div>Checking Facebook link</div>
+				) : facebookLinked ? (
+					<div>
+						<Button
+							onClick={this.onRefreshPages.bind(this)}
+							disabled={isRefreshing}
+						>
+							Refresh pages
+						</Button>
+						<SelectGroup
+							items={pages.map(page => ({
+								value: page.id,
+								name: page.name
+							}))}
+							value={pageId}
+							onChange={e => this.setState({ pageId: e.target.value })}
+						/>
 
-				<SelectGroup
-					items={[{ value: "MUSIC_EVENT", name: "Music Event" }]}
-					value={facebookCategory}
-					onChange={e => this.setState({ facebookCategory: e.target.value })}
-				/>
-				<Button
-					size="large"
-					type="submit"
-					variant="callToAction"
-					onClick={this.onSubmit.bind(this)}
-					disabled={isSubmitting}
-				>
-					Publish
-				</Button>
+						<SelectGroup
+							items={[{ value: "MUSIC_EVENT", name: "Music Event" }]}
+							value={facebookCategory}
+							onChange={e =>
+								this.setState({ facebookCategory: e.target.value })
+							}
+						/>
+						<Button
+							size="large"
+							type="submit"
+							variant="callToAction"
+							onClick={this.onSubmit.bind(this)}
+							disabled={isSubmitting || isRefreshing}
+						>
+							Publish
+						</Button>
+					</div>
+				) : (
+					<div>
+						<FacebookButton scopes="email,pages_show_list">
+							Link Facebook
+						</FacebookButton>
+					</div>
+				)}
 			</div>
 		);
 	}
