@@ -17,6 +17,7 @@ import CheckBox from "../../elements/form/CheckBox";
 import DateFlag from "../../elements/event/DateFlag";
 import SupportingArtistsLabel from "../events/SupportingArtistsLabel";
 import nl2br from "../../../helpers/nl2br";
+import ellipsis from "../../../helpers/ellipsis";
 
 const styles = theme => ({
 	cardContent: {
@@ -414,7 +415,9 @@ class EventTicketsCard extends Component {
 								<Typography className={classes.topLineInfo}>
 									{nl2br(top_line_info)}
 								</Typography>
-								<Typography className={classes.eventName}>{name}</Typography>
+								<Typography className={classes.eventName}>
+									{ellipsis(name, 36)}
+								</Typography>
 								<Typography className={classes.date}>
 									{formattedDate}
 								</Typography>
