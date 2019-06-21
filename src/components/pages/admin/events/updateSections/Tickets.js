@@ -130,7 +130,13 @@ const formatForSaving = (ticketTypes, event) => {
 		}
 
 		let start_date = null;
-		if (!parentId && ticketTypeStartDate && ticketTypeStartDate.isValid()) {
+
+		if (
+			!parentId &&
+			isNaN(parentId) &&
+			ticketTypeStartDate &&
+			ticketTypeStartDate.isValid()
+		) {
 			start_date = ticketTypeStartDate
 				.utc()
 				.format(moment.HTML5_FMT.DATETIME_LOCAL_MS);

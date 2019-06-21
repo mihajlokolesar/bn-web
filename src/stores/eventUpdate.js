@@ -358,6 +358,10 @@ class EventUpdate {
 				);
 				if (!saveTicketResponse.result) {
 					return saveTicketResponse;
+				} else if (!ticketTypes[index].id) {
+					//Add the new ticket id to the current ticket type if it's a new ticket
+					//So if one ticket save fails it won't recreate the successfully saved ones
+					this.ticketTypes[index].id = saveTicketResponse.result.data.id;
 				}
 			}
 		}

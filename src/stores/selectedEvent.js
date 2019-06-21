@@ -153,6 +153,12 @@ class SelectedEvent {
 					this.privateAccessCodeError = private_access_code
 						? "Incorrect code."
 						: "";
+				} else if (
+					error.response &&
+					error.response.status &&
+					error.response.status === 404
+				) {
+					this.event = false;
 				} else {
 					onError(message);
 				}
