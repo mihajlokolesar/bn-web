@@ -575,7 +575,7 @@ class EventDashboardContainer extends Component {
 
 				{event ? (
 					<VisitEventPage
-						id={event.id}
+						id={event.slug || event.id}
 						style={{ marginTop: 40, marginBottom: 20 }}
 					/>
 				) : null}

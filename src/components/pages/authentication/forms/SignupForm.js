@@ -16,13 +16,9 @@ import Bigneon from "../../../../helpers/bigneon";
 import removePhoneFormatting from "../../../../helpers/removePhoneFormatting";
 import StyledLink from "../../../elements/StyledLink";
 import analytics from "../../../../helpers/analytics";
+import TermsAndConditionsLinks from "../TermsAndConditionsLinks";
 
-const styles = theme => ({
-	privacy: {
-		fontSize: theme.typography.fontSize * 0.8,
-		marginBottom: theme.spacing.unit
-	}
-});
+const styles = theme => ({});
 
 class SignupForm extends Component {
 	constructor(props) {
@@ -131,7 +127,7 @@ class SignupForm extends Component {
 					localStorage.setItem("refresh_token", refresh_token);
 
 					//Pull user data with our new token
-					user.refreshUser((newUser) => {
+					user.refreshUser(newUser => {
 						analytics.identify({ ...newUser, method: "signup" });
 
 						//If we have a security token, send them to the accept invite page first
@@ -221,13 +217,13 @@ class SignupForm extends Component {
 			errors
 		} = this.state;
 
-		const { classes } = this.props;
+		const { classes, hideTermsAndConditions } = this.props;
 
 		return (
 			<form noValidate autoComplete="off" onSubmit={this.onSubmit.bind(this)}>
 				<div>
 					<Grid container spacing={8}>
-						{process.env.REACT_APP_FACEBOOK_APP_ID ?  (
+						{process.env.REACT_APP_FACEBOOK_APP_ID ? (
 							<Grid item xs={12} sm={12} lg={12}>
 								<FacebookButton onSuccess={this.props.onSuccess}/>
 								<Divider style={{ marginTop: 40, marginBottom: 0 }}>Or</Divider>
@@ -302,7 +298,13 @@ class SignupForm extends Component {
 								onBlur={this.validateFields.bind(this)}
 							/>
 						</Grid>
-						<Grid item xs={12} sm={12} lg={12}>
+						<Grid
+							item
+							xs={12}
+							sm={12}
+							lg={12}
+							style={{ display: "flex", justifyContent: "center" }}
+						>
 							<Recaptcha
 								callback={this.handleRecaptchaVerify}
 								expiredCallback={this.handleRecaptchaExpire}
@@ -312,29 +314,21 @@ class SignupForm extends Component {
 				</div>
 				<br/>
 				<div>
-					<Typography className={classes.privacy}>
-						By signing up I agree to BigNeon's{" "}
-						<StyledLink underlined thin href="/terms.html" target="_blank">
-							terms of service
-						</StyledLink>{" "}
-							&{" "}
-						<StyledLink
-							underlined
-							thin
-							href="/privacy.html"
-							target="_blank"
-						>
-							privacy policy
-						</StyledLink>
-					</Typography>
+					{!hideTermsAndConditions ? (
+						<div>
+							<TermsAndConditionsLinks/>
+							<br/>
+						</div>
+					) : null}
 
 					<Button
 						disabled={isSubmitting}
 						type="submit"
 						style={{ marginRight: 10, width: "100%" }}
 						variant="callToAction"
+						size={"mediumLarge"}
 					>
-						{isSubmitting ? "Submitting..." : <span>Create</span>}
+						{isSubmitting ? "Submitting..." : <span>Create account</span>}
 					</Button>
 				</div>
 			</form>
@@ -343,7 +337,8 @@ class SignupForm extends Component {
 }
 
 SignupForm.propTypes = {
-	onSuccess: PropTypes.func.isRequired
+	onSuccess: PropTypes.func.isRequired,
+	hideTermsAndConditions: PropTypes.bool
 };
 
 export default withStyles(styles)(SignupForm);

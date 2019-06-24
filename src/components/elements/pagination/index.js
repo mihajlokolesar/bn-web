@@ -271,6 +271,10 @@ PaginationBlock.propTypes = {
 	isLoading: PropTypes.bool //To prevent too many api calls
 };
 
+export const resetUrlPageParam = () => {
+	changeUrlParam("page", 1);
+};
+
 export const urlPageParam = () => {
 	const pageString = getUrlParam("page");
 

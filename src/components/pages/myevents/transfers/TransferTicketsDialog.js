@@ -3,13 +3,13 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 
-import Button from "../../elements/Button";
-import InputGroup from "../../common/form/InputGroup";
-import { validEmail, validPhone } from "../../../validators";
-import notification from "../../../stores/notifications";
-import Bigneon from "../../../helpers/bigneon";
-import Divider from "../../common/Divider";
-import Dialog from "../../elements/Dialog";
+import Button from "../../../elements/Button";
+import InputGroup from "../../../common/form/InputGroup";
+import { validEmail, validPhone } from "../../../../validators";
+import notification from "../../../../stores/notifications";
+import Bigneon from "../../../../helpers/bigneon";
+import Divider from "../../../common/Divider";
+import Dialog from "../../../elements/Dialog";
 
 const styles = {
 	content: {

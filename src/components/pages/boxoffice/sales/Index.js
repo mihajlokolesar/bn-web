@@ -279,9 +279,18 @@ class TicketSales extends Component {
 				totalNumberSelected = totalNumberSelected + selectedHolds[id];
 
 				if (hold_type !== "Comp") {
-					const { ticket_pricing } = ticketTypes[ticket_type_id];
-					const { price_in_cents } = ticket_pricing;
-					const discountedPrice = price_in_cents - discount_in_cents;
+					let discountedPrice = 0;
+					if (ticketTypes[ticket_type_id]) {
+						const { ticket_pricing } = ticketTypes[ticket_type_id];
+						const { price_in_cents } = ticket_pricing;
+						discountedPrice = price_in_cents - discount_in_cents;
+					} else {
+						//If we don't get the ticket type details in the request because they shouldn't be visible to the users
+						//we have the required fields in the holds obj
+						const { price_in_cents, discount_in_cents } = holds[id];
+						discountedPrice = price_in_cents - discount_in_cents;
+					}
+
 					totalInCents = totalInCents + discountedPrice * selectedHolds[id];
 				}
 			}

@@ -29,6 +29,9 @@ class BoxOffice {
 	@observable
 	guests = null;
 
+	@observable
+	guestsPaging = null;
+
 	@action
 	refreshEvents() {
 		const organization_id = user.currentOrganizationId;
@@ -193,13 +196,20 @@ class BoxOffice {
 	}
 
 	@action
-	refreshGuests() {
+	refreshGuests(page = 0, query = "") {
 		if (!this.activeEventId) {
 			return;
 		}
 
+		this.guests = null;
+
 		Bigneon()
-			.events.guests.index({ event_id: this.activeEventId, query: "" })
+			.events.guests.index({
+				event_id: this.activeEventId,
+				query,
+				limit: 50,
+				page
+			})
 			.then(response => {
 				const { data, paging } = response.data; //@TODO Implement pagination
 				const guests = {};
@@ -231,6 +241,7 @@ class BoxOffice {
 				);
 
 				this.guests = guests;
+				this.guestsPaging = paging;
 			})
 			.catch(error => {
 				console.error(error);

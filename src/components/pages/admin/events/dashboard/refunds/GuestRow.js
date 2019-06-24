@@ -10,6 +10,7 @@ import {
 import GuestTicketRow from "./GuestTicketRow";
 import CheckBox from "../../../../../elements/form/CheckBox";
 import servedImage from "../../../../../../helpers/imagePathHelper";
+import StyledLink from "../../../../../elements/StyledLink";
 
 const styles = theme => ({
 	root: {
@@ -71,6 +72,7 @@ const GuestRow = props => {
 		expanded,
 		onTicketSelect,
 		selectedTickets,
+		onCancelTransfer,
 		classes
 	} = props;
 
@@ -125,6 +127,7 @@ const GuestRow = props => {
 							<span>Ticket type</span>
 							<span>Price</span>
 							<span>Status</span>
+							<span>Transfer</span>
 						</GuestTicketRow>
 
 						{tickets.map(ticket => {
@@ -133,7 +136,8 @@ const GuestRow = props => {
 								ticket_type,
 								price_in_cents,
 								order_id,
-								status
+								status,
+								transfer_key
 							} = ticket;
 							const isPurchased = status === "Purchased";
 
@@ -152,6 +156,16 @@ const GuestRow = props => {
 									<Typography>{ticket_type}</Typography>
 									<Typography>$ {(price_in_cents / 100).toFixed(2)}</Typography>
 									<Typography>{status}</Typography>
+									{transfer_key ? (
+										<StyledLink
+											underlined
+											onClick={() => onCancelTransfer(transfer_key)}
+										>
+											cancel transfer
+										</StyledLink>
+									) : (
+										<span>-</span>
+									)}
 								</GuestTicketRow>
 							);
 						})}
@@ -171,7 +185,8 @@ GuestRow.propTypes = {
 	onExpandChange: PropTypes.func.isRequired,
 	expanded: PropTypes.bool.isRequired,
 	onTicketSelect: PropTypes.func.isRequired,
-	selectedTickets: PropTypes.object.isRequired
+	selectedTickets: PropTypes.object.isRequired,
+	onCancelTransfer: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(GuestRow);

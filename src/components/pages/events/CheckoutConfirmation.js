@@ -7,6 +7,7 @@ import Grid from "@material-ui/core/Grid";
 import PropTypes from "prop-types";
 import { Link, Redirect } from "react-router-dom";
 
+import OrgAnalytics from "../../common/OrgAnalytics";
 import CheckoutForm from "../../common/cart/CheckoutFormWrapper";
 import Button from "../../elements/Button";
 import Bigneon from "../../../helpers/bigneon";
@@ -31,6 +32,8 @@ import PrivateEventDialog from "./PrivateEventDialog";
 import NotFound from "../../common/NotFound";
 import TwoColumnLayout from "./TwoColumnLayout";
 import EventDescriptionBody from "./EventDescriptionBody";
+import analytics from "../../../helpers/analytics";
+import getAllUrlParams from "../../../helpers/getAllUrlParams";
 
 const styles = theme => ({
 	root: {
@@ -163,6 +166,8 @@ class CheckoutConfirmation extends Component {
 	}
 
 	onFreeCheckout() {
+		const cartItems = cart.ticketCount;
+
 		Bigneon()
 			.cart.checkout({
 				amount: 0,
@@ -176,7 +181,14 @@ class CheckoutConfirmation extends Component {
 				tickets.refreshTickets();
 
 				const { history } = this.props;
-				const { id } = selectedEvent;
+				const { id, event } = selectedEvent;
+				analytics.purchaseCompleted(
+					event.id,
+					getAllUrlParams(),
+					"USD",
+					cartItems,
+					0
+				);
 				if (id) {
 					//If they're checking out for a specific event then we have a custom success page for them
 					history.push(`/events/${id}/tickets/success`);
@@ -208,6 +220,9 @@ class CheckoutConfirmation extends Component {
 			};
 		}
 
+		const cartItems = cart.ticketCount;
+		const total = cart.total_in_cents / 100;
+
 		Bigneon()
 			.cart.checkout({
 				method: method,
@@ -226,7 +241,14 @@ class CheckoutConfirmation extends Component {
 				user.clearCampaignTrackingData();
 
 				const { history } = this.props;
-				const { id } = selectedEvent;
+				const { id, event } = selectedEvent;
+				analytics.purchaseCompleted(
+					event.id,
+					getAllUrlParams(),
+					"USD",
+					cartItems,
+					total
+				);
 				if (id) {
 					//If they're checking out for a specific event then we have a custom success page for them
 					history.push(`/events/${id}/tickets/success?order_id=${data.id}`);
@@ -346,7 +368,12 @@ class CheckoutConfirmation extends Component {
 			return <Redirect to={`/events/${id}`}/>;
 		}
 
-		const { promo_image_url, organization_id, additional_info } = event;
+		const {
+			promo_image_url,
+			organization_id,
+			additional_info,
+			tracking_keys
+		} = event;
 
 		let cryptoIcons;
 		//FIXME remove hardcoded org ID.
@@ -405,6 +432,7 @@ class CheckoutConfirmation extends Component {
 
 		return (
 			<div className={classes.root}>
+				<OrgAnalytics trackingKeys={tracking_keys}/>
 				<Meta {...event} venue={venue} artists={artists} type={"checkout"}/>
 
 				{/*DESKTOP*/}

@@ -29,6 +29,7 @@ const styles = theme => ({
 	},
 	content: {
 		maxWidth: 600,
+		minWidth: 400,
 		paddingLeft: theme.spacing.unit * 2,
 		paddingRight: theme.spacing.unit * 2,
 		[theme.breakpoints.down("sm")]: {

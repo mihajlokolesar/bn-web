@@ -284,9 +284,9 @@ class User {
 
 	//After logout
 	@action
-	onLogout() {
+	onLogout(callback = () => {}) {
 		if (localStorage.getItem("access_token")) {
-			errorReporting.addBreadcrumb("User logging out out.");
+			errorReporting.addBreadcrumb("User logging out.");
 		}
 
 		localStorage.removeItem("access_token");
@@ -311,6 +311,8 @@ class User {
 		logoutFB();
 
 		cart.emptyCart();
+
+		callback();
 	}
 
 	//Dialog is kept in Container.js ready to popup when it's needed

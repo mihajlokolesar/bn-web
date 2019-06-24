@@ -193,6 +193,7 @@ class EventTicketsCard extends Component {
 			expanded,
 			onTicketSelect,
 			onShowTransferQR,
+			onCancelTransfer,
 			showActions
 		} = this.props;
 		const { checkedTicketsIds } = this.state;
@@ -230,12 +231,16 @@ class EventTicketsCard extends Component {
 						ticket_type_name,
 						status,
 						price_in_cents,
-						order_id
+						order_id,
+						pending_transfer,
+						transfer_key
 					} = ticket;
 
 					const orderNumber = order_id.slice(-8); //TODO eventually this will also come in the API
 
+					let actionCol = null;
 					let disabled = false;
+
 					switch (status) {
 						case "Purchased":
 							disabled = false;
@@ -246,12 +251,56 @@ class EventTicketsCard extends Component {
 						//TODO deal with the other statuses
 					}
 
-					let displayStatus = status;
-
 					//If an event is in the past, don't show any actions
 					if (!showActions) {
 						disabled = true;
-						displayStatus = "This event has ended";
+						actionCol = (
+							<Typography className={classes.ticketDetailsDisabledText}>
+								This event has ended
+							</Typography>
+						);
+					}
+
+					if (pending_transfer) {
+						if (transfer_key) {
+							actionCol = (
+								<Typography className={classes.ticketDetailsText}>
+									<StyledLink
+										underlined
+										onClick={() => onCancelTransfer(transfer_key)}
+									>
+										cancel transfer
+									</StyledLink>
+								</Typography>
+							);
+						} else {
+							actionCol = (
+								<Typography className={classes.ticketDetailsDisabledText}>
+									Transferring
+								</Typography>
+							);
+						}
+					}
+
+					//Default action buttons
+					if (showActions && !actionCol) {
+						actionCol = (
+							<Typography className={classes.ticketDetailsText}>
+								<StyledLink underlined onClick={() => onTicketSelect(ticket)}>
+									show qr
+								</StyledLink>
+								<span style={{ marginRight: 10 }}/>
+								<StyledLink underlined onClick={() => onShowTransferQR([id])}>
+									transfer
+								</StyledLink>
+							</Typography>
+						);
+					} else if (disabled && !actionCol) {
+						actionCol = (
+							<Typography className={classes.ticketDetailsDisabledText}>
+								{status}
+							</Typography>
+						);
 					}
 
 					return (
@@ -279,21 +328,7 @@ class EventTicketsCard extends Component {
 							<Typography className={classes.ticketDetailsText}>
 								$ {(price_in_cents / 100).toFixed(2)}
 							</Typography>
-							{disabled ? (
-								<Typography className={classes.ticketDetailsDisabledText}>
-									{displayStatus}
-								</Typography>
-							) : (
-								<Typography className={classes.ticketDetailsText}>
-									<StyledLink underlined onClick={() => onTicketSelect(ticket)}>
-										show qr
-									</StyledLink>
-									<span style={{ marginRight: 10 }}/>
-									<StyledLink underlined onClick={() => onShowTransferQR([id])}>
-										transfer
-									</StyledLink>
-								</Typography>
-							)}
+							{actionCol}
 						</EventTicketRow>
 					);
 				})}
@@ -483,6 +518,7 @@ EventTicketsCard.propTypes = {
 	expanded: PropTypes.bool.isRequired,
 	onTicketSelect: PropTypes.func.isRequired,
 	onShowTransferQR: PropTypes.func.isRequired,
+	onCancelTransfer: PropTypes.func.isRequired,
 	history: PropTypes.object.isRequired,
 	showActions: PropTypes.bool.isRequired
 };

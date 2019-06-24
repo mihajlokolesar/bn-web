@@ -4,10 +4,10 @@ import Typography from "@material-ui/core/Typography";
 import Hidden from "@material-ui/core/Hidden";
 import { observer } from "mobx-react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
 import moment from "moment-timezone";
 import { Redirect } from "react-router-dom";
 
+import OrgAnalytics from "../../common/OrgAnalytics";
 import Button from "../../elements/Button";
 import notifications from "../../../stores/notifications";
 import TicketSelection from "./TicketSelection";
@@ -26,7 +26,8 @@ import Divider from "../../common/Divider";
 import TwoColumnLayout from "./TwoColumnLayout";
 import EventDescriptionBody from "./EventDescriptionBody";
 import getUrlParam from "../../../helpers/getUrlParam";
-import ellipsis from "../../../helpers/ellipsis";
+import analytics from "../../../helpers/analytics";
+import getAllUrlParams from "../../../helpers/getAllUrlParams";
 
 const AUTO_SELECT_TICKET_AMOUNT = 2;
 
@@ -150,12 +151,20 @@ class CheckoutSelection extends Component {
 		) {
 			const { id } = this.props.match.params;
 
-			selectedEvent.refreshResult(id, errorMessage => {
-				notifications.show({
-					message: errorMessage,
-					variant: "error"
-				});
-			});
+			selectedEvent.refreshResult(
+				id,
+				errorMessage => {
+					notifications.show({
+						message: errorMessage,
+						variant: "error"
+					});
+				},
+				() => {
+					const { id: selectedEventId } = selectedEvent.event;
+
+					analytics.viewContent([selectedEventId], getAllUrlParams());
+				}
+			);
 		} else {
 			//TODO return 404
 		}
@@ -313,7 +322,7 @@ class CheckoutSelection extends Component {
 	}
 
 	onSubmit() {
-		const { id } = selectedEvent;
+		const { id, event } = selectedEvent;
 		cart.setLatestEventId(id);
 		const { ticketSelection } = this.state;
 
@@ -349,10 +358,20 @@ class CheckoutSelection extends Component {
 
 		this.setState({ isSubmitting: true });
 
+		const cartItems = cart.ticketCount;
+		const total = cart.total_in_cents / 100;
+
 		cart.replace(
 			ticketSelection,
 			() => {
 				if (!emptySelection) {
+					analytics.initiateCheckout(
+						event.id,
+						getAllUrlParams(),
+						"USD",
+						cartItems,
+						total
+					);
 					this.props.history.push(`/events/${id}/tickets/confirmation`);
 				} else {
 					//They had something in their cart, but they removed and updated
@@ -487,7 +506,8 @@ class CheckoutSelection extends Component {
 			age_limit,
 			displayDoorTime,
 			displayShowTime,
-			eventStartDateMoment
+			eventStartDateMoment,
+			tracking_keys
 		} = event;
 
 		const promo_image_url = event.promo_image_url
@@ -557,6 +577,7 @@ class CheckoutSelection extends Component {
 
 		return (
 			<div>
+				<OrgAnalytics trackingKeys={tracking_keys}/>
 				<Meta {...event} venue={venue} artists={artists} type={"selection"}/>
 				{/*DESKTOP*/}
 				<Hidden smDown>
@@ -590,49 +611,49 @@ class CheckoutSelection extends Component {
 				{/*MOBILE*/}
 				<Hidden mdUp>
 					<div className={classes.mobileContainer}>
-						<div className={classes.mobileEventDetailsContainer}>
-							<div
-								className={classes.mobilePromoImage}
-								style={{ backgroundImage: `url(${promo_image_url})` }}
-							/>
-							<div style={{ flex: 1 }}>
-								<Typography
-									noWrap
-									variant={"display1"}
-									className={classes.mobileEventName}
-								>
-									{ellipsis(name, 45)}
-								</Typography>
-								<div
-									style={{
-										display: "flex",
-										justifyContent: "space-between",
-										flex: 1
-									}}
-								>
-									<div>
-										<Typography className={classes.mobileVenueName}>
-											{venue.name}
-											{venue.city ? ` - ${venue.city}` : ""}
-										</Typography>
-										<Typography className={classes.mobileEventTime}>
-											{displayTime(event.start_date, venue.timezone)}
-										</Typography>
-									</div>
-									<Link
-										to={`/events/${id}`}
-										style={{
-											display: "flex",
-											alignItems: "flex-end"
-										}}
-									>
-										<Typography className={classes.mobileViewDetailsLinkText}>
-											View details
-										</Typography>
-									</Link>
-								</div>
-							</div>
-						</div>
+						{/*<div className={classes.mobileEventDetailsContainer}>*/}
+						{/*<div*/}
+						{/*className={classes.mobilePromoImage}*/}
+						{/*style={{ backgroundImage: `url(${promo_image_url})` }}*/}
+						{/*/>*/}
+						{/*<div style={{ flex: 1 }}>*/}
+						{/*<Typography*/}
+						{/*noWrap*/}
+						{/*variant={"display1"}*/}
+						{/*className={classes.mobileEventName}*/}
+						{/*>*/}
+						{/*{ellipsis(name, 45)}*/}
+						{/*</Typography>*/}
+						{/*<div*/}
+						{/*style={{*/}
+						{/*display: "flex",*/}
+						{/*justifyContent: "space-between",*/}
+						{/*flex: 1*/}
+						{/*}}*/}
+						{/*>*/}
+						{/*<div>*/}
+						{/*<Typography className={classes.mobileVenueName}>*/}
+						{/*{venue.name}*/}
+						{/*{venue.city ? ` - ${venue.city}` : ""}*/}
+						{/*</Typography>*/}
+						{/*<Typography className={classes.mobileEventTime}>*/}
+						{/*{displayTime(event.start_date, venue.timezone)}*/}
+						{/*</Typography>*/}
+						{/*</div>*/}
+						{/*<Link*/}
+						{/*to={`/events/${id}`}*/}
+						{/*style={{*/}
+						{/*display: "flex",*/}
+						{/*alignItems: "flex-end"*/}
+						{/*}}*/}
+						{/*>*/}
+						{/*<Typography className={classes.mobileViewDetailsLinkText}>*/}
+						{/*View details*/}
+						{/*</Typography>*/}
+						{/*</Link>*/}
+						{/*</div>*/}
+						{/*</div>*/}
+						{/*</div>*/}
 						<div className={classes.mobileTicketSelectionContainer}>
 							{sharedContent}
 						</div>

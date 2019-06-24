@@ -48,6 +48,13 @@ const styles = theme => {
 			boxShadow: "0 2px 7.5px 1px rgba(112, 124, 237, 0.47)",
 			backgroundRepeat: "no-repeat"
 		},
+		whiteCTA: {
+			background: "#FFFFFF",
+			color: secondaryHex,
+			boxShadow: "none",
+			backgroundRepeat: "no-repeat",
+			borderColor: "#FFFFFF"
+		},
 		warning: {
 			background: `linear-gradient(45deg, ${warningHex} 10%, ${warningHex} 90%)`,
 			color: "#FFF",
@@ -165,7 +172,8 @@ CustomButton.propTypes = {
 		"callToAction",
 		"warning",
 		"text",
-		"additional"
+		"additional",
+		"whiteCTA"
 	]),
 	size: PropTypes.oneOf(["small", "medium", "mediumLarge", "large"]),
 	disabled: PropTypes.bool,

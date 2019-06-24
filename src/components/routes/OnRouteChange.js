@@ -6,8 +6,8 @@ import errorReporting from "../../helpers/errorReporting";
 
 const showSideMenuRoutes = ["/admin", "/my-events", "/orders", "/account"];
 const showStudioLogoRoutes = ["/admin", "/box-office"];
-const showFooterRoutes = ["/events"];
-const removePaddingRoutes = ["/events", "/venues"];
+const showFooterRoutes = ["/events", "/tickets/transfers"];
+const removePaddingRoutes = ["/events", "/venues", "/tickets/transfers"];
 const removeContainerRoutes = [
 	"/widget",
 	"/login",
@@ -23,9 +23,7 @@ const hideBottomMobileCartBar = [
 	"/events/"
 ];
 
-const hideFloatingHelpButton = [
-	"/tickets/success"
-];
+const hideFloatingHelpButton = ["/tickets/success"];
 
 class OnRouteChange extends Component {
 	componentDidMount() {

@@ -18,6 +18,12 @@ import cart from "../../../../stores/cart";
 import CheckoutDialog from "../sales/CheckoutDialog";
 import PurchaseSuccessOptionsDialog from "../sales/PurchaseSuccessOptionsDialog";
 import SuccessDialog from "../sales/SuccessDialog";
+import {
+	Pagination,
+	resetUrlPageParam,
+	urlPageParam
+} from "../../../elements/pagination";
+import SearchInput from "../../../elements/SearchBox";
 
 const styles = theme => ({
 	root: {},
@@ -82,16 +88,14 @@ class GuestList extends Component {
 		return false;
 	}
 
-	filterGuestsOnQuery(e) {
+	resetSelected(e) {
 		this.setState({
-			searchQuery: e.target.value,
-			expandedRowKey: null,
 			selectedTickets: {},
-			selectedHolds: {},
-			currentOrderDetails: null
+			selectedHolds: {}
 		});
 	}
 
+	//FIXME, get rid of the whole filtered guests and only rely on the api
 	filteredGuests() {
 		const { guests, childHolds } = boxOffice;
 		if (!guests || !childHolds) {
@@ -109,14 +113,24 @@ class GuestList extends Component {
 				ticketIds.push(id);
 			});
 
-			if (
-				this.stringContainedInArray(ticketIds, searchQuery) ||
-				RegExp(searchQuery.replace(" ", ".*"), "gi").test(
-					[first_name, last_name].join(" ")
-				)
-			) {
-				filteredGuests[user_id] = guests[user_id];
-			}
+			// const name_regex = RegExp(
+			// 	searchQuery
+			// 		.toLowerCase()
+			// 		.replace(/\s+|,/g, "")
+			// 		.split("")
+			// 		.join(".*?")
+			// );
+
+			//Ignore the client side filtering
+			filteredGuests[user_id] = guests[user_id];
+
+			// if (
+			// 	this.stringContainedInArray(ticketIds, searchQuery) ||
+			// 	name_regex.test([first_name, last_name].join(" ").toLowerCase()) ||
+			// 	name_regex.test([last_name, first_name].join(" ").toLowerCase())
+			// ) {
+			// 	filteredGuests[user_id] = guests[user_id];
+			// }
 		});
 
 		const filteredHolds = {};
@@ -247,6 +261,19 @@ class GuestList extends Component {
 		});
 	}
 
+	changePage(page = urlPageParam()) {
+		this.resetSelected();
+		boxOffice.refreshGuests(page, this.state.searchQuery);
+	}
+
+	onSearch(query) {
+		this.resetSelected();
+		resetUrlPageParam();
+		this.setState({ searchQuery: query }, () =>
+			boxOffice.refreshGuests(0, query)
+		);
+	}
+
 	renderBottomBar() {
 		const {
 			selectedTickets,
@@ -328,15 +355,6 @@ class GuestList extends Component {
 			return <BlankSlate>No active event selected.</BlankSlate>;
 		}
 
-		if (
-			boxOffice.childHolds !== null &&
-			Object.keys(boxOffice.childHolds).length === 0 &&
-			boxOffice.guests !== null &&
-			Object.keys(boxOffice.guests).length === 0
-		) {
-			return <BlankSlate>No guests found for event.</BlankSlate>;
-		}
-
 		const {
 			searchQuery,
 			expandedRowKey,
@@ -352,26 +370,48 @@ class GuestList extends Component {
 
 		const filteredResults = this.filteredGuests();
 
+		const searchBox = (
+			<Grid className={classes.filterOptions} container>
+				<Grid item xs={12} sm={12} md={6} lg={4}>
+					<SearchInput
+						placeholder="Search by guest name or order #"
+						onSearch={this.onSearch.bind(this)}
+					/>
+				</Grid>
+			</Grid>
+		);
+
+		if (
+			boxOffice.childHolds !== null &&
+			Object.keys(boxOffice.childHolds).length === 0 &&
+			boxOffice.guests !== null &&
+			boxOffice.guestsPaging &&
+			boxOffice.guestsPaging.total === 0
+		) {
+			return (
+				<div>
+					{searchBox}
+					<BlankSlate>No guests found for event.</BlankSlate>
+				</div>
+			);
+		}
+
 		if (filteredResults === null) {
-			return <Loader/>;
+			return (
+				<div>
+					{searchBox}
+					<Loader/>
+				</div>
+			);
 		}
 
 		const { guests, holds } = filteredResults;
-		const { ticketTypes } = boxOffice;
+		const { ticketTypes, guestsPaging } = boxOffice;
 		const guestIndexOffset = Object.keys(holds).length; //For listing each row
 
 		return (
 			<div>
-				<Grid className={classes.filterOptions} container>
-					<Grid item xs={12} sm={12} md={6} lg={4}>
-						<BoxInput
-							name="Search"
-							value={searchQuery}
-							placeholder="Search by guest name or order #"
-							onChange={this.filterGuestsOnQuery.bind(this)}
-						/>
-					</Grid>
-				</Grid>
+				{searchBox}
 
 				{Object.keys(holds).map((id, index) => {
 					const expanded = id === expandedRowKey;
@@ -478,6 +518,12 @@ class GuestList extends Component {
 						/>
 					</div>
 				) : null}
+
+				<Pagination
+					isLoading={false}
+					paging={guestsPaging}
+					onChange={this.changePage.bind(this)}
+				/>
 
 				{this.renderBottomBar()}
 			</div>

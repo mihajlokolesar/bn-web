@@ -4,7 +4,8 @@ const ga = {
 	name: "ga",
 	// true if GA has been initialized at least once
 	enabled: false,
-	disabledWarning: "No Google analytics key provided. Google Analytics is disabled.",
+	disabledWarning:
+		"No Google analytics key provided. Google Analytics is disabled.",
 
 	addTrackingKey(key) {
 		// GA support multiple tracking keys
@@ -54,11 +55,29 @@ const facebook = {
 	load() {
 		// Facebook snippet
 		/* eslint-disable */
-		!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-		n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-		n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-		t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-		document,'script','https://connect.facebook.net/en_US/fbevents.js');
+		!(function(f, b, e, v, n, t, s) {
+			if (f.fbq) return;
+			n = f.fbq = function() {
+				n.callMethod
+					? n.callMethod.apply(n, arguments)
+					: n.queue.push(arguments);
+			};
+			if (!f._fbq) f._fbq = n;
+			n.push = n;
+			n.loaded = !0;
+			n.version = "2.0";
+			n.queue = [];
+			t = b.createElement(e);
+			t.async = !0;
+			t.src = v;
+			s = b.getElementsByTagName(e)[0];
+			s.parentNode.insertBefore(t, s);
+		})(
+			window,
+			document,
+			"script",
+			"https://connect.facebook.net/en_US/fbevents.js"
+		);
 		/* eslint-enable */
 
 		// Script creates an array queue which will resolve calls once the script is loaded
@@ -100,6 +119,35 @@ const facebook = {
 	identify(user) {
 		this.keys.forEach(k => {
 			window.fbq("setUserProperties", k, user);
+		});
+	},
+
+	viewContent(ids, urlParams) {
+		this.track("ViewContent", {
+			content_ids: ids,
+			eventref: urlParams["fb_oea"]
+		});
+	},
+
+	initiateCheckout(ids, urlParams, currency, numItems, value) {
+		this.track("InitiateCheckout", {
+			content_ids: ids,
+			currency,
+			num_items: numItems,
+			value,
+			content_type: "product",
+			eventref: urlParams["fb_oea"]
+		});
+	},
+
+	purchaseCompleted(ids, urlParams, currency, numItems, value) {
+		this.track("Purchase", {
+			content_ids: ids,
+			currency,
+			num_items: numItems,
+			value,
+			content_type: "product",
+			eventref: urlParams["fb_oea"]
 		});
 	}
 };
@@ -169,7 +217,10 @@ const segment = {
 				const script = document.createElement("script");
 				script.type = "text/javascript";
 				script.async = true;
-				script.src = "https://cdn.segment.com/analytics.js/v1/" + key + "/analytics.min.js";
+				script.src =
+					"https://cdn.segment.com/analytics.js/v1/" +
+					key +
+					"/analytics.min.js";
 				script.onload = () => {
 					resolve();
 				};
@@ -196,7 +247,9 @@ const segment = {
 			this.pageView();
 			this.enabled = true;
 		} else {
-			console.warn("Implementation of segment currently does not support multiple segment keys");
+			console.warn(
+				"Implementation of segment currently does not support multiple segment keys"
+			);
 		}
 	},
 
@@ -259,7 +312,10 @@ const addTrackingKey = (providerName, options) => {
 
 	// If falsey option passed the provider is disabled
 	if (!options) {
-		console.warn(provider.disabledWarning || `Tracking for ${providerName} has been disabled.`);
+		console.warn(
+			provider.disabledWarning ||
+				`Tracking for ${providerName} has been disabled.`
+		);
 		return;
 	}
 
@@ -291,9 +347,47 @@ const identify = user => {
 };
 
 //Track load times if a provider has the `trackLoadTime` function
-const trackPageLoadTime = (milliseconds) => {
+const trackPageLoadTime = milliseconds => {
 	const enabledProviders = providers.filter(p => p.enabled);
-	enabledProviders.forEach(p => p.trackLoadTime ? p.trackLoadTime(milliseconds) : null);
+	enabledProviders.forEach(p =>
+		p.trackLoadTime ? p.trackLoadTime(milliseconds) : null
+	);
 };
 
-export default { init, addTrackingKey, getProvider, removeTrackingKey, page, identify, trackPageLoadTime };
+const viewContent = (ids, urlParams) => {
+	const enabledProviders = providers.filter(p => p.enabled);
+	enabledProviders.forEach(p => {
+		if (p.viewContent) {
+			p.viewContent(ids, urlParams);
+		}
+	});
+};
+const initiateCheckout = (ids, urlParams, currency, numItems, value) => {
+	const enabledProviders = providers.filter(p => p.enabled);
+	enabledProviders.forEach(p => {
+		if (p.initiateCheckout) {
+			p.initiateCheckout(ids, urlParams, currency, numItems, value);
+		}
+	});
+};
+
+const purchaseCompleted = (ids, urlParams, currency, numItems, value) => {
+	const enabledProviders = providers.filter(p => p.enabled);
+	enabledProviders.forEach(p => {
+		if (p.purchaseCompleted) {
+			p.purchaseCompleted(ids, urlParams, currency, numItems, value);
+		}
+	});
+};
+export default {
+	init,
+	addTrackingKey,
+	getProvider,
+	removeTrackingKey,
+	page,
+	identify,
+	trackPageLoadTime,
+	initiateCheckout,
+	purchaseCompleted,
+	viewContent
+};

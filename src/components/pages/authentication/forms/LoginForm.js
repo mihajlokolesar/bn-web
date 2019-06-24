@@ -174,10 +174,13 @@ class LoginForm extends Component {
 							onChange={e => this.setState({ password: e.target.value })}
 							onBlur={this.validateFields.bind(this)}
 						/>
-						<Recaptcha
-							callback={this.handleRecaptchaVerify}
-							expiredCallback={this.handleRecaptchaExpire}
-						/>
+
+						<div style={{ display: "flex", justifyContent: "center" }}>
+							<Recaptcha
+								callback={this.handleRecaptchaVerify}
+								expiredCallback={this.handleRecaptchaExpire}
+							/>
+						</div>
 					</div>
 					<br/>
 					<div>
@@ -191,10 +194,11 @@ class LoginForm extends Component {
 						</Button>
 					</div>
 					<br/>
-					<div style={{ justifyContent: "center" }}>
+					<div style={{ display: "flex", justifyContent: "center" }}>
 						<Button
 							onClick={() => this.setState({ resetOpen: true })}
 							variant="text"
+							size={"mediumLarge"}
 						>
 							Forgot your password?
 						</Button>

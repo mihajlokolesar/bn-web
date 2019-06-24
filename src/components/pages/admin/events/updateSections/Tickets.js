@@ -34,16 +34,17 @@ const formatForSaving = (ticketTypes, event) => {
 		} = ticketType;
 
 		let { startDate: ticketTypeStartDate, endDate } = ticketType;
+
 		const { doorTime, eventDate } = event;
 
 		//Override whatever we have with now if it needs to go on sale immediately
 		let useOldestPricePointAsStartDate = false;
 		if (saleStartTimeOption === "immediately") {
-			ticketTypeStartDate = moment();
+			ticketTypeStartDate = null; //TODO check this works
 
 			//Or set it to the oldest pricing start time to pass server side validation
 			useOldestPricePointAsStartDate = true; //Used when processing pricing
-		} else {
+		} else if (ticketTypeStartDate && ticketTypeStartDate.isValid()) {
 			ticketTypeStartDate = moment(ticketTypeStartDate);
 			if (startTime) {
 				ticketTypeStartDate = ticketTypeStartDate.set({
@@ -83,8 +84,7 @@ const formatForSaving = (ticketTypes, event) => {
 		}
 
 		const ticket_pricing = [];
-		// Using == instead of === here to check for null or undefined
-		if (parentId == null) {
+		if (!parentId) {
 			pricing.forEach(pricePoint => {
 				const { id, name, startTime, endTime, value } = pricePoint;
 
@@ -101,12 +101,12 @@ const formatForSaving = (ticketTypes, event) => {
 
 				//If a user selects a ticket type to go on sale immediately but there are price points set in the past
 				//just force the start date for the ticket type to be the oldest price point
-				if (
-					useOldestPricePointAsStartDate &&
-					ticketTypeStartDate.isAfter(startDate)
-				) {
-					ticketTypeStartDate = startDate;
-				}
+				// if (
+				// 	useOldestPricePointAsStartDate && ticketTypeStartDate &&
+				// 	ticketTypeStartDate.isAfter(startDate)
+				// ) {
+				// 	ticketTypeStartDate = startDate;
+				// }
 
 				endDate = moment(endDate);
 				if (endTime) {
@@ -129,18 +129,25 @@ const formatForSaving = (ticketTypes, event) => {
 			});
 		}
 
+		let start_date = null;
+
+		if (
+			!parentId &&
+			isNaN(parentId) &&
+			ticketTypeStartDate &&
+			ticketTypeStartDate.isValid()
+		) {
+			start_date = ticketTypeStartDate
+				.utc()
+				.format(moment.HTML5_FMT.DATETIME_LOCAL_MS);
+		}
+
 		ticket_types.push({
 			id,
 			name,
 			capacity: Number(capacity),
 			increment: Number(increment),
-			start_date:
-				// Using != instead of !== here to check for null or undefined
-				parentId != null
-					? null
-					: ticketTypeStartDate
-						.utc()
-						.format(moment.HTML5_FMT.DATETIME_LOCAL_MS),
+			start_date,
 			end_date: endDate.utc().format(moment.HTML5_FMT.DATETIME_LOCAL_MS),
 			limit_per_person:
 				!limitPerPerson || isNaN(limitPerPerson) ? 0 : Number(limitPerPerson),
@@ -226,7 +233,13 @@ const formatForInput = (ticket_types, event) => {
 		}
 
 		let saleStartTimeOption = parent_id ? "parent" : "custom";
-		if (ticketStartDate.isBefore(moment.utc().local())) {
+
+		//If there is no ticket start time or if the start time is in the past, we're assuming it sales start immediately
+		if (
+			saleStartTimeOption !== "parent" &&
+			(!ticketStartDate ||
+				(ticketStartDate && ticketStartDate.isBefore(moment.utc().local())))
+		) {
 			saleStartTimeOption = "immediately";
 		}
 

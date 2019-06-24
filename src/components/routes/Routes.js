@@ -19,6 +19,8 @@ import Account from "../pages/account/Index";
 import OrderList from "../pages/orders/List";
 import Order from "../pages/orders/Order";
 import MyEvents from "../pages/myevents/Index";
+import ReceiveTransfer from "../pages/myevents/transfers/ReceiveTransfer";
+import CancelTransfer from "../pages/myevents/transfers/CancelTransfer";
 import Signup from "../pages/authentication/Signup";
 import Login from "../pages/authentication/Login";
 import PasswordReset from "../pages/authentication/PasswordReset";
@@ -118,6 +120,10 @@ const InviteAccept = asyncComponent(() =>
 	import("../pages/admin/invites/Accept")
 );
 
+const GuestList = asyncComponent(() =>
+	import("../pages/boxoffice/guests/Index")
+);
+
 //Embedded widgets
 import EventQR from "../widgets/EventQR";
 import EmbeddedWidget from "../widgets/Embedded";
@@ -125,8 +131,6 @@ import EmbeddedWidget from "../widgets/Embedded";
 import user from "../../stores/user";
 import AuthenticateCheckDialog from "../common/AuthenticateCheckDialog";
 import WidgetLinkBuilder from "../widgets/LinkBuilder";
-import ReceiveTransfer from "../pages/myevents/ReceiveTransfer";
-import GuestList from "../pages/boxoffice/guests/Index";
 import analytics from "../../helpers/analytics";
 import getAllUrlParams from "../../helpers/getAllUrlParams";
 
@@ -205,8 +209,23 @@ class Routes extends Component {
 								<Route exact path="/invites/accept" component={InviteAccept}/>
 								<Route
 									exact
-									path="/tickets/receive"
+									path="/tickets/receive" //TODO remove this route
 									component={ReceiveTransfer}
+								/>
+								<Route
+									exact
+									path="/tickets/transfers/receive"
+									component={ReceiveTransfer}
+								/>
+								<Route
+									exact
+									path="/tickets/transfers/receive"
+									component={ReceiveTransfer}
+								/>
+								<Route
+									exact
+									path="/tickets/transfers/cancel"
+									component={CancelTransfer}
 								/>
 								<PrivateRoute
 									exact

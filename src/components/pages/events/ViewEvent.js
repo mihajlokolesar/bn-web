@@ -38,6 +38,9 @@ import Settings from "../../../config/settings";
 import EventCallToActionAppBar from "../../elements/header/EventCallToActionAppBar";
 import user from "../../../stores/user";
 import { insertScript } from "../../../helpers/insertScript";
+import replaceIdWithSlug from "../../../helpers/replaceIdWithSlug";
+import analytics from "../../../helpers/analytics";
+import getAllUrlParams from "../../../helpers/getAllUrlParams";
 
 const ADDITIONAL_INFO_CHAR_LIMIT = 300;
 
@@ -155,12 +158,25 @@ class ViewEvent extends Component {
 		) {
 			const { id } = this.props.match.params;
 
-			selectedEvent.refreshResult(id, errorMessage => {
-				notifications.show({
-					message: errorMessage,
-					variant: "error"
-				});
-			});
+			selectedEvent.refreshResult(
+				id,
+				errorMessage => {
+					notifications.show({
+						message: errorMessage,
+						variant: "error"
+					});
+				},
+				() => {
+					const { id: selectedEventId, slug } = selectedEvent.event;
+
+					//Replace the id in the URL with the slug if we have it and it isn't currently set
+					if (id === selectedEventId && slug) {
+						replaceIdWithSlug(id, slug);
+					}
+
+					analytics.viewContent([selectedEventId], getAllUrlParams());
+				}
+			);
 		} else {
 			//TODO return 404
 		}
@@ -270,7 +286,7 @@ class ViewEvent extends Component {
 			);
 		} else {
 			return (
-				<Link to={`/events/${id}/tickets`}>
+				<Link to={`/events/${event.slug || id}/tickets`}>
 					<Button
 						size={"mediumLarge"}
 						className={classes.callToAction}

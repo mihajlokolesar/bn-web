@@ -99,7 +99,8 @@ const EventResultCard = ({
 	door_time,
 	min_ticket_price,
 	max_ticket_price,
-	venueTimezone
+	venueTimezone,
+	slug
 }) => {
 	const style = {};
 	if (promo_image_url) {
@@ -120,7 +121,7 @@ const EventResultCard = ({
 		.format("h:mm A");
 
 	return (
-		<Link to={`/events/${id}`}>
+		<Link to={`/events/${slug || id}`}>
 			<Card borderLess variant="default">
 				<MaintainAspectRatio aspectRatio={Settings().promoImageAspectRatio}>
 					<div className={classes.media} style={style}>

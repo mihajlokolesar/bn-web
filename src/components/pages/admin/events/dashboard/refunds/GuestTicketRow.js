@@ -36,6 +36,7 @@ const GuestTicketRow = props => {
 		{ flex: 8, textAlign: "left" },
 		{ flex: 8, textAlign: "left" },
 		{ flex: 3, textAlign: "right" },
+		{ flex: 4, textAlign: "right" },
 		{ flex: 4, textAlign: "right" }
 	];
 
