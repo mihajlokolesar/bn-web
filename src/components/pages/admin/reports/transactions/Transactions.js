@@ -169,6 +169,7 @@ class Transactions extends Component {
 						user_id,
 						gross_fee_in_cents_total,
 						event_fee_gross_in_cents_total,
+						credit_card_fee_gross_in_cents_total,
 						first_name,
 						last_name,
 						email,
@@ -201,7 +202,11 @@ class Transactions extends Component {
 						quantity - refunded_quantity,
 						dollars(unit_price_in_cents),
 						dollars((quantity - refunded_quantity) * unit_price_in_cents), //Face value
-						dollars(event_fee_gross_in_cents_total + gross_fee_in_cents_total),
+						dollars(
+							event_fee_gross_in_cents_total +
+								gross_fee_in_cents_total +
+								credit_card_fee_gross_in_cents_total
+						),
 						dollars(promo_quantity * promo_discount_value_in_cents),
 						dollars(gross),
 						source,

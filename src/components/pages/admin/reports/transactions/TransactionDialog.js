@@ -6,7 +6,10 @@ import { Typography } from "@material-ui/core";
 import notifications from "../../../../../stores/notifications";
 import Bigneon from "../../../../../helpers/bigneon";
 import Dialog from "../../../../elements/Dialog";
-import { fontFamilyDemiBold, fontFamilyBold } from "../../../../../config/theme";
+import {
+	fontFamilyDemiBold,
+	fontFamilyBold
+} from "../../../../../config/theme";
 import StyledLink from "../../../../elements/StyledLink";
 import { dollars } from "../../../../../helpers/money";
 
@@ -67,6 +70,7 @@ class TransactionDialog extends React.Component {
 		const {
 			gross_fee_in_cents_total,
 			event_fee_gross_in_cents_total,
+			credit_card_fee_gross_in_cents_total,
 			gross,
 			order_id,
 			order_type,
@@ -100,7 +104,11 @@ class TransactionDialog extends React.Component {
 				</Detail>
 
 				<Detail label={"Service fee"} classes={classes}>
-					{dollars(event_fee_gross_in_cents_total + gross_fee_in_cents_total)}
+					{dollars(
+						event_fee_gross_in_cents_total +
+							gross_fee_in_cents_total +
+							credit_card_fee_gross_in_cents_total
+					)}
 				</Detail>
 
 				<Detail label={"Gross"} classes={classes}>
