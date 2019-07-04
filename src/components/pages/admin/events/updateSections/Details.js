@@ -468,10 +468,12 @@ class Details extends Component {
 		let { eventType } = eventUpdateStore.event;
 		eventType = eventType || "Music";
 
-		const eventTypes = [
-			{ value: "Music", label: "Music" },
-			{ value: "Conference", label: "Conference" }
-		];
+		const eventTypes = Object.keys(Bn.Enums.EventTypes || {})
+			.sort()
+			.map(value => ({
+				value,
+				label: Bn.Enums.EventTypes[value]
+			}));
 
 		return (
 			<SelectGroup
