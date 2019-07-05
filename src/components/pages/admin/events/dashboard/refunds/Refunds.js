@@ -182,14 +182,16 @@ class Refunds extends Component {
 				orderIds.push(order_id);
 			});
 
-			if (
-				this.stringContainedInArray(
-					[first_name, last_name, email, phone, ...ticketIds, ...orderIds],
-					searchQuery.replace("#", "")
-				)
-			) {
-				filteredGuests[user_id] = guests[user_id];
-			}
+			filteredGuests[user_id] = guests[user_id];
+
+			// if (
+			// 	this.stringContainedInArray(
+			// 		[first_name, last_name, email, phone, ...ticketIds, ...orderIds],
+			// 		searchQuery.replace("#", "")
+			// 	)
+			// ) {
+			// 	filteredGuests[user_id] = guests[user_id];
+			// }
 		});
 
 		return filteredGuests;
