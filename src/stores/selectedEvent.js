@@ -86,7 +86,14 @@ class SelectedEvent {
 				// this.ticket_types = ticket_types;
 				this.organization = organization;
 				this.user_is_interested = user_is_interested;
+				artists.sort((a, b) => {
+					const rank1 = a.rank || 0;
+					const rank2 = b.rank || 0;
+					return rank1 < rank2 ? -1 : rank1 > rank2 ? 1 : 0;
+				});
+
 				this.artists = artists;
+
 				this.venue = { ...venue, googleMapsLink: createGoogleMapsLink(venue) };
 
 				const venueTimezone = venue.timezone || "America/Los_Angeles";
