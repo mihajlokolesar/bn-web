@@ -4,16 +4,21 @@ import Bigneon from "../../helpers/bigneon";
 import user from "../user";
 import { dollars } from "../../helpers/money";
 
-const salesRows = (sales) => {
+const salesRows = sales => {
 	sales.forEach(row => {
-		const { online_sale_count, box_office_sale_count, online_sales_in_cents, box_office_sales_in_cents } = row;
+		const {
+			online_sale_count,
+			box_office_sale_count,
+			online_sales_in_cents,
+			box_office_sales_in_cents
+		} = row;
 		row.total_sold_count = online_sale_count + box_office_sale_count;
 		row.total_sold_in_cents = online_sales_in_cents + box_office_sales_in_cents;
 	});
 	return sales;
 };
 
-const countsRows = (counts) => {
+const countsRows = counts => {
 	counts.forEach(row => {
 		const { comp_available_count, hold_available_count } = row;
 		row.total_held_tickets = comp_available_count + hold_available_count;
@@ -109,7 +114,11 @@ export class TicketCountReport {
 	isLoading = false;
 
 	@action
-	fetchCountAndSalesData(queryParams, includeZeroCountTicketPricings = false, onSuccess) {
+	fetchCountAndSalesData(
+		queryParams,
+		includeZeroCountTicketPricings = false,
+		onSuccess
+	) {
 		this.setCountAndSalesData();
 
 		if (!user.isAuthenticated) {
@@ -118,9 +127,17 @@ export class TicketCountReport {
 
 		this.isLoading = true;
 
-		return Bigneon().reports.ticketCount({ ...queryParams })
+		return Bigneon()
+			.reports.ticketCount({ ...queryParams })
 			.then(response => {
-				const sales = response.data.sales.filter(item => includeZeroCountTicketPricings || (item.online_sale_count + item.box_office_sale_count + item.comp_sale_count) > 0);
+				const sales = response.data.sales.filter(
+					item =>
+						includeZeroCountTicketPricings ||
+						item.online_sale_count +
+							item.box_office_sale_count +
+							item.comp_sale_count >
+							0
+				);
 				this.setCountAndSalesData(response.data.counts, sales);
 
 				onSuccess ? onSuccess() : null;
@@ -135,7 +152,6 @@ export class TicketCountReport {
 
 				this.isLoading = false;
 			});
-
 	}
 
 	setCountAndSalesData(counts = [], sales = []) {
@@ -153,15 +169,25 @@ export class TicketCountReport {
 	get countsAndSalesByEventId() {
 		const results = {};
 		const { counts, sales } = this.countAndSalesData;
-		const eventIds = (counts || []).concat(sales || []).map(item => item.event_id).sort();
+		const eventIds = (counts || [])
+			.concat(sales || [])
+			.map(item => item.event_id)
+			.sort();
 		eventIds.forEach(eventId => {
 			if (!results.hasOwnProperty(eventId)) {
 				results[eventId] = {
 					name: "No Data",
-					counts: this.countAndSalesData.counts.filter(row => row.event_id === eventId),
-					sales: this.countAndSalesData.sales.filter(row => row.event_id === eventId)
+					counts: this.countAndSalesData.counts.filter(
+						row => row.event_id === eventId
+					),
+					sales: this.countAndSalesData.sales.filter(
+						row => row.event_id === eventId
+					)
 				};
-				results[eventId].name = (results[eventId].counts.length && results[eventId].counts[0].event_name) || "No Data";
+				results[eventId].name =
+					(results[eventId].counts.length &&
+						results[eventId].counts[0].event_name) ||
+					"No Data";
 			}
 		});
 		return results;
@@ -181,12 +207,20 @@ export class TicketCountReport {
 				totals: combineTotals(counts, sales)
 			};
 
-			const ticketTypeIds = counts.concat(sales).map(item => item.ticket_type_id);
+			const ticketTypeIds = counts
+				.concat(sales)
+				.map(item => item.ticket_type_id);
 			ticketTypeIds.forEach(ticketTypeId => {
 				if (!eventResult.tickets.hasOwnProperty(ticketTypeId)) {
-					const ticketTypeCounts = counts.filter(item => item.ticket_type_id === ticketTypeId);
-					const ticketTypeSales = sales.filter(item => item.ticket_type_id === ticketTypeId);
-					const name = (ticketTypeCounts.length && ticketTypeCounts[0].ticket_name) || "No Data";
+					const ticketTypeCounts = counts.filter(
+						item => item.ticket_type_id === ticketTypeId
+					);
+					const ticketTypeSales = sales.filter(
+						item => item.ticket_type_id === ticketTypeId
+					);
+					const name =
+						(ticketTypeCounts.length && ticketTypeCounts[0].ticket_name) ||
+						"No Data";
 					eventResult.tickets[ticketTypeId] = {
 						name,
 						counts: ticketTypeCounts,
@@ -229,9 +263,13 @@ export class TicketCountReport {
 			for (const ticketTypeId in tickets) {
 				const ticketSalesPricing = tickets[ticketTypeId].sales;
 				const tmpGroupByPrice = {};
+
 				ticketSalesPricing.forEach(row => {
 					//Group by price, but if there's a hold_id, group by that as well
-					const groupingKey = `pricekey-${row.ticket_pricing_price_in_cents}${row.hold_id ? `-hold-${row.hold_id}` : ""}`;
+					const groupingKey = `pricekey-${row.ticket_pricing_price_in_cents +
+						row.promo_code_discounted_ticket_price}${
+						row.hold_id ? `-hold-${row.hold_id}` : ""
+					}`;
 
 					//const ticketPricingPriceInCents = row.ticket_pricing_price_in_cents;
 					if (!tmpGroupByPrice.hasOwnProperty(groupingKey)) {
