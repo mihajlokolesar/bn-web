@@ -163,7 +163,7 @@ class Cart {
 				if (data) {
 					this.replaceCartData(data);
 				}
-				onSuccess();
+				onSuccess(data);
 			})
 			.catch(error => {
 				console.error(error);

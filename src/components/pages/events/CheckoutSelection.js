@@ -358,13 +358,17 @@ class CheckoutSelection extends Component {
 
 		this.setState({ isSubmitting: true });
 
-		const cartItems = cart.ticketCount;
-		const total = cart.total_in_cents / 100;
-
 		cart.replace(
 			ticketSelection,
-			() => {
+			data => {
 				if (!emptySelection) {
+					let cartItems = 0;
+					for (let i = 0; i < data.items.length; i++) {
+						if (data.items[i].item_type === "Tickets") {
+							cartItems += data.items[i].quantity;
+						}
+					}
+					const total = data.total_in_cents / 100;
 					analytics.initiateCheckout(
 						event.id,
 						getAllUrlParams(),
