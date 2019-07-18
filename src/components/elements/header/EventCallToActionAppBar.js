@@ -20,20 +20,6 @@ import user from "../../../stores/user";
 
 const eventImageHeight = 45;
 
-const displayTime = ({ event_start, door_time, timezone }) => {
-	const displayDate = moment(event_start)
-		.tz(timezone)
-		.format("ddd, D MMM YYYY");
-	const displayDoorTime = moment(door_time)
-		.tz(timezone)
-		.format("hh:mm A");
-	const displayShowTime = moment(event_start)
-		.tz(timezone)
-		.format("hh:mm A");
-
-	return `${displayDate}, Doors ${displayDoorTime} - Show ${displayShowTime}`;
-};
-
 const styles = theme => {
 	return {
 		toolBar: {
@@ -103,7 +89,8 @@ class EventCallToActionAppBar extends Component {
 		super(props);
 
 		this.state = {
-			show: false
+			show: false,
+			displayTime: ""
 		};
 
 		this.onWindowScroll = this.onWindowScroll.bind(this);
@@ -111,6 +98,27 @@ class EventCallToActionAppBar extends Component {
 
 	componentDidMount() {
 		window.addEventListener("scroll", this.onWindowScroll);
+
+		const { venue, event_start, door_time } = this.props;
+
+		const { timezone } = venue;
+
+		const displayDate = moment
+			.utc(event_start)
+			.tz(timezone)
+			.format("ddd, D MMM YYYY");
+		const displayDoorTime = moment
+			.utc(door_time)
+			.tz(timezone)
+			.format("hh:mm A");
+		const displayShowTime = moment
+			.utc(event_start)
+			.tz(timezone)
+			.format("hh:mm A");
+
+		const displayTime = `${displayDate}, Doors ${displayDoorTime} - Show ${displayShowTime}`;
+
+		this.setState({ displayTime });
 	}
 
 	componentWillUnmount() {
@@ -143,7 +151,7 @@ class EventCallToActionAppBar extends Component {
 
 		const { timezone } = venue;
 
-		const { show } = this.state;
+		const { show, displayTime } = this.state;
 
 		return (
 			<Slide direction="down" in={show}>
@@ -164,8 +172,7 @@ class EventCallToActionAppBar extends Component {
 								<div className={classes.textContainer}>
 									<Typography className={classes.eventTitle}>{name}</Typography>
 									<Typography className={classes.subHeading}>
-										{venue.name} -{" "}
-										{displayTime({ event_start, door_time, timezone })}
+										{venue.name} - {displayTime}
 									</Typography>
 								</div>
 							</div>
