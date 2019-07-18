@@ -1,0 +1,16 @@
+{
+	"capabilities": {
+    "build": "testng-browserstack",
+    "name": "suite_test",
+    "browserstack.debug": true
+  },
+
+  "environments": {
+    "chrome": {
+      "browser": "chrome"
+    },
+    "firefox": {
+      "browser": "firefox"
+    }
+  }
+}

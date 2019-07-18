@@ -26,3 +26,9 @@ ui-tests/node_modules
 
 
 *firebase*
+
+/selenium/**/target/
+/selenium/**/.classpath
+/selenium/**/.project
+/selenium/**/.settings/
+/selenium/**/bin/
