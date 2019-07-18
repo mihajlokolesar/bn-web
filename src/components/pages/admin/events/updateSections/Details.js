@@ -233,7 +233,7 @@ const formatDataForInputs = event => {
 		: null;
 	const endTime = event_end
 		? moment.utc(event_end, moment.HTML5_FMT.DATETIME_LOCAL_MS)
-		: null;
+		: eventDate.clone().add(DEFAULT_END_TIME_HOURS_AFTER_SHOW_TIME, "h");
 
 	const eventDetails = {
 		override_status, //TODO get from API
