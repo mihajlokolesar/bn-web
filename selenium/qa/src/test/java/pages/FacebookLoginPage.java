@@ -1,5 +1,6 @@
 package pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -33,6 +34,12 @@ public class FacebookLoginPage extends BasePage{
 		emailOrPhoneField.sendKeys(phoneOrMail);
 		passwordField.sendKeys(password);
 		loginButton.click();
+		try {
+			WebElement firstTimeLoginConfirmButton = explicitWait(5, ExpectedConditions.visibilityOfElementLocated(By.xpath("//form//tbody//button[@name='__CONFIRM__']")));
+			firstTimeLoginConfirmButton.click();
+		} catch (Exception e) {
+			System.out.println(e.getCause()); 
+		}
 		boolean retVal = explicitWait(5, ExpectedConditions.numberOfWindowsToBe(1)); 
 		return retVal;
 	}

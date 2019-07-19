@@ -1,6 +1,6 @@
 package test;
 
-import org.testng.AssertJUnit;
+import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -14,7 +14,7 @@ public class LoginStepsIT extends BaseSteps {
 	@Test(dataProvider = "user_credentials")
 	public void regularLogin(String username, String password) {
 		loginPage = new LoginPage(driver);
-		AssertJUnit.assertTrue(loginPage.login(username, password));
+		Assert.assertTrue(loginPage.login(username, password));
 
 	}
 	

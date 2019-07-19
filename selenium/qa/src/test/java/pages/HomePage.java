@@ -20,7 +20,7 @@ public class HomePage extends BasePage {
 
 	@Override
 	public void presetUrl() {
-		setUrl(Constants.BASE_URL_BIG_NEON);
+		setUrl(Constants.getBaseUrlBigNeon());
 	}
 
 	public List<WebElement> checkForResultOfSearch(String searchParam) {

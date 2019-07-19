@@ -19,7 +19,7 @@ public class LoginPage extends BasePage {
 	@FindBy(id = "password")
 	private WebElement passwordField;
 	
-	@FindBy(xpath = "//a[@href='/sign-up']")
+	@FindBy(xpath = "//a[@href='/sign-up']/button")
 	private WebElement registerLink;
 
 	@FindBy(xpath = "//form//button[span/img[contains(@src,'facebook')]]")
@@ -50,7 +50,7 @@ public class LoginPage extends BasePage {
 
 	@Override
 	public void presetUrl() {
-		setUrl(Constants.LOGIN_URL_BIG_NEON);
+		setUrl(Constants.getLoginUrlBigNeon());
 	}
 
 	public void navigate() {
@@ -95,7 +95,7 @@ public class LoginPage extends BasePage {
 				FacebookLoginPage fbLoginPage = new FacebookLoginPage(driver);
 				if (fbLoginPage.loginToFacebook(phoneOrMail, password)) {
 					driver.switchTo().window(parentWindowHandle);
-					boolean retVal = explicitWait(10, 500, ExpectedConditions.urlToBe(Constants.BASE_URL_BIG_NEON));
+					boolean retVal = explicitWait(10, 500, ExpectedConditions.urlToBe(Constants.getBaseUrlBigNeon()));
 					return retVal;
 				}
 			}

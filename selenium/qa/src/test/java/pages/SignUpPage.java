@@ -39,7 +39,7 @@ public class SignUpPage extends BasePage{
 
 	@Override
 	public void presetUrl() {
-		setUrl(Constants.SIGN_UP_BIG_NEON);
+		setUrl(Constants.getSignUpBigNeon());
 	}
 	
 	public void createAccount(String firstName, String lastName, String emailAddress, String password, String confirmPassword) {

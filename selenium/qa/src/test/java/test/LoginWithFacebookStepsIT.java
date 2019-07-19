@@ -1,6 +1,6 @@
 package test;
 
-import org.testng.AssertJUnit;
+import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -13,11 +13,11 @@ public class LoginWithFacebookStepsIT extends BaseSteps {
 	public void loginTestWithFacebook(String username, String password) {
 		LoginPage loginPage = new LoginPage(driver);
 		loginPage.navigate();
-		AssertJUnit.assertTrue(loginPage.isAtPage());
+		Assert.assertTrue(loginPage.isAtPage());
 		boolean isLogedIn = loginPage.loginWithFacebookUsingMail(username, password);
-		AssertJUnit.assertTrue(isLogedIn);
+		Assert.assertTrue(isLogedIn);
 		HomePage homePage = new HomePage(driver);
-		AssertJUnit.assertTrue(homePage.isAtPage());
+		Assert.assertTrue(homePage.isAtPage());
 	}
 
 	@DataProvider(name = "user_fb_credentials")

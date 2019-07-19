@@ -21,9 +21,8 @@
 		<maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
 		<maven-failsafe-plugin.version>2.21.0</maven-failsafe-plugin.version>
 		<browser>rm</browser>
-
-		<!-- <webdriver.gecko.driver>/home/simple-task/programs/drivers/linux/geckodriver</webdriver.gecko.driver> 
-			<webdriver.chrome.driver/> <webdriver.edge.driver/> -->
+		<baseurl>https://beta.bigneon.com/</baseurl>
+	
 	</properties>
 
 	<dependencies>
@@ -68,6 +67,7 @@
 				<configuration>
 					<systemPropertyVariables>
 						<browser>${browser}</browser>
+						<baseurl>${baseurl}</baseurl>
 						<webdriver.chrome.driver>${webdriver.chrome.driver}</webdriver.chrome.driver>
 						<webdriver.gecko.driver>${webdriver.gecko.driver}</webdriver.gecko.driver>
 						<webdriver.edge.driver>${webdriver.edge.driver}</webdriver.edge.driver>

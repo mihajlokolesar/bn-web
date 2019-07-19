@@ -1,16 +1,21 @@
 package utils;
 
 public class Constants {
-	
-	
-	public static final String BASE_URL_BIG_NEON = "https://beta.bigneon.com/";
-	
-	public static final String LOGIN_URL_BIG_NEON = BASE_URL_BIG_NEON + "login";
-	
-	public static final String SIGN_UP_BIG_NEON = BASE_URL_BIG_NEON + "sign-up";
-	
-	
-	
-	
+
+	public static String getBaseUrlBigNeon() {
+		String baseUrl = System.getProperty("baseurl");
+		if (!baseUrl.endsWith("/")) {
+			baseUrl = baseUrl + "/";
+		}
+		return baseUrl;
+	}
+
+	public static String getLoginUrlBigNeon() {
+		return getBaseUrlBigNeon() + "login";
+	}
+
+	public static String getSignUpBigNeon() {
+		return getBaseUrlBigNeon() + "sign-up";
+	}
 
 }
