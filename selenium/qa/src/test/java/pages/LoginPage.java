@@ -73,7 +73,6 @@ public class LoginPage extends BasePage {
 			retVal = false;
 		}
 		return retVal;
-
 	}
 
 	public boolean loginWithFacebookUsingPhone(String phoneNumber, String password) {
@@ -100,7 +99,6 @@ public class LoginPage extends BasePage {
 				}
 			}
 		}
-//		driver.switchTo().window(parentWindowHandle);
 		return false;
 	}
 	
@@ -115,10 +113,6 @@ public class LoginPage extends BasePage {
 		registerLink.click();
 	}
 	
-	
-	
-	
-	
 	public boolean enterMailAndClickOnResetPassword(String email) {
 		explicitWait(10, 500, ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@role='dialog']//form")));
 		forgotPasswordEmailField.sendKeys(email);
@@ -126,6 +120,5 @@ public class LoginPage extends BasePage {
 		boolean retVal = explicitWait(10, 500, ExpectedConditions.visibilityOf(dialogMessageForgotPass));
 		return retVal;
 	}
-	
 
 }

@@ -11,10 +11,7 @@ public class SafariDriverManager extends DriverManager {
 
 	@Override
 	protected void startService() {
-		
 	}
-	
-	
 
 	@Override
 	public WebDriver getDriver() throws IOException {
@@ -24,11 +21,8 @@ public class SafariDriverManager extends DriverManager {
 		return driver;
 	}
 
-
-
 	@Override
 	protected void stopService() {
-		
 	}
 
 	@Override
@@ -36,9 +30,6 @@ public class SafariDriverManager extends DriverManager {
 		SafariOptions options = new SafariOptions();
 		options.setCapability("browserstack.safari.enablePopups", true);
 		driver = new SafariDriver();
-		
-		
-		
 	}
 
 }

@@ -1,6 +1,5 @@
 package config;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 
 import org.openqa.selenium.WebDriver;
@@ -31,27 +30,11 @@ public abstract class DriverManager {
 	
 	public WebDriver getDriver() throws Exception {
 		if (driver == null) {
-//			setDriverBasePathValue("src/test/resources/drivers/");
-//			setExtension();
 			startService();
 			createDriver();
 		}
 		return driver;
 	}
 	
-	private void setDriverBasePathValue(String value) {
-		this.driversBasePathValue = value;
-	}
-	
-	private void setExtension() {
-		if (os.contains("Windows")) {
-			osPath = "windows";
-			extension = ".exe";
-		} else if (os.contains("Linux")) {
-			osPath = "linux";
-		} else {
-			osPath = "default";
-		}
-	}
 
 }

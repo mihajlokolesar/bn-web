@@ -10,8 +10,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class FacebookLoginPage extends BasePage{
 	
-	
-	
 	@FindBy(id = "email")
 	private WebElement emailOrPhoneField;
 	
@@ -48,7 +46,5 @@ public class FacebookLoginPage extends BasePage{
 		super(driver);
 		PageFactory.initElements(driver, this);
 	}
-	
-	
 
 }

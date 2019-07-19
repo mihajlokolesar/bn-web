@@ -33,7 +33,6 @@ public class Header extends BasePage {
 		}
 	}
 	
-	
 	public WebElement openProfileOptions() {
 		WebElement profileDropDownMenu = null;
 		profileOptions.click();
@@ -57,8 +56,5 @@ public class Header extends BasePage {
 		WebElement name =  explicitWait(5, 200, ExpectedConditions.visibilityOfElementLocated(By.xpath(xpath)));
 		return true;
 	}
-	
-	
-	
 
 }
