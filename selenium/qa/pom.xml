@@ -21,7 +21,7 @@
 		<maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
 		<maven-failsafe-plugin.version>2.21.0</maven-failsafe-plugin.version>
 		<browser>rm</browser>
-		<baseurl>https://beta.bigneon.com/</baseurl>
+		<baseurl>https://develop.bigneon.com/</baseurl>
 	
 	</properties>
 

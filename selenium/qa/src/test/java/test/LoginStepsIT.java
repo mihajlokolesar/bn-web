@@ -8,18 +8,15 @@ import pages.LoginPage;
 
 public class LoginStepsIT extends BaseSteps {
 
-	private LoginPage loginPage;
-	
-
 	@Test(dataProvider = "user_credentials")
 	public void regularLogin(String username, String password) {
-		loginPage = new LoginPage(driver);
-		Assert.assertTrue(loginPage.login(username, password));
-
+		LoginPage loginPage = new LoginPage(driver);
+		boolean retVal = loginPage.login(username, password);
+		Assert.assertTrue(retVal);
 	}
 	
 	@DataProvider(name = "user_credentials")
 	public static Object[][] data() {
-		return new Object[][] { { "testuser@mailnator.com", "test1111" } };
+		return new Object[][] { { "testuser@mailinator.com", "test1111" } };
 	}
 }

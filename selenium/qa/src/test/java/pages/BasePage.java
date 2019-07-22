@@ -2,7 +2,9 @@ package pages;
 
 import java.util.function.Function;
 
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public abstract class BasePage {
@@ -35,22 +37,21 @@ public abstract class BasePage {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T, V> T explicitWait(int time, long poolingInterval, Function<? super WebDriver, V> condition) {
+	public <T, V> T explicitWait(int time, long poolingInterval, Function<? super WebDriver, V> condition) throws TimeoutException {
 		return (T) new WebDriverWait(driver, time, poolingInterval).until(condition);
 	}
 	
-	@SuppressWarnings("unchecked")
-	public <T, V> T explicitWait(int time, Function<? super WebDriver, V> condition) {
+	public <T, V> T explicitWait(int time, Function<? super WebDriver, V> condition) throws TimeoutException {
 		return explicitWait(time, 500, condition);
 	}
 	
 	@SuppressWarnings("unchecked")
-	public <T, V> T explicitWaitNoPooling(int time, Function<? super WebDriver, V> condition) {
+	public <T, V> T explicitWaitNoPooling(int time, Function<? super WebDriver, V> condition) throws TimeoutException{
 		return (T) new WebDriverWait(driver, time).until(condition);
 	}
 	
 	public boolean isAtPage() {
-		return driver.getCurrentUrl().equals(url);
+		return explicitWait(5, ExpectedConditions.urlToBe(getUrl()));
 	}
 
 }

@@ -41,7 +41,7 @@ public class LoginPage extends BasePage {
 	private WebElement forgotPasswordConfirmButton;
 	
 	@FindBy(id = "message-id")
-	private WebElement dialogMessageForgotPass;
+	private WebElement dialogMessage;
 
 	public LoginPage(WebDriver driver) {
 		super(driver);
@@ -65,16 +65,14 @@ public class LoginPage extends BasePage {
 		recaptcha.click();
 		loginSubmitButton.click();
 		boolean retVal = false;
-
 		try {
 			retVal = explicitWait(8, ExpectedConditions.stalenessOf(recaptcha));
-			System.out.println(driver.getCurrentUrl());
 		} catch (Exception e) {
 			retVal = false;
 		}
 		return retVal;
 	}
-
+	
 	public boolean loginWithFacebookUsingPhone(String phoneNumber, String password) {
 		return loginWithFacebook(phoneNumber, password);
 	}
@@ -117,7 +115,7 @@ public class LoginPage extends BasePage {
 		explicitWait(10, 500, ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@role='dialog']//form")));
 		forgotPasswordEmailField.sendKeys(email);
 		forgotPasswordConfirmButton.click();
-		boolean retVal = explicitWait(10, 500, ExpectedConditions.visibilityOf(dialogMessageForgotPass));
+		boolean retVal = explicitWait(10, 500, ExpectedConditions.visibilityOf(dialogMessage));
 		return retVal;
 	}
 

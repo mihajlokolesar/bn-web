@@ -44,7 +44,7 @@ public class SignUpStepsIT extends BaseSteps {
 		Integer ran = random.nextInt(1000000);
 		String firstName = "seleniumtest";
 		String lastName = "qaselenium";
-		String emailAddress = firstName + ran + "@mailnator.com";
+		String emailAddress = firstName + ran + "@mailinator.com";
 		String password = "seleniumpassword";
 		String confirmPas = password;
 		Map<String, String> map = new HashMap<>();
