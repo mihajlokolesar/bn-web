@@ -2,12 +2,11 @@ package config;
 
 public class DriverFactory {
 
-
 	private static String browser;
-	
+
 	public static DriverManager getDriverManager(String config, String environment) {
-		DriverManager manager = null;
 		
+		DriverManager manager = null;
 		try {
 			browser = System.getProperty("browser");
 			BrowsersEnum browserEnum = BrowsersEnum.getEnumForCode(browser);
@@ -40,8 +39,19 @@ public class DriverFactory {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return manager;
-
+	}
+	
+	public static String getUsername() {
+		return System.getProperty("username");
+	}
+	
+	public static String getAccessKey() {
+		return System.getProperty("key");
+	}
+	
+	public static BrowsersEnum getBrowser() {
+		String code = System.getProperty("browser");
+		return BrowsersEnum.getEnumForCode(code);
 	}
 }

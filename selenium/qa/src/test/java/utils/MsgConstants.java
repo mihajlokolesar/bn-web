@@ -1,0 +1,11 @@
+package utils;
+
+public class MsgConstants {
+	
+	public static final String RESET_PASS_UNMATCHED_PASS_ERROR = "Please make sure passwords match";
+	public static final String RESET_PASS_MISSING_PASS_ERROR = "Missing password";
+	public static final String RESET_PASS_MISSING_CONFIRM_PASS_ERROR = "Missing password confirmation";
+	public static final String ACCOUNT_UPDATED_NOTIFICATION = "Account updated";
+	public static final String EMAIL_OR_PASS_INCORRECT_ON_LOGIN_ERROR = "Email or password incorrect";
+
+}

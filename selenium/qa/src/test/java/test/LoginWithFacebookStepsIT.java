@@ -12,12 +12,14 @@ public class LoginWithFacebookStepsIT extends BaseSteps {
 	@Test(dataProvider = "user_fb_credentials")
 	public void loginTestWithFacebook(String username, String password) {
 		LoginPage loginPage = new LoginPage(driver);
+		maximizeWindow();
 		loginPage.navigate();
 		Assert.assertTrue(loginPage.isAtPage());
 		boolean isLogedIn = loginPage.loginWithFacebookUsingMail(username, password);
 		Assert.assertTrue(isLogedIn);
 		HomePage homePage = new HomePage(driver);
 		Assert.assertTrue(homePage.isAtPage());
+		homePage.logOut();
 	}
 
 	@DataProvider(name = "user_fb_credentials")

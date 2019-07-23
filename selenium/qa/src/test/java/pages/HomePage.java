@@ -35,5 +35,10 @@ public class HomePage extends BasePage {
 		}
 		return false;
 	}
+	
+	public void logOut() {
+		Header header = new Header(driver);
+		header.logOut();
+	}
 
 }

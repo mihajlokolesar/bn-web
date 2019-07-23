@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Pool" parallel="tests">
+  <test thread-count="2" name="Chrome" parallel="classes">
+    <parameter name="config" value="suite.conf.json"/>
+    <parameter name="environment" value="chrome"/>
+    <classes>
+      <class name="test.LoginWithFacebookStepsIT"/>
+      <class name="test.LoginStepsIT"/>
+      <class name="test.SignUpStepsIT"/>
+    </classes>
+  </test>
+  <test thread-count="2" name="Firefox" parallel="classes">
+	<parameter name="config" value="suite.conf.json"/>
+    <parameter name="environment" value="firefox"/>
+    <classes>
+      <class name="test.LoginWithFacebookStepsIT"/>
+      <class name="test.LoginStepsIT"/>
+      <class name="test.SignUpStepsIT"/>
+    </classes>
+  </test> 
+</suite>

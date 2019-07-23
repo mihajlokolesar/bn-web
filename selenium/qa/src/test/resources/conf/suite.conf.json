@@ -1,16 +1,17 @@
 {
 	"capabilities": {
     "build": "testng-browserstack",
-    "name": "suite_test",
     "browserstack.debug": true
   },
 
   "environments": {
     "chrome": {
-      "browser": "chrome"
+      "browser": "chrome",
+      "browser_version", "74.0"
     },
     "firefox": {
-      "browser": "firefox"
+      "browser": "firefox",
+      "browser_version", "68.0"
     }
   }
 }

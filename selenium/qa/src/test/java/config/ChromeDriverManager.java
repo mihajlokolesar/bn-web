@@ -17,7 +17,6 @@ public class ChromeDriverManager extends DriverManager {
 	@Override
 	protected void createDriver() {
 		ChromeOptions options = new ChromeOptions();
-		options.addArguments("test-type");
 		driver = new ChromeDriver();
 		
 	}

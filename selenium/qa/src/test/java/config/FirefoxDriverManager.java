@@ -17,7 +17,6 @@ public class FirefoxDriverManager extends DriverManager{
 	@Override
 	protected void createDriver() {
 		FirefoxOptions options = new FirefoxOptions();
-		options.addArguments("test-type");
 		driver = new FirefoxDriver();
 	}
 
