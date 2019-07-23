@@ -43,6 +43,8 @@ public class MailinatorHomePage extends BasePage{
 	}
 	public void checkIfOnUserInboxPage(String userInboxName) {
 		explicitWait(10, 500, ExpectedConditions.urlContains(userInboxName));
+		explicitWait(10, 1000, ExpectedConditions.presenceOfElementLocated(By.xpath("//table//thead//th[contains(text(),'From')]")));
+		
 	}
 	
 	

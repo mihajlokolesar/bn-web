@@ -51,7 +51,7 @@ public abstract class BasePage {
 	}
 	
 	public boolean isAtPage() {
-		return explicitWait(5, ExpectedConditions.urlToBe(getUrl()));
+		return explicitWait(10, ExpectedConditions.urlToBe(getUrl()));
 	}
 
 }

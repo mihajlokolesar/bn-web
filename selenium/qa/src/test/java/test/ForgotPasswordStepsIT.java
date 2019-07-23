@@ -13,7 +13,8 @@ import pages.mailinator.MailinatorInboxPage;
 public class ForgotPasswordStepsIT extends BaseSteps {
 
 	@Test(dataProvider = "reset_password")
-	public void forgotPasswordFunctionallity(String email, String newPass, String confirmPass, boolean test) throws InterruptedException {
+	public void forgotPasswordFunctionallity(String email, String newPass, String confirmPass, boolean test)
+			throws InterruptedException {
 		LoginPage loginPage = new LoginPage(driver);
 		driver.manage().window().maximize();
 		loginPage.navigate();
@@ -29,7 +30,7 @@ public class ForgotPasswordStepsIT extends BaseSteps {
 		MailinatorInboxPage inboxPage = new MailinatorInboxPage(driver);
 		inboxPage.goToResetMail();
 		inboxPage.clickOnResetPasswordLinkInMail();
-		
+
 		ResetPasswordPage resetPasswordPage = new ResetPasswordPage(driver);
 		resetPasswordPage.fillForm(newPass, confirmPass);
 		resetPasswordPage.clickResetButton();
@@ -50,9 +51,9 @@ public class ForgotPasswordStepsIT extends BaseSteps {
 
 	@DataProvider(name = "reset_password")
 	public static Object[][] data() {
-		return new Object[][] { { "bluetestneouser@mailinator.com", "test1111", "test2222", false },
-				 { "bluetestneouser@mailinator.com", "test1111", "test1111", true }
-		};
+		return new Object[][] { 
+			{ "bluetestneouser@mailinator.com", "test1111", "test2222", false },
+			{ "bluetestneouser@mailinator.com", "test1111", "test1111", true } };
 	}
 
 }

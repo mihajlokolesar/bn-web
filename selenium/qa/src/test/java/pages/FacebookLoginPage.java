@@ -27,12 +27,12 @@ public class FacebookLoginPage extends BasePage {
 	}
 
 	public boolean loginToFacebook(String phoneOrMail, String password) {
-		explicitWait(5, 250, ExpectedConditions.visibilityOf(emailOrPhoneField));
+		explicitWait(10, 250, ExpectedConditions.visibilityOf(emailOrPhoneField));
 		emailOrPhoneField.sendKeys(phoneOrMail);
 		passwordField.sendKeys(password);
 		loginButton.click();
 		try {
-			WebElement firstTimeLoginConfirmButton = explicitWait(5, ExpectedConditions
+			WebElement firstTimeLoginConfirmButton = explicitWait(10, ExpectedConditions
 					.visibilityOfElementLocated(By.xpath("//form//tbody//button[@name='__CONFIRM__']")));
 			firstTimeLoginConfirmButton.click();
 		} catch (Exception e) {

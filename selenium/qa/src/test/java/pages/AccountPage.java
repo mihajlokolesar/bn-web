@@ -33,7 +33,7 @@ public class AccountPage extends BasePage {
 	}
 
 	public boolean isAccountUpdatedMsg() {
-		explicitWait(5, ExpectedConditions.visibilityOf(dialogMessage));
+		explicitWait(10, ExpectedConditions.visibilityOf(dialogMessage));
 		String msg = dialogMessage.getText();
 		if (msg.contains(MsgConstants.ACCOUNT_UPDATED_NOTIFICATION)) {
 			return true;

@@ -3,8 +3,10 @@ package pages.mailinator;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeoutException;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
@@ -26,12 +28,11 @@ public class MailinatorInboxPage extends BasePage {
 
 	public void goToResetMail() throws InterruptedException {
 		driver.navigate().refresh();
-		long st = System.currentTimeMillis();
-		System.out.println(new Date(st));
 		Thread.sleep(4000);
-		
 		driver.navigate().refresh();
-		Thread.sleep(2000);
+		Thread.sleep(3000);
+		driver.navigate().refresh();
+		Thread.sleep(500);
 		WebElement mailRowCell = explicitWait(20, 2000, ExpectedConditions.presenceOfElementLocated(By.xpath(
 				".//table//tbody//tr[td[contains(text(),'noreply@bigneon.com')] and td[contains(text(),'Reset Your Password')]]/td[contains(text(),'noreply@bigneon.com')]")));
 		mailRowCell.click();
@@ -40,11 +41,16 @@ public class MailinatorInboxPage extends BasePage {
 	public void clickOnResetPasswordLinkInMail() {
 		String parentHandle = driver.getWindowHandle();
 		explicitWait(10, ExpectedConditions.urlContains("msgpane"));
-		WebElement contentIframe = explicitWait(5, ExpectedConditions
-				.presenceOfElementLocated(By.xpath("//div//div[@class='x_content']/iframe[@id='msg_body']")));
-		driver.switchTo().frame(contentIframe);
-		WebElement resetLink = explicitWait(5, 5000,
-				ExpectedConditions.presenceOfElementLocated(By.xpath("//a[text()='Reset Password']")));
+		driver = explicitWait(15, ExpectedConditions
+				.frameToBeAvailableAndSwitchToIt(By.xpath("//div//div[@class='x_content']/iframe[@id='msg_body']")));
+		WebElement resetLink = null;
+		try {
+			resetLink = explicitWait(10, 500,
+					ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[text()='Reset Password']")));
+		} catch (Exception e) {
+			JavascriptExecutor js = (JavascriptExecutor) driver;
+			js.executeScript("window.scrollBy(0,400)");
+		}
 		resetLink.click();
 		List<String> handles = new ArrayList<String>(driver.getWindowHandles());
 		String childHandle = driver.getWindowHandle();

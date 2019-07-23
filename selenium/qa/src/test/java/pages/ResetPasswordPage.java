@@ -39,7 +39,7 @@ public class ResetPasswordPage extends BasePage {
 	}
 
 	public void fillForm(String password, String confirmPassword) {
-		explicitWait(5, 200, ExpectedConditions.visibilityOf(newPasswordField));
+		explicitWait(10, 200, ExpectedConditions.visibilityOf(newPasswordField));
 		newPasswordField.sendKeys(password);
 		confirmPasswordField.sendKeys(confirmPassword);
 	}

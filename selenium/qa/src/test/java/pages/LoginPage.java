@@ -65,12 +65,12 @@ public class LoginPage extends BasePage {
 		passwordField.sendKeys(password);
 		WebElement recaptcha = driver.findElement(By.className("g-recaptcha"));
 		recaptcha.click();
-		explicitWait(4, ExpectedConditions.elementToBeClickable(loginSubmitButton));
+		explicitWait(10, ExpectedConditions.elementToBeClickable(loginSubmitButton));
 		loginSubmitButton.click();
 	}
 
 	public boolean isMailOrPassIncorrectMessageDisplayed() {
-		explicitWait(5, ExpectedConditions.visibilityOf(dialogMessage));
+		explicitWait(10, ExpectedConditions.visibilityOf(dialogMessage));
 		String msg = dialogMessage.getText();
 		System.out.println(msg);
 		if (msg.contains(MsgConstants.EMAIL_OR_PASS_INCORRECT_ON_LOGIN_ERROR)) {
@@ -84,7 +84,7 @@ public class LoginPage extends BasePage {
 		login(username, password);
 		boolean retVal = false;
 		try {
-			retVal = explicitWait(5, ExpectedConditions.urlMatches(Constants.getBaseUrlBigNeon()));
+			retVal = explicitWait(10, ExpectedConditions.urlMatches(Constants.getBaseUrlBigNeon()));
 		} catch (TimeoutException e) {
 			retVal = false;
 		}
@@ -104,28 +104,32 @@ public class LoginPage extends BasePage {
 		loginFacebook.click();
 		explicitWait(10, ExpectedConditions.numberOfWindowsToBe(2));
 		Set<String> allWindows = driver.getWindowHandles();
-		for (String handle : allWindows) {
-			if (!parentWindowHandle.equalsIgnoreCase(handle)) {
-				driver.switchTo().window(handle);
-				FacebookLoginPage fbLoginPage = new FacebookLoginPage(driver);
-				if (fbLoginPage.loginToFacebook(phoneOrMail, password)) {
-					driver.switchTo().window(parentWindowHandle);
-					boolean retVal = explicitWait(10, 500, ExpectedConditions.urlToBe(Constants.getBaseUrlBigNeon()));
-					return retVal;
+		String currentWindowHandle = driver.getWindowHandle();
+		if (parentWindowHandle.equalsIgnoreCase(currentWindowHandle)) {
+			for (String handle : allWindows) {
+				if (!parentWindowHandle.equalsIgnoreCase(handle)) {
+					driver.switchTo().window(handle);
+					
 				}
 			}
+		}
+		FacebookLoginPage fbLoginPage = new FacebookLoginPage(driver);
+		if (fbLoginPage.loginToFacebook(phoneOrMail, password)) {
+			driver.switchTo().window(parentWindowHandle);
+			boolean retVal = explicitWait(10, 500, ExpectedConditions.urlToBe(Constants.getBaseUrlBigNeon()));
+			return retVal;
 		}
 		return false;
 	}
 
 	public void clickOnForgotPassword() {
-		explicitWait(5, ExpectedConditions.elementToBeClickable(forgotPasswordButton));
+		explicitWait(10, ExpectedConditions.elementToBeClickable(forgotPasswordButton));
 		forgotPasswordButton.click();
 
 	}
 
 	public void clickOnRegisterLink() {
-		explicitWait(5, ExpectedConditions.elementToBeClickable(registerLink));
+		explicitWait(10, ExpectedConditions.elementToBeClickable(registerLink));
 		registerLink.click();
 	}
 

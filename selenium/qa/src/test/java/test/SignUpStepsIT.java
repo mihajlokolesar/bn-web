@@ -24,6 +24,7 @@ public class SignUpStepsIT extends BaseSteps {
 	@Test
 	public void singUpToBigNeon() {
 		LoginPage loginPage = new LoginPage(driver);
+		maximizeWindow();
 		loginPage.navigate();
 		loginPage.clickOnRegisterLink();
 		SignUpPage signUpPage = new SignUpPage(driver);
@@ -32,7 +33,7 @@ public class SignUpStepsIT extends BaseSteps {
 				map.get(passwordKey), map.get(passwordConfirmKey));
 		boolean retVal = false;
 		try {
-			retVal = new WebDriverWait(driver, 5, 200).until(ExpectedConditions.urlToBe(Constants.getBaseUrlBigNeon()));
+			retVal = new WebDriverWait(driver, 10, 200).until(ExpectedConditions.urlToBe(Constants.getBaseUrlBigNeon()));
 		} catch (Exception e) {
 			retVal = false;
 		}

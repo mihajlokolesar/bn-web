@@ -1,17 +1,18 @@
 {
 	"capabilities": {
     "build": "testng-browserstack",
-    "browserstack.debug": true
+    "browserstack.debug": true,
+    "resolution": "1600x1200"
   },
 
   "environments": {
     "chrome": {
       "browser": "chrome",
-      "browser_version", "74.0"
+      "browser_version": "74.0"
     },
     "firefox": {
       "browser": "firefox",
-      "browser_version", "68.0"
+      "browser_version": "68.0"
     }
   }
 }
