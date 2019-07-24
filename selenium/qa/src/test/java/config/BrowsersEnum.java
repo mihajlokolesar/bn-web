@@ -10,8 +10,9 @@ public enum BrowsersEnum {
 	private String name;
 	
 
-	private BrowsersEnum(String browserCode, String b) {
+	private BrowsersEnum(String browserCode, String name) {
 		this.browserCode = browserCode;
+		this.name = name;
 	}
 
 	public String getBrowserCode() {
