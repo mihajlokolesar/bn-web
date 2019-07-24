@@ -13,7 +13,7 @@ public class Header extends BasePage {
 	@FindBy(css = "header form input")
 	private WebElement searchEvents;
 
-	@FindBy(xpath = "/html/body/div[1]/div/header/div/span/div/span/img")
+	@FindBy(xpath = "//body//header//span[@aria-owns='menu-appbar']/img[contains(@src,'down-active.svg')]")
 	private WebElement profileOptions;
 	
 	public Header(WebDriver driver) {
@@ -35,9 +35,10 @@ public class Header extends BasePage {
 	
 	public WebElement openProfileOptions() {
 		WebElement profileDropDownMenu = null;
+		explicitWait(10, ExpectedConditions.elementToBeClickable(profileOptions));
 		profileOptions.click();
 		try {
-			profileDropDownMenu = explicitWait(5, ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/div[4]/div[2]")));
+			profileDropDownMenu = explicitWait(10, ExpectedConditions.presenceOfElementLocated(By.xpath("/html/body/div[4]/div[2]")));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -1,20 +1,22 @@
 package pages.mailinator;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeoutException;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import pages.BasePage;
 
 public class MailinatorInboxPage extends BasePage {
+
+	@FindBy(id = "trash_but")
+	private WebElement trashBin;
 
 	public MailinatorInboxPage(WebDriver driver) {
 		super(driver);
@@ -26,13 +28,10 @@ public class MailinatorInboxPage extends BasePage {
 
 	}
 
-	public void goToResetMail() throws InterruptedException {
-		driver.navigate().refresh();
-		Thread.sleep(4000);
-		driver.navigate().refresh();
-		Thread.sleep(3000);
-		driver.navigate().refresh();
-		Thread.sleep(500);
+	public void goToResetMail() {
+		for (int i = 0; i < 6; i++) {
+			driver.navigate().refresh();
+		}
 		WebElement mailRowCell = explicitWait(20, 2000, ExpectedConditions.presenceOfElementLocated(By.xpath(
 				".//table//tbody//tr[td[contains(text(),'noreply@bigneon.com')] and td[contains(text(),'Reset Your Password')]]/td[contains(text(),'noreply@bigneon.com')]")));
 		mailRowCell.click();
@@ -52,6 +51,16 @@ public class MailinatorInboxPage extends BasePage {
 			js.executeScript("window.scrollBy(0,400)");
 		}
 		resetLink.click();
+		// go back to mailpage and delete mail
+		String currentHandle = driver.getWindowHandle();
+		if (!currentHandle.equalsIgnoreCase(parentHandle)) {
+			driver.switchTo().window(parentHandle);
+		}
+		driver.switchTo().parentFrame();
+		deleteCurrentMail();
+		driver.navigate().refresh();
+
+		// switch to new tab
 		List<String> handles = new ArrayList<String>(driver.getWindowHandles());
 		String childHandle = driver.getWindowHandle();
 		if (childHandle.equals(parentHandle)) {
@@ -60,6 +69,16 @@ public class MailinatorInboxPage extends BasePage {
 					driver.switchTo().window(handle);
 				}
 			}
+		}
+	}
+
+	private void deleteCurrentMail() {
+		try {
+			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", trashBin);
+			explicitWait(10, ExpectedConditions.visibilityOf(trashBin));
+			trashBin.click();
+		} catch (Exception e) {
+
 		}
 	}
 }

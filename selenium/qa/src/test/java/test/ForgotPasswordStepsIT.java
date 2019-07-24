@@ -13,8 +13,7 @@ import pages.mailinator.MailinatorInboxPage;
 public class ForgotPasswordStepsIT extends BaseSteps {
 
 	@Test(dataProvider = "reset_password")
-	public void forgotPasswordFunctionallity(String email, String newPass, String confirmPass, boolean test)
-			throws InterruptedException {
+	public void forgotPasswordFunctionallity(String email, String newPass, String confirmPass, boolean test) {
 		LoginPage loginPage = new LoginPage(driver);
 		driver.manage().window().maximize();
 		loginPage.navigate();
@@ -37,15 +36,13 @@ public class ForgotPasswordStepsIT extends BaseSteps {
 		if (!newPass.equals(confirmPass)) {
 			boolean isUnamatched = resetPasswordPage.isUnmatchedPasswordError();
 			Assert.assertTrue(isUnamatched);
-		}
-		AccountPage accountPage = new AccountPage(driver);
-		if (newPass.equals(confirmPass)) {
-			boolean isAccountPage = accountPage.isAtPage();
-			Assert.assertEquals(test, isAccountPage);
+		} else {
+			AccountPage accountPage = new AccountPage(driver);
 
+			boolean isAccountPage = accountPage.isAtPage();
 			accountPage.clickSave();
 			boolean isAccountUpdated = accountPage.isAccountUpdatedMsg();
-			Assert.assertEquals(test, isAccountUpdated);
+			Assert.assertEquals(test, isAccountUpdated && isAccountPage);
 		}
 	}
 
