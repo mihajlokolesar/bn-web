@@ -28,5 +28,9 @@ public class Constants {
 	public static String getAccountBigNeon() {
 		return getBaseUrlBigNeon() + "account";
 	}
+	
+	public static String getEventsBigNeon() {
+		return getBaseUrlBigNeon() + "events";
+	}
 
 }

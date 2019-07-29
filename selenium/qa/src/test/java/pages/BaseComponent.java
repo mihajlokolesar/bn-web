@@ -2,12 +2,12 @@ package pages;
 
 import org.openqa.selenium.WebDriver;
 
-public abstract class BaseComponent {
+public abstract class BaseComponent extends AbstractBase{
 	
 	private WebDriver driver;
 	
 	public BaseComponent(WebDriver driver) {
-		this.driver = driver;
+		super(driver);
 	}
 	
 

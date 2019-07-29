@@ -61,6 +61,11 @@ public class LoginPage extends BasePage {
 
 	public void login(String username, String password) {
 		navigate();
+		loginWithoutNavigate(username, password);
+	}
+	
+	public void loginWithoutNavigate(String username, String password) {
+		explicitWait(20, ExpectedConditions.visibilityOf(usernameField));
 		usernameField.sendKeys(username);
 		passwordField.sendKeys(password);
 		WebElement recaptcha = driver.findElement(By.className("g-recaptcha"));
