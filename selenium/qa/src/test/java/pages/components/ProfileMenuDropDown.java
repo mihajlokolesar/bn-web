@@ -1,15 +1,13 @@
-package pages;
+package pages.components;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import pages.BaseComponent;
+
 public class ProfileMenuDropDown extends BaseComponent {
-	
-	@FindBy(xpath = "a[@href='/admin/events")
-	private WebElement adminEvents;
-	
 	@FindBy(xpath = "a[@href='/my-events]")
 	private WebElement myEvents;
 
@@ -35,7 +33,6 @@ public class ProfileMenuDropDown extends BaseComponent {
 	}
 
 	public void logout() {
-		explicitWaitForVisiblity(logout);
 		logout.click();
 	}
 

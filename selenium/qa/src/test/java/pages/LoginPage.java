@@ -42,6 +42,12 @@ public class LoginPage extends BasePage {
 	@FindBy(xpath = "//div[@role='dialog']//form//button[@type='submit']")
 	private WebElement forgotPasswordConfirmButton;
 
+	@FindBy(xpath = "//div[@class='g-recaptcha']//iframe[contains(@src,'google')]")
+	private WebElement recaptchaIframe;
+
+	@FindBy(id = "recaptcha-anchor")
+	private WebElement recaptchaAnchorInFrame;
+
 	@FindBy(id = "message-id")
 	private WebElement dialogMessage;
 
@@ -61,18 +67,49 @@ public class LoginPage extends BasePage {
 
 	public void login(String username, String password) {
 		navigate();
+		loginWithoutNavigate(username, password);
+	}
+
+	public void loginWithoutNavigate(String username, String password) {
+		explicitWaitForVisiblity(usernameField);
 		usernameField.sendKeys(username);
+		explicitWaitForVisiblity(passwordField);
 		passwordField.sendKeys(password);
-		WebElement recaptcha = driver.findElement(By.className("g-recaptcha"));
-		recaptcha.click();
+		clickOnRecaptcha();
 		explicitWait(10, ExpectedConditions.elementToBeClickable(loginSubmitButton));
 		loginSubmitButton.click();
+		if (checkForLoginFailedMessage()) {
+			loginSubmitButton.click();
+		}
+
+	}
+
+	private boolean checkForLoginFailedMessage() {
+		boolean retVal = false;
+		try {
+			explicitWait(3, ExpectedConditions.visibilityOf(dialogMessage));
+			String msg = dialogMessage.getText();
+			if (msg != null && !msg.isEmpty() && msg.contains(MsgConstants.LOGIN_FAILED_ERROR)) {
+				retVal = true;
+			}
+		} catch (Exception e) {
+			retVal = false;
+		}
+		return retVal;
+
+	}
+
+	private void clickOnRecaptcha() {
+		WebElement recaptcha = driver.findElement(By.className("g-recaptcha"));
+		recaptcha.click();
+		explicitWait(10, ExpectedConditions.frameToBeAvailableAndSwitchToIt(recaptchaIframe));
+		explicitWait(10, ExpectedConditions.attributeContains(recaptchaAnchorInFrame, "aria-checked", "true"));
+		driver.switchTo().parentFrame();
 	}
 
 	public boolean isMailOrPassIncorrectMessageDisplayed() {
 		explicitWait(10, ExpectedConditions.visibilityOf(dialogMessage));
 		String msg = dialogMessage.getText();
-		System.out.println(msg);
 		if (msg.contains(MsgConstants.EMAIL_OR_PASS_INCORRECT_ON_LOGIN_ERROR)) {
 			return true;
 		} else {
@@ -109,7 +146,7 @@ public class LoginPage extends BasePage {
 			for (String handle : allWindows) {
 				if (!parentWindowHandle.equalsIgnoreCase(handle)) {
 					driver.switchTo().window(handle);
-					
+
 				}
 			}
 		}

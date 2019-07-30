@@ -41,7 +41,7 @@ public class BaseSteps {
 
 				Map<String, String> parameters = new HashMap<String, String>();
 				parameters.put("methodName", result.getMethod().getMethodName());
-				
+
 				if (result.getStatus() == ITestResult.SUCCESS) {
 					updateTestStatus(driver, BrowserStackStatusEnum.PASSED, parameters);
 				} else if (result.getStatus() == ITestResult.FAILURE) {
@@ -53,10 +53,6 @@ public class BaseSteps {
 		} finally {
 			driver.quit();
 		}
-	}
-	
-	public void maximizeWindow() {
-		driver.manage().window().maximize();
 	}
 
 	private void updateTestStatus(WebDriver driver, BrowserStackStatusEnum status, Map<String, String> parameters) {
@@ -81,6 +77,10 @@ public class BaseSteps {
 		HttpPut putRequest = new HttpPut(uri);
 		putRequest.setEntity(new UrlEncodedFormEntity(content));
 		HttpClientBuilder.create().build().execute(putRequest);
+	}
+
+	public void maximizeWindow() {
+		driver.manage().window().maximize();
 	}
 
 }

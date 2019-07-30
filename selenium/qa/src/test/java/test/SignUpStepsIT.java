@@ -21,7 +21,7 @@ public class SignUpStepsIT extends BaseSteps {
 	private final String passwordKey = "pass";
 	private final String passwordConfirmKey = "passConfirm";
 
-	@Test
+//	@Test
 	public void singUpToBigNeon() {
 		LoginPage loginPage = new LoginPage(driver);
 		maximizeWindow();
