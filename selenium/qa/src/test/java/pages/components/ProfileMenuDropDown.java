@@ -8,6 +8,10 @@ import org.openqa.selenium.support.PageFactory;
 import pages.BaseComponent;
 
 public class ProfileMenuDropDown extends BaseComponent {
+	
+	@FindBy(xpath = "a[@href='/admin/events")
+	private WebElement adminEvents;
+	
 	@FindBy(xpath = "a[@href='/my-events]")
 	private WebElement myEvents;
 
@@ -19,6 +23,11 @@ public class ProfileMenuDropDown extends BaseComponent {
 
 	@FindBy(xpath = "/html/body//ul//li[contains(text(),'Logout')]")
 	private WebElement logout;
+	
+	public ProfileMenuDropDown(WebDriver driver) {
+		super(driver);
+		PageFactory.initElements(driver, this);
+	}
 
 	public void myEventsClick() {
 		myEvents.click();
@@ -37,9 +46,6 @@ public class ProfileMenuDropDown extends BaseComponent {
 		logout.click();
 	}
 
-	public ProfileMenuDropDown(WebDriver driver) {
-		super(driver);
-		PageFactory.initElements(driver, this);
-	}
+	
 
 }
