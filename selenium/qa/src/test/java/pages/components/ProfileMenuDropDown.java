@@ -17,7 +17,7 @@ public class ProfileMenuDropDown extends BaseComponent {
 	@FindBy(xpath = "a[@href='/account']")
 	private WebElement account;
 
-	@FindBy(xpath = "/html/body/div[4]/div[2]/ul/li")
+	@FindBy(xpath = "/html/body//ul//li[contains(text(),'Logout')]")
 	private WebElement logout;
 
 	public void myEventsClick() {
@@ -33,6 +33,7 @@ public class ProfileMenuDropDown extends BaseComponent {
 	}
 
 	public void logout() {
+		explicitWaitForClickable(logout);
 		logout.click();
 	}
 

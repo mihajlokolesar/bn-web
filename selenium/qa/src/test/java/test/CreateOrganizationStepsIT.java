@@ -9,6 +9,7 @@ import pages.admin.organizations.AdminOrganizationsPage;
 import pages.admin.organizations.CreateOrganizationPage;
 import pages.components.AdminSideBar;
 import pages.components.Header;
+import utils.ProjectUtils;
 
 public class CreateOrganizationStepsIT extends BaseSteps {
 
@@ -20,16 +21,17 @@ public class CreateOrganizationStepsIT extends BaseSteps {
 		AdminEventsPage eventPage = new AdminEventsPage(driver);
 		Assert.assertTrue(eventPage.isAtPage());
 		Header header = new Header(driver);
-		
 		header.clickOnBoxOfficeLink();
 		header.clickOnToStudioLink();
 		AdminSideBar sideBar = new AdminSideBar(driver);
 		AdminOrganizationsPage organizationPage = sideBar.clickOnOrganizations();
 		CreateOrganizationPage createOrganization = organizationPage.clickOnCreateOrganizationButton();
-		createOrganization.fillFormAndConfirm("Auto test", "1111111111", "Africa/Johannesburg", "Johannesburg, South Africa");
+		Integer randomNum = ProjectUtils.generateRandomInt(1000000);
+		String name = "Auto test " + randomNum;
+		createOrganization.fillFormAndConfirm(name, "1111111111", "Africa/Johannesburg", "Johannesburg, South Africa");
 		boolean retVal = createOrganization.checkPopupMessage();
 		header.logOut();
-		Assert.assertEquals(retVal, false);
+		Assert.assertEquals(retVal, true);
 	}
 
 }

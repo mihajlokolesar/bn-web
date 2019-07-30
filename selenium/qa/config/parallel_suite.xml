@@ -8,7 +8,6 @@
       <class name="test.LoginWithFacebookStepsIT"/>
       <class name="test.LoginStepsIT"/>
       <class name="test.SignUpStepsIT"/> 
-      <class name="test.CreateOrganizationStepsIT"/>
     </classes>
   </test>
   <test thread-count="2" name="Firefox" parallel="classes">
@@ -18,7 +17,6 @@
       <class name="test.LoginWithFacebookStepsIT"/> 
       <class name="test.LoginStepsIT"/>
       <class name="test.SignUpStepsIT"/>
-      <class name="test.CreateOrganizationStepsIT"/>
     </classes>
   </test> 
 </suite>

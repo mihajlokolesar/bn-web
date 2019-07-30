@@ -1,13 +1,8 @@
 package pages.admin.organizations;
 
-import java.util.Map;
-
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.interactions.Keyboard;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
@@ -43,8 +38,10 @@ public class CreateOrganizationPage extends BasePage {
 		timeZoneDropDown.click();
 		explicitWaitForVisiblity(timeZoneList);
 		WebElement selectedTimeZone = timeZoneList.findElement(By.xpath(".//li[@data-value='" + timeZone + "']"));
-		explicitWaitForVisiblity(selectedTimeZone);
+		explicitWait(10, ExpectedConditions.elementToBeClickable(selectedTimeZone));
+		waitForTime(2, 900);
 		selectedTimeZone.click();
+
 	}
 
 	public CreateOrganizationPage(WebDriver driver) {
@@ -95,14 +92,14 @@ public class CreateOrganizationPage extends BasePage {
 	}
 
 	public void enterOrganizationAddress(String address) {
-			explicitWait(15, ExpectedConditions.elementToBeClickable(addressAutoSearchField));
-			waitForTime(1, 900);
-			addressAutoSearchField.click();
-			addressAutoSearchField.sendKeys(address);
-			explicitWait(15, ExpectedConditions.visibilityOfElementLocated(By.xpath(
-					"//form//div[contains(@class,'autocomplete-dropdown-container')]/div[contains(@class,'suggestion-item')]")));
-			addressAutoSearchField.sendKeys(Keys.DOWN);
-			addressAutoSearchField.sendKeys(Keys.ENTER);
+		explicitWait(15, ExpectedConditions.visibilityOf(addressAutoSearchField));
+		waitForTime(2, 900);
+		addressAutoSearchField.sendKeys(address);
+		WebElement firstInList = explicitWait(15, ExpectedConditions.visibilityOfElementLocated(By.xpath(
+				"//form//div[contains(@class,'autocomplete-dropdown-container')]/div[contains(@class,'suggestion-item')]")));
+		explicitWaitForClickable(firstInList);
+		firstInList.click();
+
 
 	}
 
