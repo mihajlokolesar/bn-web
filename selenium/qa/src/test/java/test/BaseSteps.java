@@ -12,6 +12,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.ITestResult;
@@ -81,6 +82,11 @@ public class BaseSteps {
 
 	public void maximizeWindow() {
 		driver.manage().window().maximize();
+	}
+	
+	public void setWindowDimension(int width, int height) {
+		Dimension d = new Dimension(width, height);
+		driver.manage().window().setSize(d);
 	}
 
 }

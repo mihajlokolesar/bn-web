@@ -4,7 +4,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import pages.LoginPage;
-import pages.admin.AdminEventsPage;
+import pages.admin.events.AdminEventsPage;
 import pages.admin.organizations.AdminOrganizationsPage;
 import pages.admin.organizations.CreateOrganizationPage;
 import pages.components.AdminSideBar;

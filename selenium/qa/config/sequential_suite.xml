@@ -7,6 +7,7 @@
     <classes>
       <class name="test.ForgotPasswordStepsIT"/>
       <class name="test.CreateOrganizationStepsIT"/>
+      <class name="test.CreateEventStepsIT"/>
     </classes>
   </test>
   <test name="Firefox">
@@ -15,6 +16,16 @@
     <classes>
       <class name="test.ForgotPasswordStepsIT"/>
       <class name="test.CreateOrganizationStepsIT"/>
+      <class name="test.CreateEventStepsIT"/>
+    </classes>
+  </test> 
+  <test name="Safari">
+	<parameter name="config" value="suite.conf.json"/>
+    <parameter name="environment" value="safari"/>
+    <classes>
+      <class name="test.ForgotPasswordStepsIT"/>
+      <class name="test.CreateOrganizationStepsIT"/>
+      <class name="test.CreateEventStepsIT"/>
     </classes>
   </test> 
 </suite>

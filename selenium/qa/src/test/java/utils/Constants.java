@@ -1,8 +1,7 @@
 package utils;
 
 public class Constants {
-	
-	
+
 	public static final String MAILINATOR_BASE_URL = "https://www.mailinator.com/";
 
 	public static String getBaseUrlBigNeon() {
@@ -20,33 +19,37 @@ public class Constants {
 	public static String getSignUpBigNeon() {
 		return getBaseUrlBigNeon() + "sign-up";
 	}
-	
+
 	public static String getResetPasswordBigNeon() {
 		return getBaseUrlBigNeon() + "password-reset";
 	}
-	
+
 	public static String getAccountBigNeon() {
 		return getBaseUrlBigNeon() + "account";
 	}
-	
+
 	public static String getEventsBigNeon() {
 		return getBaseUrlBigNeon() + "events";
 	}
-	
+
 	public static String getBoxOfficeSell() {
 		return getBaseUrlBigNeon() + "box-office/sell";
 	}
-	
+
 	public static String getAdminEvents() {
 		return getBaseUrlBigNeon() + "admin/events";
 	}
-	
+
 	public static String getAdminOrganizations() {
 		return getBaseUrlBigNeon() + "admin/organizations/";
 	}
-	
+
 	public static String getAdminOrganizationsCreate() {
 		return getAdminOrganizations() + "create";
+	}
+
+	public static String getAdminEventCreate() {
+		return getAdminEvents() + "/create";
 	}
 
 }
