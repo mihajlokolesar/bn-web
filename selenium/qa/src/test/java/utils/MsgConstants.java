@@ -1,7 +1,7 @@
 package utils;
 
 public class MsgConstants {
-	
+
 	public static final String RESET_PASS_UNMATCHED_PASS_ERROR = "Please make sure passwords match";
 	public static final String RESET_PASS_MISSING_PASS_ERROR = "Missing password";
 	public static final String RESET_PASS_MISSING_CONFIRM_PASS_ERROR = "Missing password confirmation";
@@ -11,5 +11,6 @@ public class MsgConstants {
 	public static final String ORGANIZATION_CREATE_FAILED = "Create organization failed";
 	public static final String ORGANIZATION_CREATED_SUCCESS = "Organization created";
 	public static final String LOGIN_FAILED_ERROR = "Login failed";
+	public static final String EVENT_PUBLISHED = "Event published";
 
 }

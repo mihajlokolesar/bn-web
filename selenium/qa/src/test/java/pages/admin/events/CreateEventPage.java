@@ -1,7 +1,6 @@
 package pages.admin.events;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -10,6 +9,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import pages.BasePage;
 import pages.components.AddTicketTypeComponent;
 import utils.Constants;
+import utils.MsgConstants;
 
 public class CreateEventPage extends BasePage {
 
@@ -71,6 +71,9 @@ public class CreateEventPage extends BasePage {
 	@FindBy(xpath = "//main//div//button[span[contains(text(),'Publish')]]")
 	private WebElement publishButton;
 
+	@FindBy(id = "message-id")
+	private WebElement message;
+
 	public CreateEventPage(WebDriver driver) {
 		super(driver);
 	}
@@ -107,8 +110,8 @@ public class CreateEventPage extends BasePage {
 	 * 
 	 * @param startDate format "mm/dd/yyyy"
 	 * @param endDate   format "mm/dd/yyyy"
-	 * @param showTime  format "0800AM", "0930PM" ...
-	 * @param endTime   format "0800AM", "0930PM" ...
+	 * @param showTime  format "08:00 AM", "09:30 PM" ...
+	 * @param endTime   format "08:00 AM", "09:30 PM" ...
 	 * @param doorTime  format "0.5";"1";"2";..;"10"
 	 */
 	public void enterDatesAndTimes(String startDate, String endDate, String showTime, String endTime, String doorTime) {
@@ -122,21 +125,25 @@ public class CreateEventPage extends BasePage {
 
 	}
 
+	public void enterArtistName(String artistName) {
+		waitForTime(1000);
+		waitVisibilityAndClick(artistInputDropDown);
+		WebElement select = driver.findElement(
+				By.xpath("//div[contains(@class,'css-15k3avv')]//div[span[contains(text(),'" + artistName + "')]]"));
+		waitVisibilityAndClick(select);
+	}
+
 	public void enterEventName(String eventName) {
 		waitVisibilityAndClick(eventNameField);
 		eventNameField.clear();
 		waitVisibilityAndSendKeys(eventNameField, eventName);
 	}
-	
+
 	public void selectVenue(String venueName) {
 		waitVisibilityAndClick(venueDropDownSelect);
 		WebElement selectedVenue = selectElementFormVenueDropDown(venueName);
-//		System.out.println(selectedVenue.getAttribute("class"));
-//		System.out.println(selectedVenue.getText());
-//		explicitWaitForVisiblity(selectedVenue);
-//		explicitWaitForClickable(selectedVenue);
-//		actionsMoveToElement(selectedVenue).click().perform();
-		
+		waitForTime(500);
+		explicitWait(5, ExpectedConditions.textToBePresentInElement(venueDropDownSelect, venueName));
 	}
 
 	private void enterDate(WebElement element, String date) {
@@ -145,16 +152,24 @@ public class CreateEventPage extends BasePage {
 		waitVisibilityAndSendKeys(element, date);
 	}
 
-	public void enterArtistName(String artistName) {
-
-		waitVisibilityAndClick(artistInputDropDown);
-		actionsManualType(artistName).sendKeys(Keys.ENTER).perform();
-	}
-
 	public void addNewTicketType(String name, String capacity, String price) {
 		waitVisibilityAndClick(addTicketTypeButton);
 		AddTicketTypeComponent ticketType = new AddTicketTypeComponent(driver);
 		ticketType.addNewTicketType(name, capacity, price);
+	}
+
+	public void clickOnPublish() {
+		waitVisibilityAndClick(publishButton);
+	}
+
+	public boolean checkMessage() {
+		explicitWait(15, ExpectedConditions.visibilityOf(message));
+		String msg = message.getText();
+		if (msg.contains(MsgConstants.EVENT_PUBLISHED)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	private void clickOnUploadImage() {
@@ -187,7 +202,7 @@ public class CreateEventPage extends BasePage {
 	/**
 	 * WebElement element param is one that need to be clicked for timeMenu to
 	 * appear. String time is time to be selected in drop down. format of time arg
-	 * is 1230AM,1300AM, 1330AM with 30 minutes increments
+	 * is 12:30 AM,13:00 AM, 13:30 AM with 30 minutes increments
 	 * 
 	 * @param element
 	 * @param time
@@ -195,16 +210,12 @@ public class CreateEventPage extends BasePage {
 	private void selectTime(WebElement element, String time) {
 		waitVisibilityAndClick(element);
 		explicitWaitForVisiblity(timeMenu);
-		WebElement selectedTime = timeMenu.findElement(By.id(time));
-//		Actions actions = new Actions(driver);
-//		actions.moveToElement(selectedTime);
-//		actions.click().perform();
+		WebElement selectedTime = timeMenu.findElement(By.xpath(".//li[contains(text(),'" + time + "')]"));
 		explicitWaitForVisiblity(selectedTime);
 		explicitWaitForClickable(selectedTime);
+		waitForTime(500);
 		selectedTime.click();
-//		actionsMoveToElement(selectedTime).click().perform();
-		explicitWait(5, ExpectedConditions.invisibilityOf(selectedTime));
-//		waitVisibilityAndClick(selectedTime);
+		explicitWait(5, ExpectedConditions.attributeToBe(element, "value", time));
 
 	}
 
