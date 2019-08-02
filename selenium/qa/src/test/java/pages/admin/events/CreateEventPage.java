@@ -1,6 +1,7 @@
 package pages.admin.events;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -135,7 +136,11 @@ public class CreateEventPage extends BasePage {
 
 	public void enterEventName(String eventName) {
 		waitVisibilityAndClick(eventNameField);
-		eventNameField.clear();
+		String text = eventNameField.getAttribute("value");
+		for(int i=0;i<text.length();i++) {
+			eventNameField.sendKeys(Keys.BACK_SPACE);
+		}
+		waitForTime(500);
 		waitVisibilityAndSendKeys(eventNameField, eventName);
 	}
 

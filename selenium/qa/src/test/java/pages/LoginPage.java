@@ -91,6 +91,7 @@ public class LoginPage extends BasePage {
 			String msg = dialogMessage.getText();
 			if (msg != null && !msg.isEmpty() && msg.contains(MsgConstants.LOGIN_FAILED_ERROR)) {
 				retVal = true;
+				System.out.println(msg);
 			}
 		} catch (Exception e) {
 			retVal = false;

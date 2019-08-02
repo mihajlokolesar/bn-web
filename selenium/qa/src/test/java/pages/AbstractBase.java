@@ -99,7 +99,7 @@ public class AbstractBase {
 		}
 	}
 
-	private boolean isSafari() {
+	public boolean isSafari() {
 		BrowsersEnum browser = DriverFactory.getBrowser();
 		if (BrowsersEnum.REMOTE.equals(browser)) {
 			String b = ((RemoteWebDriver) driver).getCapabilities().getBrowserName();

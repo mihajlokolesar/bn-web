@@ -50,8 +50,9 @@ public class MailinatorInboxPage extends BasePage {
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			js.executeScript("window.scrollBy(0,400)");
 		}
-		resetLink.click();
+		waitVisibilityAndClick(resetLink);
 		// go back to mailpage and delete mail
+		waitForTime(1500);
 		String currentHandle = driver.getWindowHandle();
 		if (!currentHandle.equalsIgnoreCase(parentHandle)) {
 			driver.switchTo().window(parentHandle);

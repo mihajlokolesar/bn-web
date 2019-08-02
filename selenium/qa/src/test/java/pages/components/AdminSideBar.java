@@ -6,6 +6,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 import pages.BaseComponent;
+import pages.admin.events.AdminEventsPage;
 import pages.admin.organizations.AdminOrganizationsPage;
 
 public class AdminSideBar extends BaseComponent{
@@ -26,6 +27,12 @@ public class AdminSideBar extends BaseComponent{
 		superAdminOrganizations.click();
 		return new AdminOrganizationsPage(driver);
 		
+	}
+	
+	public AdminEventsPage clickOnEvents() {
+		explicitWaitForVisiblity(adminEventsLink);
+		adminEventsLink.click();
+		return new AdminEventsPage(driver);
 	}
 
 }
