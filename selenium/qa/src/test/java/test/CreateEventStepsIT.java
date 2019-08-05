@@ -44,8 +44,11 @@ public class CreateEventStepsIT extends BaseSteps {
 		createEvent.enterArtistName("The Testers");
 		createEvent.enterEventName("TestNameEvent" + ProjectUtils.generateRandomInt(10000000));
 		createEvent.selectVenue("MSG");
-
-		createEvent.enterDatesAndTimes("08/14/2019", "08/18/2019", "08:30 PM", "10:00 PM", "1");
+		
+		String[] dateSpan = ProjectUtils.getDatesWithSpecifiedRangeInDays(2);
+		String startDate = dateSpan[0];
+		String endDate = dateSpan[1];
+		createEvent.enterDatesAndTimes(startDate, endDate, "08:30 PM", "10:00 PM", "1");
 
 		createEvent.addNewTicketType("GA", "100", "1");
 		createEvent.addNewTicketType("VIP", "70", "2");
@@ -58,5 +61,4 @@ public class CreateEventStepsIT extends BaseSteps {
 		Assert.assertEquals(retVal, true);
 
 	}
-
 }
