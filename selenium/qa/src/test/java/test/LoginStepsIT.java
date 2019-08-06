@@ -5,6 +5,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import pages.LoginPage;
+import pages.components.Header;
 
 public class LoginStepsIT extends BaseSteps {
 
@@ -13,6 +14,8 @@ public class LoginStepsIT extends BaseSteps {
 		maximizeWindow();
 		LoginPage loginPage = new LoginPage(driver);
 		boolean retVal = loginPage.confirmedLogin(username, password);
+		Header header = new Header(driver);
+		header.logOut();
 		Assert.assertTrue(retVal);
 	}
 	

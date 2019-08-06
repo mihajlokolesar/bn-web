@@ -77,7 +77,6 @@ class MobileOptionsControlDialog extends Component {
 		super(props);
 
 		this.state = {
-			selectedOptionIndex: null,
 			isConfirming: false
 		};
 
@@ -91,29 +90,20 @@ class MobileOptionsControlDialog extends Component {
 	}
 
 	reset() {
-		setTimeout(
-			() => this.setState({ selectedOptionIndex: null, isConfirming: false }),
-			200
-		);
+		setTimeout(() => this.setState({ isConfirming: false }), 200);
 	}
 
 	onClose() {
 		this.props.onClose();
-
 		this.reset();
 	}
 
-	onSelectOption(selectedOptionIndex) {
-		this.setState({ selectedOptionIndex });
-	}
-
-	onConfirm() {
+	onConfirm(index) {
 		this.setState({ isConfirming: true }, () => {
-			const { selectedOptionIndex } = this.state;
 			const { options } = this.props;
 
-			if (options && options[selectedOptionIndex]) {
-				const { onClick } = options[selectedOptionIndex];
+			if (options && options[index]) {
+				const { onClick } = options[index];
 				if (onClick) {
 					onClick();
 				}
@@ -123,7 +113,7 @@ class MobileOptionsControlDialog extends Component {
 
 	render() {
 		const { classes, options, open } = this.props;
-		const { selectedOptionIndex, isConfirming } = this.state;
+		const { isConfirming } = this.state;
 
 		const controlOptions = [];
 
@@ -138,21 +128,14 @@ class MobileOptionsControlDialog extends Component {
 							})}
 							onClick={
 								!isConfirming && !o.disabled
-									? () => this.onSelectOption(index)
+									? () => this.onConfirm(index)
 									: null
 							}
 						>
-							{selectedOptionIndex === index ? (
-								<img
-									className={classes.icon}
-									src={"/icons/checkmark-active.svg"}
-								/>
-							) : null}
-
 							<Typography
 								className={classnames({
 									[classes.optionText]: true,
-									[classes.optionDisabledText]: o.disabled
+									[classes.optionDisabledText]: o.disabled || isConfirming
 								})}
 							>
 								{o.label}
@@ -186,25 +169,23 @@ class MobileOptionsControlDialog extends Component {
 				<div onClick={this.onClose} className={classes.onCloseDiv}/>
 				{controlOptions}
 
-				<Collapse in={selectedOptionIndex !== null}>
-					<div
+				<div
+					className={classnames({
+						[classes.option]: true,
+						[classes.confirmOption]: true,
+						[classes.confirmOptionDisabled]: isConfirming
+					})}
+					onClick={!isConfirming ? this.onClose.bind(this) : null}
+				>
+					<Typography
 						className={classnames({
-							[classes.option]: true,
-							[classes.confirmOption]: true,
-							[classes.confirmOptionDisabled]: isConfirming
+							[classes.optionText]: true,
+							[classes.optionTextConfirm]: true
 						})}
-						onClick={!isConfirming ? this.onConfirm.bind(this) : null}
 					>
-						<Typography
-							className={classnames({
-								[classes.optionText]: true,
-								[classes.optionTextConfirm]: true
-							})}
-						>
-							{isConfirming ? "Processing..." : "Confirm"}
-						</Typography>
-					</div>
-				</Collapse>
+						Cancel
+					</Typography>
+				</div>
 			</Dialog>
 		);
 	}

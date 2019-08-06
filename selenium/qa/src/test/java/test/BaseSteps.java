@@ -12,6 +12,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.ITestResult;
@@ -41,7 +42,7 @@ public class BaseSteps {
 
 				Map<String, String> parameters = new HashMap<String, String>();
 				parameters.put("methodName", result.getMethod().getMethodName());
-				
+
 				if (result.getStatus() == ITestResult.SUCCESS) {
 					updateTestStatus(driver, BrowserStackStatusEnum.PASSED, parameters);
 				} else if (result.getStatus() == ITestResult.FAILURE) {
@@ -53,10 +54,6 @@ public class BaseSteps {
 		} finally {
 			driver.quit();
 		}
-	}
-	
-	public void maximizeWindow() {
-		driver.manage().window().maximize();
 	}
 
 	private void updateTestStatus(WebDriver driver, BrowserStackStatusEnum status, Map<String, String> parameters) {
@@ -81,6 +78,15 @@ public class BaseSteps {
 		HttpPut putRequest = new HttpPut(uri);
 		putRequest.setEntity(new UrlEncodedFormEntity(content));
 		HttpClientBuilder.create().build().execute(putRequest);
+	}
+
+	public void maximizeWindow() {
+		driver.manage().window().maximize();
+	}
+	
+	public void setWindowDimension(int width, int height) {
+		Dimension d = new Dimension(width, height);
+		driver.manage().window().setSize(d);
 	}
 
 }

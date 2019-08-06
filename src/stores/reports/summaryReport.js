@@ -4,6 +4,7 @@ import { EVENT_SALES_HEADINGS } from "../../components/pages/admin/reports/event
 import { REVENUE_SHARE_HEADINGS } from "../../components/pages/admin/reports/eventSummary/EventSummary";
 import React from "react";
 import { dollars } from "../../helpers/money";
+import EventSummaryRow from "../../components/pages/admin/reports/eventSummary/EventSummaryRow";
 
 export class SummaryReport extends TicketCountReport {
 	@action
@@ -11,7 +12,7 @@ export class SummaryReport extends TicketCountReport {
 		super.fetchCountAndSalesData(queryParams, false, onSuccess);
 	}
 
-	csv(eventData) {
+	csv(eventData, eventFees) {
 		let csvRows = [];
 		const { eventName } = eventData;
 		let title = "Event summary report";
@@ -28,14 +29,14 @@ export class SummaryReport extends TicketCountReport {
 		csvRows.push([""]);
 
 		//Revenue share
-		csvRows = [...csvRows, ...this.revenueShareCsvData(eventData)];
+		csvRows = [...csvRows, ...this.revenueShareCsvData(eventData, eventFees)];
 		return csvRows;
 	}
 
-	revenueShareCsvData(eventData) {
-		const {
-			totalOnlineClientFeesInCents
-		} = eventData.totals;
+	revenueShareCsvData(eventData, eventFees) {
+		const { totalOnlineClientFeesInCents } = eventData.totals;
+		let totalOnlineClientFeesInCentsWithOrderFees = 0;
+
 		const csvRows = [];
 		csvRows.push(REVENUE_SHARE_HEADINGS);
 		Object.keys(eventData.tickets).map((ticketId, index) => {
@@ -45,10 +46,14 @@ export class SummaryReport extends TicketCountReport {
 			sales.forEach((pricePoint, priceIndex) => {
 				let priceName = pricePoint.ticket_pricing_name;
 				if (pricePoint.hold_name) {
-					priceName = (pricePoint.promo_redemption_code ? "Promo - " : "Hold - ") + pricePoint.hold_name;
+					priceName =
+						(pricePoint.promo_redemption_code ? "Promo - " : "Hold - ") +
+						pricePoint.hold_name;
 				}
 
-				const priceInCents = pricePoint.ticket_pricing_price_in_cents + pricePoint.promo_code_discounted_ticket_price;
+				const priceInCents =
+					pricePoint.ticket_pricing_price_in_cents +
+					pricePoint.promo_code_discounted_ticket_price;
 
 				csvRows.push([
 					`${name} - ${priceName}`,
@@ -61,14 +66,33 @@ export class SummaryReport extends TicketCountReport {
 				]);
 			});
 		});
+
+		if (eventFees) {
+			{
+				eventFees.map(fee => {
+					totalOnlineClientFeesInCentsWithOrderFees =
+						totalOnlineClientFeesInCents + fee;
+					csvRows.push([
+						"Order Fees",
+						" ",
+						dollars(fee),
+						" ",
+						" ",
+						" ",
+						dollars(fee)
+					]);
+				});
+			}
+		}
+
 		csvRows.push([
 			"Total revenue share",
 			" ",
-			dollars(totalOnlineClientFeesInCents),
+			dollars(totalOnlineClientFeesInCentsWithOrderFees),
 			" ",
 			" ",
 			" ",
-			dollars(totalOnlineClientFeesInCents)
+			dollars(totalOnlineClientFeesInCentsWithOrderFees)
 		]);
 		return csvRows;
 	}
@@ -84,17 +108,21 @@ export class SummaryReport extends TicketCountReport {
 			totalGross = 0
 		} = eventData.totals;
 
-		Object.keys(eventData.tickets).map((ticketId) => {
+		Object.keys(eventData.tickets).map(ticketId => {
 			const ticketSale = eventData.tickets[ticketId];
 			const { totals, sales, name: ticketName } = ticketSale;
 
 			sales.forEach(pricePoint => {
 				let priceName = pricePoint.ticket_pricing_name;
 				if (pricePoint.hold_name) {
-					priceName = (pricePoint.promo_redemption_code ? "Promo - " : "Hold - ") + pricePoint.hold_name;
+					priceName =
+						(pricePoint.promo_redemption_code ? "Promo - " : "Hold - ") +
+						pricePoint.hold_name;
 				}
 
-				const priceInCents = pricePoint.ticket_pricing_price_in_cents + pricePoint.promo_code_discounted_ticket_price;
+				const priceInCents =
+					pricePoint.ticket_pricing_price_in_cents +
+					pricePoint.promo_code_discounted_ticket_price;
 
 				csvRows.push([
 					`${ticketName} - ${priceName}`,
@@ -119,7 +147,6 @@ export class SummaryReport extends TicketCountReport {
 		]);
 		return csvRows;
 	}
-
 }
 
 const summaryReport = new SummaryReport();

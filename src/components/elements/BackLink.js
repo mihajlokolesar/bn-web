@@ -22,21 +22,24 @@ const styles = theme => ({
 	}
 });
 
-const BackLink = ({ classes, children, to }) => {
+const BackLink = ({ classes, children, to, onClick }) => {
+	const WrapperComponent = to ? Link : props => <div {...props}/>;
+
 	return (
-		<Link className={classes.root} to={to}>
+		<WrapperComponent className={classes.root} to={to} onClick={onClick}>
 			<Hidden mdUp>
 				<img className={classes.icon} src={"/icons/left-active.svg"}/>{" "}
 			</Hidden>
 			<Typography className={classes.linkText}>{children}</Typography>
-		</Link>
+		</WrapperComponent>
 	);
 };
 
 BackLink.propTypes = {
 	classes: PropTypes.object.isRequired,
 	children: PropTypes.string.isRequired,
-	to: PropTypes.string.isRequired
+	to: PropTypes.string,
+	onClick: PropTypes.func
 };
 
 export default withStyles(styles)(BackLink);

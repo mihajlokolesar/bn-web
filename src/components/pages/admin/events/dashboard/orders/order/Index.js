@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Hidden, Typography, withStyles, Grid } from "@material-ui/core";
 import { observer } from "mobx-react";
 import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
 
 import user from "../../../../../../../stores/user";
 import Loader from "../../../../../../elements/loaders/Loader";
@@ -11,7 +10,7 @@ import Bigneon from "../../../../../../../helpers/bigneon";
 import moment from "moment-timezone";
 import notifications from "../../../../../../../stores/notifications";
 import Divider from "../../../../../../common/Divider";
-import OrderItemsCard from "./OrderItemsCard";
+import OrderItems from "./OrderItems";
 import Header from "./Header";
 import BackLink from "../../../../../../elements/BackLink";
 import CreateNote from "./CreateNote";
@@ -45,7 +44,8 @@ class SingleOrder extends Component {
 			eventDetails: null,
 			order: null,
 			orderItems: null,
-			orderHistory: null
+			orderHistory: null,
+			showMobileTicketsView: false
 		};
 
 		this.refreshOrder = this.loadAll.bind(this);
@@ -179,8 +179,20 @@ class SingleOrder extends Component {
 			});
 	}
 
+	toggleMobileTicketsView() {
+		this.setState(({ showMobileTicketsView }) => {
+			return { showMobileTicketsView: !showMobileTicketsView };
+		});
+	}
+
 	render() {
-		const { order, orderItems, eventDetails, orderHistory } = this.state;
+		const {
+			order,
+			orderItems,
+			eventDetails,
+			orderHistory,
+			showMobileTicketsView
+		} = this.state;
 		const { classes, timezone, organizationId } = this.props;
 
 		const isReady = order && eventDetails && orderItems;
@@ -188,13 +200,26 @@ class SingleOrder extends Component {
 		const header = isReady ? <Header {...order}/> : null;
 
 		const orderDetails = isReady ? (
-			<OrderItemsCard
+			<OrderItems
 				eventDetails={eventDetails}
 				order={order}
 				items={orderItems}
 				refreshOrder={this.refreshOrder}
+				toggleMobileTicketsView={this.toggleMobileTicketsView.bind(this)}
+				showMobileTicketsView={showMobileTicketsView}
 			/>
 		) : null;
+
+		if (showMobileTicketsView) {
+			return (
+				<React.Fragment>
+					<BackLink onClick={this.toggleMobileTicketsView.bind(this)}>
+						Back to order
+					</BackLink>
+					{orderDetails}
+				</React.Fragment>
+			);
+		}
 
 		return (
 			<React.Fragment>

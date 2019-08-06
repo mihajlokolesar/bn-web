@@ -7,6 +7,7 @@ import junit.framework.Assert;
 import pages.AccountPage;
 import pages.LoginPage;
 import pages.ResetPasswordPage;
+import pages.components.Header;
 import pages.mailinator.MailinatorHomePage;
 import pages.mailinator.MailinatorInboxPage;
 
@@ -43,7 +44,10 @@ public class ForgotPasswordStepsIT extends BaseSteps {
 			accountPage.clickSave();
 			boolean isAccountUpdated = accountPage.isAccountUpdatedMsg();
 			Assert.assertEquals(test, isAccountUpdated && isAccountPage);
+			Header header = new Header(driver);
+			header.logOut();
 		}
+		
 	}
 
 	@DataProvider(name = "reset_password")

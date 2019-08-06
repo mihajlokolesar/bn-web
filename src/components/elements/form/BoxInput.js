@@ -15,7 +15,8 @@ const styles = theme => {
 		inputContainer: {
 			height: 50,
 			padding: theme.spacing.unit / 2,
-			paddingLeft: theme.spacing.unit * 2
+			paddingLeft: theme.spacing.unit * 2,
+			flex: 1
 		},
 		input: {
 			fontSize: theme.typography.fontSize * 0.9,

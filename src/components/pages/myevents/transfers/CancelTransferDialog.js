@@ -169,7 +169,7 @@ class CancelTransferDialog extends Component {
 						variant="secondary"
 						disabled={isCancelling || !transferId}
 					>
-						{isCancelling ? "Cancelling..." : "Cancel transfer"}
+						{isCancelling ? "Cancelling..." : "Confirm"}
 					</Button>
 				</div>
 			</React.Fragment>

@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 
 import pages.LoginPage;
 import pages.SignUpPage;
+import pages.components.Header;
 import utils.Constants;
 
 public class SignUpStepsIT extends BaseSteps {
@@ -34,6 +35,8 @@ public class SignUpStepsIT extends BaseSteps {
 		boolean retVal = false;
 		try {
 			retVal = new WebDriverWait(driver, 10, 200).until(ExpectedConditions.urlToBe(Constants.getBaseUrlBigNeon()));
+			Header header = new Header(driver);
+			header.logOut();
 		} catch (Exception e) {
 			retVal = false;
 		}

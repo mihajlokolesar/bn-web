@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { withStyles, Typography, Hidden } from "@material-ui/core";
+import { withStyles, Typography, Hidden, Grid } from "@material-ui/core";
 import moment from "moment-timezone";
 
 import notifications from "../../../../stores/notifications";
@@ -17,6 +17,7 @@ import downloadCSV from "../../../../helpers/downloadCSV";
 import { Pagination, urlPageParam } from "../../../elements/pagination";
 import Loader from "../../../elements/loaders/Loader";
 import servedImage from "../../../../helpers/imagePathHelper";
+import SearchBox from "../../../elements/SearchBox";
 
 const imageSize = 40;
 
@@ -67,9 +68,24 @@ const styles = theme => ({
 		justifyContent: "center",
 		alignItems: "center"
 	},
+	searchHolder: {
+		display: "flex",
+		flexDirection: "row-reverse"
+	},
+	searchStyle: {
+		display: "flex",
+		width: "25%"
+	},
 	missingProfileImage: {
 		width: imageSize * 0.45,
 		height: "auto"
+	},
+	mobiPaginationStyle: {
+		width: "90vw"
+	},
+	mobiSearchStyle: {
+		marginTop: theme.spacing.unit,
+		width: "100%"
 	}
 });
 
@@ -83,11 +99,12 @@ class FanList extends Component {
 			isExporting: false,
 			isLoading: true
 		};
+		this.onSearch = this.onSearch.bind(this);
 	}
 
 	componentDidMount() {
 		layout.toggleSideMenu(true);
-		this.loadFans();
+		this.refreshFans();
 	}
 
 	componentWillUnmount() {
@@ -175,22 +192,23 @@ class FanList extends Component {
 			});
 	}
 
-	loadFans(page = urlPageParam()) {
+	refreshFans(query = "", page = urlPageParam()) {
 		this.setState({ isLoading: true });
 		const organization_id = user.currentOrganizationId;
 
 		if (!organization_id) {
-			this.timeout = setTimeout(this.loadFans.bind(this), 500);
+			this.timeout = setTimeout(this.refreshFans.bind(this), 500);
 			return;
 		}
-
+		const params = {
+			organization_id,
+			page,
+			limit: 20,
+			query,
+			sort: "LastInteracted"
+		};
 		Bigneon()
-			.organizations.fans.index({
-				organization_id,
-				page,
-				limit: 20,
-				sort: "LastInteracted"
-			})
+			.organizations.fans.index(params)
 			.then(response => {
 				const { data, paging } = response.data;
 				this.setState({ users: data, paging });
@@ -208,6 +226,15 @@ class FanList extends Component {
 			});
 	}
 
+	onSearch(query) {
+		this.query = query;
+		this.refreshFans(query);
+	}
+
+	changePage(page = urlPageParam()) {
+		this.refreshFans(this.query || "", page);
+	}
+
 	renderUsers() {
 		const organization_tz = user.currentOrgTimezone;
 		const { users, paging, isLoading } = this.state;
@@ -218,12 +245,34 @@ class FanList extends Component {
 		}
 
 		if (users.length === 0) {
-			return <Typography>No fans currently.</Typography>;
+			return (
+				<Card>
+					<div className={classes.content}>
+						<div className={classes.searchHolder}>
+							<div className={classes.searchStyle}>
+								<SearchBox
+									placeholder="Search name or email"
+									onSearch={this.onSearch}
+								/>
+							</div>
+						</div>
+						<Typography>No fans currently.</Typography>
+					</div>
+				</Card>
+			);
 		}
 
 		return (
 			<Card>
 				<div className={classes.content}>
+					<div className={classes.searchHolder}>
+						<div className={classes.searchStyle}>
+							<SearchBox
+								placeholder="Search name or email"
+								onSearch={this.onSearch}
+							/>
+						</div>
+					</div>
 					<FanRow>
 						<Typography className={classes.heading}>Name</Typography>
 						<Typography className={classes.heading}>Email</Typography>
@@ -304,7 +353,7 @@ class FanList extends Component {
 					<Pagination
 						isLoading={isLoading}
 						paging={paging}
-						onChange={this.loadFans.bind(this)}
+						onChange={this.changePage.bind(this)}
 					/>
 				</div>
 			</Card>
@@ -319,12 +368,34 @@ class FanList extends Component {
 		}
 
 		if (users.length === 0) {
-			return <Typography>No fans currently.</Typography>;
+			return (
+				<Card>
+					<div className={classes.mobiContent}>
+						<div className={classes.searchHolder}>
+							<div className={classes.mobiSearchStyle}>
+								<SearchBox
+									placeholder="Search name or email"
+									onSearch={this.onSearch}
+								/>
+							</div>
+						</div>
+						<Typography>No fans currently.</Typography>
+					</div>
+				</Card>
+			);
 		}
 
 		return (
 			<Card>
 				<div className={classes.mobiContent}>
+					<div className={classes.searchHolder}>
+						<div className={classes.mobiSearchStyle}>
+							<SearchBox
+								placeholder="Search name or email"
+								onSearch={this.onSearch}
+							/>
+						</div>
+					</div>
 					<FanRow>
 						<Typography className={classes.heading}>Name</Typography>
 						<Typography className={classes.heading}>Email</Typography>
@@ -372,11 +443,13 @@ class FanList extends Component {
 					})}
 
 					<br/>
-					<Pagination
-						isLoading={isLoading}
-						paging={paging}
-						onChange={this.loadFans.bind(this)}
-					/>
+					<div className={classes.mobiPaginationStyle}>
+						<Pagination
+							isLoading={isLoading}
+							paging={paging}
+							onChange={this.changePage.bind(this)}
+						/>
+					</div>
 				</div>
 			</Card>
 		);

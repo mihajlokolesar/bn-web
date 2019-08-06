@@ -1,6 +1,6 @@
 {
 	"name": "bn-web",
-	"version": "1.0.488",
+	"version": "1.0.502",
 	"private": true,
 	"dependencies": {
 		"@date-io/moment": "1.0.1",

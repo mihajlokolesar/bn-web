@@ -49,7 +49,7 @@ const styles = theme => ({
 
 const TicketCard = ({
 	classes,
-	colStyles,
+	colStyles = [],
 	refundable,
 	total_price_in_cents,
 	status,
@@ -65,9 +65,10 @@ const TicketCard = ({
 	code,
 	code_type,
 	ticket_type_name,
+	shortened,
 	...rest
 }) => {
-	const checkboxStyle = { marginLeft: 20 };
+	const checkboxStyle = { marginLeft: shortened ? 10 : 20 };
 
 	const checkbox = (
 		<CheckBox
@@ -76,8 +77,11 @@ const TicketCard = ({
 			variant={"white"}
 			active={isChecked}
 			onClick={onCheck}
+			disabled={!refundable}
 		/>
 	);
+
+	const showAllDetails = !shortened;
 
 	if (ticket_instance_id) {
 		return (
@@ -91,35 +95,47 @@ const TicketCard = ({
 					<div style={colStyles[1]}>
 						<Link to={`/admin/fans/${attendee_id}`}>
 							<Typography className={classes.attendeeNameText}>
-								{attendee_first_name} {attendee_last_name}
+								{ellipsis(
+									`${attendee_first_name ? attendee_first_name : ""} ${
+										attendee_last_name ? attendee_last_name : ""
+									}`
+								)}
 							</Typography>
 						</Link>
 						<Typography className={classes.subText}>
-							{attendee_email}
+							{ellipsis(attendee_email)}
 						</Typography>
 					</div>
 					<div style={colStyles[2]}>
 						<ColorTag variant={"green"}>
-							{ellipsis(ticket_type_name, 13)}
+							{ellipsis(ticket_type_name, 6)}
 						</ColorTag>
 					</div>
-					<div style={colStyles[3]}>
-						{code ? (
-							<div>
-								<Typography>{code}</Typography>
-								<Typography className={classes.subText}>{code_type}</Typography>
-							</div>
-						) : (
-							<Typography>-</Typography>
-						)}
-					</div>
-					<Typography style={colStyles[4]}>1</Typography>
+					{showAllDetails ? (
+						<div style={colStyles[3]}>
+							{code ? (
+								<div>
+									<Typography>{code}</Typography>
+									<Typography className={classes.subText}>
+										{code_type}
+									</Typography>
+								</div>
+							) : (
+								<Typography>-</Typography>
+							)}
+						</div>
+					) : null}
+					{showAllDetails ? (
+						<Typography style={colStyles[4]}>1</Typography>
+					) : null}
 					<Typography style={colStyles[5]}>
 						{dollars(total_price_in_cents - fees_price_in_cents)}
 					</Typography>
-					<Typography style={colStyles[6]} className={classes.statusText}>
-						{status}
-					</Typography>
+					{showAllDetails ? (
+						<Typography style={colStyles[6]} className={classes.statusText}>
+							{status}
+						</Typography>
+					) : null}
 				</div>
 
 				<div className={classes.perTicketFeeRow}>
@@ -135,12 +151,12 @@ const TicketCard = ({
 					</span>
 					<span style={colStyles[1]}/>
 					<span style={colStyles[2]}/>
-					<span style={colStyles[3]}/>
-					<span style={colStyles[4]}/>
+					{showAllDetails ? <span style={colStyles[3]}/> : null}
+					{showAllDetails ? <span style={colStyles[4]}/> : null}
 					<Typography style={colStyles[5]} className={classes.boldText}>
 						{dollars(fees_price_in_cents)}
 					</Typography>
-					<span style={colStyles[6]}/>
+					{showAllDetails ? <span style={colStyles[6]}/> : null}
 				</div>
 			</Card>
 		);
@@ -153,16 +169,18 @@ const TicketCard = ({
 				<Typography className={classes.boldText}>Per order fee</Typography>
 			</div>
 
-			<Typography style={colStyles[1]}/>
-			<Typography style={colStyles[2]}/>
-			<Typography style={colStyles[3]}/>
-			<Typography style={colStyles[4]}>1</Typography>
+			<span style={colStyles[1]}/>
+			<span style={colStyles[2]}/>
+			{showAllDetails ? <span style={colStyles[3]}/> : null}
+			{showAllDetails ? <span style={colStyles[4]}/> : null}
 			<Typography style={colStyles[5]}>
 				{dollars(total_price_in_cents)}
 			</Typography>
-			<Typography style={colStyles[6]} className={classes.statusText}>
-				{status}
-			</Typography>
+			{showAllDetails ? (
+				<Typography style={colStyles[6]} className={classes.statusText}>
+					{status}
+				</Typography>
+			) : null}
 		</div>
 	);
 };
@@ -170,7 +188,9 @@ const TicketCard = ({
 TicketCard.propTypes = {
 	classes: PropTypes.object.isRequired,
 	onCheck: PropTypes.func.isRequired,
-	isChecked: PropTypes.bool.isRequired
+	isChecked: PropTypes.bool.isRequired,
+	shortened: PropTypes.bool,
+	colStyles: PropTypes.array
 };
 
 export default withStyles(styles)(TicketCard);

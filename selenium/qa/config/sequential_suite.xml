@@ -6,6 +6,8 @@
     <parameter name="environment" value="chrome"/>
     <classes>
       <class name="test.ForgotPasswordStepsIT"/>
+      <class name="test.CreateOrganizationStepsIT"/>
+      <class name="test.CreateEventStepsIT"/>
     </classes>
   </test>
   <test name="Firefox">
@@ -13,6 +15,8 @@
     <parameter name="environment" value="firefox"/>
     <classes>
       <class name="test.ForgotPasswordStepsIT"/>
+      <class name="test.CreateOrganizationStepsIT"/>
+      <class name="test.CreateEventStepsIT"/>
     </classes>
-  </test> 
+  </test>  
 </suite>

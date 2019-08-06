@@ -15,6 +15,7 @@ import {
 } from "../../../../../../../config/theme";
 import SelectGroup from "../../../../../../common/form/SelectGroup";
 import CheckBox from "../../../../../../elements/form/CheckBox";
+import TicketCard from "./TicketCard";
 
 const styles = theme => ({
 	content: {
@@ -78,6 +79,23 @@ const styles = theme => ({
 	},
 	valueTextActive: {
 		color: secondaryHex
+	},
+	orderTotalRow: {
+		backgroundColor: "#f6f7f9",
+		display: "flex",
+		justifyContent: "space-between",
+		padding: 16,
+		borderRadius: 8
+	},
+	orderTotalRowLabel: {
+		fontFamily: fontFamilyDemiBold,
+		fontSize: 14
+	},
+	orderTotalRowValue: {
+		fontFamily: fontFamilyDemiBold,
+		fontSize: 16,
+		color: secondaryHex,
+		textAlign: "right"
 	}
 });
 
@@ -128,12 +146,49 @@ class RefundDialog extends Component {
 		this.defaultState = {
 			reasonVal: "empty",
 			selectedRefundType: "fullRefund",
-			isRefunding: false
+			isRefunding: false,
+			selectedRefundOrderItem: {},
+			refundAmountInCents: 0
 		};
 
 		this.state = this.defaultState;
 
 		this.onClose = this.onClose.bind(this);
+	}
+
+	static getDerivedStateFromProps(props, state) {
+		const { selectedRefundOrderItem } = props;
+
+		return { selectedRefundOrderItem };
+	}
+
+	componentDidUpdate(prevProps, prevState, snapshot) {
+		if (prevProps.open === false && this.props.open === true) {
+			this.setRefundAmount();
+		}
+	}
+
+	toggleRefundOrderItem(index) {
+		this.setState(({ selectedRefundOrderItem }) => {
+			selectedRefundOrderItem[index] = !selectedRefundOrderItem[index];
+			return { selectedRefundOrderItem };
+		}, this.setRefundAmount.bind(this));
+	}
+
+	setRefundAmount() {
+		const { items } = this.props;
+		const { selectedRefundOrderItem } = this.state;
+
+		let refundAmountInCents = 0;
+		if (items) {
+			items.forEach((item, index) => {
+				if (selectedRefundOrderItem && selectedRefundOrderItem[index]) {
+					const { total_price_in_cents } = item;
+					refundAmountInCents += total_price_in_cents;
+				}
+			});
+		}
+		this.setState({ refundAmountInCents });
 	}
 
 	onClose() {
@@ -145,24 +200,30 @@ class RefundDialog extends Component {
 	}
 
 	refund() {
-		const { order, items: itemDetails } = this.props;
+		const { order, items: itemDetails, type } = this.props;
 
 		const { id } = order;
 
-		const { reasonVal, selectedRefundType } = this.state;
+		const {
+			reasonVal,
+			selectedRefundType,
+			selectedRefundOrderItem
+		} = this.state;
 
-		//TODO use selectedRefundType to adjust which items should be refunded
+		//TODO use selectedRefundType to adjust which items should be refunded for type===full
 
 		const items = [];
 
 		if (itemDetails) {
-			itemDetails.forEach(i => {
-				const { order_item_id, ticket_instance_id, refundable, ...rest } = i;
+			itemDetails.forEach((item, index) => {
+				const { order_item_id, ticket_instance_id, refundable, ...rest } = item;
 				if (refundable) {
-					items.push({
-						order_item_id,
-						ticket_instance_id
-					});
+					if (type === "full" || selectedRefundOrderItem[index]) {
+						items.push({
+							order_item_id,
+							ticket_instance_id
+						});
+					}
 				}
 			});
 		}
@@ -185,6 +246,7 @@ class RefundDialog extends Component {
 
 				const { amount_refunded, refund_breakdown } = response.data;
 
+				this.props.onSuccess();
 				this.onClose();
 			})
 			.catch(error => {
@@ -308,9 +370,68 @@ class RefundDialog extends Component {
 		return <div>{""}</div>;
 	}
 
+	renderDesktopOrderItems() {
+		const colStyles = [
+			{ flex: 3 },
+			{ flex: 3 },
+			{ flex: 4 },
+			{ flex: 2 },
+			{ flex: 1 },
+			{ flex: 2 },
+			{ flex: 2 }
+		];
+
+		const { items } = this.props;
+		const { selectedRefundOrderItem } = this.state;
+
+		return items.map((item, index) => (
+			<TicketCard
+				shortened
+				onCheck={() => this.toggleRefundOrderItem(index)}
+				isChecked={!!selectedRefundOrderItem[index]}
+				key={index}
+				colStyles={colStyles}
+				{...item}
+			/>
+		));
+	}
+
+	renderMobileOrderItems() {
+		const colStyles = [
+			{ flex: 3 },
+			{ flex: 3 },
+			{ flex: 4 },
+			{ flex: 2 },
+			{ flex: 1 },
+			{ flex: 2 },
+			{ flex: 2 }
+		];
+
+		const { items } = this.props;
+		const { selectedRefundOrderItem } = this.state;
+
+		return null;
+		//TODO when designs are found
+		// return items.map((item, index) => (
+		// 	<TicketCard
+		// 		shortened
+		// 		onCheck={() => this.toggleRefundOrderItem(index)}
+		// 		isChecked={!!selectedRefundOrderItem[index]}
+		// 		key={index}
+		// 		colStyles={colStyles}
+		// 		{...item}
+		// 	/>
+		// ));
+	}
+
 	render() {
-		const { classes, open, order } = this.props;
-		const { reasonVal, selectedRefundType, isRefunding } = this.state;
+		const { classes, open, order, type } = this.props;
+		const {
+			reasonVal,
+			selectedRefundType,
+			isRefunding,
+			refundAmountInCents
+		} = this.state;
 
 		const refundValues = this.refundValues(order);
 
@@ -318,12 +439,31 @@ class RefundDialog extends Component {
 			<Dialog
 				iconUrl={"/icons/tickets-white.svg"}
 				open={open}
-				title={"Issue refund"}
+				title={`Issue ${type === "full" ? "full " : ""}refund`}
 				onClose={this.onClose}
 			>
 				<div className={classes.content}>
-					<Hidden smDown>{this.renderDesktopOrderDetails()}</Hidden>
-					<Hidden mdUp>{this.renderMobileOrderDetails()}</Hidden>
+					{type !== "full" ? (
+						<Typography>
+							In order to issue a refund, select the refund amount and refund
+							method below. The refund will be transferred to the ticket
+							purchaser.
+						</Typography>
+					) : null}
+
+					{type === "full" ? (
+						<React.Fragment>
+							<Hidden smDown>{this.renderDesktopOrderDetails()}</Hidden>
+							<Hidden mdUp>{this.renderMobileOrderDetails()}</Hidden>
+						</React.Fragment>
+					) : null}
+
+					{type === "items" ? (
+						<React.Fragment>
+							<Hidden smDown>{this.renderDesktopOrderItems()}</Hidden>
+							<Hidden mdUp>{this.renderMobileOrderItems()}</Hidden>
+						</React.Fragment>
+					) : null}
 
 					<br/>
 					<Typography className={classes.formLabelText}>
@@ -336,35 +476,51 @@ class RefundDialog extends Component {
 						items={refundReasons}
 					/>
 
-					<Typography className={classes.formLabelText}>
-						Select refund amount
-					</Typography>
+					{type === "full" ? (
+						<React.Fragment>
+							<Typography className={classes.formLabelText}>
+								Select refund amount
+							</Typography>
+							<div className={classes.refundAmountBox}>
+								{Object.keys(refundValues).map(key => {
+									const { label, cents } = refundValues[key];
+									const active = selectedRefundType === key;
 
-					<div className={classes.refundAmountBox}>
-						{Object.keys(refundValues).map(key => {
-							const { label, cents } = refundValues[key];
-							const active = selectedRefundType === key;
+									return (
+										<div key={key} className={classes.refundAmountRow}>
+											<CheckBox
+												active={active}
+												onClick={() =>
+													this.setState({ selectedRefundType: key })
+												}
+											>
+												{label}
+											</CheckBox>
+											<Typography
+												className={classnames({
+													[classes.valueText]: true,
+													[classes.valueTextActive]: active
+												})}
+											>
+												{dollars(cents)}
+											</Typography>
+										</div>
+									);
+								})}
+							</div>
+						</React.Fragment>
+					) : null}
 
-							return (
-								<div key={key} className={classes.refundAmountRow}>
-									<CheckBox
-										active={active}
-										onClick={() => this.setState({ selectedRefundType: key })}
-									>
-										{label}
-									</CheckBox>
-									<Typography
-										className={classnames({
-											[classes.valueText]: true,
-											[classes.valueTextActive]: active
-										})}
-									>
-										{dollars(cents)}
-									</Typography>
-								</div>
-							);
-						})}
-					</div>
+					{type === "items" ? (
+						<div className={classes.orderTotalRow}>
+							<Typography className={classes.orderTotalRowLabel}>
+								Refund total
+							</Typography>
+							<Typography className={classes.orderTotalRowValue}>
+								{dollars(refundAmountInCents)}
+							</Typography>
+						</div>
+					) : null}
 
 					<div className={classes.actionButtonsContainer}>
 						<Button
@@ -393,8 +549,11 @@ RefundDialog.propTypes = {
 	classes: PropTypes.object.isRequired,
 	open: PropTypes.bool.isRequired,
 	onClose: PropTypes.func.isRequired,
+	onSuccess: PropTypes.func.isRequired,
 	items: PropTypes.array.isRequired,
-	order: PropTypes.object.isRequired
+	order: PropTypes.object.isRequired,
+	selectedRefundOrderItem: PropTypes.object,
+	type: PropTypes.oneOf(["full", "items"])
 };
 
 export default withStyles(styles)(RefundDialog);

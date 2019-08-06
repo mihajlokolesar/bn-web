@@ -33,7 +33,7 @@ public class MailinatorInboxPage extends BasePage {
 			driver.navigate().refresh();
 		}
 		WebElement mailRowCell = explicitWait(20, 2000, ExpectedConditions.presenceOfElementLocated(By.xpath(
-				".//table//tbody//tr[td[contains(text(),'noreply@bigneon.com')] and td[contains(text(),'Reset Your Password')]]/td[contains(text(),'noreply@bigneon.com')]")));
+				".//table//tbody//tr[td[contains(text(),'noreply@bigneon.com')] and td/a[contains(text(),'Reset Your Password')]]/td[contains(text(),'noreply@bigneon.com')]")));
 		mailRowCell.click();
 	}
 
@@ -50,8 +50,9 @@ public class MailinatorInboxPage extends BasePage {
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			js.executeScript("window.scrollBy(0,400)");
 		}
-		resetLink.click();
+		waitVisibilityAndClick(resetLink);
 		// go back to mailpage and delete mail
+		waitForTime(1500);
 		String currentHandle = driver.getWindowHandle();
 		if (!currentHandle.equalsIgnoreCase(parentHandle)) {
 			driver.switchTo().window(parentHandle);

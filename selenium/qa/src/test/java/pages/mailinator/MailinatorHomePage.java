@@ -35,7 +35,7 @@ public class MailinatorHomePage extends BasePage{
 			WebElement searchBox = driver.findElement(By.id("inboxfield"));
 			explicitWait(4, ExpectedConditions.elementToBeClickable(searchBox));
 			searchBox.sendKeys(userInboxName);
-			WebElement clickGoButton = driver.findElement(By.xpath("/html/body/header/nav/div/div[1]/div[1]/div[3]/div/span/button"));
+			WebElement clickGoButton = driver.findElement(By.xpath("//body//div//span/button[@id='go_inbox1']"));
 			clickGoButton.click(); 
 		} catch (Exception e) {
 			e.printStackTrace();

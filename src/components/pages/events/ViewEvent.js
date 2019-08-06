@@ -455,6 +455,7 @@ class ViewEvent extends Component {
 							isAuthenticated={user.isAuthenticated}
 							venue={venue}
 							{...event}
+							promo_image_url={promo_image_url}
 							ctaButton={this.renderCallToActionButton("secondary")}
 						/>
 					) : null}

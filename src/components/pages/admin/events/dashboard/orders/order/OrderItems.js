@@ -23,6 +23,9 @@ import MobileOptionsControlDialog from "../../../../../../elements/MobileOptions
 import notification from "../../../../../../../stores/notifications";
 import RefundDialog from "./RefundDialog";
 import user from "../../../../../../../stores/user";
+import RefundBottomBar from "./RefundBottomBar";
+import Divider from "../../../../../../common/Divider";
+import MobileTicketCard from "./MobileTicketCard";
 
 const styles = theme => ({
 	root: {
@@ -106,10 +109,25 @@ const styles = theme => ({
 	mobileSubText: {
 		fontSize: 13,
 		color: "#8b94a7"
+	},
+	mobileViewTicketsRow: {
+		paddingLeft: 18,
+		paddingRight: 18,
+		paddingBottom: 18
+	},
+	mobileViewTicketsInner: {
+		paddingTop: 18,
+		display: "flex",
+		justifyContent: "space-between"
+	},
+	mobileViewTicketsText: {
+		color: secondaryHex,
+		fontFamily: fontFamilyDemiBold,
+		fontSize: 14
 	}
 });
 
-class OrderItemsCard extends Component {
+class OrderItems extends Component {
 	constructor(props) {
 		super(props);
 
@@ -120,7 +138,8 @@ class OrderItemsCard extends Component {
 			selectedRefundOrderItem: {},
 			mobileOptionsControlOpen: false,
 
-			showRefundDialog: false
+			showRefundType: null,
+			refundAmountInCents: 0
 		};
 
 		this.toggleShowOrderDetails = this.toggleShowOrderDetails.bind(this);
@@ -145,12 +164,12 @@ class OrderItemsCard extends Component {
 	}
 
 	onRefundDialogClose() {
-		this.setState({ showRefundDialog: false });
+		this.setState({ showRefundType: null });
 		this.props.refreshOrder();
 	}
 
-	onRefundClick() {
-		this.setState({ showRefundDialog: true, mobileOptionsControlOpen: false });
+	onRefundClick(showRefundType) {
+		this.setState({ showRefundType, mobileOptionsControlOpen: false });
 	}
 
 	handleOptionsMenuClose() {
@@ -171,10 +190,30 @@ class OrderItemsCard extends Component {
 	}
 
 	toggleRefundOrderItem(id) {
+		if (!this.orderRefundable) {
+			return;
+		}
+
 		this.setState(({ selectedRefundOrderItem }) => {
 			selectedRefundOrderItem[id] = !selectedRefundOrderItem[id];
 			return { selectedRefundOrderItem };
-		});
+		}, this.setRefundAmount.bind(this));
+	}
+
+	setRefundAmount() {
+		const { items } = this.props;
+		const { selectedRefundOrderItem } = this.state;
+
+		let refundAmountInCents = 0;
+		if (items) {
+			items.forEach((item, index) => {
+				if (selectedRefundOrderItem && selectedRefundOrderItem[index]) {
+					const { total_price_in_cents } = item;
+					refundAmountInCents += total_price_in_cents;
+				}
+			});
+		}
+		this.setState({ refundAmountInCents });
 	}
 
 	orderRefundable() {
@@ -216,7 +255,14 @@ class OrderItemsCard extends Component {
 				onClose={this.handleOptionsMenuClose.bind(this)}
 			>
 				{orderControlOptions.map((o, index) => (
-					<MenuItem key={index} onClick={o.onClick} disabled={o.disabled}>
+					<MenuItem
+						key={index}
+						onClick={() => {
+							this.handleOptionsMenuClose();
+							o.onClick();
+						}}
+						disabled={o.disabled}
+					>
 						{o.label}
 					</MenuItem>
 				))}
@@ -225,8 +271,8 @@ class OrderItemsCard extends Component {
 	}
 
 	renderTickets() {
-		const { classes, eventDetails, order, items } = this.props;
-		const { showOrderDetails, selectedRefundOrderItem } = this.state;
+		const { classes, items } = this.props;
+		const { selectedRefundOrderItem } = this.state;
 
 		const colStyles = [
 			{ flex: 4 },
@@ -239,48 +285,69 @@ class OrderItemsCard extends Component {
 		];
 
 		return (
-			<Collapse in={showOrderDetails}>
-				<div className={classes.ticketContainer}>
-					<div className={classes.row}>
-						{[
-							"Ticket #",
-							"Attendee",
-							"Ticket type",
-							"Code",
-							"QTY",
-							"Total",
-							"Status"
-						].map((heading, index) => (
-							<Typography
-								key={index}
-								style={colStyles[index]}
-								className={classes.headingText}
-							>
-								{heading}
-							</Typography>
-						))}
-					</div>
-					{items.map((item, index) => (
-						<TicketCard
-							onCheck={() => this.toggleRefundOrderItem(index)}
-							isChecked={!!selectedRefundOrderItem[index]}
+			<div className={classes.ticketContainer}>
+				<div className={classes.row}>
+					{[
+						"Ticket #",
+						"Attendee",
+						"Ticket type",
+						"Code",
+						"QTY",
+						"Total",
+						"Status"
+					].map((heading, index) => (
+						<Typography
 							key={index}
-							colStyles={colStyles}
-							{...item}
-						/>
+							style={colStyles[index]}
+							className={classes.headingText}
+						>
+							{heading}
+						</Typography>
 					))}
 				</div>
-			</Collapse>
+				{items.map((item, index) => (
+					<TicketCard
+						onCheck={() => this.toggleRefundOrderItem(index)}
+						isChecked={!!selectedRefundOrderItem[index]}
+						key={index}
+						colStyles={colStyles}
+						{...item}
+					/>
+				))}
+			</div>
 		);
 	}
 
+	renderMobileTickets() {
+		const { items } = this.props;
+		const { selectedRefundOrderItem } = this.state;
+
+		return items.map((item, index) => (
+			<MobileTicketCard
+				onCheck={() => this.toggleRefundOrderItem(index)}
+				isChecked={!!selectedRefundOrderItem[index]}
+				key={index}
+				{...item}
+			/>
+		));
+	}
+
 	render() {
-		const { classes, eventDetails, order, items } = this.props;
+		const {
+			classes,
+			eventDetails,
+			order,
+			items,
+			toggleMobileTicketsView,
+			showMobileTicketsView
+		} = this.props;
 
 		const {
 			showOrderDetails,
 			mobileOptionsControlOpen,
-			showRefundDialog
+			showRefundType,
+			refundAmountInCents,
+			selectedRefundOrderItem
 		} = this.state;
 
 		const {
@@ -291,10 +358,16 @@ class OrderItemsCard extends Component {
 
 		let code = "";
 		let codeType = "";
+		let qty = 0;
+
 		items.forEach(item => {
 			if (item.code) {
 				code = item.code;
 				codeType = item.code_type;
+			}
+
+			if (item.ticket_instance_id) {
+				qty += 1;
 			}
 		});
 
@@ -324,7 +397,7 @@ class OrderItemsCard extends Component {
 			orderControlOptions.push({
 				label: `Refund Event Total ${!orderRefundable ? "(Unavailable)" : ""}`,
 				disabled: !orderRefundable,
-				onClick: this.onRefundClick.bind(this)
+				onClick: () => this.onRefundClick("full")
 			});
 		}
 
@@ -340,15 +413,16 @@ class OrderItemsCard extends Component {
 
 		const venueDisplayName = `${venue.name}, ${venue.address}, ${venue.city}`;
 
-		const qty = items.length;
-
 		return (
 			<React.Fragment>
 				<RefundDialog
-					open={showRefundDialog}
+					open={!!showRefundType}
 					onClose={this.onRefundDialogClose.bind(this)}
 					items={items}
 					order={order}
+					type={showRefundType}
+					selectedRefundOrderItem={selectedRefundOrderItem}
+					onSuccess={() => this.setState({ selectedRefundOrderItem: {} })}
 				/>
 
 				{/*DESKTOP*/}
@@ -428,86 +502,113 @@ class OrderItemsCard extends Component {
 							/>
 						</div>
 
-						{this.renderTickets()}
+						<Collapse in={showOrderDetails}>{this.renderTickets()}</Collapse>
 					</Card>
 				</Hidden>
 
 				{/*MOBILE*/}
 				<Hidden mdUp>
-					<Card variant={"raisedLight"} className={classes.mobileCard}>
-						<div className={classes.mobileRow}>
-							<div className={classes.mobilePadded} style={{ paddingRight: 0 }}>
-								<Typography className={classes.mobileHeadingText}>
-									{eventName}
-								</Typography>
-								<Typography className={classes.mobileEventDetailsText}>
-									{venueDisplayName}
-								</Typography>
-								<Typography className={classes.mobileEventDetailsText}>
-									{eventDisplayDate}
-								</Typography>
-							</div>
-							{moreIcon}
-						</div>
-
-						<div className={classes.mobileBottomRow}>
-							<div style={{ flex: 4 }}>
-								<Typography className={classes.mobileSubHeadingText}>
-									Code
-								</Typography>
-								<Typography className={classes.mobileValueText}>
-									{code}
-								</Typography>
-								<Typography className={classes.mobileSubText}>
-									{codeType}
-								</Typography>
-							</div>
-							<div style={{ flex: 2 }}>
-								<Typography className={classes.mobileSubHeadingText}>
-									QTY
-								</Typography>
-								<Typography>{qty}</Typography>
-							</div>
-							<div style={{ flex: 3 }}>
-								<Typography className={classes.mobileSubHeadingText}>
-									Total
-								</Typography>
-								<Typography
-									className={classnames({
-										[classes.mobileValueText]: true,
-										[classes.mobileValueHighlightedText]: true
-									})}
+					{showMobileTicketsView ? (
+						this.renderMobileTickets()
+					) : (
+						<Card variant={"raisedLight"} className={classes.mobileCard}>
+							<div className={classes.mobileRow}>
+								<div
+									className={classes.mobilePadded}
+									style={{ paddingRight: 0 }}
 								>
-									{dollars(total_in_cents - fees_in_cents)}
-								</Typography>
-								<Typography className={classes.mobileSubText}>
-									+ {dollars(fees_in_cents)} fees
-								</Typography>
+									<Typography className={classes.mobileHeadingText}>
+										{eventName}
+									</Typography>
+									<Typography className={classes.mobileEventDetailsText}>
+										{venueDisplayName}
+									</Typography>
+									<Typography className={classes.mobileEventDetailsText}>
+										{eventDisplayDate}
+									</Typography>
+								</div>
+								{moreIcon}
 							</div>
-						</div>
 
-						<MobileOptionsControlDialog
-							open={!!mobileOptionsControlOpen}
-							onClose={() =>
-								this.setState({
-									mobileOptionsControlOpen: null
-								})
-							}
-							options={orderControlOptions}
-						/>
-					</Card>
+							<div className={classes.mobileBottomRow}>
+								<div style={{ flex: 4 }}>
+									<Typography className={classes.mobileSubHeadingText}>
+										Code
+									</Typography>
+									<Typography className={classes.mobileValueText}>
+										{code || "-"}
+									</Typography>
+									<Typography className={classes.mobileSubText}>
+										{codeType}
+									</Typography>
+								</div>
+								<div style={{ flex: 2 }}>
+									<Typography className={classes.mobileSubHeadingText}>
+										QTY
+									</Typography>
+									<Typography>{qty}</Typography>
+								</div>
+								<div style={{ flex: 3 }}>
+									<Typography className={classes.mobileSubHeadingText}>
+										Total
+									</Typography>
+									<Typography
+										className={classnames({
+											[classes.mobileValueText]: true,
+											[classes.mobileValueHighlightedText]: true
+										})}
+									>
+										{dollars(total_in_cents - fees_in_cents)}
+									</Typography>
+									<Typography className={classes.mobileSubText}>
+										+ {dollars(fees_in_cents)} fees
+									</Typography>
+								</div>
+							</div>
+
+							<div
+								className={classes.mobileViewTicketsRow}
+								onClick={toggleMobileTicketsView}
+							>
+								<Divider/>
+								<div className={classes.mobileViewTicketsInner}>
+									<Typography className={classes.mobileViewTicketsText}>
+										View tickets
+									</Typography>
+									<img src={"/icons/right-active.svg"}/>
+								</div>
+							</div>
+
+							<MobileOptionsControlDialog
+								open={!!mobileOptionsControlOpen}
+								onClose={() =>
+									this.setState({
+										mobileOptionsControlOpen: null
+									})
+								}
+								options={orderControlOptions}
+							/>
+						</Card>
+					)}
 				</Hidden>
+
+				<RefundBottomBar
+					amountInCents={!showRefundType ? refundAmountInCents : null}
+					onClick={() => this.onRefundClick("items")}
+				/>
 			</React.Fragment>
 		);
 	}
 }
 
-OrderItemsCard.propTypes = {
+OrderItems.propTypes = {
 	classes: PropTypes.object.isRequired,
 	eventDetails: PropTypes.object.isRequired,
 	items: PropTypes.array.isRequired,
 	order: PropTypes.object.isRequired,
-	refreshOrder: PropTypes.func.isRequired
+	refreshOrder: PropTypes.func.isRequired,
+	toggleMobileTicketsView: PropTypes.func.isRequired,
+	showMobileTicketsView: PropTypes.bool.isRequired
 };
 
-export default withStyles(styles)(OrderItemsCard);
+export default withStyles(styles)(OrderItems);

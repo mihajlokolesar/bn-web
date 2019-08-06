@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Typography, withStyles } from "@material-ui/core";
+import { Hidden, Typography, withStyles } from "@material-ui/core";
 import PropTypes from "prop-types";
 import moment from "moment-timezone";
 
@@ -8,9 +8,13 @@ import user from "../../../../../../../stores/user";
 import Bigneon from "../../../../../../../helpers/bigneon";
 import notifications from "../../../../../../../stores/notifications";
 import Loader from "../../../../../../elements/loaders/Loader";
+import Card from "../../../../../../elements/Card";
 
 const styles = theme => ({
-	root: {}
+	root: {},
+	mobileCard: {
+		marginBottom: 15
+	}
 });
 
 class OrderHistory extends Component {
@@ -67,7 +71,7 @@ class OrderHistory extends Component {
 	}
 
 	render() {
-		const { orderHistory, eventDetails } = this.props;
+		const { orderHistory, eventDetails, classes } = this.props;
 		const { profile, expandedRowIndex, eventStartDisplay } = this.state;
 
 		if (!profile) {
@@ -80,16 +84,29 @@ class OrderHistory extends Component {
 
 		return orderHistory.map((item, index) => {
 			const expanded = expandedRowIndex === index;
-			return (
+
+			const fanHistorySection = (
 				<FanHistoryActivityCard
 					profile={profile}
 					onExpandChange={() => this.onExpandChange(index)}
 					expanded={expanded}
 					eventStart={eventStartDisplay}
-					key={index}
 					item={item}
 					event={eventDetails}
+					showDivider={false}
 				/>
+			);
+
+			return (
+				<React.Fragment key={index}>
+					<Hidden smDown>{fanHistorySection}</Hidden>
+
+					<Hidden mdUp>
+						<Card variant={"raisedLight"} className={classes.mobileCard}>
+							{fanHistorySection}
+						</Card>
+					</Hidden>
+				</React.Fragment>
 			);
 		});
 	}

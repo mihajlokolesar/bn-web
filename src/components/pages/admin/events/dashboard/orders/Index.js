@@ -212,7 +212,7 @@ class OrderList extends Component {
 		const headings = [
 			"Order #",
 			"Date & Time",
-			"Fan",
+			"Customer",
 			"QTY",
 			"Order value",
 			"POS"

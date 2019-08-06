@@ -107,7 +107,8 @@ export class TicketCountReport {
 	countAndSalesData = {
 		name: "Loading",
 		counts: [],
-		sales: []
+		sales: [],
+		fees: []
 	};
 
 	@observable
@@ -138,7 +139,18 @@ export class TicketCountReport {
 							item.comp_sale_count >
 							0
 				);
-				this.setCountAndSalesData(response.data.counts, sales);
+
+				const fees = response.data.sales.filter(
+					item =>
+						!item.ticket_type_id &&
+						item.online_sale_count +
+							item.box_office_sale_count +
+							item.comp_sale_count +
+							item.per_order_client_online_fees >
+							0
+				);
+
+				this.setCountAndSalesData(response.data.counts, sales, fees);
 
 				onSuccess ? onSuccess() : null;
 
@@ -154,11 +166,12 @@ export class TicketCountReport {
 			});
 	}
 
-	setCountAndSalesData(counts = [], sales = []) {
+	setCountAndSalesData(counts = [], sales = [], fees = []) {
 		this.countAndSalesData = {
 			name: "Loading",
 			counts: countsRows(counts),
-			sales: salesRows(sales)
+			sales: salesRows(sales),
+			fees: fees
 		};
 	}
 
@@ -168,9 +181,10 @@ export class TicketCountReport {
 	@computed
 	get countsAndSalesByEventId() {
 		const results = {};
-		const { counts, sales } = this.countAndSalesData;
+		const { counts, sales, fees } = this.countAndSalesData;
 		const eventIds = (counts || [])
 			.concat(sales || [])
+			.concat(fees || [])
 			.map(item => item.event_id)
 			.sort();
 		eventIds.forEach(eventId => {
@@ -181,6 +195,9 @@ export class TicketCountReport {
 						row => row.event_id === eventId
 					),
 					sales: this.countAndSalesData.sales.filter(
+						row => row.event_id === eventId
+					),
+					fees: this.countAndSalesData.fees.filter(
 						row => row.event_id === eventId
 					)
 				};
@@ -231,7 +248,25 @@ export class TicketCountReport {
 			});
 			results[eventId] = eventResult;
 		}
+		return results;
+	}
 
+	@computed
+	get feesData() {
+		const allEventData = this.countsAndSalesByEventId;
+		const results = {};
+		for (const eventId in allEventData) {
+			const eventData = allEventData[eventId];
+			const { name, fees = [] } = eventData;
+
+			const eventResult = {
+				eventName: name
+			};
+
+			const orderFees = fees.map(item => item.per_order_client_online_fees);
+
+			results[eventId] = orderFees;
+		}
 		return results;
 	}
 
