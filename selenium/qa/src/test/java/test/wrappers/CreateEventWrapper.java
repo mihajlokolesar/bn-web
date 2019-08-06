@@ -1,27 +1,18 @@
-package test;
+package test.wrappers;
 
+import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
-import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
 
 import model.Event;
-import model.User;
-import pages.LoginPage;
 import pages.admin.events.AdminEventsPage;
 import pages.admin.events.CreateEventPage;
 import pages.components.AdminSideBar;
 import pages.components.Header;
-import test.wrappers.CreateOrganizationWrapper;
 import utils.SeleniumUtils;
 
-public class CreateEventStepsIT extends BaseSteps {
-
-	@Test(dataProvider = "create_event_data")
-	public void createEvent(User superuser, Event event) throws Exception {
-
-		LoginPage login = new LoginPage(driver);
-		maximizeWindow();
-		login.login(superuser.getEmailAddress(), superuser.getPass());
+public class CreateEventWrapper {
+	
+	public boolean createEvent(WebDriver driver, Event event) throws Exception {
 		Header header = new Header(driver);
 		AdminEventsPage adminEvents = null;
 		boolean isOrgPresent = header.isOrganizationPresent(event.getOrganization().getName());
@@ -43,13 +34,7 @@ public class CreateEventStepsIT extends BaseSteps {
 		boolean retVal = createEvent.createEventPageSteps(event);
 		String path = SeleniumUtils.getUrlPath(driver);
 		retVal = retVal && path.contains("edit");
-		header.logOut();
-		Assert.assertEquals(retVal, true);
+		return retVal;
+	}
 
-	}
-	
-	@DataProvider(name = "create_event_data")
-	public static Object[][] data() {
-		return new Object[][] { { User.generateSuperUser(), Event.generateEvent()} };
-	}
 }

@@ -12,5 +12,6 @@ public class MsgConstants {
 	public static final String ORGANIZATION_CREATED_SUCCESS = "Organization created";
 	public static final String LOGIN_FAILED_ERROR = "Login failed";
 	public static final String EVENT_PUBLISHED = "Event published";
+	public static final String MORE_THAN_ONE_EVENT_PURCHASE_ERROR = "Cart limited to one event for purchasing";
 
 }

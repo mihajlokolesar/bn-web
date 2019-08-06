@@ -1,5 +1,7 @@
 package pages.admin.events;
 
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -7,6 +9,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import model.Event;
+import model.TicketType;
 import pages.BasePage;
 import pages.components.AddTicketTypeComponent;
 import utils.Constants;
@@ -88,6 +92,20 @@ public class CreateEventPage extends BasePage {
 	public void clickOnImportSettingDialogNoThanks() {
 		waitVisibilityAndClick(dissmisImportSettingDialog);
 	}
+	
+	
+	public boolean createEventPageSteps(Event event) {
+		isAtPage();
+		clickOnImportSettingDialogNoThanks();
+		enterArtistName(event.getArtistName());
+		enterEventName(event.getEventName());
+		selectVenue(event.getVenueName());
+		enterDatesAndTimes(event.getStartDate(), event.getEndDate(), event.getStartTime(), event.getEndTime(), event.getDoorTime());
+		addTicketTypes(event.getTicketTypes());
+		clickOnPublish();
+		boolean retVal = checkMessage();
+		return retVal;
+	}
 
 	public void uploadImage(String imageLink) {
 		clickOnUploadImage();
@@ -157,10 +175,16 @@ public class CreateEventPage extends BasePage {
 		waitVisibilityAndSendKeys(element, date);
 	}
 
-	public void addNewTicketType(String name, String capacity, String price) {
+	public void addNewTicketType(TicketType type) {
 		waitVisibilityAndClick(addTicketTypeButton);
 		AddTicketTypeComponent ticketType = new AddTicketTypeComponent(driver);
-		ticketType.addNewTicketType(name, capacity, price);
+		ticketType.addNewTicketType(type.getTicketTypeName(), type.getCapacity(), type.getPrice());
+	}
+	
+	public void addTicketTypes(List<TicketType> list) {
+		for(TicketType type : list) {
+			addNewTicketType(type);
+		}
 	}
 
 	public void clickOnPublish() {

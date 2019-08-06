@@ -28,7 +28,7 @@ public class ForgotPasswordStepsIT extends BaseSteps {
 		mailinatorHomePage.searchForUser(username);
 		mailinatorHomePage.checkIfOnUserInboxPage(username);
 		MailinatorInboxPage inboxPage = new MailinatorInboxPage(driver);
-		inboxPage.goToResetMail();
+		inboxPage.goToMail("Reset Your Password");
 		inboxPage.clickOnResetPasswordLinkInMail();
 
 		ResetPasswordPage resetPasswordPage = new ResetPasswordPage(driver);

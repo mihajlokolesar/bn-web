@@ -33,10 +33,12 @@ public class Header extends BaseComponent {
 
 	@FindBy(xpath = "//body//header//div[span[@aria-owns='menu-appbar']//span[contains(text(),'Current organization')]]")
 	private WebElement currentOrganizationDropDown;
+	
+	@FindBy(xpath = "//header//span/a[contains(@href,'tickets/confirmation')]/button")
+	public WebElement shoppingBasket;
 
 	public Header(WebDriver driver) {
 		super(driver);
-		PageFactory.initElements(driver, this);
 	}
 
 	public void searchEvents(String event) {
@@ -105,6 +107,13 @@ public class Header extends BaseComponent {
 		element.click();
 
 		return retVal;
+	}
+	
+	public void clickOnShoppingBasket() {
+		boolean isVisible = isExplicitlyWaitVisible(shoppingBasket);
+		if (isVisible) {
+			waitVisibilityAndClick(shoppingBasket);
+		}
 	}
 
 }
