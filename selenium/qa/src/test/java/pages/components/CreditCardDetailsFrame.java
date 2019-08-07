@@ -24,11 +24,11 @@ public class CreditCardDetailsFrame extends BaseComponent {
 	}
 
 	public void enterCreditCardNumber(String number) {
-		waitVisibilityAndSendKeys(cardNumberField, number);
+		waitVisibilityAndSendKeysSlow(cardNumberField, number);
 	}
 
 	public void enterExpirationDate(String expirationDate) {
-		waitVisibilityAndSendKeys(expirationDateField, expirationDate);
+		waitVisibilityAndSendKeysSlow(expirationDateField, expirationDate);
 	}
 
 	public void enterCvc(String cvc) {

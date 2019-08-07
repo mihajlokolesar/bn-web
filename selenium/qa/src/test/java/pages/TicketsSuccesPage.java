@@ -26,7 +26,7 @@ public class TicketsSuccesPage extends BasePage{
 	}
 	
 	public void enterPhoneNumber(String phoneNumber) {
-		waitVisibilityAndSendKeys(mobileNumberField, phoneNumber);
+		waitVisibilityAndSendKeysSlow(mobileNumberField, phoneNumber);
 		waitVisibilityAndClick(sendMeTextButton);
 	}
 

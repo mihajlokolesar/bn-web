@@ -109,6 +109,15 @@ public class AbstractBase {
 		element.click();
 	}
 
+	public void waitVisibilityAndSendKeysSlow(WebElement element, String value) {
+		explicitWaitForVisiblity(element);
+		explicitWaitForClickable(element);
+		for (int i = 0; i < value.length(); i++) {
+			element.sendKeys(Character.toString(value.charAt(i)));
+			waitForTime(100);
+		}
+	}
+
 	public void waitVisibilityAndSendKeys(WebElement element, String value) {
 		explicitWaitForVisiblity(element);
 		explicitWaitForClickable(element);

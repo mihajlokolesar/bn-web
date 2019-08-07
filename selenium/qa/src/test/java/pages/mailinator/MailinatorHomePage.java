@@ -28,7 +28,14 @@ public class MailinatorHomePage extends BasePage {
 		driver.get(getUrl());
 		explicitWait(10, 500, ExpectedConditions.urlToBe(getUrl()));
 	}
-
+	
+	
+	public void navigateToInNewTab(String url) {
+		String parentHandler = driver.getWindowHandle();
+		String jsScript = "window.open('" + url + "','_blank');";
+		explicitWait(15, ExpectedConditions.javaScriptThrowsNoExceptions(jsScript));
+		SeleniumUtils.switchToChildWindow(parentHandler, driver);
+	}
 
 	public void searchForUser(String userInboxName) {
 		try {

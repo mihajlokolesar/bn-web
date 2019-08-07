@@ -19,7 +19,7 @@ public class TicketsConfirmationPage extends BasePage {
 
 	@FindBy(xpath = "//header//span/a[contains(@href,'tickets/confirmation')]/button/span[1]")
 	public WebElement shoppingBasket;
-	
+
 	@FindBy(xpath = "//header//span/a[contains(@href,'tickets/confirmation')]/button/span[1]//span")
 	public WebElement shoppingBasketTime;
 
@@ -37,7 +37,7 @@ public class TicketsConfirmationPage extends BasePage {
 	public void presetUrl() {
 	}
 
-	public void ticketsConfirmationPageSteps(CreditCard card, int numberOfTickets) {
+	public void ticketsConfirmationPageSteps(CreditCard card) {
 		isAtConfirmationPage();
 		confirmPaymentMethod("card");
 		enterCreditCardDetails(card.getCardNumber(), card.getExpirationDate(), card.getCvc(), card.getZipCode());
@@ -51,7 +51,7 @@ public class TicketsConfirmationPage extends BasePage {
 	public boolean isCreditCardMethod() {
 		return isExplicitlyWaitVisible(paymentMethodCard);
 	}
-	
+
 	public void clickOnChangeTicketLink() {
 		explicitWaitForVisiblity(changeTicketLink);
 		SeleniumUtils.clickOnLink(changeTicketLink, driver);

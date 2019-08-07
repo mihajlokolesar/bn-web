@@ -10,6 +10,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import model.User;
 import utils.Constants;
 import utils.MsgConstants;
 
@@ -63,6 +64,10 @@ public class LoginPage extends BasePage {
 
 	public void navigate() {
 		driver.get(getUrl());
+	}
+
+	public void login(User user) {
+		login(user.getEmailAddress(), user.getPass());
 	}
 
 	public void login(String username, String password) {

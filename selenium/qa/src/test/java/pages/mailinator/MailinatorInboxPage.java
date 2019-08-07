@@ -37,7 +37,7 @@ public class MailinatorInboxPage extends BasePage {
 				ExpectedConditions.presenceOfElementLocated(By.xpath(
 						".//table//tbody//tr[td[contains(text(),'noreply@bigneon.com')] and td/a[contains(text(),'"
 								+ subjectValue + "')]]/td[contains(text(),'noreply@bigneon.com')]")));
-		explicitWaitForClickable(mailRowCell);
+		
 		mailRowCell.click();
 	}
 

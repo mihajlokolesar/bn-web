@@ -5,6 +5,7 @@ public class Purchase {
 	private Event event;
 	private CreditCard creditCard;
 	private int numberOfTickets;
+	private int removeNumberOfTickets;
 	private String phoneNumber;
 
 	public Event getEvent() {
@@ -38,5 +39,14 @@ public class Purchase {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
+
+	public int getRemoveNumberOfTickets() {
+		return removeNumberOfTickets;
+	}
+
+	public void setRemoveNumberOfTickets(int removeNumberOfTickets) {
+		this.removeNumberOfTickets = removeNumberOfTickets;
+	}
+	
 	
 }

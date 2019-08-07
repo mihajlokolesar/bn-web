@@ -35,8 +35,8 @@ public class TicketsPage extends BasePage {
 		return explicitWait(15, ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(
 				"//div/p[contains(text(),'Select tickets')]/following-sibling::div//div[./p[contains(text(),'+')]]")));
 	}
-	
-	public List<WebElement> removeTicketType() {
+
+	public List<WebElement> removeTicketTypes() {
 		return explicitWait(15, ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(
 				"//div/p[contains(text(),'Select tickets')]/following-sibling::div//div[./p[contains(text(),'-')]]")));
 	}
@@ -48,6 +48,11 @@ public class TicketsPage extends BasePage {
 	@Override
 	public void presetUrl() {
 
+	}
+
+	@Override
+	public boolean isAtPage() {
+		return explicitWait(15, ExpectedConditions.urlMatches("tickets$"));
 	}
 
 	public void ticketsPageStepsWithLogin(String mail, String password, int numberOfTickets) {
@@ -62,8 +67,53 @@ public class TicketsPage extends BasePage {
 		}
 	}
 
+	public void ticketsPageStepsWithOutLogin(int numberOfTickets) {
+		addNumberOfTickets(numberOfTickets);
+		clickOnContinue();
+		waitForTime(1000);
+
+	}
+
 	public String getUrlPath() throws URISyntaxException {
 		return SeleniumUtils.getUrlPath(driver);
+	}
+
+	public void addNumberOfTickets(int number) {
+		for (int k = 0; k < number; k++) {
+			addTicketForLastType();
+		}
+	}
+
+	public void removeNumberOfTickets(int number) {
+		List<WebElement> list = removeTicketTypes();
+		WebElement lastTicketType = list.get(list.size() - 1);
+		WebElement currentQuantityEl = lastTicketType.findElement(By.xpath(".//following-sibling::p"));
+		String text = currentQuantityEl.getText();
+		Integer currentQuantity = Integer.parseInt(text);
+		if (currentQuantity <= number && (currentQuantity - 1) > 0) {
+			number = currentQuantity - 1;
+		}
+		for (int k = 0; k < number; k++) {
+			removeTicketForLastType();
+		}
+	}
+
+	private void removeTicketForLastType() {
+		if (verifyDifferentTicketTypesAreDisplayed()) {
+			List<WebElement> list = removeTicketTypes();
+			waitVisibilityAndClick(list.get(list.size() - 1));
+		} else {
+			throw new NotFoundException("No ticket types found");
+		}
+	}
+
+	public void addTicketForLastType() {
+		if (verifyDifferentTicketTypesAreDisplayed()) {
+			List<WebElement> list = addTicketTypes();
+			incrementTicketNumber(list.get(list.size() - 1));
+		} else {
+			throw new NotFoundException("No ticket types found");
+		}
 	}
 
 	public boolean verifyDifferentTicketTypesAreDisplayed() {
@@ -72,21 +122,6 @@ public class TicketsPage extends BasePage {
 			return false;
 		} else {
 			return true;
-		}
-	}
-
-	public void addNumberOfTickets(int number) {
-		for (int k = 0; k < number; k++) {
-			addTicketForLastType();
-		}
-	}
-	
-	public void addTicketForLastType() {
-		if (verifyDifferentTicketTypesAreDisplayed()) {
-			List<WebElement> list = addTicketTypes();
-			incrementTicketNumber(list.get(list.size() - 1));
-		} else {
-			throw new NotFoundException("No ticket types found");
 		}
 	}
 

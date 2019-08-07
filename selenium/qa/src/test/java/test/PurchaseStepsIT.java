@@ -29,11 +29,11 @@ public class PurchaseStepsIT extends BaseSteps {
 		ticketsPage.ticketsPageStepsWithLogin(user.getEmailAddress(), user.getPass(), purchase.getNumberOfTickets());
 
 		TicketsConfirmationPage confirmationPage = new TicketsConfirmationPage(driver);
-		confirmationPage.ticketsConfirmationPageSteps(purchase.getCreditCard(), purchase.getNumberOfTickets());
+		confirmationPage.ticketsConfirmationPageSteps(purchase.getCreditCard());
 
 		TicketsSuccesPage successPage = new TicketsSuccesPage(driver);
 		successPage.isAtPage();
-		successPage.enterPhoneNumber(purchase.getPhoneNumber());
+//		successPage.enterPhoneNumber(purchase.getPhoneNumber());
 		Header header = new Header(driver);
 		header.logOut();
 
@@ -44,11 +44,11 @@ public class PurchaseStepsIT extends BaseSteps {
 		Assert.assertTrue(retVal);
 	}
 
-	@DataProvider(name = "user_credentials")
+	@DataProvider(name = "purchase_data")
 	public static Object[][] data() {
 		Purchase purchase = new Purchase();
 		Event event = Event.generateEvent();
-		event.setEventName("TestNameEventeeeee");
+		event.setEventName("TestNameEvent");
 		purchase.setEvent(event);
 		purchase.setCreditCard(CreditCard.generateCreditCard());
 		purchase.setNumberOfTickets(2);
