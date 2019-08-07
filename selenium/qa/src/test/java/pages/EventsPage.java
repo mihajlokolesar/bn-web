@@ -42,6 +42,8 @@ public class EventsPage extends BasePage {
 		navigate();
 		if (!isEventPresent(event.getEventName())) {
 			createEvent(event);
+			navigate();
+			driver.navigate().refresh();
 		}
 		clickOnEvent(event.getEventName());
 		clickOnViewMap();

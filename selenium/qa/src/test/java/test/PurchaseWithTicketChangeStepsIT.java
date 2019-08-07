@@ -16,6 +16,7 @@ import pages.TicketsSuccesPage;
 import pages.components.Header;
 import pages.mailinator.MailinatorHomePage;
 import pages.mailinator.MailinatorInboxPage;
+import utils.ProjectUtils;
 
 public class PurchaseWithTicketChangeStepsIT extends BaseSteps {
 
@@ -62,6 +63,9 @@ public class PurchaseWithTicketChangeStepsIT extends BaseSteps {
 	public static Object[][] data() {
 		Purchase purchase = new Purchase();
 		Event event = Event.generateEvent();
+		String[] dates = ProjectUtils.getDatesWithSpecifiedRangeInDaysWithStartOffset(7, 30);
+		event.setStartDate(dates[0]);
+		event.setEndDate(dates[1]);
 		event.setEventName("TestNameEvent");
 		purchase.setEvent(event);
 		purchase.setCreditCard(CreditCard.generateCreditCard());

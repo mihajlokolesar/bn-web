@@ -13,6 +13,7 @@ public class CreditCardDetailsFrame extends BaseComponent {
 
 	@FindBy(name = "exp-date")
 	private WebElement expirationDateField;
+	
 	@FindBy(name = "cvc")
 	private WebElement cvcField;
 

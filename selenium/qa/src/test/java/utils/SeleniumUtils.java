@@ -52,7 +52,7 @@ public class SeleniumUtils {
 	}
 
 	/**
-	 * Opens new tab, switches to it, and returns to parent window handle
+	 * Opens new tab, switches to it, and returns parent window handle
 	 * 
 	 * @param url
 	 * @param driver

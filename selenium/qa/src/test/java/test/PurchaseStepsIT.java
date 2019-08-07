@@ -15,10 +15,11 @@ import pages.TicketsSuccesPage;
 import pages.components.Header;
 import pages.mailinator.MailinatorHomePage;
 import pages.mailinator.MailinatorInboxPage;
+import utils.ProjectUtils;
 
 public class PurchaseStepsIT extends BaseSteps {
 
-	@Test(dataProvider = "user_credentials")
+	@Test(dataProvider = "purchase_data")
 	public void purchaseSteps(User user, Purchase purchase) throws Exception {
 
 		EventsPage eventsPage = new EventsPage(driver);
@@ -39,7 +40,7 @@ public class PurchaseStepsIT extends BaseSteps {
 
 		MailinatorHomePage mailinatorHomePage = new MailinatorHomePage(driver);
 		MailinatorInboxPage inboxPage = mailinatorHomePage.goToUserInbox(user.getEmailAddress());
-		boolean retVal = inboxPage.openMailAndCheckValidity("Next Step - Get Your Tickets", 
+		boolean retVal = inboxPage.openMailAndCheckValidity("Next Step - Get Your Tickets",
 				purchase.getNumberOfTickets(), purchase.getEvent().getEventName());
 		Assert.assertTrue(retVal);
 	}
@@ -48,6 +49,9 @@ public class PurchaseStepsIT extends BaseSteps {
 	public static Object[][] data() {
 		Purchase purchase = new Purchase();
 		Event event = Event.generateEvent();
+		String[] dates = ProjectUtils.getDatesWithSpecifiedRangeInDaysWithStartOffset(7, 30);
+		event.setStartDate(dates[0]);
+		event.setEndDate(dates[1]);
 		event.setEventName("TestNameEvent");
 		purchase.setEvent(event);
 		purchase.setCreditCard(CreditCard.generateCreditCard());
