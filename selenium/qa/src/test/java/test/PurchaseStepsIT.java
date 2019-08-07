@@ -1,9 +1,9 @@
 package test;
 
+import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import junit.framework.Assert;
 import model.CreditCard;
 import model.Event;
 import model.Purchase;
@@ -34,7 +34,6 @@ public class PurchaseStepsIT extends BaseSteps {
 		TicketsSuccesPage successPage = new TicketsSuccesPage(driver);
 		successPage.isAtPage();
 		successPage.enterPhoneNumber(purchase.getPhoneNumber());
-		Thread.sleep(5000);
 		Header header = new Header(driver);
 		header.logOut();
 

@@ -164,7 +164,7 @@ public class CreateEventPage extends BasePage {
 
 	public void selectVenue(String venueName) {
 		waitVisibilityAndClick(venueDropDownSelect);
-		WebElement selectedVenue = selectElementFormVenueDropDown(venueName);
+		selectElementFormVenueDropDown(venueName);
 		waitForTime(500);
 		explicitWait(5, ExpectedConditions.textToBePresentInElement(venueDropDownSelect, venueName));
 	}

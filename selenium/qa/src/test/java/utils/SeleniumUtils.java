@@ -67,9 +67,9 @@ public class SeleniumUtils {
 	}
 
 	public static void clickOnLink(WebElement element, WebDriver driver) {
-		String jsScript = "arguments[0].click()";
+		String jsScript = "arguments[0].click();";
 		JavascriptExecutor executor = (JavascriptExecutor) driver;
-		executor.executeScript("arguments[0].click();", element);
+		executor.executeScript(jsScript, element);
 	}
 
 }

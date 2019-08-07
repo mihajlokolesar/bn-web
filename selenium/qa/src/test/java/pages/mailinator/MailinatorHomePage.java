@@ -1,11 +1,9 @@
 package pages.mailinator;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import pages.BasePage;
@@ -31,12 +29,6 @@ public class MailinatorHomePage extends BasePage {
 		explicitWait(10, 500, ExpectedConditions.urlToBe(getUrl()));
 	}
 
-	public void navigateToInNewTab(String url) {
-		String parentHandler = driver.getWindowHandle();
-		String jsScript = "window.open('" + url + "','_blank');";
-		explicitWait(15, ExpectedConditions.javaScriptThrowsNoExceptions(jsScript));
-		SeleniumUtils.switchToChildWindow(parentHandler, driver);
-	}
 
 	public void searchForUser(String userInboxName) {
 		try {
@@ -58,8 +50,7 @@ public class MailinatorHomePage extends BasePage {
 	}
 
 	public MailinatorInboxPage goToUserInbox(String userEmail) {
-		navigateToInNewTab(getUrl());
-//		navigate();
+		SeleniumUtils.openNewTabWithLink(getUrl(), driver);
 		String username = userEmail.split("@")[0];
 		searchForUser(username);
 		checkIfOnUserInboxPage(username);

@@ -8,6 +8,7 @@
       <class name="test.ForgotPasswordStepsIT"/>
       <class name="test.CreateOrganizationStepsIT"/>
       <class name="test.CreateEventStepsIT"/>
+      <class name="test.PurchaseStepsIT"/>
     </classes>
   </test>
   <test name="Firefox">
@@ -17,6 +18,7 @@
       <class name="test.ForgotPasswordStepsIT"/>
       <class name="test.CreateOrganizationStepsIT"/>
       <class name="test.CreateEventStepsIT"/>
+      <class name="test.PurchaseStepsIT"/>
     </classes>
   </test>  
 </suite>

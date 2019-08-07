@@ -2,7 +2,6 @@ package config;
 
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
 
 public class FirefoxDriverManager extends DriverManager{
 	
