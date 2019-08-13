@@ -9,7 +9,7 @@ import pages.components.Header;
 
 public class LoginStepsIT extends BaseSteps {
 
-//	@Test(dataProvider = "user_credentials")
+	@Test(dataProvider = "user_credentials")
 	public void regularLogin(String username, String password) {
 		maximizeWindow();
 		LoginPage loginPage = new LoginPage(driver);
