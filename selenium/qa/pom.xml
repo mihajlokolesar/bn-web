@@ -20,9 +20,9 @@
 		<java.mail.version>1.4.7</java.mail.version>
 		<maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
 		<maven-failsafe-plugin.version>2.21.0</maven-failsafe-plugin.version>
-		<browser>rm</browser>
+		<browser>sf</browser>
 		<baseurl>https://develop.bigneon.com/</baseurl>
-	
+
 	</properties>
 
 	<dependencies>
@@ -43,11 +43,11 @@
 			<artifactId>mail</artifactId>
 			<version>${java.mail.version}</version>
 		</dependency>
-		  <dependency>
-            <groupId>com.googlecode.json-simple</groupId>
-            <artifactId>json-simple</artifactId>
-            <version>1.1.1</version>
-        </dependency>
+		<dependency>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+			<version>1.1.1</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -65,12 +65,18 @@
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<version>${maven-failsafe-plugin.version}</version>
 				<configuration>
+					<properties>
+						<property>
+							<name>surefire.testng.verbose</name>
+							<value>5</value>
+						</property>
+					</properties>
 					<systemPropertyVariables>
 						<browser>${browser}</browser>
 						<baseurl>${baseurl}</baseurl>
-						<webdriver.chrome.driver>${webdriver.chrome.driver}</webdriver.chrome.driver>
-						<webdriver.gecko.driver>${webdriver.gecko.driver}</webdriver.gecko.driver>
-						<webdriver.edge.driver>${webdriver.edge.driver}</webdriver.edge.driver>
+						<!-- <webdriver.chrome.driver>${webdriver.chrome.driver}</webdriver.chrome.driver> 
+							<webdriver.gecko.driver>${webdriver.gecko.driver}</webdriver.gecko.driver> 
+							<webdriver.edge.driver>${webdriver.edge.driver}</webdriver.edge.driver> -->
 					</systemPropertyVariables>
 				</configuration>
 				<executions>
@@ -94,7 +100,7 @@
 						<artifactId>maven-failsafe-plugin</artifactId>
 						<configuration>
 							<suiteXmlFiles>
-								<suiteXmlFile>config/testng.xml</suiteXmlFile>		
+								<suiteXmlFile>config/testng.xml</suiteXmlFile>
 							</suiteXmlFiles>
 							<systemPropertyVariables>
 								<username>${username}</username>

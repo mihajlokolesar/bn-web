@@ -21,6 +21,10 @@ public class FacebookLoginPage extends BasePage {
 
 	@FindBy(id = "u_0_0")
 	private WebElement loginButton;
+	
+	public FacebookLoginPage(WebDriver driver) {
+		super(driver);
+	}
 
 	@Override
 	public void presetUrl() {
@@ -45,9 +49,6 @@ public class FacebookLoginPage extends BasePage {
 		return retVal;
 	}
 
-	public FacebookLoginPage(WebDriver driver) {
-		super(driver);
-		PageFactory.initElements(driver, this);
-	}
+	
 
 }

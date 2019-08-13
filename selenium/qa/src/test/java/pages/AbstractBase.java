@@ -57,6 +57,12 @@ public class AbstractBase {
 	public <T, V> T explicitWaitForVisiblity(WebElement element) {
 		return explicitWait(15, ExpectedConditions.visibilityOf(element));
 	}
+	
+	public void explicitWaitForVisibilityAndClickableWithClick(WebElement element) {
+		explicitWaitForVisiblity(element);
+		explicitWaitForClickable(element);
+		element.click();
+	}
 
 	public boolean isExplicitlyWaitVisible(WebElement element) {
 		return isExplicitlyWaitVisible(15, element);

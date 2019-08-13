@@ -8,35 +8,38 @@ import pages.BaseComponent;
 
 public class ProfileMenuDropDown extends BaseComponent {
 	
-	@FindBy(xpath = "a[@href='/admin/events")
+	@FindBy(xpath = "//body/div[@id='menu-appbar']//ul/a[@href='/admin/events']/li")
 	private WebElement adminEvents;
 	
-	@FindBy(xpath = "a[@href='/my-events]")
+	@FindBy(xpath = "//body/div[@id='menu-appbar']//ul/a[@href='/my-events']/li")
 	private WebElement myEvents;
 
-	@FindBy(xpath = "a[@href='/orders']")
+	@FindBy(xpath = "//body/div[@id='menu-appbar']//ul/a[@href='/orders']/li")
 	private WebElement myOrders;
 
-	@FindBy(xpath = "a[@href='/account']")
+	@FindBy(xpath = "//body/div[@id='menu-appbar']//ul/a[@href='/account']/li")
 	private WebElement account;
 
 	@FindBy(xpath = "/html/body//ul//li[contains(text(),'Logout')]")
 	private WebElement logout;
+	
+	@FindBy(xpath = "//body/div[@id='menu-appbar']")
+	private WebElement profileMenuDropDownContainer;
 	
 	public ProfileMenuDropDown(WebDriver driver) {
 		super(driver);
 	}
 
 	public void myEventsClick() {
-		myEvents.click();
+		explicitWaitForVisibilityAndClickableWithClick(myEvents);
 	}
 
 	public void myOrdersClick() {
-		myOrders.click();
+		explicitWaitForVisibilityAndClickableWithClick(myOrders);
 	}
 
 	public void myAccountClick() {
-		account.click();
+		explicitWaitForVisibilityAndClickableWithClick(account);
 	}
 
 	public void logout() {

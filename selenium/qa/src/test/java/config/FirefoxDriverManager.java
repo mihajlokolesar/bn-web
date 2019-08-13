@@ -16,6 +16,7 @@ public class FirefoxDriverManager extends DriverManager{
 	@Override
 	protected void createDriver() {
 		FirefoxOptions options = new FirefoxOptions();
+	
 		driver = new FirefoxDriver();
 	}
 

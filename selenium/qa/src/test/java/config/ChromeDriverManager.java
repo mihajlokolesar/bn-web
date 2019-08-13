@@ -16,6 +16,7 @@ public class ChromeDriverManager extends DriverManager {
 	@Override
 	protected void createDriver() {
 		ChromeOptions options = new ChromeOptions();
+		System.setProperty("webdriver.chrome.driver","/Users/simpletask/Desktop/mihajlo/drivers/chromedriver");
 		driver = new ChromeDriver();
 		
 	}

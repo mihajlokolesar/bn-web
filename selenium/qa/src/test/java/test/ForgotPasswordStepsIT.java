@@ -44,8 +44,8 @@ public class ForgotPasswordStepsIT extends BaseSteps {
 			accountPage.clickSave();
 			boolean isAccountUpdated = accountPage.isAccountUpdatedMsg();
 			Assert.assertEquals(test, isAccountUpdated && isAccountPage);
-			Header header = new Header(driver);
-			header.logOut();
+			
+			accountPage.logOut();
 		}
 		
 	}

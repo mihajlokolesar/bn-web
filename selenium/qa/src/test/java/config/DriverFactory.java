@@ -6,6 +6,8 @@ public class DriverFactory {
 
 	public static DriverManager getDriverManager(String config, String environment) {
 		
+		System.setProperty("webdriver.gecko.driver", "/Users/simpletask/Desktop/mihajlo/drivers/geckodriver");
+		
 		DriverManager manager = null;
 		try {
 			browser = System.getProperty("browser");

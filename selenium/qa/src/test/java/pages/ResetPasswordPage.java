@@ -25,7 +25,6 @@ public class ResetPasswordPage extends BasePage {
 
 	public ResetPasswordPage(WebDriver driver) {
 		super(driver);
-		PageFactory.initElements(driver, this);
 	}
 
 	@Override

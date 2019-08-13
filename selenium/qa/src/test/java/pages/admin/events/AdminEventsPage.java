@@ -3,8 +3,6 @@ package pages.admin.events;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-
 import pages.BasePage;
 import utils.Constants;
 
@@ -22,7 +20,6 @@ public class AdminEventsPage extends BasePage {
 	
 	public AdminEventsPage(WebDriver driver) {
 		super(driver);
-		PageFactory.initElements(driver, this);
 	}
 
 	@Override
