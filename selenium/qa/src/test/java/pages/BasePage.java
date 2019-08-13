@@ -6,7 +6,6 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import pages.components.Header;
-import utils.MsgConstants;
 
 public abstract class BasePage extends AbstractBase {
 	

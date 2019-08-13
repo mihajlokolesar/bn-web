@@ -1,6 +1,7 @@
 package pages.user;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NotFoundException;
@@ -66,6 +67,26 @@ public class MyEventsPage extends BasePage {
 		WebElement element = explicitWait(15,
 				ExpectedConditions.visibilityOfElementLocated(By.xpath(selectedEventXpath)));
 		return element;
+	}
+
+	public boolean checkIfTicketExists(String ticketNumber, String orderNumber, String eventName) {
+		List<WebElement> events = explicitWait(15, ExpectedConditions.presenceOfAllElementsLocatedBy(
+				By.xpath("//body//main//div[div[div[div[p[text()='" + eventName + "']]]]]")));
+
+		for (WebElement event : events) {
+			EventComponent component = clickOnViewMyTicketOfEvent(event);
+			try {
+				boolean retVal = component.isTicketNumberPresent(ticketNumber);
+				retVal = retVal && component.isOrderNumberPresent(orderNumber);
+				if (retVal) {
+					return retVal;
+				}
+			} catch (NoSuchElementException e) {
+				continue;
+			}
+
+		}
+		return false;
 	}
 
 	public WebElement findEventByName(String eventName) {

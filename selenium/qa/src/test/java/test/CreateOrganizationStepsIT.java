@@ -7,7 +7,6 @@ import org.testng.annotations.Test;
 import model.Organization;
 import model.User;
 import pages.LoginPage;
-import pages.components.Header;
 import test.wrappers.CreateOrganizationWrapper;
 
 public class CreateOrganizationStepsIT extends BaseSteps {

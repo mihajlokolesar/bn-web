@@ -72,7 +72,7 @@ public class TransferTicketStepsIT extends BaseSteps {
 		login.logOut();
 	}
 
-	@Test(dataProvider = "ticket_transfer_to_old_user_data", priority = 9, retryAnalyzer = RetryAnalizer.class)
+	@Test(dataProvider = "ticket_transfer_to_old_user_data", priority = 9/*, retryAnalyzer = RetryAnalizer.class*/)
 	public void transferTicketToExistingUserSteps(User sender, User receiver) {
 		LoginPage login = new LoginPage(driver);
 		maximizeWindow();
@@ -101,11 +101,12 @@ public class TransferTicketStepsIT extends BaseSteps {
 		Assert.assertTrue(login.confirmedLogin(receiver), "Login with receiver account failed: " + receiver);
 		myEventsPage = login.getHeader().clickOnMyEventsInProfileDropDown();
 		myEventsPage.isAtPage();
-		WebElement event = myEventsPage.findEventByName(eventName);
-		selectedEvent = myEventsPage.clickOnViewMyTicketOfEvent(event);
-
-		boolean isTicketTransfered = selectedEvent.isTicketNumberPresent(ticketNumber);
-		isTicketTransfered = isTicketTransfered && selectedEvent.isOrderNumberPresent(orderNumber);
+//		WebElement event = myEventsPage.findEventByName(eventName);
+//		selectedEvent = myEventsPage.clickOnViewMyTicketOfEvent(event);
+//
+//		boolean isTicketTransfered = selectedEvent.isTicketNumberPresent(ticketNumber);
+//		isTicketTransfered = isTicketTransfered && selectedEvent.isOrderNumberPresent(orderNumber);
+		boolean isTicketTransfered = myEventsPage.checkIfTicketExists(ticketNumber, orderNumber, eventName);
 		Assert.assertTrue(isTicketTransfered, "Ticket not transfered to receiver account");
 		login.logOut();
 

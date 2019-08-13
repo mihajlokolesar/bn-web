@@ -9,7 +9,7 @@ import pages.LoginPage;
 
 public class LoginWithFacebookStepsIT extends BaseSteps {
 
-	@Test(dataProvider = "user_fb_credentials")
+	@Test(dataProvider = "user_fb_credentials", priority = 3)
 	public void loginTestWithFacebook(String username, String password) {
 		LoginPage loginPage = new LoginPage(driver);
 		maximizeWindow();
