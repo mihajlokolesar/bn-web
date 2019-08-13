@@ -11,11 +11,19 @@ public class EventComponent extends BaseComponent {
 
 	private WebElement selectedEventElement;
 
+	private WebElement selectedRow;
+
 	private String relativeTicketNumberXpath = ".//div[span/p[contains(text(),'Ticket #')]]/following-sibling::div/div/span[2]";
 
 	private String relativeOrderNumberXpath = ".//div[span/p[contains(text(),'Ticket #')]]/following-sibling::div/div/span[3]";
 
-	private String relativeTransferLink = ".//div//a[span[contains(text(),'transfer')]]";
+	private String relativeToRowTicketNumberXpath = ".//div/span[2]";
+	
+	private String relativeToRowOrderNumberXpath = ".//div/span[3]";
+	
+	private String relativeTransferLink = ".//div//a[span[text()='transfer']]";
+
+	private String relativeRowWithTransfer = ".//div[div[span[p[a[span[text()='transfer']]]]]]";
 
 	public EventComponent(WebDriver driver) {
 		super(driver);
@@ -26,6 +34,12 @@ public class EventComponent extends BaseComponent {
 		this.selectedEventElement = selectedEventElement;
 	}
 
+	public WebElement selectRow(){
+		WebElement row = SeleniumUtils.getChildElementFromParentLocatedBy(selectedEventElement, By.xpath(relativeRowWithTransfer), driver);
+		this.selectedRow = row;
+		return row;
+	}
+	
 	public boolean isTicketNumberPresent(String ticketNumber) {
 		WebElement ticketNumberEl = SeleniumUtils.getChildElementFromParentLocatedBy(selectedEventElement,
 				By.xpath(relativeTicketNumberXpath + "/p[contains(text(),'" + ticketNumber + "')]"), driver);
@@ -39,20 +53,22 @@ public class EventComponent extends BaseComponent {
 	}
 
 	public String getTicketNumber() {
-		WebElement ticketNumber = SeleniumUtils.getChildElementFromParentLocatedBy(selectedEventElement,
-				By.xpath(relativeTicketNumberXpath), driver);
+		WebElement ticketNumber = SeleniumUtils.getChildElementFromParentLocatedBy(selectedRow,
+				By.xpath(relativeToRowTicketNumberXpath), driver);
 		return ticketNumber.getText();
 	}
 
 	public String getOrderNumber() {
-		WebElement orderNumber = SeleniumUtils.getChildElementFromParentLocatedBy(selectedEventElement,
-				By.xpath(relativeOrderNumberXpath), driver);
+		WebElement orderNumber = SeleniumUtils.getChildElementFromParentLocatedBy(selectedRow,
+				By.xpath(relativeToRowOrderNumberXpath), driver);
 		return orderNumber.getText();
 	}
 
 	public void clickOnTransfer() {
-		WebElement transferButton = SeleniumUtils.getChildElementFromParentLocatedBy(selectedEventElement,
+		WebElement transferButton = SeleniumUtils.getChildElementFromParentLocatedBy(selectedRow,
 				By.xpath(relativeTransferLink), driver);
 		explicitWaitForVisibilityAndClickableWithClick(transferButton);
 	}
+	
+	
 }

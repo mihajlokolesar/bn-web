@@ -1,10 +1,12 @@
 package pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import model.User;
 import utils.Constants;
 
 public class TicketTransferPage extends BasePage {
@@ -17,7 +19,7 @@ public class TicketTransferPage extends BasePage {
 	
 	@FindBy(xpath = "//main//div/button[span[contains(text(),concat('Let',\"'\",'s do this'))]]")
 	private WebElement letsDoThisButton;
-
+	
 	public TicketTransferPage(WebDriver driver) {
 		super(driver);
 	}
@@ -38,6 +40,10 @@ public class TicketTransferPage extends BasePage {
 	
 	public void clickOnLetsDoIt() {
 		explicitWaitForVisibilityAndClickableWithClick(letsDoThisButton);
+	}
+	
+	public boolean checkIfCorrectUser(User user) {
+		return isExplicitlyWaitVisible(By.xpath("//main//p[contains(text(),'" + user.getEmailAddress() + "')]"));
 	}
 
 }

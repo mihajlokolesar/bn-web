@@ -73,6 +73,11 @@ public class SeleniumUtils {
 		executor.executeScript(jsScript, element);
 	}
 	
+	public static void jsScrollIntoView(WebElement element, WebDriver driver) {
+		String jsScript = "arguments[0].scrollIntoView(true);";
+		((JavascriptExecutor) driver).executeScript(jsScript, element);
+	}
+	
 	
 	public static String getTextOfElemenyLocatedBy(By by, WebDriver driver) {
 		WebElement  element = new WebDriverWait(driver, 15).until(ExpectedConditions.visibilityOfElementLocated(by));
@@ -81,7 +86,7 @@ public class SeleniumUtils {
 	}
 	
 	public static WebElement getChildElementFromParentLocatedBy(WebElement parent, By relativeChildBy, WebDriver driver) {
-		WebElement element = new WebDriverWait(driver, 15).until(ExpectedConditions.visibilityOfElementLocated(relativeChildBy));
+		WebElement element = new WebDriverWait(driver, 15).until(ExpectedConditions.visibilityOf(parent.findElement(relativeChildBy)));
 		return element;
 		
 		

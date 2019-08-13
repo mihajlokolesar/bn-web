@@ -20,7 +20,7 @@
 		<java.mail.version>1.4.7</java.mail.version>
 		<maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
 		<maven-failsafe-plugin.version>2.21.0</maven-failsafe-plugin.version>
-		<browser>sf</browser>
+		<browser>rm</browser>
 		<baseurl>https://develop.bigneon.com/</baseurl>
 
 	</properties>
@@ -65,18 +65,12 @@
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<version>${maven-failsafe-plugin.version}</version>
 				<configuration>
-					<properties>
-						<property>
-							<name>surefire.testng.verbose</name>
-							<value>5</value>
-						</property>
-					</properties>
 					<systemPropertyVariables>
 						<browser>${browser}</browser>
 						<baseurl>${baseurl}</baseurl>
-						<!-- <webdriver.chrome.driver>${webdriver.chrome.driver}</webdriver.chrome.driver> 
-							<webdriver.gecko.driver>${webdriver.gecko.driver}</webdriver.gecko.driver> 
-							<webdriver.edge.driver>${webdriver.edge.driver}</webdriver.edge.driver> -->
+						<webdriver.chrome.driver>${webdriver.chrome.driver}</webdriver.chrome.driver> 
+						<webdriver.gecko.driver>${webdriver.gecko.driver}</webdriver.gecko.driver> 
+						<webdriver.edge.driver>${webdriver.edge.driver}</webdriver.edge.driver> 
 					</systemPropertyVariables>
 				</configuration>
 				<executions>

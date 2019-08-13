@@ -60,7 +60,7 @@ public class SignUpPage extends BasePage {
 	public void createAccount(User user) {
 		createAccount(user.getFirstName(), user.getLastName(), user.getEmailAddress(), user.getPass(), user.getPassConfirm());
 	}
-
+	
 	public void createAccount(String firstName, String lastName, String emailAddress, String password,
 			String confirmPassword) {
 		waitVisibilityAndSendKeys(firstNameField, firstName);

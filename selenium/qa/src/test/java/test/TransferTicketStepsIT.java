@@ -18,51 +18,61 @@ import utils.RetryAnalizer;
 
 public class TransferTicketStepsIT extends BaseSteps {
 
-	@Test(dataProvider = "ticket_transfer_to_new_user_data", priority = 10)
+	@Test(dataProvider = "ticket_transfer_to_new_user_data", priority = 10, retryAnalyzer = RetryAnalizer.class)
 	public void transferTicketToNewUserSteps(User sender, User receiver) {
 		LoginPage login = new LoginPage(driver);
 		maximizeWindow();
-//		login.confirmedLogin(sender.getEmailAddress(), sender.getPass());
-//
-//		MyEventsPage myEventsPage = login.getHeader().clickOnMyEventsInProfileDropDown();
-//		myEventsPage.isAtPage();
-//		// get event name of ticket that is being transfered
-//		WebElement selectedEventElement = myEventsPage.clickOnFirstOneViewMyTicketsButton();
-//		String eventName = myEventsPage.getEventName(selectedEventElement);
-//
-//		EventComponent selectedEvent = myEventsPage.getSelectedEvent();
-//		String ticketNumber = selectedEvent.getTicketNumber();
-//		String orderNumber = selectedEvent.getOrderNumber();
-//		selectedEvent.clickOnTransfer();
-//
-//		myEventsPage.enterReceiversMail(receiver);
-//		login.logOut();
-		MyEventsPage myEventsPage = new MyEventsPage(driver);
-		EventComponent selectedEvent = null;
-		String eventName = "eventName";
-		String ticketNumber = "123123";
-		String orderNumber = "78979";
-		receiver.setEmailAddress("seleniumtest214090@mailinator.com");
-		// do some kind of factory and template method combination for this mailinator
-		// pages.
+		login.confirmedLogin(sender.getEmailAddress(), sender.getPass());
+
+		MyEventsPage myEventsPage = login.getHeader().clickOnMyEventsInProfileDropDown();
+		myEventsPage.isAtPage();
+		// select first event in the list of senders events
+		WebElement selectedEventElement = myEventsPage.clickOnFirstOneViewMyTicketsButton();
+
+		// get event name of ticket that is being transfered for latter comparison
+		String eventName = myEventsPage.getEventName(selectedEventElement);
+
+		EventComponent selectedEvent = myEventsPage.getSelectedEvent();
+		// selects first transferable ticket row in opened event(ie. one that is not in
+		// current process of transfer)
+		selectedEvent.selectRow();
+		// get ticketNumber and orderNumber for latter comparison
+		String ticketNumber = selectedEvent.getTicketNumber();
+		String orderNumber = selectedEvent.getOrderNumber();
+
+		selectedEvent.clickOnTransfer();
+
+		myEventsPage.enterReceiversMail(receiver);
+		login.logOut();
+
+		// TODO: do some kind of factory and template method combination for this
+		// mailinator pages.
 		MailinatorHomePage mailinatorHomePage = new MailinatorHomePage(driver);
 		MailinatorInboxPage inboxPage = mailinatorHomePage.goToUserInbox(receiver.getEmailAddress());
-		inboxPage.goToMail("you tickets! Action Required!");
+		inboxPage.goToMail(sender.getFirstName() + " " + sender.getLastName() + " sent you tickets! Action Required!");
 		inboxPage.clickOnClaimTicket();
 
 		TicketTransferPage ticketTransferPage = new TicketTransferPage(driver);
 		SignUpPage signUpPage = ticketTransferPage.clickOnContinueWithEmail();
+
 		signUpPage.createAccount(receiver);
+		Assert.assertTrue(ticketTransferPage.checkIfCorrectUser(receiver), "Wrong user registerd");
+
+		ticketTransferPage.clickOnLetsDoIt();
 		signUpPage.getHeader().clickOnMyEventsInProfileDropDown();
+		myEventsPage.isAtPage();
+		// find the event that was sent to receiver
 		WebElement event = myEventsPage.findEventByName(eventName);
 		selectedEvent = myEventsPage.clickOnViewMyTicketOfEvent(event);
+
+		// compare if correct ticket is transfered
 		boolean isTicketTransfered = selectedEvent.isTicketNumberPresent(ticketNumber);
 		isTicketTransfered = isTicketTransfered && selectedEvent.isOrderNumberPresent(orderNumber);
 		Assert.assertTrue(isTicketTransfered, "Ticket not transfered to receiver account");
 		login.logOut();
 	}
 
-//	@Test(dataProvider = "ticket_transfer_to_old_user_data", priority = 9, retryAnalyzer = RetryAnalizer.class)
+	@Test(dataProvider = "ticket_transfer_to_old_user_data", priority = 9, retryAnalyzer = RetryAnalizer.class)
 	public void transferTicketToExistingUserSteps(User sender, User receiver) {
 		LoginPage login = new LoginPage(driver);
 		maximizeWindow();
@@ -75,6 +85,7 @@ public class TransferTicketStepsIT extends BaseSteps {
 		String eventName = myEventsPage.getEventName(selectedEventElement);
 
 		EventComponent selectedEvent = myEventsPage.getSelectedEvent();
+		selectedEvent.selectRow();
 		// get ticket number and order number to retrieve later in receivers events
 		String ticketNumber = selectedEvent.getTicketNumber();
 		String orderNumber = selectedEvent.getOrderNumber();
@@ -86,13 +97,13 @@ public class TransferTicketStepsIT extends BaseSteps {
 		Assert.assertTrue(retVal, "Notification not displayed");
 		login.logOut();
 
-		// Login with receiver
-
+		// Log in with receiver
 		Assert.assertTrue(login.confirmedLogin(receiver), "Login with receiver account failed: " + receiver);
 		myEventsPage = login.getHeader().clickOnMyEventsInProfileDropDown();
 		myEventsPage.isAtPage();
 		WebElement event = myEventsPage.findEventByName(eventName);
 		selectedEvent = myEventsPage.clickOnViewMyTicketOfEvent(event);
+
 		boolean isTicketTransfered = selectedEvent.isTicketNumberPresent(ticketNumber);
 		isTicketTransfered = isTicketTransfered && selectedEvent.isOrderNumberPresent(orderNumber);
 		Assert.assertTrue(isTicketTransfered, "Ticket not transfered to receiver account");
@@ -117,6 +128,7 @@ public class TransferTicketStepsIT extends BaseSteps {
 		receiver.setLastName("testqa");
 		receiver.setPass("test1111");
 		receiver.setPassConfirm("test1111");
+
 		return new Object[][] { { sender, receiver } };
 	}
 

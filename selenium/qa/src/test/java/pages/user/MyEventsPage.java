@@ -34,9 +34,6 @@ public class MyEventsPage extends BasePage {
 
 	private List<WebElement> listOfEvents;
 
-//	@FindBy(xpath = "//body//main//div//a[span[contains(text(),'transfer')]]")
-//	private WebElement firstTicketTransferLink;
-
 	@FindBy(id = "emailOrCellNumber-error-text")
 	private WebElement emailOrCellNumberError;
 
@@ -48,11 +45,6 @@ public class MyEventsPage extends BasePage {
 
 	@FindBy(xpath = "//body//div[@role='dialog' and @aria-labelledby='dialog-title']//div//button[span[contains(text(),'Cancel')]]")
 	private WebElement cancelButton;
-
-	private List<WebElement> listOfEventsContainers() {
-		return explicitWait(15,
-				ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(listOfEventsContainersXpath)));
-	}
 
 	public MyEventsPage(WebDriver driver) {
 		super(driver);
@@ -93,7 +85,6 @@ public class MyEventsPage extends BasePage {
 	}
 
 	public String getEventName(WebElement event) {
-//		WebElement event = listOfEventsContainers().get(0);
 		WebElement eventName = event.findElement(By.xpath(".//div/div/div/div/p[2]"));
 		return eventName.getText();
 	}
@@ -115,10 +106,6 @@ public class MyEventsPage extends BasePage {
 		explicitWaitForVisibilityAndClickableWithClick(viewMyTicketsEl);
 		return listOfEvents.get(0);
 	}
-
-//	public void clickOnTransferOnFirstTicket() {
-//		explicitWaitForVisibilityAndClickableWithClick(firstTicketTransferLink);
-//	}
 
 	public void enterReceiversMail(User receiver) {
 		waitVisibilityAndSendKeys(emailOrPhoneInputField, receiver.getEmailAddress());

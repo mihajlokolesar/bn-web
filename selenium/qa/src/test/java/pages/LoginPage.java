@@ -80,6 +80,7 @@ public class LoginPage extends BasePage {
 		explicitWait(10, ExpectedConditions.elementToBeClickable(loginSubmitButton));
 		loginSubmitButton.click();
 		if (checkForLoginFailedMessage()) {
+			waitForTime(1000);
 			loginSubmitButton.click();
 		}
 	}
@@ -106,10 +107,6 @@ public class LoginPage extends BasePage {
 			String msg = message.getText();
 			if (msg != null && !msg.isEmpty() && msg.contains(MsgConstants.LOGIN_FAILED_ERROR)) {
 				retVal = true;
-				System.out.println(msg);
-			} else if (msg != null) {
-				retVal = true;
-				System.out.println(msg);
 			}
 		} catch (Exception e) {
 			retVal = false;
@@ -123,12 +120,7 @@ public class LoginPage extends BasePage {
 
 	public boolean isMailOrPassIncorrectMessageDisplayed() {
 		explicitWait(10, ExpectedConditions.visibilityOf(message));
-		String msg = message.getText();
-		if (msg.contains(MsgConstants.EMAIL_OR_PASS_INCORRECT_ON_LOGIN_ERROR)) {
-			return true;
-		} else {
-			return false;
-		}
+		return isNotificationDisplayedWithMessage(MsgConstants.EMAIL_OR_PASS_INCORRECT_ON_LOGIN_ERROR);
 	}
 	
 	
@@ -165,8 +157,6 @@ public class LoginPage extends BasePage {
 	}
 
 	public void clickOnForgotPassword() {
-		// explicitWait(10, ExpectedConditions.elementToBeClickable(forgotPasswordButton));
-		// forgotPasswordButton.click();
 		explicitWaitForVisibilityAndClickableWithClick(forgotPasswordButton);
 
 	}
@@ -178,9 +168,7 @@ public class LoginPage extends BasePage {
 
 	public boolean enterMailAndClickOnResetPassword(String email) {
 		explicitWait(10, 500, ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@role='dialog']//form")));
-		// forgotPasswordEmailField.sendKeys(email);
 		waitVisibilityAndSendKeys(forgotPasswordEmailField, email);
-		// forgotPasswordConfirmButton.click();
 		explicitWaitForVisibilityAndClickableWithClick(forgotPasswordConfirmButton);
 		message = explicitWait(10, 500, ExpectedConditions.visibilityOf(message));
 		return true;

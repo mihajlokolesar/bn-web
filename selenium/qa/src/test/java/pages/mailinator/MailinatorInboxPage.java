@@ -80,9 +80,7 @@ public class MailinatorInboxPage extends BasePage {
 		
 		//TODO: move this logic to PurhchaseMailFrame, it belongs there
 		String quantity = purchaseMailFrame.getQuantity();
-		System.out.println(quantity);
 		String ename = purchaseMailFrame.getEventName();
-		System.out.println(ename);
 		driver.switchTo().parentFrame();
 		if (("" + numberOfTickets).equals(quantity) && ename.contains(eventName)) {
 			return true;
@@ -103,10 +101,15 @@ public class MailinatorInboxPage extends BasePage {
 	
 	public void clickOnClaimTicket() {
 		String parentHandler = driver.getWindowHandle();
-		driver = checkMessagePageAndSwitchToFrame();
+		waitForTime(1000);
+		explicitWait(10, ExpectedConditions.urlContains(urlMsgPaneValue));
+		explicitWaitForVisiblity(msgContentFrame);
+		driver.switchTo().frame(msgContentFrame);
+		waitForTime(1000);
 		new ClaimTicketFrame(driver).clickOnClaimTicketLink();
-		driver.switchTo().parentFrame();
 		
+		driver.switchTo().parentFrame();
+		SeleniumUtils.switchToParentWindow(parentHandler, driver);
 		waitVisibilityAndClick(trashBin);
 		SeleniumUtils.switchToChildWindow(parentHandler, driver);
 		

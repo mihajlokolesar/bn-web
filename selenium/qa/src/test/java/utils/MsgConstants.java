@@ -16,7 +16,4 @@ public class MsgConstants {
 	public static final String TICKET_TRANSFER_EMAIL_LINK_SENT_SUCCESS = "Ticket transfer link sent";
 	public static final String TICKET_TRANSFER_INVALID_DESTINATION_ERROR = "Invalid destination, please supply valid phone number or email address";
 	public static final String TICKET_TRANSFER_INVALID_MOBILE_NUMBER_OR_EMAIL_ADDRESS_VALIDATION = "Invalid mobile number or email address";
-//	bluetestneouser1234567
-//	you tickets! Action Required!
-
 }

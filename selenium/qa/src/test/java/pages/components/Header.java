@@ -127,7 +127,6 @@ public class Header extends BaseComponent {
 	
 	public boolean isLoggedOut() {
 		return isExplicitlyWaitVisible(signInButton);
-		
 	}
 
 }

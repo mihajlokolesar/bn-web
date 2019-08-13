@@ -63,6 +63,8 @@ public class User {
 		User user = new User();
 		user.setEmailAddress("bluetestneouser@mailinator.com");
 		user.setPass("test1111");
+		user.setFirstName("test");
+		user.setLastName("testqa");
 		return user;
 	}
 	

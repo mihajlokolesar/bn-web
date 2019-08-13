@@ -18,7 +18,7 @@ public class LoginStepsIT extends BaseSteps {
 		Assert.assertTrue(retVal);
 	}
 	
-//	@Test(dataProvider = "wrong_user_mail_credentials")
+	@Test(dataProvider = "wrong_user_mail_credentials")
 	public void wrongEmailLogin(String username, String password) {
 		maximizeWindow();
 		LoginPage loginPage = new LoginPage(driver);
@@ -26,7 +26,7 @@ public class LoginStepsIT extends BaseSteps {
 		Assert.assertTrue(loginPage.isMailOrPassIncorrectMessageDisplayed());
 	}
 	
-//	@Test(dataProvider = "wrong_pass_credentials")
+	@Test(dataProvider = "wrong_pass_credentials")
 	public void wrongPasswordLogin(String username, String password) {
 		maximizeWindow();
 		LoginPage loginPage = new LoginPage(driver);

@@ -88,12 +88,7 @@ public class CreateOrganizationPage extends BasePage {
 
 	public boolean checkPopupMessage() {
 		explicitWaitForVisiblity(message);
-		String msg = message.getText();
-		if (msg.contains(MsgConstants.ORGANIZATION_CREATED_SUCCESS)) {
-			return true;
-		} else {
-			return false;
-		}
+		return isNotificationDisplayedWithMessage(MsgConstants.ORGANIZATION_CREATED_SUCCESS);
 	}
 
 }
