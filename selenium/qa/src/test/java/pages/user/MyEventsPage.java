@@ -110,13 +110,23 @@ public class MyEventsPage extends BasePage {
 		return eventName.getText();
 	}
 
-	public boolean confirmTicketTransferForNewUser(String eventName) {
-		WebElement eventNameElement = findEventByName(eventName);
-		if (eventNameElement != null) {
-			return true;
-		} else {
-			return false;
+	public EventComponent findEventWithTransferableTickets() {
+		if (!isEventsPresent()) {
+			throw new NotFoundException("Upcoming events not found");
 		}
+		for (WebElement e : listOfEvents) {
+			WebElement viewMyTicketsEl = e.findElement(By.xpath(relativeViewMyTicketsLink));
+			explicitWaitForVisibilityAndClickableWithClick(viewMyTicketsEl);
+			String eventName = getEventName(e);
+			EventComponent eventComponent = getSelectedEvent();
+			WebElement row = eventComponent.selectRow();
+			if (row != null) {
+				eventComponent.setEventName(eventName);
+			} else {
+				continue;
+			}
+		}
+		return null;
 	}
 
 	public WebElement clickOnFirstOneViewMyTicketsButton() {

@@ -12,6 +12,8 @@ public class EventComponent extends BaseComponent {
 	private WebElement selectedEventElement;
 
 	private WebElement selectedRow;
+	
+	private String eventName;
 
 	private String relativeTicketNumberXpath = ".//div[span/p[contains(text(),'Ticket #')]]/following-sibling::div/div/span[2]";
 
@@ -35,8 +37,14 @@ public class EventComponent extends BaseComponent {
 	}
 
 	public WebElement selectRow(){
-		WebElement row = SeleniumUtils.getChildElementFromParentLocatedBy(selectedEventElement, By.xpath(relativeRowWithTransfer), driver);
-		this.selectedRow = row;
+		WebElement row = null;
+		try {
+			row = SeleniumUtils.getChildElementFromParentLocatedBy(selectedEventElement, By.xpath(relativeRowWithTransfer), driver);
+			this.selectedRow = row;
+			return row;
+		}catch (Exception e) {
+			row = null;
+		}
 		return row;
 	}
 	
@@ -69,6 +77,13 @@ public class EventComponent extends BaseComponent {
 				By.xpath(relativeTransferLink), driver);
 		explicitWaitForVisibilityAndClickableWithClick(transferButton);
 	}
-	
-	
+
+	public String getEventName() {
+		return eventName;
+	}
+
+	public void setEventName(String eventName) {
+		this.eventName = eventName;
+	}
+		
 }

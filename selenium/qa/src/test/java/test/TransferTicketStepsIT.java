@@ -18,7 +18,7 @@ import utils.RetryAnalizer;
 
 public class TransferTicketStepsIT extends BaseSteps {
 
-	@Test(dataProvider = "ticket_transfer_to_new_user_data", priority = 10, retryAnalyzer = RetryAnalizer.class)
+	@Test(dataProvider = "ticket_transfer_to_new_user_data", priority = 10)
 	public void transferTicketToNewUserSteps(User sender, User receiver) {
 		LoginPage login = new LoginPage(driver);
 		maximizeWindow();
@@ -72,7 +72,7 @@ public class TransferTicketStepsIT extends BaseSteps {
 		login.logOut();
 	}
 
-	@Test(dataProvider = "ticket_transfer_to_old_user_data", priority = 9/*, retryAnalyzer = RetryAnalizer.class*/)
+	@Test(dataProvider = "ticket_transfer_to_old_user_data", priority = 9)
 	public void transferTicketToExistingUserSteps(User sender, User receiver) {
 		LoginPage login = new LoginPage(driver);
 		maximizeWindow();
@@ -80,8 +80,9 @@ public class TransferTicketStepsIT extends BaseSteps {
 
 		MyEventsPage myEventsPage = login.getHeader().clickOnMyEventsInProfileDropDown();
 		myEventsPage.isAtPage();
-		// get event name of ticket that is being transfered
+		
 		WebElement selectedEventElement = myEventsPage.clickOnFirstOneViewMyTicketsButton();
+		// get event name of ticket that is being transfered
 		String eventName = myEventsPage.getEventName(selectedEventElement);
 
 		EventComponent selectedEvent = myEventsPage.getSelectedEvent();
