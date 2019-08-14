@@ -36,7 +36,7 @@ public class EventComponent extends BaseComponent {
 		this.selectedEventElement = selectedEventElement;
 	}
 
-	public WebElement selectRow(){
+	public WebElement selectTransferableRow(){
 		WebElement row = null;
 		try {
 			row = SeleniumUtils.getChildElementFromParentLocatedBy(selectedEventElement, By.xpath(relativeRowWithTransfer), driver);

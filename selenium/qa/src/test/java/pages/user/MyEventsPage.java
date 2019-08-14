@@ -68,7 +68,14 @@ public class MyEventsPage extends BasePage {
 				ExpectedConditions.visibilityOfElementLocated(By.xpath(selectedEventXpath)));
 		return element;
 	}
-
+	/**
+	 * Looks through events that are named with param eventName, and in each event it looks for ticket
+	 * with ticketNumber and orderNumber
+	 * @param ticketNumber
+	 * @param orderNumber
+	 * @param eventName
+	 * @return
+	 */
 	public boolean checkIfTicketExists(String ticketNumber, String orderNumber, String eventName) {
 		List<WebElement> events = explicitWait(15, ExpectedConditions.presenceOfAllElementsLocatedBy(
 				By.xpath("//body//main//div[div[div[div[p[text()='" + eventName + "']]]]]")));
@@ -119,11 +126,10 @@ public class MyEventsPage extends BasePage {
 			explicitWaitForVisibilityAndClickableWithClick(viewMyTicketsEl);
 			String eventName = getEventName(e);
 			EventComponent eventComponent = getSelectedEvent();
-			WebElement row = eventComponent.selectRow();
+			WebElement row = eventComponent.selectTransferableRow();
 			if (row != null) {
 				eventComponent.setEventName(eventName);
-			} else {
-				continue;
+				return eventComponent;
 			}
 		}
 		return null;

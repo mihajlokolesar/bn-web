@@ -1,6 +1,5 @@
 package test;
 
-import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -14,7 +13,6 @@ import pages.mailinator.MailinatorHomePage;
 import pages.mailinator.MailinatorInboxPage;
 import pages.user.MyEventsPage;
 import utils.MsgConstants;
-import utils.RetryAnalizer;
 
 public class TransferTicketStepsIT extends BaseSteps {
 
@@ -26,17 +24,10 @@ public class TransferTicketStepsIT extends BaseSteps {
 
 		MyEventsPage myEventsPage = login.getHeader().clickOnMyEventsInProfileDropDown();
 		myEventsPage.isAtPage();
-		// select first event in the list of senders events
-		WebElement selectedEventElement = myEventsPage.clickOnFirstOneViewMyTicketsButton();
-
-		// get event name of ticket that is being transfered for latter comparison
-		String eventName = myEventsPage.getEventName(selectedEventElement);
-
-		EventComponent selectedEvent = myEventsPage.getSelectedEvent();
-		// selects first transferable ticket row in opened event(ie. one that is not in
-		// current process of transfer)
-		selectedEvent.selectRow();
-		// get ticketNumber and orderNumber for latter comparison
+		//goes through events on users myEvents page, and looks for event with tickets that are transferable 
+		//(not in process of transfer)
+		EventComponent selectedEvent = myEventsPage.findEventWithTransferableTickets();
+		String eventName = selectedEvent.getEventName();
 		String ticketNumber = selectedEvent.getTicketNumber();
 		String orderNumber = selectedEvent.getOrderNumber();
 
@@ -61,13 +52,8 @@ public class TransferTicketStepsIT extends BaseSteps {
 		ticketTransferPage.clickOnLetsDoIt();
 		signUpPage.getHeader().clickOnMyEventsInProfileDropDown();
 		myEventsPage.isAtPage();
-		// find the event that was sent to receiver
-		WebElement event = myEventsPage.findEventByName(eventName);
-		selectedEvent = myEventsPage.clickOnViewMyTicketOfEvent(event);
 
-		// compare if correct ticket is transfered
-		boolean isTicketTransfered = selectedEvent.isTicketNumberPresent(ticketNumber);
-		isTicketTransfered = isTicketTransfered && selectedEvent.isOrderNumberPresent(orderNumber);
+		boolean isTicketTransfered = myEventsPage.checkIfTicketExists(ticketNumber, orderNumber, eventName);
 		Assert.assertTrue(isTicketTransfered, "Ticket not transfered to receiver account");
 		login.logOut();
 	}
@@ -81,12 +67,9 @@ public class TransferTicketStepsIT extends BaseSteps {
 		MyEventsPage myEventsPage = login.getHeader().clickOnMyEventsInProfileDropDown();
 		myEventsPage.isAtPage();
 		
-		WebElement selectedEventElement = myEventsPage.clickOnFirstOneViewMyTicketsButton();
-		// get event name of ticket that is being transfered
-		String eventName = myEventsPage.getEventName(selectedEventElement);
-
-		EventComponent selectedEvent = myEventsPage.getSelectedEvent();
-		selectedEvent.selectRow();
+		
+		EventComponent selectedEvent = myEventsPage.findEventWithTransferableTickets();
+		String eventName = selectedEvent.getEventName();
 		// get ticket number and order number to retrieve later in receivers events
 		String ticketNumber = selectedEvent.getTicketNumber();
 		String orderNumber = selectedEvent.getOrderNumber();
@@ -102,11 +85,7 @@ public class TransferTicketStepsIT extends BaseSteps {
 		Assert.assertTrue(login.confirmedLogin(receiver), "Login with receiver account failed: " + receiver);
 		myEventsPage = login.getHeader().clickOnMyEventsInProfileDropDown();
 		myEventsPage.isAtPage();
-//		WebElement event = myEventsPage.findEventByName(eventName);
-//		selectedEvent = myEventsPage.clickOnViewMyTicketOfEvent(event);
-//
-//		boolean isTicketTransfered = selectedEvent.isTicketNumberPresent(ticketNumber);
-//		isTicketTransfered = isTicketTransfered && selectedEvent.isOrderNumberPresent(orderNumber);
+
 		boolean isTicketTransfered = myEventsPage.checkIfTicketExists(ticketNumber, orderNumber, eventName);
 		Assert.assertTrue(isTicketTransfered, "Ticket not transfered to receiver account");
 		login.logOut();
