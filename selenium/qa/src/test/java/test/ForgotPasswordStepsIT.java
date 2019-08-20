@@ -12,10 +12,10 @@ import pages.mailinator.MailinatorInboxPage;
 
 public class ForgotPasswordStepsIT extends BaseSteps {
 
-	@Test(dataProvider = "reset_password", priority = 4)
+	@Test(dataProvider = "reset_password", priority = 3)
 	public void forgotPasswordFunctionallity(String email, String newPass, String confirmPass, boolean test) {
 		LoginPage loginPage = new LoginPage(driver);
-		driver.manage().window().maximize();
+		maximizeWindow();
 		loginPage.navigate();
 		loginPage.clickOnForgotPassword();
 		boolean mailSent = loginPage.enterMailAndClickOnResetPassword(email);

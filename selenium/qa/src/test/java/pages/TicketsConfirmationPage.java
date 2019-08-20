@@ -7,6 +7,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import model.CreditCard;
 import pages.components.CreditCardDetailsFrame;
+import pages.components.user.TicketConfirmationDetails;
 import utils.SeleniumUtils;
 
 public class TicketsConfirmationPage extends BasePage {
@@ -78,5 +79,12 @@ public class TicketsConfirmationPage extends BasePage {
 				paymentMethodCard.click();
 			}
 		}
+	}
+	
+	public Integer getTicketQuantity() {
+		TicketConfirmationDetails details = new TicketConfirmationDetails(driver);
+		String quantity =  details.getTicketQuantity();
+		Integer intQuantity = Integer.parseInt(quantity);
+		return intQuantity;
 	}
 }

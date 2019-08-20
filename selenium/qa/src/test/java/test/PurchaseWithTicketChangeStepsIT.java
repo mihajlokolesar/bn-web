@@ -25,14 +25,17 @@ public class PurchaseWithTicketChangeStepsIT extends BaseSteps {
 		LoginPage loginPage = new LoginPage(driver);
 		maximizeWindow();
 		loginPage.login(user);
-		Header header = new Header(driver);
-
-		header.searchEvents(purchase.getEvent().getArtistName());
-		EventsPage eventsPage = new EventsPage(driver);
-		eventsPage.eventsPageSteps(purchase.getEvent());
+		Header header = loginPage.getHeader();
 
 		TicketsPage ticketsPage = new TicketsPage(driver);
-		ticketsPage.ticketsPageStepsWithOutLogin(purchase.getNumberOfTickets());
+
+		if (!header.clickOnShoppingBasketIfPresent()) {
+			header.searchEvents(purchase.getEvent().getArtistName());
+			EventsPage eventsPage = new EventsPage(driver);
+			eventsPage.eventsPageSteps(purchase.getEvent());
+
+			ticketsPage.ticketsPageStepsWithOutLogin(purchase.getNumberOfTickets());
+		}
 
 		TicketsConfirmationPage confirmationPage = new TicketsConfirmationPage(driver);
 		confirmationPage.isAtConfirmationPage();
@@ -41,7 +44,7 @@ public class PurchaseWithTicketChangeStepsIT extends BaseSteps {
 		ticketsPage.isAtPage();
 		ticketsPage.removeNumberOfTickets(purchase.getRemoveNumberOfTickets());
 		ticketsPage.clickOnContinue();
-
+		int ticketNumbers = confirmationPage.getTicketQuantity();
 		confirmationPage.ticketsConfirmationPageSteps(purchase.getCreditCard());
 
 		TicketsSuccesPage successPage = new TicketsSuccesPage(driver);
@@ -52,7 +55,6 @@ public class PurchaseWithTicketChangeStepsIT extends BaseSteps {
 
 		MailinatorHomePage mailinatorHomePage = new MailinatorHomePage(driver);
 		MailinatorInboxPage inboxPage = mailinatorHomePage.goToUserInbox(user.getEmailAddress());
-		int ticketNumbers = purchase.getNumberOfTickets() - purchase.getRemoveNumberOfTickets();
 		boolean retVal = inboxPage.openMailAndCheckValidity("Next Step - Get Your Tickets", ticketNumbers,
 				purchase.getEvent().getEventName());
 		Assert.assertTrue(retVal);

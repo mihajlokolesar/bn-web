@@ -127,7 +127,6 @@ public class MailinatorInboxPage extends BasePage {
 			waitVisibilityAndClick(trashBin);
 		}catch (Exception e) {
 		}
-		return retVal;
 		
 	}
 }

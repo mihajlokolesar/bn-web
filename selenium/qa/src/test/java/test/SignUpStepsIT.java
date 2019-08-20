@@ -13,7 +13,7 @@ import utils.Constants;
 
 public class SignUpStepsIT extends BaseSteps {
 
-	@Test(dataProvider = "new_user_data", priority = 3)
+	@Test(dataProvider = "new_user_data", priority = 4)
 	public void singUpToBigNeon(User user) {
 		LoginPage loginPage = new LoginPage(driver);
 		maximizeWindow();

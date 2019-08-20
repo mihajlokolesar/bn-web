@@ -105,47 +105,6 @@ public class AbstractBase {
 		return retVal;
 	}
 
-	public boolean isExplicitlyWaitVisible(WebElement element) {
-		return isExplicitlyWaitVisible(15, element);
-	}
-
-	public boolean isExplicitlyWaitVisible(int timeForSeconds, WebElement element) {
-		boolean retVal = false;
-		try {
-			explicitWait(timeForSeconds, ExpectedConditions.visibilityOf(element));
-			retVal = true;
-		} catch (Exception e) {
-			retVal = false;
-		}
-		return retVal;
-	}
-
-	public boolean isExplicitlyInvisible(WebElement element) {
-		return isExplicitlyInvisible(15, element);
-	}
-
-	public boolean isExplicitlyInvisible(int waitForSeconds, WebElement element) {
-		boolean retVal = false;
-		try {
-			explicitWait(waitForSeconds, ExpectedConditions.invisibilityOf(element));
-			retVal = true;
-		} catch (Exception e) {
-			retVal = false;
-		}
-		return retVal;
-	}
-
-	public boolean isExplicitlyWaitVisible(By byElement) {
-		boolean retVal = false;
-		try {
-			explicitWait(15, ExpectedConditions.visibilityOfElementLocated(byElement));
-			retVal = true;
-		} catch (Exception e) {
-			retVal = false;
-		}
-		return retVal;
-	}
-
 	public <T, V> T explicitWaitForClickable(WebElement element) {
 		return explicitWait(15, ExpectedConditions.elementToBeClickable(element));
 	}

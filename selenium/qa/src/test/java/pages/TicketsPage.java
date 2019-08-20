@@ -10,7 +10,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import pages.components.Header;
 import utils.MsgConstants;
 import utils.SeleniumUtils;
 
@@ -59,8 +58,7 @@ public class TicketsPage extends BasePage {
 		login(mail, password);
 		waitForTime(1500);
 		if (checkIfMoreEventsAreBeingPurchased()) {
-			Header header = new Header(driver);
-			header.clickOnShoppingBasket();
+			getHeader().clickOnShoppingBasketIfPresent();
 		}
 	}
 
@@ -68,7 +66,6 @@ public class TicketsPage extends BasePage {
 		addNumberOfTickets(numberOfTickets);
 		clickOnContinue();
 		waitForTime(1000);
-
 	}
 
 	public String getUrlPath() throws URISyntaxException {
@@ -89,6 +86,8 @@ public class TicketsPage extends BasePage {
 		Integer currentQuantity = Integer.parseInt(text);
 		if (currentQuantity <= number && (currentQuantity - 1) > 0) {
 			number = currentQuantity - 1;
+		} else if (currentQuantity.equals(1)) {
+			number = 0;
 		}
 		for (int k = 0; k < number; k++) {
 			removeTicketForLastType();
@@ -146,13 +145,14 @@ public class TicketsPage extends BasePage {
 	}
 
 	private boolean checkIfMoreEventsAreBeingPurchased() {
-		boolean retVal = isExplicitlyWaitVisible(5, message);
-		if (retVal) {
-			String msg = message.getText();
-			if (msg != null && !msg.isEmpty() && msg.contains(MsgConstants.MORE_THAN_ONE_EVENT_PURCHASE_ERROR)) {
-				retVal = true;
-			}
-		}
-		return retVal;
+		return isNotificationDisplayedWithMessage(MsgConstants.MORE_THAN_ONE_EVENT_PURCHASE_ERROR, 4);
+//		boolean retVal = isExplicitlyWaitVisible(5, message);
+//		if (retVal) {
+//			String msg = message.getText();
+//			if (msg != null && !msg.isEmpty() && msg.contains(MsgConstants.MORE_THAN_ONE_EVENT_PURCHASE_ERROR)) {
+//				retVal = true;
+//			}
+//		}
+//		return retVal;
 	}
 }

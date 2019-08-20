@@ -16,7 +16,7 @@ import utils.MsgConstants;
 
 public class TransferTicketStepsIT extends BaseSteps {
 
-	@Test(dataProvider = "ticket_transfer_to_new_user_data", priority = 10)
+//	@Test(dataProvider = "ticket_transfer_to_new_user_data", priority = 10)
 	public void transferTicketToNewUserSteps(User sender, User receiver) {
 		LoginPage login = new LoginPage(driver);
 		maximizeWindow();
@@ -60,7 +60,7 @@ public class TransferTicketStepsIT extends BaseSteps {
 		login.logOut();
 	}
 
-	@Test(dataProvider = "ticket_transfer_to_old_user_data", priority = 9)
+//	@Test(dataProvider = "ticket_transfer_to_old_user_data", priority = 9)
 	public void transferTicketToExistingUserSteps(User sender, User receiver) {
 		LoginPage login = new LoginPage(driver);
 		maximizeWindow();

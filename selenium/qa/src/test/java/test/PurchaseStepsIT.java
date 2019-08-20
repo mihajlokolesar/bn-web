@@ -12,7 +12,6 @@ import pages.EventsPage;
 import pages.TicketsConfirmationPage;
 import pages.TicketsPage;
 import pages.TicketsSuccesPage;
-import pages.components.Header;
 import pages.mailinator.MailinatorHomePage;
 import pages.mailinator.MailinatorInboxPage;
 import utils.ProjectUtils;
@@ -35,8 +34,7 @@ public class PurchaseStepsIT extends BaseSteps {
 		TicketsSuccesPage successPage = new TicketsSuccesPage(driver);
 		successPage.isAtPage();
 //		successPage.enterPhoneNumber(purchase.getPhoneNumber());
-		Header header = new Header(driver);
-		header.logOut();
+		successPage.getHeader().logOut();
 
 		MailinatorHomePage mailinatorHomePage = new MailinatorHomePage(driver);
 		MailinatorInboxPage inboxPage = mailinatorHomePage.goToUserInbox(user.getEmailAddress());
@@ -55,7 +53,7 @@ public class PurchaseStepsIT extends BaseSteps {
 		event.setEventName("TestNameEvent");
 		purchase.setEvent(event);
 		purchase.setCreditCard(CreditCard.generateCreditCard());
-		purchase.setNumberOfTickets(2);
+		purchase.setNumberOfTickets(3);
 		// TODO: replace with some other number
 		purchase.setPhoneNumber("14422460151");
 		return new Object[][] { { User.generateUser(), purchase } };

@@ -10,7 +10,7 @@
       <class name="test.CreateEventStepsIT"/>
       <class name="test.PurchaseStepsIT"/>
       <class name="test.PurchaseWithTicketChangeStepsIT"/>
-      <class name="test.TransferTicketStepsIT"/>
+      <!-- <class name="test.TransferTicketStepsIT"/> -->
     </classes>
   </test>
   <test name="Firefox">
@@ -22,7 +22,7 @@
       <class name="test.CreateEventStepsIT"/>
       <class name="test.PurchaseStepsIT"/> 
       <class name="test.PurchaseWithTicketChangeStepsIT"/>
-      <class name="test.TransferTicketStepsIT"/>
+     <!--  <class name="test.TransferTicketStepsIT"/> -->
     </classes>
   </test>  
  </suite>

@@ -66,6 +66,13 @@ public class SeleniumUtils {
 		switchToChildWindow(parentHandle, driver);
 		return parentHandle;
 	}
+	
+	public static String openLink(String url, WebDriver driver) {
+		String parentHandle = driver.getWindowHandle();
+		String jsScript = "window.open('" + url + "','_self');";
+		new WebDriverWait(driver, 15).until(ExpectedConditions.javaScriptThrowsNoExceptions(jsScript));
+		return parentHandle;
+	}
 
 	public static void clickOnLink(WebElement element, WebDriver driver) {
 		String jsScript = "arguments[0].click();";

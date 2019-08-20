@@ -1,14 +1,21 @@
 package pages.components;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import pages.BaseComponent;
 import pages.user.MyEventsPage;
+import utils.Constants;
+import utils.SeleniumUtils;
 
 public class Header extends BaseComponent {
 
@@ -33,9 +40,9 @@ public class Header extends BaseComponent {
 	@FindBy(xpath = "//body//header//div[span[@aria-owns='menu-appbar']//span[contains(text(),'Current organization')]]")
 	private WebElement currentOrganizationDropDown;
 
-	@FindBy(xpath = "//header//span/a[contains(@href,'tickets/confirmation')]|//header//span/div[contains(@to,'tickets/confirmation')]")
+	@FindBy(xpath = "//header//span[a[contains(@href,'tickets/confirmation')]]|//header//span/div[contains(@to,'tickets/confirmation')]")
 	public WebElement shoppingBasket;
-	
+
 	@FindBy(xpath = "//body//header//button[span[contains(text(),'Sign In')]]")
 	public WebElement signInButton;
 
@@ -118,13 +125,25 @@ public class Header extends BaseComponent {
 		return retVal;
 	}
 
-	public void clickOnShoppingBasket() {
-		boolean isVisible = isExplicitlyWaitVisible(shoppingBasket);
+	public boolean clickOnShoppingBasketIfPresent() {
+		boolean isVisible = isExplicitlyWaitVisible(4, shoppingBasket);
 		if (isVisible) {
-			waitVisibilityAndClick(shoppingBasket);
+			String innerHtml = shoppingBasket.getAttribute("innerHTML");
+			Document document = Jsoup.parse(innerHtml);
+			Elements paragraphs = document.getElementsByTag("a");
+			String href = null;
+			for (Element paragraph : paragraphs) {
+				href = paragraph.attr("href");
+				break;
+			}
+			String formatedPath = href.substring(1);
+			SeleniumUtils.openLink(Constants.getBaseUrlBigNeon() + formatedPath, driver);
+
+			return true;
 		}
+		return false;
 	}
-	
+
 	public boolean isLoggedOut() {
 		return isExplicitlyWaitVisible(signInButton);
 	}
