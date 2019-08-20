@@ -11,13 +11,15 @@ import Collapse from "@material-ui/core/Collapse";
 
 import Card from "../../elements/Card";
 import StyledLink from "../../elements/StyledLink";
-import { fontFamilyDemiBold } from "../../../config/theme";
+import { fontFamilyDemiBold, secondaryHex } from "../../../config/theme";
 import EventTicketRow from "./EventTicketRow";
 import CheckBox from "../../elements/form/CheckBox";
 import DateFlag from "../../elements/event/DateFlag";
 import SupportingArtistsLabel from "../events/SupportingArtistsLabel";
 import nl2br from "../../../helpers/nl2br";
 import ellipsis from "../../../helpers/ellipsis";
+import Settings from "../../../config/settings";
+import MobileEventTicketRow from "./MobileEventTicketRow";
 
 const styles = theme => ({
 	cardContent: {
@@ -99,22 +101,38 @@ const styles = theme => ({
 	},
 	ticketContainer: {
 		padding: theme.spacing.unit * 2,
-		paddingTop: theme.spacing.unit * 8
+		paddingTop: theme.spacing.unit * 6,
+
+		[theme.breakpoints.down("sm")]: {
+			paddingTop: theme.spacing.unit
+		}
 	},
 	ticketDetailsText: {
 		fontFamily: fontFamilyDemiBold,
-		fontSize: theme.typography.fontSize * 0.9
+		fontSize: "inherit"
 	},
 	ticketDetailsDisabledText: {
 		color: "#9da3b4",
 		fontFamily: fontFamilyDemiBold,
 		fontSize: theme.typography.fontSize * 0.9
 	},
-
 	bottomActionRow: {
 		display: "flex",
 		justifyContent: "flex-end",
 		padding: theme.spacing.unit * 2
+	},
+	downloadAppText: {
+		color: "#9da3b4",
+		fontFamily: fontFamilyDemiBold,
+		textAlign: "center",
+		marginBottom: 20,
+		paddingLeft: 20,
+		paddingRight: 20
+	},
+	downloadAppLinkText: {
+		color: secondaryHex,
+		font: "inherit",
+		cursor: "pointer"
 	}
 });
 
@@ -198,19 +216,21 @@ class EventTicketsCard extends Component {
 		} = this.props;
 		const { checkedTicketsIds } = this.state;
 
+		const RowComponent = props => (
+			<React.Fragment>
+				<Hidden smDown>
+					<EventTicketRow {...props}/>
+				</Hidden>
+				<Hidden mdUp>
+					<MobileEventTicketRow {...props}/>
+				</Hidden>
+			</React.Fragment>
+		);
+
 		return (
 			<div className={classes.ticketContainer}>
-				<EventTicketRow>
-					{showActions ? (
-						<span>
-							{/*<CheckBox*/}
-							{/*active={this.allSelected()}*/}
-							{/*onClick={this.toggleAllTickets.bind(this)}*/}
-							{/*/>*/}
-						</span>
-					) : (
-						<span/>
-					)}
+				<RowComponent>
+					{showActions ? <span/> : null}
 
 					<Typography className={classes.ticketDetailsText}>
 						Ticket #
@@ -220,10 +240,15 @@ class EventTicketsCard extends Component {
 						Ticket type
 					</Typography>
 					<Typography className={classes.ticketDetailsText}>
-						Ticket price
+						<Hidden smDown>Ticket price</Hidden>
+						<Hidden mdUp>Price</Hidden>
 					</Typography>
-					<Typography className={classes.ticketDetailsText}>Action</Typography>
-				</EventTicketRow>
+					{showActions ? (
+						<Typography className={classes.ticketDetailsText}>
+							Action
+						</Typography>
+					) : null}
+				</RowComponent>
 
 				{tickets.map((ticket, index) => {
 					const {
@@ -254,66 +279,60 @@ class EventTicketsCard extends Component {
 					//If an event is in the past, don't show any actions
 					if (!showActions) {
 						disabled = true;
-						actionCol = (
-							<Typography className={classes.ticketDetailsDisabledText}>
-								This event has ended
-							</Typography>
-						);
-					}
+						actionCol = null;
+					} else {
+						if (pending_transfer) {
+							if (transfer_key) {
+								actionCol = (
+									<Typography className={classes.ticketDetailsText}>
+										<StyledLink
+											underlined
+											onClick={() => onCancelTransfer(transfer_key)}
+										>
+											cancel transfer
+										</StyledLink>
+									</Typography>
+								);
+							} else {
+								actionCol = (
+									<Typography className={classes.ticketDetailsDisabledText}>
+										Transferring
+									</Typography>
+								);
+							}
+						}
 
-					if (pending_transfer) {
-						if (transfer_key) {
+						//Default action buttons
+						if (showActions && !actionCol && !disabled) {
 							actionCol = (
 								<Typography className={classes.ticketDetailsText}>
-									<StyledLink
-										underlined
-										onClick={() => onCancelTransfer(transfer_key)}
-									>
-										cancel transfer
+									<StyledLink underlined onClick={() => onTicketSelect(ticket)}>
+										show qr
+									</StyledLink>
+									<span style={{ marginRight: 10 }}/>
+									<StyledLink underlined onClick={() => onShowTransferQR([id])}>
+										transfer
 									</StyledLink>
 								</Typography>
 							);
-						} else {
+						} else if (disabled && !actionCol) {
 							actionCol = (
 								<Typography className={classes.ticketDetailsDisabledText}>
-									Transferring
+									{status}
 								</Typography>
 							);
 						}
 					}
 
-					//Default action buttons
-					if (showActions && !actionCol && !disabled) {
-						actionCol = (
-							<Typography className={classes.ticketDetailsText}>
-								<StyledLink underlined onClick={() => onTicketSelect(ticket)}>
-									show qr
-								</StyledLink>
-								<span style={{ marginRight: 10 }}/>
-								<StyledLink underlined onClick={() => onShowTransferQR([id])}>
-									transfer
-								</StyledLink>
-							</Typography>
-						);
-					} else if (disabled && !actionCol) {
-						actionCol = (
-							<Typography className={classes.ticketDetailsDisabledText}>
-								{status}
-							</Typography>
-						);
-					}
-
 					return (
-						<EventTicketRow key={id} item>
+						<RowComponent key={id} item>
 							{showActions ? (
 								<CheckBox
 									disabled={disabled}
 									active={checkedTicketsIds.indexOf(id) !== -1}
 									onClick={() => this.toggleTicketCheckbox(id)}
 								/>
-							) : (
-								<span/>
-							)}
+							) : null}
 							<Typography className={classes.ticketDetailsText}>{`#${id.slice(
 								-8
 							)}`}</Typography>
@@ -329,7 +348,7 @@ class EventTicketsCard extends Component {
 								$ {(price_in_cents / 100).toFixed(2)}
 							</Typography>
 							{actionCol}
-						</EventTicketRow>
+						</RowComponent>
 					);
 				})}
 
@@ -411,7 +430,8 @@ class EventTicketsCard extends Component {
 			expanded,
 			onTicketSelect,
 			onShowTransferQR,
-			onExpand
+			onExpand,
+			onShowSMSLinkDialog
 		} = this.props;
 		const { checkedTicketsIds } = this.state;
 
@@ -494,6 +514,28 @@ class EventTicketsCard extends Component {
 				<Collapse in={expanded}>
 					{this.renderTicketList()}
 
+					<Typography className={classes.downloadAppText}>
+						To transfer your ticket{tickets.length === 1 ? "" : "s"} please
+						download the{" "}
+						<Hidden smDown>
+							<span
+								className={classes.downloadAppLinkText}
+								onClick={onShowSMSLinkDialog}
+							>
+								Big&nbsp;Neon&nbsp;app.
+							</span>
+						</Hidden>
+						<Hidden mdUp>
+							<a
+								target={"_blank"}
+								href={Settings().genericAppDownloadLink}
+								className={classes.downloadAppLinkText}
+							>
+								Big&nbsp;Neon&nbsp;app.
+							</a>{" "}
+						</Hidden>
+					</Typography>
+
 					<div className={classes.closeButtonRow}>
 						{expanded ? (
 							<Typography>
@@ -520,7 +562,8 @@ EventTicketsCard.propTypes = {
 	onShowTransferQR: PropTypes.func.isRequired,
 	onCancelTransfer: PropTypes.func.isRequired,
 	history: PropTypes.object.isRequired,
-	showActions: PropTypes.bool.isRequired
+	showActions: PropTypes.bool.isRequired,
+	onShowSMSLinkDialog: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(EventTicketsCard);

@@ -20,7 +20,7 @@ import utils.ProjectUtils;
 
 public class PurchaseWithTicketChangeStepsIT extends BaseSteps {
 
-	@Test(dataProvider = "purchase_data")
+	@Test(dataProvider = "purchase_data", priority = 8)
 	private void purchaseStepsWithTicketChange(User user, Purchase purchase) throws Exception {
 		LoginPage loginPage = new LoginPage(driver);
 		maximizeWindow();

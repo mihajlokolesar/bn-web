@@ -16,11 +16,17 @@ import {
 import SelectGroup from "../../../../../../common/form/SelectGroup";
 import CheckBox from "../../../../../../elements/form/CheckBox";
 import TicketCard from "./TicketCard";
+import Divider from "../../../../../../common/Divider";
 
 const styles = theme => ({
 	content: {
 		[theme.breakpoints.up("sm")]: {
 			minWidth: 550
+		}
+	},
+	successContent: {
+		[theme.breakpoints.up("sm")]: {
+			maxWidth: 400
 		}
 	},
 	actionButtonsContainer: {
@@ -96,6 +102,20 @@ const styles = theme => ({
 		fontSize: 16,
 		color: secondaryHex,
 		textAlign: "right"
+	},
+	successDetailsRow: {
+		marginTop: 20,
+		display: "flex",
+		justifyContent: "space-between"
+	},
+	userDetailsText: {
+		fontFamily: fontFamilyDemiBold,
+		color: secondaryHex
+	},
+	successRefundType: {
+		color: "#8b94a7",
+		fontSize: 14,
+		textTransform: "uppercase"
 	}
 });
 
@@ -148,7 +168,8 @@ class RefundDialog extends Component {
 			selectedRefundType: "fullRefund",
 			isRefunding: false,
 			selectedRefundOrderItem: {},
-			refundAmountInCents: 0
+			refundAmountInCents: 0,
+			refundSuccessDetails: null
 		};
 
 		this.state = this.defaultState;
@@ -193,10 +214,13 @@ class RefundDialog extends Component {
 
 	onClose() {
 		const { onClose } = this.props;
-
-		this.setState(this.defaultState);
-
+		const { refundSuccessDetails } = this.state;
 		onClose();
+
+		if (refundSuccessDetails) {
+			//Reset the dialog content just after it's finished hiding so the user doesn't notice
+			setTimeout(() => this.setState(this.defaultState), 500);
+		}
 	}
 
 	refund() {
@@ -239,15 +263,12 @@ class RefundDialog extends Component {
 				reason
 			})
 			.then(response => {
-				notification.show({
-					message: "Order refunded successfully.",
-					variant: "success"
-				});
-
 				const { amount_refunded, refund_breakdown } = response.data;
 
 				this.props.onSuccess();
-				this.onClose();
+				this.setState({
+					refundSuccessDetails: { amount_refunded, refund_breakdown }
+				});
 			})
 			.catch(error => {
 				notification.showFromErrorResponse({
@@ -424,122 +445,184 @@ class RefundDialog extends Component {
 		// ));
 	}
 
+	renderSuccessContent() {
+		const { classes, type, order } = this.props;
+		const { refundSuccessDetails } = this.state;
+		const { amount_refunded } = refundSuccessDetails;
+
+		let userDetails = "";
+
+		if (order && order.user) {
+			const { first_name, last_name, email } = order.user;
+
+			userDetails = `${first_name} ${last_name} (${email})`;
+		}
+
+		const refundTypeText = type === "full" ? "full refund" : "partial refund";
+
+		return (
+			<div className={classes.successContent}>
+				<div className={classes.successDetailsRow}>
+					<Typography className={classes.successRefundType}>
+						{refundTypeText}
+					</Typography>
+
+					<Typography className={classes.orderTotalRowValue}>
+						{dollars(amount_refunded)}
+					</Typography>
+				</div>
+
+				<Divider/>
+
+				<div style={{ textAlign: "center", marginTop: 20 }}>
+					<Typography>
+						The {refundTypeText} was sent to purchaser
+						{userDetails ? (
+							<span>
+								{" "}
+								- <span className={classes.userDetailsText}>{userDetails}</span>
+							</span>
+						) : null}
+					</Typography>
+
+					<Button
+						variant={"secondary"}
+						style={{ marginTop: 20 }}
+						onClick={this.onClose}
+					>
+						Got it
+					</Button>
+				</div>
+			</div>
+		);
+	}
+
 	render() {
 		const { classes, open, order, type } = this.props;
 		const {
 			reasonVal,
 			selectedRefundType,
 			isRefunding,
-			refundAmountInCents
+			refundAmountInCents,
+			refundSuccessDetails
 		} = this.state;
 
 		const refundValues = this.refundValues(order);
+
+		let title = `Issue ${type === "full" ? "full " : ""}refund`;
+		if (refundSuccessDetails) {
+			title = "Refund successful";
+		}
 
 		return (
 			<Dialog
 				iconUrl={"/icons/tickets-white.svg"}
 				open={open}
-				title={`Issue ${type === "full" ? "full " : ""}refund`}
+				title={title}
 				onClose={this.onClose}
 			>
-				<div className={classes.content}>
-					{type !== "full" ? (
-						<Typography>
-							In order to issue a refund, select the refund amount and refund
-							method below. The refund will be transferred to the ticket
-							purchaser.
+				{refundSuccessDetails ? (
+					this.renderSuccessContent()
+				) : (
+					<div className={classes.content}>
+						{type !== "full" ? (
+							<Typography>
+								In order to issue a refund, select the refund amount and refund
+								method below. The refund will be transferred to the ticket
+								purchaser.
+							</Typography>
+						) : null}
+
+						{type === "full" ? (
+							<React.Fragment>
+								<Hidden smDown>{this.renderDesktopOrderDetails()}</Hidden>
+								<Hidden mdUp>{this.renderMobileOrderDetails()}</Hidden>
+							</React.Fragment>
+						) : null}
+
+						{type === "items" ? (
+							<React.Fragment>
+								<Hidden smDown>{this.renderDesktopOrderItems()}</Hidden>
+								<Hidden mdUp>{this.renderMobileOrderItems()}</Hidden>
+							</React.Fragment>
+						) : null}
+
+						<br/>
+						<Typography className={classes.formLabelText}>
+							Select refund reason
 						</Typography>
-					) : null}
+						<SelectGroup
+							name={"reason"}
+							value={reasonVal}
+							onChange={this.onReasonChange.bind(this)}
+							items={refundReasons}
+						/>
 
-					{type === "full" ? (
-						<React.Fragment>
-							<Hidden smDown>{this.renderDesktopOrderDetails()}</Hidden>
-							<Hidden mdUp>{this.renderMobileOrderDetails()}</Hidden>
-						</React.Fragment>
-					) : null}
+						{type === "full" ? (
+							<React.Fragment>
+								<Typography className={classes.formLabelText}>
+									Select refund amount
+								</Typography>
+								<div className={classes.refundAmountBox}>
+									{Object.keys(refundValues).map(key => {
+										const { label, cents } = refundValues[key];
+										const active = selectedRefundType === key;
 
-					{type === "items" ? (
-						<React.Fragment>
-							<Hidden smDown>{this.renderDesktopOrderItems()}</Hidden>
-							<Hidden mdUp>{this.renderMobileOrderItems()}</Hidden>
-						</React.Fragment>
-					) : null}
+										return (
+											<div key={key} className={classes.refundAmountRow}>
+												<CheckBox
+													active={active}
+													onClick={() =>
+														this.setState({ selectedRefundType: key })
+													}
+												>
+													{label}
+												</CheckBox>
+												<Typography
+													className={classnames({
+														[classes.valueText]: true,
+														[classes.valueTextActive]: active
+													})}
+												>
+													{dollars(cents)}
+												</Typography>
+											</div>
+										);
+									})}
+								</div>
+							</React.Fragment>
+						) : null}
 
-					<br/>
-					<Typography className={classes.formLabelText}>
-						Select refund reason
-					</Typography>
-					<SelectGroup
-						name={"reason"}
-						value={reasonVal}
-						onChange={this.onReasonChange.bind(this)}
-						items={refundReasons}
-					/>
-
-					{type === "full" ? (
-						<React.Fragment>
-							<Typography className={classes.formLabelText}>
-								Select refund amount
-							</Typography>
-							<div className={classes.refundAmountBox}>
-								{Object.keys(refundValues).map(key => {
-									const { label, cents } = refundValues[key];
-									const active = selectedRefundType === key;
-
-									return (
-										<div key={key} className={classes.refundAmountRow}>
-											<CheckBox
-												active={active}
-												onClick={() =>
-													this.setState({ selectedRefundType: key })
-												}
-											>
-												{label}
-											</CheckBox>
-											<Typography
-												className={classnames({
-													[classes.valueText]: true,
-													[classes.valueTextActive]: active
-												})}
-											>
-												{dollars(cents)}
-											</Typography>
-										</div>
-									);
-								})}
+						{type === "items" ? (
+							<div className={classes.orderTotalRow}>
+								<Typography className={classes.orderTotalRowLabel}>
+									Refund total
+								</Typography>
+								<Typography className={classes.orderTotalRowValue}>
+									{dollars(refundAmountInCents)}
+								</Typography>
 							</div>
-						</React.Fragment>
-					) : null}
+						) : null}
 
-					{type === "items" ? (
-						<div className={classes.orderTotalRow}>
-							<Typography className={classes.orderTotalRowLabel}>
-								Refund total
-							</Typography>
-							<Typography className={classes.orderTotalRowValue}>
-								{dollars(refundAmountInCents)}
-							</Typography>
+						<div className={classes.actionButtonsContainer}>
+							<Button
+								style={{ marginRight: 5, width: 150 }}
+								variant="default"
+								onClick={this.onClose}
+							>
+								Cancel
+							</Button>
+							<Button
+								style={{ marginLeft: 5, width: 150 }}
+								variant="secondary"
+								disabled={isRefunding}
+								onClick={this.refund.bind(this)}
+							>
+								{isRefunding ? "Refunding..." : "Confirm"}
+							</Button>
 						</div>
-					) : null}
-
-					<div className={classes.actionButtonsContainer}>
-						<Button
-							style={{ marginRight: 5, width: 150 }}
-							variant="default"
-							onClick={this.onClose}
-						>
-							Cancel
-						</Button>
-						<Button
-							style={{ marginLeft: 5, width: 150 }}
-							variant="secondary"
-							disabled={isRefunding}
-							onClick={this.refund.bind(this)}
-						>
-							{isRefunding ? "Refunding..." : "Confirm"}
-						</Button>
 					</div>
-				</div>
+				)}
 			</Dialog>
 		);
 	}

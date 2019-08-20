@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -70,6 +71,25 @@ public class SeleniumUtils {
 		String jsScript = "arguments[0].click();";
 		JavascriptExecutor executor = (JavascriptExecutor) driver;
 		executor.executeScript(jsScript, element);
+	}
+	
+	public static void jsScrollIntoView(WebElement element, WebDriver driver) {
+		String jsScript = "arguments[0].scrollIntoView(true);";
+		((JavascriptExecutor) driver).executeScript(jsScript, element);
+	}
+	
+	
+	public static String getTextOfElemenyLocatedBy(By by, WebDriver driver) {
+		WebElement  element = new WebDriverWait(driver, 15).until(ExpectedConditions.visibilityOfElementLocated(by));
+		String text = element.getText();
+		return text;
+	}
+	
+	public static WebElement getChildElementFromParentLocatedBy(WebElement parent, By relativeChildBy, WebDriver driver) {
+		WebElement element = new WebDriverWait(driver, 15).until(ExpectedConditions.visibilityOf(parent.findElement(relativeChildBy)));
+		return element;
+		
+		
 	}
 
 }

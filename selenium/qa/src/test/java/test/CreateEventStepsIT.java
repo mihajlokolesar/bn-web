@@ -16,13 +16,13 @@ import utils.SeleniumUtils;
 
 public class CreateEventStepsIT extends BaseSteps {
 
-	@Test(dataProvider = "create_event_data")
+	@Test(dataProvider = "create_event_data", priority = 6)
 	public void createEvent(User superuser, Event event) throws Exception {
 
 		LoginPage login = new LoginPage(driver);
 		maximizeWindow();
 		login.login(superuser.getEmailAddress(), superuser.getPass());
-		Header header = new Header(driver);
+		Header header = login.getHeader();
 		AdminEventsPage adminEvents = null;
 		boolean isOrgPresent = header.isOrganizationPresent(event.getOrganization().getName());
 		

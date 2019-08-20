@@ -7,14 +7,14 @@
     <classes>
       <class name="test.LoginWithFacebookStepsIT"/>
       <class name="test.LoginStepsIT"/>
-      <class name="test.SignUpStepsIT"/> 
+      <class name="test.SignUpStepsIT"/>
     </classes>
   </test>
   <test thread-count="2" name="Firefox" parallel="classes">
 	<parameter name="config" value="suite.conf.json"/>
     <parameter name="environment" value="firefox"/>
     <classes>
-      <class name="test.LoginWithFacebookStepsIT"/> 
+      <class name="test.LoginWithFacebookStepsIT"/>
       <class name="test.LoginStepsIT"/>
       <class name="test.SignUpStepsIT"/>
     </classes>

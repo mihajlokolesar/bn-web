@@ -160,6 +160,29 @@ class CheckoutSelection extends Component {
 		}
 	}
 
+	//Determine the amount to auto add to cart based on increment, limit per person and available tickets
+	getAutoAddQuantity(ticketType) {
+		const { increment, limit_per_person, available } = ticketType;
+		let quantity = AUTO_SELECT_TICKET_AMOUNT;
+
+		//If the default auto select amount is NOT divisible by the increment amount, rather auto select the first increment
+		if (AUTO_SELECT_TICKET_AMOUNT % increment != 0) {
+			quantity = increment;
+		}
+
+		//If limit_per_person is set don't allow auto selecting more than the user is allowed to buy
+		if (limit_per_person && quantity > limit_per_person) {
+			quantity = limit_per_person;
+		}
+
+		//Will first display `Sold out` for this rule anyways.
+		if (available < increment) {
+			quantity = 0;
+		}
+
+		return quantity;
+	}
+
 	setTicketSelectionFromExistingCart(items) {
 		const ticketSelection = {};
 		const { id } = this.props.match.params;
@@ -184,7 +207,7 @@ class CheckoutSelection extends Component {
 
 				if (!ticketSelection[type_id]) {
 					ticketSelection[type_id] = {
-						quantity: AUTO_SELECT_TICKET_AMOUNT
+						quantity: this.getAutoAddQuantity(ticket_types[0])
 					};
 				}
 
@@ -206,10 +229,11 @@ class CheckoutSelection extends Component {
 								}
 								const type_id = types[i].id;
 
+								//Auto add a ticket after refreshing the event tickets
 								if (!ticketSelection[type_id]) {
 									if (types.length === 1) {
 										ticketSelection[type_id] = {
-											quantity: AUTO_SELECT_TICKET_AMOUNT
+											quantity: this.getAutoAddQuantity(types[i])
 										};
 									}
 								}
@@ -438,12 +462,13 @@ class CheckoutSelection extends Component {
 						key={id}
 						name={name}
 						description={description}
-						available={ticketsAvailable}
+						ticketsAvailable={ticketsAvailable}
 						price_in_cents={price_in_cents}
 						error={errors[id]}
 						amount={ticketSelection[id] ? ticketSelection[id].quantity : 0}
 						increment={increment}
 						limitPerPerson={limitPerPerson}
+						available={available}
 						discount_in_cents={discount_in_cents}
 						discount_as_percentage={discount_as_percentage}
 						redemption_code={redemption_code}

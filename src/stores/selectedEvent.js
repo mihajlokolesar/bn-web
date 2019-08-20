@@ -332,11 +332,9 @@ class SelectedEvent {
 		if (!this.ticket_types) {
 			return null; //Unknown
 		}
-
 		let hasTickets = false;
-		this.ticket_types.map(({ ticket_pricing }) => {
-			const price = "";
-			if (ticket_pricing) {
+		this.ticket_types.map(({ ticket_pricing, end_date }) => {
+			if (ticket_pricing && moment.utc().isBefore(moment.utc(end_date))) {
 				hasTickets = true;
 			}
 		});

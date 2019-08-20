@@ -2,9 +2,9 @@
 
 ### Description:
 
-### Environment Variables
+### Release Screenshots / Video:
+
+### Environment Variables:
  * No change
 
-### API requirements
-
-### Release Video Link:
+### API requirements:

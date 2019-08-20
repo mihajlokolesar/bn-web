@@ -11,6 +11,7 @@ import StatsCard from "../../../elements/menu/StatsCard";
 import Button from "../../../elements/Button";
 import orders from "../../../../stores/orders";
 import tickets from "../../../../stores/tickets";
+import Settings from "../../../../config/settings";
 
 const styles = theme => {
 	return {
@@ -67,7 +68,7 @@ const UserList = observer(props => {
 				<div className={classes.spacer}/>
 
 				<Button
-					href={process.env.REACT_APP_DOWNLOAD_APP}
+					href={Settings().genericAppDownloadLink}
 					target="_blank"
 					iconUrl="/icons/phone-white.svg"
 					className={classes.button}

@@ -8,6 +8,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import pages.BasePage;
+import pages.components.ClaimTicketFrame;
 import pages.components.PurchaseMailFrame;
 import utils.SeleniumUtils;
 
@@ -18,6 +19,8 @@ public class MailinatorInboxPage extends BasePage {
 
 	@FindBy(xpath = "//div//div[@class='x_content']/iframe[@id='msg_body']")
 	private WebElement msgContentFrame;
+	
+	private String urlMsgPaneValue = "msgpane";
 
 	public MailinatorInboxPage(WebDriver driver) {
 		super(driver);
@@ -62,22 +65,22 @@ public class MailinatorInboxPage extends BasePage {
 			driver.switchTo().window(parentHandle);
 		}
 		driver.switchTo().parentFrame();
-		waitVisibilityAndClick(trashBin);
+		deleteMail();
 		driver.navigate().refresh();
 
 		// switch to new tab
 		SeleniumUtils.switchToChildWindow(parentHandle, driver);
 	}
-
+	
 	public boolean isCorrectMail(int numberOfTickets, String eventName) {
 		waitForTime(1000);
 		explicitWait(10, ExpectedConditions.urlContains("msgpane"));
 		driver = explicitWait(15, ExpectedConditions.frameToBeAvailableAndSwitchToIt(msgContentFrame));
 		PurchaseMailFrame purchaseMailFrame = new PurchaseMailFrame(driver);
+		
+		//TODO: move this logic to PurhchaseMailFrame, it belongs there
 		String quantity = purchaseMailFrame.getQuantity();
-		System.out.println(quantity);
 		String ename = purchaseMailFrame.getEventName();
-		System.out.println(ename);
 		driver.switchTo().parentFrame();
 		if (("" + numberOfTickets).equals(quantity) && ename.contains(eventName)) {
 			return true;
@@ -90,7 +93,39 @@ public class MailinatorInboxPage extends BasePage {
 		goToMail(mailSubjectValue);
 		boolean retVal = isCorrectMail(numberOfTickets, eventName);
 		if(retVal) {
+			deleteMail();
+		}
+		return retVal;
+		
+	}
+	
+	public void clickOnClaimTicket() {
+		String parentHandler = driver.getWindowHandle();
+		waitForTime(1000);
+		explicitWait(10, ExpectedConditions.urlContains(urlMsgPaneValue));
+		explicitWaitForVisiblity(msgContentFrame);
+		driver.switchTo().frame(msgContentFrame);
+		waitForTime(1000);
+		new ClaimTicketFrame(driver).clickOnClaimTicketLink();
+		
+		driver.switchTo().parentFrame();
+		SeleniumUtils.switchToParentWindow(parentHandler, driver);
+		deleteMail();
+		SeleniumUtils.switchToChildWindow(parentHandler, driver);
+		
+	}
+	
+	public WebDriver checkMessagePageAndSwitchToFrame() {
+		waitForTime(1000);
+		explicitWait(10, ExpectedConditions.urlContains(urlMsgPaneValue));
+		driver = explicitWait(15, ExpectedConditions.frameToBeAvailableAndSwitchToIt(msgContentFrame));
+		return driver;
+	}
+	
+	private void deleteMail() {
+		try {
 			waitVisibilityAndClick(trashBin);
+		}catch (Exception e) {
 		}
 		return retVal;
 		

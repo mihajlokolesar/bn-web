@@ -398,6 +398,11 @@ class User {
 	}
 
 	@computed
+	get isSuper() {
+		return this.globalRoles.indexOf("Super") > -1;
+	}
+
+	@computed
 	get isOrgOwner() {
 		return this.globalRoles.indexOf("OrgOwner") > -1;
 	}

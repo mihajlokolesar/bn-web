@@ -8,6 +8,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import pages.BaseComponent;
+import pages.user.MyEventsPage;
 
 public class Header extends BaseComponent {
 
@@ -34,9 +35,15 @@ public class Header extends BaseComponent {
 
 	@FindBy(xpath = "//header//span/a[contains(@href,'tickets/confirmation')]|//header//span/div[contains(@to,'tickets/confirmation')]")
 	public WebElement shoppingBasket;
+	
+	@FindBy(xpath = "//body//header//button[span[contains(text(),'Sign In')]]")
+	public WebElement signInButton;
+
+	private ProfileMenuDropDown profileMenuDropDown;
 
 	public Header(WebDriver driver) {
 		super(driver);
+		profileMenuDropDown = new ProfileMenuDropDown(driver);
 	}
 
 	public void searchEvents(String event) {
@@ -58,18 +65,21 @@ public class Header extends BaseComponent {
 		toStudioButton.click();
 	}
 
-	public WebElement openProfileOptions() {
-		WebElement profileDropDownMenu = null;
-		explicitWait(10, ExpectedConditions.elementToBeClickable(profileOptions));
-		profileOptions.click();
-		return profileDropDownMenu;
-
+	public void openProfileOptions() {
+		waitForTime(500);
+		explicitWaitForVisibilityAndClickableWithClick(profileOptions);
+		waitForTime(500);
 	}
 
 	public void logOut() {
 		openProfileOptions();
-		ProfileMenuDropDown profileMenu = new ProfileMenuDropDown(driver);
-		profileMenu.logout();
+		profileMenuDropDown.logout();
+	}
+
+	public MyEventsPage clickOnMyEventsInProfileDropDown() {
+		openProfileOptions();
+		profileMenuDropDown.myEventsClick();
+		return new MyEventsPage(driver);
 	}
 
 	public boolean checkLogedInFirstNameInHeader(String firstName) {
@@ -113,6 +123,10 @@ public class Header extends BaseComponent {
 		if (isVisible) {
 			waitVisibilityAndClick(shoppingBasket);
 		}
+	}
+	
+	public boolean isLoggedOut() {
+		return isExplicitlyWaitVisible(signInButton);
 	}
 
 }

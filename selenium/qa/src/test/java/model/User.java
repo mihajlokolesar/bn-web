@@ -1,5 +1,7 @@
 package model;
 
+import utils.ProjectUtils;
+
 public class User {
 	
 	private String emailAddress;
@@ -39,6 +41,17 @@ public class User {
 		this.lastName = lastName;
 	}
 	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(this.emailAddress + "; ");
+		sb.append(this.firstName +"; ");
+		sb.append(this.lastName + "; ");
+		sb.append(this.pass + "; ");
+		sb.append(this.passConfirm);
+		return sb.toString();
+	}
+	
 	public static User generateSuperUser() {
 		User user = new User();
 		user.setEmailAddress("superuser@test.com");
@@ -50,7 +63,23 @@ public class User {
 		User user = new User();
 		user.setEmailAddress("bluetestneouser@mailinator.com");
 		user.setPass("test1111");
+		user.setFirstName("test");
+		user.setLastName("testqa");
 		return user;
 	}
-
+	
+	public static User generateRandomUser() {
+		User retVal = new User();
+		String firstName = "seleniumtest";
+		String lastName = "qaselenium";
+		String emailAddress = firstName + ProjectUtils.generateRandomInt(1000000) + "@mailinator.com";
+		String password = "seleniumpassword";
+		String confirmPas = password;
+		retVal.setEmailAddress(emailAddress);
+		retVal.setFirstName(firstName);
+		retVal.setLastName(lastName);
+		retVal.setPass(password);
+		retVal.setPassConfirm(confirmPas);
+		return retVal;
+	}
 }

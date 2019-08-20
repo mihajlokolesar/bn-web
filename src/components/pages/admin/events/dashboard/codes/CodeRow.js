@@ -37,23 +37,26 @@ const styles = theme => {
 			cursor: "pointer"
 		},
 		nameSpan: {
-			flex: 2,
+			flex: 4,
 			display: "flex",
-			alignItems: "center"
+			alignItems: "center",
+			maxWidth: "90%"
 		},
 		nameText: {
 			fontFamily: fontFamilyDemiBold,
 			textAlign: "left",
 			overflow: "hidden",
 			whiteSpace: "nowrap",
-			textOverflow: "ellipsis"
+			textOverflow: "ellipsis",
+			maxWidth: "80%"
 		},
 		codeText: {
 			color: textColorPrimary,
-			flex: 2,
+			flex: 3,
 			textAlign: "left",
 			overflow: "hidden",
-			textOverflow: "ellipsis"
+			textOverflow: "ellipsis",
+			maxWidth: "80%"
 		},
 		desktopActionButtonGroup: {
 			flex: 3,
@@ -71,8 +74,7 @@ const styles = theme => {
 			color: secondaryHex
 		},
 		ticketTypesContainer: {
-			flex: 5
-			//display: "flex"
+			flex: 2
 		},
 		ticketTypeContainer: {
 			float: "left",

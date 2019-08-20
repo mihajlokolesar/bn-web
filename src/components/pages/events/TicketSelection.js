@@ -85,7 +85,7 @@ class TicketSelection extends Component {
 
 	render() {
 		const {
-			available,
+			ticketsAvailable,
 			classes,
 			error,
 			name,
@@ -93,6 +93,7 @@ class TicketSelection extends Component {
 			price_in_cents,
 			amount,
 			increment,
+			available,
 			onNumberChange,
 			validateFields,
 			limitPerPerson,
@@ -128,10 +129,16 @@ class TicketSelection extends Component {
 			discount_message = dollars(discount_in_cents) + " Discount applied";
 		}
 
-		let priceActive = available;
+		let priceActive = ticketsAvailable;
 		let priceDisplay = null;
 		if (!isNaN(calculatedPriceInCents)) {
 			priceDisplay = `${dollars(calculatedPriceInCents, true)}`;
+		}
+
+		//They can't select more than is available (This will be fixed in the API soon hopefully)
+		if (available < increment) {
+			status = "SoldOut";
+			priceActive = false;
 		}
 
 		let unavailableLabel = null;
@@ -280,7 +287,7 @@ class TicketSelection extends Component {
 }
 
 TicketSelection.propTypes = {
-	available: PropTypes.bool,
+	ticketsAvailable: PropTypes.bool,
 	onNumberChange: PropTypes.func.isRequired,
 	name: PropTypes.string.isRequired,
 	description: PropTypes.string,
@@ -290,6 +297,7 @@ TicketSelection.propTypes = {
 	error: PropTypes.string,
 	amount: PropTypes.number,
 	increment: PropTypes.number.isRequired,
+	available: PropTypes.number.isRequired,
 	validateFields: PropTypes.func.isRequired,
 	limitPerPerson: PropTypes.number,
 	status: PropTypes.string.isRequired,

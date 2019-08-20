@@ -86,6 +86,9 @@ const styles = theme => ({
 	perTicketFeeLabel: {
 		fontSize: 14,
 		color: "#8b94a7"
+	},
+	discountValueText: {
+		color: "#8b94a7"
 	}
 });
 
@@ -106,6 +109,7 @@ const MobileTicketCard = ({
 	code,
 	code_type,
 	ticket_type_name,
+	discount_price_in_cents,
 	...rest
 }) => {
 	const checkbox = (
@@ -154,6 +158,11 @@ const MobileTicketCard = ({
 							<Typography className={classes.heading}>Code</Typography>
 							<Typography className={classes.valueText}>
 								{code || "-"}
+								{discount_price_in_cents ? (
+									<span className={classes.discountValueText}>
+										&nbsp;/&nbsp;{dollars(discount_price_in_cents * -1, true)}
+									</span>
+								) : null}
 							</Typography>
 							<Typography className={classes.subText}>
 								{code_type || ""}

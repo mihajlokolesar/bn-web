@@ -5,9 +5,6 @@ import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.PageFactory;
-
-import pages.components.Header;
 import utils.Constants;
 
 
@@ -15,7 +12,6 @@ public class HomePage extends BasePage {
 
 	public HomePage(WebDriver driver) {
 		super(driver);
-		PageFactory.initElements(driver, this);
 	}
 
 	@Override
@@ -36,10 +32,4 @@ public class HomePage extends BasePage {
 		}
 		return false;
 	}
-	
-	public void logOut() {
-		Header header = new Header(driver);
-		header.logOut();
-	}
-
 }

@@ -76,9 +76,6 @@ public class CreateEventPage extends BasePage {
 	@FindBy(xpath = "//main//div//button[span[contains(text(),'Publish')]]")
 	private WebElement publishButton;
 
-	@FindBy(id = "message-id")
-	private WebElement message;
-
 	public CreateEventPage(WebDriver driver) {
 		super(driver);
 	}

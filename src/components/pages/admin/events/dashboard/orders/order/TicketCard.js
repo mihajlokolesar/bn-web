@@ -44,6 +44,9 @@ const styles = theme => ({
 	subText: {
 		color: "#8b94a7",
 		fontSize: 14
+	},
+	discountValueText: {
+		color: "#8b8b8b"
 	}
 });
 
@@ -66,6 +69,7 @@ const TicketCard = ({
 	code_type,
 	ticket_type_name,
 	shortened,
+	discount_price_in_cents,
 	...rest
 }) => {
 	const checkboxStyle = { marginLeft: shortened ? 10 : 20 };
@@ -115,7 +119,15 @@ const TicketCard = ({
 						<div style={colStyles[3]}>
 							{code ? (
 								<div>
-									<Typography>{code}</Typography>
+									<Typography>
+										{code}
+										{discount_price_in_cents ? (
+											<span className={classes.discountValueText}>
+												&nbsp;/&nbsp;
+												{dollars(discount_price_in_cents * -1, true)}
+											</span>
+										) : null}
+									</Typography>
 									<Typography className={classes.subText}>
 										{code_type}
 									</Typography>

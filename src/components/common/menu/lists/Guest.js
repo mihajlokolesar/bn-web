@@ -2,11 +2,11 @@ import React from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import Divider from "@material-ui/core/Divider";
-import { Link } from "react-router-dom";
 import { observer } from "mobx-react";
 
 import MenuItem from "../../../elements/menu/MenuItem";
 import Button from "../../../elements/Button";
+import Settings from "../../../../config/settings";
 
 const styles = theme => {
 	return {
@@ -24,7 +24,7 @@ const styles = theme => {
 };
 
 const GuestMenuList = observer(props => {
-	const { toggleDrawer, openMenuItem, changeOpenMenu, classes } = props;
+	const { toggleDrawer, classes } = props;
 
 	return (
 		<div>
@@ -36,7 +36,7 @@ const GuestMenuList = observer(props => {
 
 			<div className={classes.stats}>
 				<Button
-					href={process.env.REACT_APP_DOWNLOAD_APP}
+					href={Settings().genericAppDownloadLink}
 					target="_blank"
 					iconUrl="/icons/phone-white.svg"
 					className={classes.button}

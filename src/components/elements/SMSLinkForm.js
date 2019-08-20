@@ -116,6 +116,9 @@ class SMSLinkForm extends Component {
 			() => {
 				this.setState({ isSubmitting: false, isSent: true });
 				notifications.show({ message: "SMS sent!", variant: "success" });
+
+				const { onSuccess } = this.props;
+				onSuccess ? onSuccess() : null;
 			},
 			err => {
 				this.setState({ isSubmitting: false });
@@ -130,12 +133,13 @@ class SMSLinkForm extends Component {
 
 	render() {
 		const { phone, isSubmitting, isSent } = this.state;
-		const { classes } = this.props;
+		const { classes, autoFocus } = this.props;
 
 		return (
 			<div className={classes.smsContainer}>
 				<form noValidate autoComplete="off" onSubmit={this.onSubmit.bind(this)}>
 					<InputGroup
+						autoFocus={autoFocus}
 						label="Mobile number"
 						value={phone}
 						type="phone"
@@ -159,7 +163,9 @@ class SMSLinkForm extends Component {
 }
 
 SMSLinkForm.propTypes = {
-	classes: PropTypes.object.isRequired
+	classes: PropTypes.object.isRequired,
+	autoFocus: PropTypes.bool,
+	onSuccess: PropTypes.func
 };
 
 export default withStyles(styles)(SMSLinkForm);

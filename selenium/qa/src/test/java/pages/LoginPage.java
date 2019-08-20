@@ -7,10 +7,10 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import model.User;
+import pages.components.RecaptchaFrame;
 import utils.Constants;
 import utils.MsgConstants;
 
@@ -49,12 +49,8 @@ public class LoginPage extends BasePage {
 	@FindBy(id = "recaptcha-anchor")
 	private WebElement recaptchaAnchorInFrame;
 
-	@FindBy(id = "message-id")
-	private WebElement dialogMessage;
-
 	public LoginPage(WebDriver driver) {
 		super(driver);
-		PageFactory.initElements(driver, this);
 	}
 
 	@Override
@@ -84,43 +80,13 @@ public class LoginPage extends BasePage {
 		explicitWait(10, ExpectedConditions.elementToBeClickable(loginSubmitButton));
 		loginSubmitButton.click();
 		if (checkForLoginFailedMessage()) {
+			waitForTime(1000);
 			loginSubmitButton.click();
 		}
-
 	}
-
-	private boolean checkForLoginFailedMessage() {
-		boolean retVal = false;
-		try {
-			explicitWait(3, ExpectedConditions.visibilityOf(dialogMessage));
-			String msg = dialogMessage.getText();
-			if (msg != null && !msg.isEmpty() && msg.contains(MsgConstants.LOGIN_FAILED_ERROR)) {
-				retVal = true;
-				System.out.println(msg);
-			}
-		} catch (Exception e) {
-			retVal = false;
-		}
-		return retVal;
-
-	}
-
-	private void clickOnRecaptcha() {
-		WebElement recaptcha = driver.findElement(By.className("g-recaptcha"));
-		recaptcha.click();
-		explicitWait(10, ExpectedConditions.frameToBeAvailableAndSwitchToIt(recaptchaIframe));
-		explicitWait(10, ExpectedConditions.attributeContains(recaptchaAnchorInFrame, "aria-checked", "true"));
-		driver.switchTo().parentFrame();
-	}
-
-	public boolean isMailOrPassIncorrectMessageDisplayed() {
-		explicitWait(10, ExpectedConditions.visibilityOf(dialogMessage));
-		String msg = dialogMessage.getText();
-		if (msg.contains(MsgConstants.EMAIL_OR_PASS_INCORRECT_ON_LOGIN_ERROR)) {
-			return true;
-		} else {
-			return false;
-		}
+	
+	public boolean confirmedLogin(User user) {
+		return confirmedLogin(user.getEmailAddress(), user.getPass());
 	}
 
 	public boolean confirmedLogin(String username, String password) {
@@ -133,6 +99,31 @@ public class LoginPage extends BasePage {
 		}
 		return retVal;
 	}
+
+	private boolean checkForLoginFailedMessage() {
+		boolean retVal = false;
+		try {
+			explicitWait(3, ExpectedConditions.visibilityOf(message));
+			String msg = message.getText();
+			if (msg != null && !msg.isEmpty() && msg.contains(MsgConstants.LOGIN_FAILED_ERROR)) {
+				retVal = true;
+			}
+		} catch (Exception e) {
+			retVal = false;
+		}
+		return retVal;
+	}
+
+	private void clickOnRecaptcha() {
+		new RecaptchaFrame(driver).clickOnRecaptcha();
+	}
+
+	public boolean isMailOrPassIncorrectMessageDisplayed() {
+		explicitWait(10, ExpectedConditions.visibilityOf(message));
+		return isNotificationDisplayedWithMessage(MsgConstants.EMAIL_OR_PASS_INCORRECT_ON_LOGIN_ERROR);
+	}
+	
+	
 
 	public boolean loginWithFacebookUsingPhone(String phoneNumber, String password) {
 		return loginWithFacebook(phoneNumber, password);
@@ -166,8 +157,7 @@ public class LoginPage extends BasePage {
 	}
 
 	public void clickOnForgotPassword() {
-		explicitWait(10, ExpectedConditions.elementToBeClickable(forgotPasswordButton));
-		forgotPasswordButton.click();
+		explicitWaitForVisibilityAndClickableWithClick(forgotPasswordButton);
 
 	}
 
@@ -178,9 +168,9 @@ public class LoginPage extends BasePage {
 
 	public boolean enterMailAndClickOnResetPassword(String email) {
 		explicitWait(10, 500, ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@role='dialog']//form")));
-		forgotPasswordEmailField.sendKeys(email);
-		forgotPasswordConfirmButton.click();
-		dialogMessage = explicitWait(10, 500, ExpectedConditions.visibilityOf(dialogMessage));
+		waitVisibilityAndSendKeys(forgotPasswordEmailField, email);
+		explicitWaitForVisibilityAndClickableWithClick(forgotPasswordConfirmButton);
+		message = explicitWait(10, 500, ExpectedConditions.visibilityOf(message));
 		return true;
 	}
 

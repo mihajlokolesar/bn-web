@@ -19,7 +19,7 @@ import utils.ProjectUtils;
 
 public class PurchaseStepsIT extends BaseSteps {
 
-	@Test(dataProvider = "purchase_data")
+	@Test(dataProvider = "purchase_data", priority = 7)
 	public void purchaseSteps(User user, Purchase purchase) throws Exception {
 
 		EventsPage eventsPage = new EventsPage(driver);

@@ -16,6 +16,9 @@ import Card from "../../elements/Card";
 import StyledLink from "../../elements/StyledLink";
 import changeUrlParam from "../../../helpers/changeUrlParam";
 import getUrlParam from "../../../helpers/getUrlParam";
+import user from "../../../stores/user";
+import getScreenWidth from "../../../helpers/getScreenWidth";
+import SMSAppLinkDialog from "../../elements/SMSAppLinkDialog";
 
 const styles = theme => ({
 	menuContainer: {
@@ -37,7 +40,8 @@ class MyEvents extends Component {
 			selectedTransferTicketIds: null,
 			selectedTicket: null,
 			cancelTransferKey: null,
-			type: "upcoming"
+			type: "upcoming",
+			showSMSLinkDialog: false
 		};
 	}
 
@@ -97,6 +101,11 @@ class MyEvents extends Component {
 			groups = tickets.pastGroups;
 		}
 
+		//Hide for everyone not super or on mobile
+		if (!user.isSuper || getScreenWidth() < 500) {
+			showActions = false;
+		}
+
 		if (groups === null || groups === undefined) {
 			return (
 				<Grid item xs={12} sm={12} lg={12}>
@@ -117,7 +126,10 @@ class MyEvents extends Component {
 							expanded={expandedEventId === id}
 							showActions={showActions}
 							onTicketSelect={selectedTicket =>
-								this.setState({ selectedTicket, selectedEventName: name })
+								this.setState({
+									selectedTicket,
+									selectedEventName: name
+								})
 							}
 							onShowTransferQR={selectedTransferTicketIds =>
 								this.setState({ selectedTransferTicketIds })
@@ -129,6 +141,9 @@ class MyEvents extends Component {
 							}
 							history={history}
 							onExpand={() => this.onExpandTickets(id)}
+							onShowSMSLinkDialog={() =>
+								this.setState({ showSMSLinkDialog: true })
+							}
 						/>
 					</Grid>
 				);
@@ -148,7 +163,8 @@ class MyEvents extends Component {
 			selectedTicket,
 			selectedTransferTicketIds,
 			type,
-			cancelTransferKey
+			cancelTransferKey,
+			showSMSLinkDialog
 		} = this.state;
 
 		const { classes } = this.props;
@@ -181,6 +197,10 @@ class MyEvents extends Component {
 					onClose={() =>
 						this.setState({ cancelTransferKey: null }, this.refreshTickets)
 					}
+				/>
+				<SMSAppLinkDialog
+					open={showSMSLinkDialog}
+					onClose={() => this.setState({ showSMSLinkDialog: false })}
 				/>
 
 				<Grid container spacing={24}>

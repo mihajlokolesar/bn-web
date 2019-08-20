@@ -239,13 +239,13 @@ class CodeList extends Component {
 			"Type",
 			"Times Used",
 			"Discount",
-			""
+			" "
 		];
 
 		const columnStyles = [
+			{ flex: 4 },
+			{ flex: 3 },
 			{ flex: 2 },
-			{ flex: 2 },
-			{ flex: 5 },
 			{ flex: 2 },
 			{ flex: 2 },
 			{ flex: 2 },

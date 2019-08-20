@@ -28,9 +28,6 @@ public class TicketsPage extends BasePage {
 	@FindBy(xpath = "//body//div[@role='dialog' and @aria-labelledby='dialog-title']//div/h1[contains(text(),'Login to your Big Neon account')]")
 	private WebElement loginDialogTitle;
 
-	@FindBy(id = "message-id")
-	private WebElement message;
-
 	public List<WebElement> addTicketTypes() {
 		return explicitWait(15, ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(
 				"//div/p[contains(text(),'Select tickets')]/following-sibling::div//div[./p[contains(text(),'+')]]")));

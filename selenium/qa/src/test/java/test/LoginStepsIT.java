@@ -5,21 +5,19 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import pages.LoginPage;
-import pages.components.Header;
 
 public class LoginStepsIT extends BaseSteps {
 
-	@Test(dataProvider = "user_credentials")
+	@Test(dataProvider = "user_credentials", priority = 1)
 	public void regularLogin(String username, String password) {
 		maximizeWindow();
 		LoginPage loginPage = new LoginPage(driver);
 		boolean retVal = loginPage.confirmedLogin(username, password);
-		Header header = new Header(driver);
-		header.logOut();
+		loginPage.logOut();
 		Assert.assertTrue(retVal);
 	}
 	
-	@Test(dataProvider = "wrong_user_mail_credentials")
+	@Test(dataProvider = "wrong_user_mail_credentials", priority = 1)
 	public void wrongEmailLogin(String username, String password) {
 		maximizeWindow();
 		LoginPage loginPage = new LoginPage(driver);
@@ -27,7 +25,7 @@ public class LoginStepsIT extends BaseSteps {
 		Assert.assertTrue(loginPage.isMailOrPassIncorrectMessageDisplayed());
 	}
 	
-	@Test(dataProvider = "wrong_pass_credentials")
+	@Test(dataProvider = "wrong_pass_credentials", priority = 1)
 	public void wrongPasswordLogin(String username, String password) {
 		maximizeWindow();
 		LoginPage loginPage = new LoginPage(driver);

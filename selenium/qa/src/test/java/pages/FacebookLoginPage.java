@@ -5,7 +5,6 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class FacebookLoginPage extends BasePage {
@@ -21,6 +20,10 @@ public class FacebookLoginPage extends BasePage {
 
 	@FindBy(id = "u_0_0")
 	private WebElement loginButton;
+	
+	public FacebookLoginPage(WebDriver driver) {
+		super(driver);
+	}
 
 	@Override
 	public void presetUrl() {
@@ -44,10 +47,4 @@ public class FacebookLoginPage extends BasePage {
 		boolean retVal = explicitWait(5, ExpectedConditions.numberOfWindowsToBe(1));
 		return retVal;
 	}
-
-	public FacebookLoginPage(WebDriver driver) {
-		super(driver);
-		PageFactory.initElements(driver, this);
-	}
-
 }

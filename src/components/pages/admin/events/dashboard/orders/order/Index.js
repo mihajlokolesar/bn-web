@@ -158,10 +158,13 @@ class SingleOrder extends Component {
 				const { data } = response.data;
 
 				const orderHistory = data.map(item => {
-					const occurredAt = moment
-						.utc(item.occurredAt)
-						.tz(timezone)
-						.format("llll");
+					const { occurred_at } = item;
+					const occurredAt = occurred_at
+						? moment
+							.utc(occurred_at)
+							.tz(timezone)
+							.format("llll")
+						: "-";
 
 					return { ...item, occurredAt };
 				});

@@ -29,6 +29,7 @@ import user from "../../../stores/user";
 import getUrlParam from "../../../helpers/getUrlParam";
 import getPhoneOS from "../../../helpers/getPhoneOS";
 import servedImage from "../../../helpers/imagePathHelper";
+import Settings from "../../../config/settings";
 
 const heroHeight = 800;
 
@@ -465,7 +466,7 @@ class CheckoutSuccess extends Component {
 									<div className={classes.mobilePopupCard}>
 										<div className={classes.buttonContainer}>
 											<AppButton
-												href={process.env.REACT_APP_DOWNLOAD_APP}
+												href={Settings().genericAppDownloadLink}
 												variant={phoneOS}
 												color={"callToAction"}
 												style={{ width: "100%" }}

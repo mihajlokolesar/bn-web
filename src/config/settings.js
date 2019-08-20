@@ -12,7 +12,8 @@ export const settingsFactory = () => {
 		settings = {
 			promoImageAspectRatio: 1920 / 1080,
 			webPSupported: null, //Does the browser support next gen image formats
-			webUrl
+			webUrl,
+			genericAppDownloadLink: process.env.REACT_APP_DOWNLOAD_APP
 			//TODO add all process.env variables here
 		};
 

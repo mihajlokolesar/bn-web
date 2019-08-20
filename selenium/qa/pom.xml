@@ -22,7 +22,7 @@
 		<maven-failsafe-plugin.version>2.21.0</maven-failsafe-plugin.version>
 		<browser>rm</browser>
 		<baseurl>https://develop.bigneon.com/</baseurl>
-	
+
 	</properties>
 
 	<dependencies>
@@ -43,11 +43,18 @@
 			<artifactId>mail</artifactId>
 			<version>${java.mail.version}</version>
 		</dependency>
-		  <dependency>
-            <groupId>com.googlecode.json-simple</groupId>
-            <artifactId>json-simple</artifactId>
-            <version>1.1.1</version>
-        </dependency>
+		<dependency>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.11.3</version>
+		</dependency>
+
 	</dependencies>
 	<build>
 		<plugins>
@@ -68,10 +75,13 @@
 					<systemPropertyVariables>
 						<browser>${browser}</browser>
 						<baseurl>${baseurl}</baseurl>
-						<webdriver.chrome.driver>${webdriver.chrome.driver}</webdriver.chrome.driver>
-						<webdriver.gecko.driver>${webdriver.gecko.driver}</webdriver.gecko.driver>
-						<webdriver.edge.driver>${webdriver.edge.driver}</webdriver.edge.driver>
+							<webdriver.chrome.driver>${webdriver.chrome.driver}</webdriver.chrome.driver> 
+							<webdriver.gecko.driver>${webdriver.gecko.driver}</webdriver.gecko.driver> 
+							<webdriver.edge.driver>${webdriver.edge.driver}</webdriver.edge.driver>
 					</systemPropertyVariables>
+					<suiteXmlFiles>
+						<suiteXmlFile>config/local/ltestng.xml</suiteXmlFile>
+					</suiteXmlFiles>
 				</configuration>
 				<executions>
 					<execution>
@@ -94,7 +104,7 @@
 						<artifactId>maven-failsafe-plugin</artifactId>
 						<configuration>
 							<suiteXmlFiles>
-								<suiteXmlFile>config/testng.xml</suiteXmlFile>		
+								<suiteXmlFile>config/testng.xml</suiteXmlFile>
 							</suiteXmlFiles>
 							<systemPropertyVariables>
 								<username>${username}</username>

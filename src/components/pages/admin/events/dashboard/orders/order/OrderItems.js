@@ -124,6 +124,9 @@ const styles = theme => ({
 		color: secondaryHex,
 		fontFamily: fontFamilyDemiBold,
 		fontSize: 14
+	},
+	discountValueText: {
+		color: "#8b94a7"
 	}
 });
 
@@ -278,7 +281,7 @@ class OrderItems extends Component {
 			{ flex: 4 },
 			{ flex: 3 },
 			{ flex: 3 },
-			{ flex: 2 },
+			{ flex: 3 },
 			{ flex: 1 },
 			{ flex: 2 },
 			{ flex: 2 }
@@ -359,11 +362,16 @@ class OrderItems extends Component {
 		let code = "";
 		let codeType = "";
 		let qty = 0;
+		let discountInCents = null;
 
 		items.forEach(item => {
 			if (item.code) {
 				code = item.code;
 				codeType = item.code_type;
+
+				if (item.discount_price_in_cents) {
+					discountInCents = item.discount_price_in_cents;
+				}
 			}
 
 			if (item.ticket_instance_id) {
@@ -422,7 +430,12 @@ class OrderItems extends Component {
 					order={order}
 					type={showRefundType}
 					selectedRefundOrderItem={selectedRefundOrderItem}
-					onSuccess={() => this.setState({ selectedRefundOrderItem: {} })}
+					onSuccess={() =>
+						this.setState(
+							{ selectedRefundOrderItem: {} },
+							this.setRefundAmount.bind(this)
+						)
+					}
 				/>
 
 				{/*DESKTOP*/}
@@ -471,6 +484,11 @@ class OrderItems extends Component {
 									<React.Fragment>
 										<Typography className={classes.headingText}>
 											{code}
+											{discountInCents ? (
+												<span className={classes.discountValueText}>
+													&nbsp;/&nbsp;{dollars(discountInCents * -1, true)}
+												</span>
+											) : null}
 										</Typography>
 										<Typography className={classes.subText}>
 											{codeType}
@@ -537,6 +555,11 @@ class OrderItems extends Component {
 									</Typography>
 									<Typography className={classes.mobileValueText}>
 										{code || "-"}
+										{discountInCents ? (
+											<span className={classes.discountValueText}>
+												&nbsp;/&nbsp;{dollars(discountInCents * -1, true)}
+											</span>
+										) : null}
 									</Typography>
 									<Typography className={classes.mobileSubText}>
 										{codeType}
