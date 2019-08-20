@@ -19,7 +19,6 @@ public class TicketConfirmationDetails extends BaseComponent{
 		super(driver);
 	}
 	
-	
 	public String getTicketQuantity() {
 		explicitWaitForVisiblity(ticketsContainer);
 		WebElement quantityInfoEl = SeleniumUtils.getChildElementFromParentLocatedBy(
@@ -29,8 +28,5 @@ public class TicketConfirmationDetails extends BaseComponent{
 		String quantity = split[0];
 		return quantity;
 	}
-	
-	
-	
 	
 }

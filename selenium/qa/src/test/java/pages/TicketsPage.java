@@ -146,13 +146,5 @@ public class TicketsPage extends BasePage {
 
 	private boolean checkIfMoreEventsAreBeingPurchased() {
 		return isNotificationDisplayedWithMessage(MsgConstants.MORE_THAN_ONE_EVENT_PURCHASE_ERROR, 4);
-//		boolean retVal = isExplicitlyWaitVisible(5, message);
-//		if (retVal) {
-//			String msg = message.getText();
-//			if (msg != null && !msg.isEmpty() && msg.contains(MsgConstants.MORE_THAN_ONE_EVENT_PURCHASE_ERROR)) {
-//				retVal = true;
-//			}
-//		}
-//		return retVal;
 	}
 }
