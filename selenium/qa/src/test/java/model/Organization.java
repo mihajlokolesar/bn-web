@@ -1,9 +1,12 @@
 package model;
 
+import java.io.Serializable;
+
 import utils.ProjectUtils;
 
-public class Organization {
+public class Organization implements Serializable {
 	
+	private static final long serialVersionUID = -2120443225758565920L;
 	private String name;
 	private String phoneNumber;
 	private String timeZone;

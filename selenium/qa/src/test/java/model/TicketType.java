@@ -1,7 +1,10 @@
 package model;
 
-public class TicketType {
+import java.io.Serializable;
+
+public class TicketType implements Serializable{
 	
+	private static final long serialVersionUID = 4807652309876731369L;
 	private String ticketTypeName;
 	private String capacity;
 	private String price;

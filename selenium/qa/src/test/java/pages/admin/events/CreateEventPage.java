@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -89,15 +90,15 @@ public class CreateEventPage extends BasePage {
 	public void clickOnImportSettingDialogNoThanks() {
 		waitVisibilityAndClick(dissmisImportSettingDialog);
 	}
-	
-	
+
 	public boolean createEventPageSteps(Event event) {
 		isAtPage();
 		clickOnImportSettingDialogNoThanks();
 		enterArtistName(event.getArtistName());
 		enterEventName(event.getEventName());
 		selectVenue(event.getVenueName());
-		enterDatesAndTimes(event.getStartDate(), event.getEndDate(), event.getStartTime(), event.getEndTime(), event.getDoorTime());
+		enterDatesAndTimes(event.getStartDate(), event.getEndDate(), event.getStartTime(), event.getEndTime(),
+				event.getDoorTime());
 		addTicketTypes(event.getTicketTypes());
 		clickOnPublish();
 		boolean retVal = checkMessage();
@@ -152,7 +153,7 @@ public class CreateEventPage extends BasePage {
 	public void enterEventName(String eventName) {
 		waitVisibilityAndClick(eventNameField);
 		String text = eventNameField.getAttribute("value");
-		for(int i=0;i<text.length();i++) {
+		for (int i = 0; i < text.length(); i++) {
 			eventNameField.sendKeys(Keys.BACK_SPACE);
 		}
 		waitForTime(500);
@@ -177,9 +178,9 @@ public class CreateEventPage extends BasePage {
 		AddTicketTypeComponent ticketType = new AddTicketTypeComponent(driver);
 		ticketType.addNewTicketType(type.getTicketTypeName(), type.getCapacity(), type.getPrice());
 	}
-	
+
 	public void addTicketTypes(List<TicketType> list) {
-		for(TicketType type : list) {
+		for (TicketType type : list) {
 			addNewTicketType(type);
 		}
 	}
@@ -189,13 +190,7 @@ public class CreateEventPage extends BasePage {
 	}
 
 	public boolean checkMessage() {
-		explicitWait(15, ExpectedConditions.visibilityOf(message));
-		String msg = message.getText();
-		if (msg.contains(MsgConstants.EVENT_PUBLISHED)) {
-			return true;
-		} else {
-			return false;
-		}
+		return isNotificationDisplayedWithMessage(MsgConstants.EVENT_PUBLISHED);
 	}
 
 	private void clickOnUploadImage() {

@@ -1,7 +1,10 @@
 package model;
 
-public class Purchase {
+import java.io.Serializable;
 
+public class Purchase implements Serializable {
+
+	private static final long serialVersionUID = 4491179406895426817L;
 	private Event event;
 	private CreditCard creditCard;
 	private int numberOfTickets;

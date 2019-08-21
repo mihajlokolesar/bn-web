@@ -1,5 +1,6 @@
 package pages;
 
+import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
@@ -21,7 +22,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import config.BrowsersEnum;
 import config.DriverFactory;
 
-public class AbstractBase {
+public class AbstractBase implements Serializable{
 
 	public WebDriver driver;
 
@@ -58,6 +59,10 @@ public class AbstractBase {
 		return explicitWait(15, ExpectedConditions.visibilityOf(element));
 	}
 	
+	public <T,V> T explicitWaitForVisiblityForAllElements(By by) {
+		return explicitWait(15, ExpectedConditions.visibilityOfAllElementsLocatedBy(by));
+	}
+ 	
 	public void explicitWaitForVisibilityAndClickableWithClick(WebElement element) {
 		explicitWaitForVisiblity(element);
 		explicitWaitForClickable(element);
@@ -93,11 +98,15 @@ public class AbstractBase {
 		}
 		return retVal;
 	}
-
+	
 	public boolean isExplicitlyWaitVisible(By byElement) {
+		return isExplicitlyWaitVisible(15, byElement);
+	}
+
+	public boolean isExplicitlyWaitVisible(int waitForSeconds, By byElement) {
 		boolean retVal = false;
 		try {
-			explicitWait(15, ExpectedConditions.visibilityOfElementLocated(byElement));
+			explicitWait(waitForSeconds, ExpectedConditions.visibilityOfElementLocated(byElement));
 			retVal = true;
 		} catch (Exception e) {
 			retVal = false;
@@ -129,7 +138,7 @@ public class AbstractBase {
 		explicitWaitForClickable(element);
 		element.sendKeys(value);
 	}
-
+	
 	public void waitForTime(int timeout, long poolingInterval) {
 		try {
 			new WebDriverWait(driver, timeout, poolingInterval)

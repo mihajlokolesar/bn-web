@@ -8,7 +8,10 @@ public class DriverFactory {
 		
 		DriverManager manager = null;
 		try {
+			System.setProperty("webdriver.chrome.driver","/home/simple-task/programs/drivers/linux/chromedriver");
+			System.setProperty("webdriver.gecko.driver", "/home/simple-task/programs/drivers/linux/geckodriver");
 			browser = System.getProperty("browser");
+			browser = "ff";
 			BrowsersEnum browserEnum = BrowsersEnum.getEnumForCode(browser);
 
 			switch (browserEnum) {

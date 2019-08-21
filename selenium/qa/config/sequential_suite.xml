@@ -11,6 +11,7 @@
       <class name="test.PurchaseStepsIT"/>
       <class name="test.PurchaseWithTicketChangeStepsIT"/>
       <!-- <class name="test.TransferTicketStepsIT"/> -->
+      <class name="test.CancelEventStepsIT"/>
     </classes>
   </test>
   <test name="Firefox">
@@ -23,6 +24,7 @@
       <class name="test.PurchaseStepsIT"/> 
       <class name="test.PurchaseWithTicketChangeStepsIT"/>
      <!--  <class name="test.TransferTicketStepsIT"/> -->
+      <class name="test.CancelEventStepsIT/>"
     </classes>
   </test>  
  </suite>

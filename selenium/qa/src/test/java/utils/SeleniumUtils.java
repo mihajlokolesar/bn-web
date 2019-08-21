@@ -95,8 +95,17 @@ public class SeleniumUtils {
 	public static WebElement getChildElementFromParentLocatedBy(WebElement parent, By relativeChildBy, WebDriver driver) {
 		WebElement element = new WebDriverWait(driver, 15).until(ExpectedConditions.visibilityOf(parent.findElement(relativeChildBy)));
 		return element;
-		
-		
+	}
+	
+	public static boolean isChildElementVisibleFromParentLocatedBy(WebElement parent, By relativeChildBy, WebDriver driver) {
+		boolean retVal = false;
+		try {
+			WebElement child = getChildElementFromParentLocatedBy(parent, relativeChildBy, driver);
+			retVal = true;
+		}catch (Exception e) {
+			retVal = false;
+		}
+		return retVal;
 	}
 
 }
