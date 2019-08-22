@@ -20,7 +20,7 @@ import utils.SeleniumUtils;
 
 public class CancelEventStepsIT extends BaseSteps {
 
-	@Test(dataProvider = "cancel_event_steps", priority=9)
+	@Test(dataProvider = "cancel_event_steps", priority = 9)
 	public void cancelEventSteps(User superuser, Event event) throws Exception {
 		Event genericEvent = SerializationUtils.clone(event);
 		genericEvent.setEventName(genericEvent.getEventName());
@@ -41,7 +41,7 @@ public class CancelEventStepsIT extends BaseSteps {
 			adminEvents = new AdminEventsPage(driver);
 			adminEvents.isAtPage();
 		}
-		
+
 		AdminEventComponent selectedEvent = adminEvents.findOpenedEventByName(genericEvent.getEventName());
 		if (selectedEvent == null) {
 
@@ -52,12 +52,12 @@ public class CancelEventStepsIT extends BaseSteps {
 			Assert.assertTrue(retVal, "Event with name: " + event.getEventName() + " not created");
 			String path = SeleniumUtils.getUrlPath(driver);
 			retVal = retVal && path.contains("edit");
-			
+
 			sideBar.clickOnEvents();
 			adminEvents.isAtPage();
-			selectedEvent = adminEvents.findEventByName(genericEvent.getEventName());
+			selectedEvent = adminEvents.findOpenedEventByName(event.getEventName());
 		}
-		
+
 		selectedEvent.cancelEvent();
 		login.logOut();
 	}
@@ -67,7 +67,7 @@ public class CancelEventStepsIT extends BaseSteps {
 		User superUser = User.generateSuperUser();
 		Event event = Event.generateEvent();
 		event.setEventName("TestNameCancelEvent");
-		return new Object[][] { { superUser, event} };
+		return new Object[][] { { superUser, event } };
 	}
 
 }

@@ -74,7 +74,7 @@ public class AdminEventComponent extends BaseComponent {
 
 	private void findActionAndClickInDropDown(By by) {
 		List<WebElement> elements = explicitWaitForVisiblityForAllElements(by);
-		for (int i = elements.size() - 1; i == 0; i--) {
+		for (int i = elements.size() - 1; i >= 0; i--) {
 			WebElement e = elements.get(i);
 			if (isExplicitlyWaitVisible(e)) {
 				explicitWaitForClickable(e);
