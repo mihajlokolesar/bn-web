@@ -87,6 +87,9 @@ const TicketCard = ({
 
 	const showAllDetails = !shortened;
 
+	const ticketFacePriceInCents =
+		total_price_in_cents - fees_price_in_cents + discount_price_in_cents;
+
 	if (ticket_instance_id) {
 		return (
 			<Card className={classes.root}>
@@ -141,7 +144,7 @@ const TicketCard = ({
 						<Typography style={colStyles[4]}>1</Typography>
 					) : null}
 					<Typography style={colStyles[5]}>
-						{dollars(total_price_in_cents - fees_price_in_cents)}
+						{dollars(ticketFacePriceInCents)}
 					</Typography>
 					{showAllDetails ? (
 						<Typography style={colStyles[6]} className={classes.statusText}>

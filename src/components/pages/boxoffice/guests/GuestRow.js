@@ -134,7 +134,14 @@ const GuestRow = props => {
 		];
 
 		ticketRows = tickets.map(ticket => {
-			const { id, ticket_type, price_in_cents, order_id, status } = ticket;
+			const {
+				id,
+				ticket_type,
+				price_in_cents,
+				order_id,
+				status,
+				event_id
+			} = ticket;
 			const isPurchased = status === "Purchased";
 
 			return (
@@ -152,7 +159,7 @@ const GuestRow = props => {
 						{order_id ? (
 							<StyledLink
 								underlined
-								href={`/orders/${order_id}`}
+								href={`/admin/events/${event_id}/dashboard/orders/manage/${order_id}`}
 								target="_blank"
 							>
 								{order_id.slice(-8)}

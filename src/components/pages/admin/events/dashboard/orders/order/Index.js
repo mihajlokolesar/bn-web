@@ -104,14 +104,14 @@ class SingleOrder extends Component {
 				const platform = is_box_office ? "Box office" : data.platform || "";
 
 				let fees_in_cents = 0;
-				items.forEach(({ item_type, unit_price_in_cents }) => {
+				items.forEach(({ item_type, unit_price_in_cents, quantity }) => {
 					//Only include fee type items
 					if (
 						["CreditCardFees", "PerUnitFees", "CreditCardFees"].indexOf(
 							item_type
 						) > -1
 					) {
-						fees_in_cents += unit_price_in_cents;
+						fees_in_cents += unit_price_in_cents * quantity;
 					}
 				});
 
