@@ -3,12 +3,12 @@
 <suite name="Suite">
   <test verbose="1" name="Test">
      <classes>
-      <!-- <class name="test.LoginWithFacebookStepsIT"/> -->
-      <!-- <class name="test.LoginStepsIT"/> -->
-      <!-- <class name="test.SignUpStepsIT"/> -->
+      <class name="test.LoginWithFacebookStepsIT"/>
+      <class name="test.LoginStepsIT"/>
+      <class name="test.SignUpStepsIT"/>
       <class name="test.ForgotPasswordStepsIT"/>
-      <!-- <class name="test.CreateOrganizationStepsIT"/> -->
-      <!-- <class name="test.CreateEventStepsIT"/> -->
+      <class name="test.CreateOrganizationStepsIT"/>
+      <class name="test.CreateEventStepsIT"/>
       <class name="test.PurchaseStepsIT"/>
       <class name="test.PurchaseWithTicketChangeStepsIT"/>
       <!-- <class name="test.TransferTicketStepsIT"/> -->
