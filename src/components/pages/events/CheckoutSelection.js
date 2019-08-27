@@ -96,6 +96,8 @@ class CheckoutSelection extends Component {
 	constructor(props) {
 		super(props);
 
+		this.eventId = this.props.match.params.id;
+
 		this.state = {
 			errors: {},
 			ticketSelection: null,
@@ -134,15 +136,9 @@ class CheckoutSelection extends Component {
 			);
 		}
 
-		if (
-			this.props.match &&
-			this.props.match.params &&
-			this.props.match.params.id
-		) {
-			const { id } = this.props.match.params;
-
+		if (this.eventId) {
 			selectedEvent.refreshResult(
-				id,
+				this.eventId,
 				errorMessage => {
 					notifications.show({
 						message: errorMessage,
@@ -191,7 +187,7 @@ class CheckoutSelection extends Component {
 				if (ticket_type_id) {
 					ticketSelection[ticket_type_id] = {
 						quantity: ticketSelection[ticket_type_id]
-							? ticketSelection[ticket_type_id] + quantity
+							? ticketSelection[ticket_type_id].quantity + quantity
 							: quantity,
 						redemption_code: redemption_code
 					};
@@ -286,20 +282,35 @@ class CheckoutSelection extends Component {
 
 	clearAppliedPromoCodes() {
 		//Remove codes from selected tickets to not apply them when adding to cart
-		this.setState(({ ticketSelection }) => {
-			if (ticketSelection) {
-				Object.keys(ticketSelection).forEach(id => {
-					if (ticketSelection[id]) {
-						delete ticketSelection[id].redemption_code;
-					}
-				});
+		this.setState(
+			({ ticketSelection }) => {
+				if (ticketSelection) {
+					Object.keys(ticketSelection).forEach(id => {
+						if (ticketSelection[id]) {
+							delete ticketSelection[id].redemption_code;
+						}
+					});
+				}
+
+				return { ticketSelection };
+			},
+			() => {
+				//Remove from ticket types in store
+				selectedEvent.removePromoCodesFromTicketTypes();
+
+				//Update the ticket types so limit details with no promo code applied are used
+				selectedEvent.refreshResult(
+					this.eventId,
+					errorMessage => {
+						notifications.show({
+							message: errorMessage,
+							variant: "error"
+						});
+					},
+					() => {}
+				);
 			}
-
-			return { ticketSelection };
-		});
-
-		//Remove from ticket types in store
-		selectedEvent.removePromoCodesFromTicketTypes();
+		);
 	}
 
 	onSubmitPromo(code) {

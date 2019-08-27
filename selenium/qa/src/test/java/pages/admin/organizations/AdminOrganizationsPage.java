@@ -3,7 +3,6 @@ package pages.admin.organizations;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import pages.BasePage;
 import utils.Constants;
@@ -23,8 +22,6 @@ public class AdminOrganizationsPage extends BasePage {
 	}
 
 	public void clickOnCreateOrganizationButton() {
-//		explicitWait(15, ExpectedConditions.visibilityOf(createOrganizationButton));
-//		createOrganizationButton.click();
 		explicitWaitForVisibilityAndClickableWithClick(createOrganizationButton);
 	}
 
