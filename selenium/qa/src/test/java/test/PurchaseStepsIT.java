@@ -29,7 +29,7 @@ public class PurchaseStepsIT extends BaseSteps {
 		
 		Assert.assertTrue(eventsFacade.thenUserIsAtTicketsPage());
 		
-		eventsFacade.whenUserSelectsNumberOfTicketsAndClicksOnContiue(purchase);
+		eventsFacade.whenUserSelectsNumberOfTicketsAndClicksOnContinue(purchase);
 		eventsFacade.whenUserLogsInOnTicketsPage(user);
 		eventsFacade.thenUserIsAtConfirmationPage();
 		eventsFacade.whenUserEntersCreditCardDetailsAndClicksOnPurchase(purchase.getCreditCard());

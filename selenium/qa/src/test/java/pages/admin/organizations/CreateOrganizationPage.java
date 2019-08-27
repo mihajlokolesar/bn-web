@@ -52,7 +52,7 @@ public class CreateOrganizationPage extends BasePage {
 		enterOrganizationAddress(org.getLocation());
 	}
 
-	public void enterOrganizationAddress(String address) {
+	private void enterOrganizationAddress(String address) {
 		explicitWait(15, ExpectedConditions.visibilityOf(addressAutoSearchField));
 		waitForTime(2000);
 		addressAutoSearchField.sendKeys(address);

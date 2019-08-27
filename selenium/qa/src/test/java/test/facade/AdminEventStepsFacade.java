@@ -55,8 +55,7 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 	}
 
 	public boolean thenEventShouldBeCanceled(Event event) {
-		AdminEventsPage adminEventsPage = new AdminEventsPage(driver);
-		AdminEventComponent componentEvent = adminEventsPage.findEventByName(event.getEventName());
+		AdminEventComponent componentEvent = adminEvents.findEventByName(event.getEventName());
 		if (componentEvent != null) {
 			return componentEvent.isEventCanceled();
 		} else {

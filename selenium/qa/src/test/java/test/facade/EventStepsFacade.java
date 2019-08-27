@@ -102,7 +102,7 @@ public class EventStepsFacade extends BaseFacadeSteps {
 		eventsPage.getHeader().searchEvents(purchase.getEvent().getArtistName());
 	}
 
-	public void whenUserSelectsNumberOfTicketsAndClicksOnContiue(Purchase purchase) {
+	public void whenUserSelectsNumberOfTicketsAndClicksOnContinue(Purchase purchase) {
 		ticketPage.selectTicketNumberAndClickOnContinue(purchase.getNumberOfTickets());
 	}
 

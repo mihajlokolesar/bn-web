@@ -20,7 +20,7 @@ import utils.ProjectUtils;
 
 public class CreateEventWithAdditionalOptionsStepsIT extends BaseSteps {
 
-	@Test(dataProvider = "event_with_additional_opt_different_sales_date", priority = 10)
+	@Test(dataProvider = "event_with_additional_opt_different_sales_date", priority = 10, retryAnalyzer = utils.RetryAnalizer.class)
 	public void createEventWithAdditionalOptionsDifferentSalesDate(User superuser, Event event) throws Exception {
 		LoginStepsFacade loginFacade = new LoginStepsFacade(driver);
 		AdminEventStepsFacade adminEventFacade = new AdminEventStepsFacade(driver);

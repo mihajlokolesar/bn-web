@@ -47,7 +47,8 @@ public class ForgotPasswordStepsIT extends BaseSteps {
 
 	@DataProvider(name = "reset_password")
 	public static Object[][] data() {
-		return new Object[][] { { "bluetestneouser@mailinator.com", "test1111", "test2222", false },
+		return new Object[][] { 
+				{ "bluetestneouser@mailinator.com", "test1111", "test2222", false },
 				{ "bluetestneouser@mailinator.com", "test1111", "test1111", true } };
 	}
 
