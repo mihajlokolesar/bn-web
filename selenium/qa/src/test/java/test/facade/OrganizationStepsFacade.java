@@ -5,8 +5,8 @@ import model.Organization;
 import pages.admin.events.AdminEventsPage;
 import pages.admin.organizations.AdminOrganizationsPage;
 import pages.admin.organizations.CreateOrganizationPage;
-import pages.components.AdminSideBar;
 import pages.components.Header;
+import pages.components.admin.AdminSideBar;
 
 public class OrganizationStepsFacade extends BaseFacadeSteps {
 	

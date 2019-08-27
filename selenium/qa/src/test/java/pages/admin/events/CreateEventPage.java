@@ -10,8 +10,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import model.TicketType;
 import pages.BasePage;
-import pages.components.AddTicketTypeComponent;
 import pages.components.TimeMenuDropDown;
+import pages.components.admin.AddTicketTypeComponent;
 import utils.Constants;
 import utils.MsgConstants;
 import utils.SeleniumUtils;

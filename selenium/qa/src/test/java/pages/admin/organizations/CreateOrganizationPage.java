@@ -71,8 +71,6 @@ public class CreateOrganizationPage extends BasePage {
 	}
 
 	private void enterOrganizationName(String organizationName) {
-//		explicitWaitForVisiblity(nameField);
-//		nameField.sendKeys(organizationName);
 		waitVisibilityAndSendKeys(nameField, organizationName);
 	}
 

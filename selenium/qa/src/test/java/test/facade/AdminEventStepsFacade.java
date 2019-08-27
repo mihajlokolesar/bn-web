@@ -10,8 +10,8 @@ import org.testng.Assert;
 import model.Event;
 import pages.admin.events.AdminEventsPage;
 import pages.admin.events.CreateEventPage;
-import pages.components.AdminSideBar;
 import pages.components.admin.AdminEventComponent;
+import pages.components.admin.AdminSideBar;
 import utils.ProjectUtils;
 import utils.SeleniumUtils;
 

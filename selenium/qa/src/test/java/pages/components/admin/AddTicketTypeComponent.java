@@ -1,4 +1,4 @@
-package pages.components;
+package pages.components.admin;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -11,6 +11,8 @@ import model.TicketType;
 import model.AdditionalOptionsTicketType.SaleEnd;
 import model.AdditionalOptionsTicketType.SaleStart;
 import pages.BaseComponent;
+import pages.components.GenericDropDown;
+import pages.components.TimeMenuDropDown;
 import utils.SeleniumUtils;
 
 public class AddTicketTypeComponent extends BaseComponent {
@@ -90,7 +92,7 @@ public class AddTicketTypeComponent extends BaseComponent {
 
 	private void addAdditionalOptions(AdditionalOptionsTicketType options) {
 		clickOnAdditionalOptionsButton();
-		waitForTime(1500);
+		explicitWaitForVisiblity(startSalesOptions);
 		if (options.getSaleStart() != null) {
 			fillOutSaleStartOptions(options);
 		}

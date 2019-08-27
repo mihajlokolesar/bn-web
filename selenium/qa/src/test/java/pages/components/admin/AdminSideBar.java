@@ -1,9 +1,8 @@
-package pages.components;
+package pages.components.admin;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import pages.BaseComponent;
 import pages.admin.events.AdminEventsPage;
@@ -18,18 +17,13 @@ public class AdminSideBar extends BaseComponent{
 
 	public AdminSideBar(WebDriver driver) {
 		super(driver);
-		PageFactory.initElements(driver, this);
 	}
 	
 	public void clickOnOrganizations() {
-//		explicitWaitForVisiblity(superAdminOrganizations);
-//		superAdminOrganizations.click();
 		explicitWaitForVisibilityAndClickableWithClick(superAdminOrganizations);
 	}
 	
 	public AdminEventsPage clickOnEvents() {
-//		explicitWaitForVisiblity(adminEventsLink);
-//		adminEventsLink.click();
 		explicitWaitForVisibilityAndClickableWithClick(adminEventsLink);
 		return new AdminEventsPage(driver);
 	}
