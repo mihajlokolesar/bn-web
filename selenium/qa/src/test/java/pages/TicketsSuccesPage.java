@@ -25,7 +25,7 @@ public class TicketsSuccesPage extends BasePage{
 		return explicitWait(20, ExpectedConditions.urlContains("tickets/success?order_id")); 
 	}
 	
-	public void enterPhoneNumber(String phoneNumber) {
+	public void enterPhoneNumberAndClickSend(String phoneNumber) {
 		waitVisibilityAndSendKeysSlow(mobileNumberField, phoneNumber);
 		waitVisibilityAndClick(sendMeTextButton);
 	}

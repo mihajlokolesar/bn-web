@@ -9,7 +9,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import pages.BasePage;
 import pages.mailinator.inbox.MailinatorInboxPage;
 import utils.Constants;
-import utils.SeleniumUtils;
 
 public class MailinatorHomePage extends BasePage {
 

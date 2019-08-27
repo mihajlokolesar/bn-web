@@ -1,17 +1,14 @@
 package pages.mailinator.inbox;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import pages.BasePage;
-import pages.TicketTransferPage;
 import pages.components.ClaimTicketFrame;
 import pages.components.PurchaseMailFrame;
-import pages.components.TransferTicketSenderMailFrame;
 import utils.SeleniumUtils;
 
 public class MailinatorInboxPage extends BasePage {

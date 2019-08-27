@@ -2,6 +2,7 @@
 	"capabilities": {
     "build": "testng-browserstack",
     "browserstack.debug": true,
+    "browserstack.console": "errors",
     "resolution": "1600x1200"
   },
 

@@ -2,7 +2,6 @@ package pages.mailinator.inbox;
 
 import org.openqa.selenium.WebDriver;
 
-import pages.BasePage;
 import pages.components.TransferTicketSenderMailFrame;
 import utils.SeleniumUtils;
 

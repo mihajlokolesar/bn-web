@@ -4,8 +4,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import pages.BaseComponent;
-
 public class TransferCancelDialog extends DialogContainerComponent {
 
 	@FindBy(xpath = "//div/button[span[contains(text(),'Confirm')]]")

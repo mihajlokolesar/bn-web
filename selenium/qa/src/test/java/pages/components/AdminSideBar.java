@@ -7,7 +7,6 @@ import org.openqa.selenium.support.PageFactory;
 
 import pages.BaseComponent;
 import pages.admin.events.AdminEventsPage;
-import pages.admin.organizations.AdminOrganizationsPage;
 
 public class AdminSideBar extends BaseComponent{
 	
@@ -22,16 +21,16 @@ public class AdminSideBar extends BaseComponent{
 		PageFactory.initElements(driver, this);
 	}
 	
-	public AdminOrganizationsPage clickOnOrganizations() {
-		explicitWaitForVisiblity(superAdminOrganizations);
-		superAdminOrganizations.click();
-		return new AdminOrganizationsPage(driver);
-		
+	public void clickOnOrganizations() {
+//		explicitWaitForVisiblity(superAdminOrganizations);
+//		superAdminOrganizations.click();
+		explicitWaitForVisibilityAndClickableWithClick(superAdminOrganizations);
 	}
 	
 	public AdminEventsPage clickOnEvents() {
-		explicitWaitForVisiblity(adminEventsLink);
-		adminEventsLink.click();
+//		explicitWaitForVisiblity(adminEventsLink);
+//		adminEventsLink.click();
+		explicitWaitForVisibilityAndClickableWithClick(adminEventsLink);
 		return new AdminEventsPage(driver);
 	}
 

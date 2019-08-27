@@ -8,6 +8,8 @@ public class TicketType implements Serializable{
 	private String ticketTypeName;
 	private String capacity;
 	private String price;
+	private AdditionalOptionsTicketType additionalOptions;
+	
 		
 	public TicketType(String ticketTypeName, String capacity, String price) {
 		super();
@@ -36,5 +38,14 @@ public class TicketType implements Serializable{
 	public void setPrice(String price) {
 		this.price = price;
 	}
+	public AdditionalOptionsTicketType getAdditionalOptions() {
+		return additionalOptions;
+	}
+	public void setAdditionalOptions(AdditionalOptionsTicketType additionalOptions) {
+		this.additionalOptions = additionalOptions;
+	}
+	
+	
+	
 	
 }

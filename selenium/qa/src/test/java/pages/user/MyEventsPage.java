@@ -1,8 +1,6 @@
 package pages.user;
 
 import java.util.List;
-import java.util.NoSuchElementException;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.NotFoundException;
 import org.openqa.selenium.WebDriver;
@@ -98,17 +96,13 @@ public class MyEventsPage extends BasePage {
 		return false;
 	}
 
-	public WebElement findEventByName(String eventName) {
-		return explicitWait(15, ExpectedConditions.visibilityOfElementLocated(
-				By.xpath("//body//main//div[div[div[div[p[text()='" + eventName + "']]]]]")));
+	private void clickOnEventViewMyTickets(WebElement eventElement) {
+		WebElement viewMyTicketsButton = SeleniumUtils.getChildElementFromParentLocatedBy(eventElement,
+				By.xpath(relativeViewMyTicketsLink), driver);
+		explicitWaitForVisibilityAndClickableWithClick(viewMyTicketsButton);
 	}
-
-	public EventComponent clickOnViewMyTicketOfEvent(WebElement eventParent) {
-		clickOnEventViewMyTickets(eventParent);
-		return getSelectedEvent();
-	}
-
-	public boolean isTicketInEvent(WebElement eventParent, String ticketNumber, String orderNumber) {
+	
+	private boolean isTicketInEvent(WebElement eventParent, String ticketNumber, String orderNumber) {
 		clickOnEventViewMyTickets(eventParent);
 		List<WebElement> list = getSelectedEventsTicketList();
 		for (WebElement openEvent : list) {
@@ -126,13 +120,7 @@ public class MyEventsPage extends BasePage {
 		return false;
 	}
 
-	private void clickOnEventViewMyTickets(WebElement eventElement) {
-		WebElement viewMyTicketsButton = SeleniumUtils.getChildElementFromParentLocatedBy(eventElement,
-				By.xpath(relativeViewMyTicketsLink), driver);
-		explicitWaitForVisibilityAndClickableWithClick(viewMyTicketsButton);
-	}
-
-	public String getEventName(WebElement event) {
+	private String getEventName(WebElement event) {
 		WebElement eventName = event.findElement(By.xpath(".//div/div/div/div/p[2]"));
 		return eventName.getText();
 	}
@@ -153,15 +141,6 @@ public class MyEventsPage extends BasePage {
 			}
 		}
 		return null;
-	}
-
-	public WebElement clickOnFirstOneViewMyTicketsButton() {
-		if (!isEventsPresent()) {
-			throw new NotFoundException("Upcoming events not found");
-		}
-		WebElement viewMyTicketsEl = listOfEvents.get(0).findElement(By.xpath(relativeViewMyTicketsLink));
-		explicitWaitForVisibilityAndClickableWithClick(viewMyTicketsEl);
-		return listOfEvents.get(0);
 	}
 
 	public void enterReceiversMail(User receiver) {

@@ -68,7 +68,7 @@ public class EventComponent extends BaseComponent {
 			if (ticketNum.equals(ticketNumber) && orderNum.equals(orderNumber)) {
 				WebElement cancelTransfer = SeleniumUtils.getChildElementFromParentLocatedBy(selectedRow,
 						By.xpath(relativeCancelTransferlLink), driver);
-				String innerHTML = cancelTransfer.getAttribute("innerHTML");
+				cancelTransfer.getAttribute("innerHTML");
 				explicitWaitForVisiblity(cancelTransfer);
 				cancelTransfer.click();
 				break;

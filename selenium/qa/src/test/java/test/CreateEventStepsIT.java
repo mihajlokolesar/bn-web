@@ -7,44 +7,33 @@ import org.testng.annotations.Test;
 import model.Event;
 import model.User;
 import pages.LoginPage;
-import pages.admin.events.AdminEventsPage;
-import pages.admin.events.CreateEventPage;
-import pages.components.AdminSideBar;
-import pages.components.Header;
-import test.wrappers.CreateOrganizationWrapper;
-import utils.SeleniumUtils;
+import test.facade.AdminEventStepsFacade;
+import test.facade.LoginStepsFacade;
+import test.facade.OrganizationStepsFacade;
 
 public class CreateEventStepsIT extends BaseSteps {
 
-	@Test(dataProvider = "create_event_data", priority = 6)
+	@Test(dataProvider = "create_event_data", priority = 6, retryAnalyzer = utils.RetryAnalizer.class)
 	public void createEvent(User superuser, Event event) throws Exception {
-
-		LoginPage login = new LoginPage(driver);
-		maximizeWindow();
-		login.login(superuser.getEmailAddress(), superuser.getPass());
-		Header header = login.getHeader();
-		AdminEventsPage adminEvents = null;
-		boolean isOrgPresent = header.isOrganizationPresent(event.getOrganization().getName());
 		
-		if (!isOrgPresent) {
-			CreateOrganizationWrapper wr = new CreateOrganizationWrapper();
-			Assert.assertTrue(wr.createOrganization(driver, event.getOrganization()));
-			AdminSideBar sideBar = new AdminSideBar(driver);
-			adminEvents = sideBar.clickOnEvents();
-		} else {
-			header.selectOrganizationFromDropDown(event.getOrganization().getName());
-			adminEvents = new AdminEventsPage(driver);
-			adminEvents.isAtPage();
-		}
-
-		adminEvents.clickCreateEvent();
-
-		CreateEventPage createEvent = new CreateEventPage(driver);
-		boolean retVal = createEvent.createEventPageSteps(event);
-		String path = SeleniumUtils.getUrlPath(driver);
-		retVal = retVal && path.contains("edit");
-		header.logOut();
-		Assert.assertEquals(retVal, true);
+		LoginStepsFacade loginFacade = new LoginStepsFacade(driver);
+		maximizeWindow();
+		OrganizationStepsFacade organizationFacade = new OrganizationStepsFacade(driver);
+		AdminEventStepsFacade adminEventFacade = new AdminEventStepsFacade(driver);
+		
+		//given
+		LoginPage loginPage = loginFacade.givenAdminUserIsLogedIn(superuser);
+		boolean isOrgPresent = organizationFacade.givenOrganizationExist(event.getOrganization());
+		Assert.assertTrue(isOrgPresent, "Organization: " + event.getOrganization().getName() + " does not exist");
+		adminEventFacade.givenUserIsOnAdminEventsPage();
+		
+		//when
+		boolean isEventCreated = adminEventFacade.createEvent(event);
+		
+		//then
+		Assert.assertTrue(isEventCreated, "Event: " + event.getEventName() + " with additional options not created");
+		
+		loginPage.logOut();
 
 	}
 	

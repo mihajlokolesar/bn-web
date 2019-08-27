@@ -18,4 +18,8 @@ public class MsgConstants {
 	public static final String TICKET_TRANSFER_INVALID_MOBILE_NUMBER_OR_EMAIL_ADDRESS_VALIDATION = "Invalid mobile number or email address";
 	public static final String TICKET_TRANSFER_RECEIVING_TICKETS_FAILED = "Receiving tickets failed";
 	public static final String QUERY_ERROR = "Query error";
+	
+	public static String resetPasswordMessage(String mail) {
+		return "Your request has been received; " + mail + " will receive an email shortly with a link to reset your password if it is an account on file";
+	}
 }

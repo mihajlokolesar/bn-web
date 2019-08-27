@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -66,7 +67,7 @@ public class SeleniumUtils {
 		switchToChildWindow(parentHandle, driver);
 		return parentHandle;
 	}
-	
+
 	public static String openLink(String url, WebDriver driver) {
 		String parentHandle = driver.getWindowHandle();
 		String jsScript = "window.open('" + url + "','_self');";
@@ -79,33 +80,43 @@ public class SeleniumUtils {
 		JavascriptExecutor executor = (JavascriptExecutor) driver;
 		executor.executeScript(jsScript, element);
 	}
-	
+
 	public static void jsScrollIntoView(WebElement element, WebDriver driver) {
 		String jsScript = "arguments[0].scrollIntoView(true);";
 		((JavascriptExecutor) driver).executeScript(jsScript, element);
 	}
-	
-	
+
 	public static String getTextOfElemenyLocatedBy(By by, WebDriver driver) {
-		WebElement  element = new WebDriverWait(driver, 15).until(ExpectedConditions.visibilityOfElementLocated(by));
+		WebElement element = new WebDriverWait(driver, 15).until(ExpectedConditions.visibilityOfElementLocated(by));
 		String text = element.getText();
 		return text;
 	}
-	
-	public static WebElement getChildElementFromParentLocatedBy(WebElement parent, By relativeChildBy, WebDriver driver) {
-		WebElement element = new WebDriverWait(driver, 15).until(ExpectedConditions.visibilityOf(parent.findElement(relativeChildBy)));
+
+	public static WebElement getChildElementFromParentLocatedBy(WebElement parent, By relativeChildBy,
+			WebDriver driver) {
+		WebElement element = new WebDriverWait(driver, 15)
+				.until(ExpectedConditions.visibilityOf(parent.findElement(relativeChildBy)));
 		return element;
 	}
-	
-	public static boolean isChildElementVisibleFromParentLocatedBy(WebElement parent, By relativeChildBy, WebDriver driver) {
+
+	public static boolean isChildElementVisibleFromParentLocatedBy(WebElement parent, By relativeChildBy,
+			WebDriver driver) {
 		boolean retVal = false;
 		try {
-			WebElement child = getChildElementFromParentLocatedBy(parent, relativeChildBy, driver);
+			getChildElementFromParentLocatedBy(parent, relativeChildBy, driver);
 			retVal = true;
-		}catch (Exception e) {
+		} catch (Exception e) {
 			retVal = false;
 		}
 		return retVal;
+	}
+
+	public static void clearInputField(WebElement inputField, WebDriver driver) {
+		new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOf(inputField));
+		String text = inputField.getAttribute("value");
+		for (int i = 0; i < text.length(); i++) {
+			inputField.sendKeys(Keys.BACK_SPACE);
+		}
 	}
 
 }

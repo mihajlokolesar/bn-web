@@ -68,12 +68,12 @@ public class TicketsConfirmationPage extends BasePage {
 		driver.switchTo().parentFrame();
 	}
 
-	public void clickOnPurchaseTicketButton() {
+	private void clickOnPurchaseTicketButton() {
 		waitVisibilityAndClick(purchaseTicketButton);
 		waitForTime(400);
 	}
 
-	public void confirmPaymentMethod(String method) {
+	private void confirmPaymentMethod(String method) {
 		if (method.equals("card")) {
 			if (isExplicitlyWaitVisible(5, paymentMethodCard)) {
 				paymentMethodCard.click();

@@ -2,8 +2,6 @@ package test;
 
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
-import org.testng.annotations.Test;
-
 import config.MailinatorEnum;
 import model.User;
 import pages.LoginPage;

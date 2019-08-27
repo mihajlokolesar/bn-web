@@ -3,19 +3,18 @@ package pages.admin.events;
 import java.util.List;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import model.Event;
 import model.TicketType;
 import pages.BasePage;
 import pages.components.AddTicketTypeComponent;
+import pages.components.TimeMenuDropDown;
 import utils.Constants;
 import utils.MsgConstants;
+import utils.SeleniumUtils;
 
 public class CreateEventPage extends BasePage {
 
@@ -91,20 +90,6 @@ public class CreateEventPage extends BasePage {
 		waitVisibilityAndClick(dissmisImportSettingDialog);
 	}
 
-	public boolean createEventPageSteps(Event event) {
-		isAtPage();
-		clickOnImportSettingDialogNoThanks();
-		enterArtistName(event.getArtistName());
-		enterEventName(event.getEventName());
-		selectVenue(event.getVenueName());
-		enterDatesAndTimes(event.getStartDate(), event.getEndDate(), event.getStartTime(), event.getEndTime(),
-				event.getDoorTime());
-		addTicketTypes(event.getTicketTypes());
-		clickOnPublish();
-		boolean retVal = checkMessage();
-		return retVal;
-	}
-
 	public void uploadImage(String imageLink) {
 		clickOnUploadImage();
 		explicitWait(15, ExpectedConditions.frameToBeAvailableAndSwitchToIt(imageUploadIframe));
@@ -152,10 +137,7 @@ public class CreateEventPage extends BasePage {
 
 	public void enterEventName(String eventName) {
 		waitVisibilityAndClick(eventNameField);
-		String text = eventNameField.getAttribute("value");
-		for (int i = 0; i < text.length(); i++) {
-			eventNameField.sendKeys(Keys.BACK_SPACE);
-		}
+		SeleniumUtils.clearInputField(eventNameField, driver);
 		waitForTime(500);
 		waitVisibilityAndSendKeys(eventNameField, eventName);
 	}
@@ -163,26 +145,26 @@ public class CreateEventPage extends BasePage {
 	public void selectVenue(String venueName) {
 		waitVisibilityAndClick(venueDropDownSelect);
 		selectElementFormVenueDropDown(venueName);
-		waitForTime(500);
+		waitForTime(1000);
 		explicitWait(5, ExpectedConditions.textToBePresentInElement(venueDropDownSelect, venueName));
 	}
 
 	private void enterDate(WebElement element, String date) {
 		explicitWaitForVisiblity(element);
-		element.clear();
+		SeleniumUtils.clearInputField(element, driver);
 		waitVisibilityAndSendKeys(element, date);
 	}
-
-	public void addNewTicketType(TicketType type) {
-		waitVisibilityAndClick(addTicketTypeButton);
-		AddTicketTypeComponent ticketType = new AddTicketTypeComponent(driver);
-		ticketType.addNewTicketType(type.getTicketTypeName(), type.getCapacity(), type.getPrice());
-	}
-
+	
 	public void addTicketTypes(List<TicketType> list) {
 		for (TicketType type : list) {
 			addNewTicketType(type);
 		}
+	}
+
+	private void addNewTicketType(TicketType type) {
+		waitVisibilityAndClick(addTicketTypeButton);
+		AddTicketTypeComponent ticketType = new AddTicketTypeComponent(driver);
+		ticketType.addNewTicketType(type);
 	}
 
 	public void clickOnPublish() {
@@ -229,14 +211,8 @@ public class CreateEventPage extends BasePage {
 	 * @param time
 	 */
 	private void selectTime(WebElement element, String time) {
-		waitVisibilityAndClick(element);
-		explicitWaitForVisiblity(timeMenu);
-		WebElement selectedTime = timeMenu.findElement(By.xpath(".//li[contains(text(),'" + time + "')]"));
-		explicitWaitForVisiblity(selectedTime);
-		explicitWaitForClickable(selectedTime);
-		waitForTime(500);
-		selectedTime.click();
-		explicitWait(5, ExpectedConditions.attributeToBe(element, "value", time));
+		TimeMenuDropDown timeDropDown = new TimeMenuDropDown(driver);
+		timeDropDown.selectTime(element, time);
 
 	}
 
