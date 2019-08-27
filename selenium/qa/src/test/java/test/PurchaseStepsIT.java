@@ -13,7 +13,7 @@ import pages.TicketsConfirmationPage;
 import pages.TicketsPage;
 import pages.TicketsSuccesPage;
 import pages.mailinator.MailinatorHomePage;
-import pages.mailinator.MailinatorInboxPage;
+import pages.mailinator.inbox.MailinatorInboxPage;
 import utils.ProjectUtils;
 
 public class PurchaseStepsIT extends BaseSteps {

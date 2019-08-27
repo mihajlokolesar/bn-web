@@ -146,7 +146,7 @@ public class AbstractBase implements Serializable{
 		} catch (Exception e) {
 		}
 	}
-
+	
 	public void waitForTime(long mills) {
 		try {
 			Wait<WebDriver> wait = new FluentWait<WebDriver>(driver).withTimeout(mills, TimeUnit.MILLISECONDS)

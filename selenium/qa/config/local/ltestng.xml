@@ -12,7 +12,7 @@
       <class name="test.PurchaseStepsIT"/>
       <class name="test.PurchaseWithTicketChangeStepsIT"/>
       <!-- <class name="test.TransferTicketStepsIT"/> -->
-      <class name="test.CancelEventStepsIT/>"
+      <class name="test.CancelEventStepsIT"/>
     </classes>
   </test>
 </suite>

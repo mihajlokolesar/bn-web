@@ -3,12 +3,13 @@ package test;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import config.MailinatorEnum;
 import junit.framework.Assert;
 import pages.AccountPage;
 import pages.LoginPage;
 import pages.ResetPasswordPage;
-import pages.mailinator.MailinatorHomePage;
-import pages.mailinator.MailinatorInboxPage;
+import pages.mailinator.MailinatorFactory;
+import pages.mailinator.inbox.ResetPasswordMailinatorPage;
 
 public class ForgotPasswordStepsIT extends BaseSteps {
 
@@ -21,14 +22,9 @@ public class ForgotPasswordStepsIT extends BaseSteps {
 		boolean mailSent = loginPage.enterMailAndClickOnResetPassword(email);
 		Assert.assertEquals(true, mailSent);
 
-		MailinatorHomePage mailinatorHomePage = new MailinatorHomePage(driver);
-		mailinatorHomePage.navigate();
-		String username = email.split("@")[0];
-		mailinatorHomePage.searchForUser(username);
-		mailinatorHomePage.checkIfOnUserInboxPage(username);
-		MailinatorInboxPage inboxPage = new MailinatorInboxPage(driver);
-		inboxPage.goToMail("Reset Your Password");
-		inboxPage.clickOnResetPasswordLinkInMail();
+		ResetPasswordMailinatorPage resetPassInbox = (ResetPasswordMailinatorPage) MailinatorFactory
+				.getInboxPage(MailinatorEnum.RESET_PASSWORD, driver, email);
+		resetPassInbox.clickOnResetPasswordLinkInMail();
 
 		ResetPasswordPage resetPasswordPage = new ResetPasswordPage(driver);
 		resetPasswordPage.fillForm(newPass, confirmPass);

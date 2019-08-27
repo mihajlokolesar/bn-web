@@ -15,7 +15,7 @@ import pages.TicketsPage;
 import pages.TicketsSuccesPage;
 import pages.components.Header;
 import pages.mailinator.MailinatorHomePage;
-import pages.mailinator.MailinatorInboxPage;
+import pages.mailinator.inbox.MailinatorInboxPage;
 import utils.ProjectUtils;
 
 public class PurchaseWithTicketChangeStepsIT extends BaseSteps {

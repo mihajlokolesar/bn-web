@@ -13,6 +13,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import model.User;
 import pages.BasePage;
 import pages.components.UserSideNavBar;
+import pages.components.dialogs.TransferCancelDialog;
 import pages.components.user.EventComponent;
 import utils.Constants;
 import utils.SeleniumUtils;
@@ -46,7 +47,7 @@ public class MyEventsPage extends BasePage {
 
 	@FindBy(xpath = "//body//div[@role='dialog' and @aria-labelledby='dialog-title']//div//button[span[contains(text(),'Cancel')]]")
 	private WebElement cancelButton;
-
+	
 	public MyEventsPage(WebDriver driver) {
 		super(driver);
 		userSideNavBar = new UserSideNavBar(driver);
@@ -123,7 +124,6 @@ public class MyEventsPage extends BasePage {
 			}
 		}
 		return false;
-
 	}
 
 	private void clickOnEventViewMyTickets(WebElement eventElement) {
@@ -167,6 +167,16 @@ public class MyEventsPage extends BasePage {
 	public void enterReceiversMail(User receiver) {
 		waitVisibilityAndSendKeys(emailOrPhoneInputField, receiver.getEmailAddress());
 		waitVisibilityAndClick(sendTicketsButton);
+	}
+	
+	public boolean isAtSelectedEventsPage() {
+		return explicitWait(10, ExpectedConditions.urlContains(Constants.getMyEventsBigNeon() + "?event_id"));
+	}
+	
+	public void confirmTransferTicketCancelation() {
+		TransferCancelDialog dialog = new TransferCancelDialog(driver);
+		dialog.clickOnContinueWithTransfer();
+		dialog.clickOnGotItButton();
 	}
 
 	private boolean isEventsPresent() {

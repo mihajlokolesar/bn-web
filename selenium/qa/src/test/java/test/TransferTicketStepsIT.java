@@ -10,7 +10,7 @@ import pages.SignUpPage;
 import pages.TicketTransferPage;
 import pages.components.user.EventComponent;
 import pages.mailinator.MailinatorHomePage;
-import pages.mailinator.MailinatorInboxPage;
+import pages.mailinator.inbox.MailinatorInboxPage;
 import pages.user.MyEventsPage;
 import utils.MsgConstants;
 
