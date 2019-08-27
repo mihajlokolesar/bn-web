@@ -12,10 +12,15 @@ public class MsgConstants {
 	public static final String ORGANIZATION_CREATED_SUCCESS = "Organization created";
 	public static final String LOGIN_FAILED_ERROR = "Login failed";
 	public static final String EVENT_PUBLISHED = "Event published";
+	public static final String EVENT_SAVED_TO_DRAFT = "Draft saved";
 	public static final String MORE_THAN_ONE_EVENT_PURCHASE_ERROR = "Cart limited to one event for purchasing";
 	public static final String TICKET_TRANSFER_EMAIL_LINK_SENT_SUCCESS = "Ticket transfer link sent";
 	public static final String TICKET_TRANSFER_INVALID_DESTINATION_ERROR = "Invalid destination, please supply valid phone number or email address";
 	public static final String TICKET_TRANSFER_INVALID_MOBILE_NUMBER_OR_EMAIL_ADDRESS_VALIDATION = "Invalid mobile number or email address";
 	public static final String TICKET_TRANSFER_RECEIVING_TICKETS_FAILED = "Receiving tickets failed";
 	public static final String QUERY_ERROR = "Query error";
+	
+	public static String resetPasswordMessage(String mail) {
+		return "Your request has been received; " + mail + " will receive an email shortly with a link to reset your password if it is an account on file";
+	}
 }

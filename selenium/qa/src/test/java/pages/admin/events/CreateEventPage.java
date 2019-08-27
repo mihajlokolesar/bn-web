@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -14,8 +13,10 @@ import model.Event;
 import model.TicketType;
 import pages.BasePage;
 import pages.components.AddTicketTypeComponent;
+import pages.components.TimeMenuDropDown;
 import utils.Constants;
 import utils.MsgConstants;
+import utils.SeleniumUtils;
 
 public class CreateEventPage extends BasePage {
 
@@ -74,8 +75,14 @@ public class CreateEventPage extends BasePage {
 	@FindBy(xpath = "//main//div[aside[contains(text(),'Add another ticket type')]]")
 	private WebElement addTicketTypeButton;
 
+	@FindBy(xpath = "//main//div//button[span[contains(text(),'Save draft')]]")
+	private WebElement saveDraftButton;
+
 	@FindBy(xpath = "//main//div//button[span[contains(text(),'Publish')]]")
 	private WebElement publishButton;
+	
+	@FindBy(xpath = "//main//div//button[span[contains(text(),'Update')]]")
+	private WebElement updateButton;
 
 	public CreateEventPage(WebDriver driver) {
 		super(driver);
@@ -89,20 +96,6 @@ public class CreateEventPage extends BasePage {
 
 	public void clickOnImportSettingDialogNoThanks() {
 		waitVisibilityAndClick(dissmisImportSettingDialog);
-	}
-
-	public boolean createEventPageSteps(Event event) {
-		isAtPage();
-		clickOnImportSettingDialogNoThanks();
-		enterArtistName(event.getArtistName());
-		enterEventName(event.getEventName());
-		selectVenue(event.getVenueName());
-		enterDatesAndTimes(event.getStartDate(), event.getEndDate(), event.getStartTime(), event.getEndTime(),
-				event.getDoorTime());
-		addTicketTypes(event.getTicketTypes());
-		clickOnPublish();
-		boolean retVal = checkMessage();
-		return retVal;
 	}
 
 	public void uploadImage(String imageLink) {
@@ -132,6 +125,7 @@ public class CreateEventPage extends BasePage {
 	 * @param doorTime  format "0.5";"1";"2";..;"10"
 	 */
 	public void enterDatesAndTimes(String startDate, String endDate, String showTime, String endTime, String doorTime) {
+
 		enterDate(startDateField, startDate);
 		enterDate(endDateField, endDate);
 		selectTime(showTimeField, showTime);
@@ -152,10 +146,11 @@ public class CreateEventPage extends BasePage {
 
 	public void enterEventName(String eventName) {
 		waitVisibilityAndClick(eventNameField);
-		String text = eventNameField.getAttribute("value");
-		for (int i = 0; i < text.length(); i++) {
-			eventNameField.sendKeys(Keys.BACK_SPACE);
-		}
+//		String text = eventNameField.getAttribute("value");
+//		for (int i = 0; i < text.length(); i++) {
+//			eventNameField.sendKeys(Keys.BACK_SPACE);
+//		}
+		SeleniumUtils.clearInputField(eventNameField, driver);
 		waitForTime(500);
 		waitVisibilityAndSendKeys(eventNameField, eventName);
 	}
@@ -163,34 +158,51 @@ public class CreateEventPage extends BasePage {
 	public void selectVenue(String venueName) {
 		waitVisibilityAndClick(venueDropDownSelect);
 		selectElementFormVenueDropDown(venueName);
-		waitForTime(500);
+		waitForTime(1000);
 		explicitWait(5, ExpectedConditions.textToBePresentInElement(venueDropDownSelect, venueName));
 	}
 
 	private void enterDate(WebElement element, String date) {
-		explicitWaitForVisiblity(element);
-		element.clear();
-		waitVisibilityAndSendKeys(element, date);
-	}
-
-	public void addNewTicketType(TicketType type) {
-		waitVisibilityAndClick(addTicketTypeButton);
-		AddTicketTypeComponent ticketType = new AddTicketTypeComponent(driver);
-		ticketType.addNewTicketType(type.getTicketTypeName(), type.getCapacity(), type.getPrice());
+		if (date != null && !date.isEmpty()) {
+			explicitWaitForVisiblity(element);
+			SeleniumUtils.clearInputField(element, driver);
+			waitVisibilityAndSendKeys(element, date);
+		}
 	}
 
 	public void addTicketTypes(List<TicketType> list) {
+		if (list == null) {
+			return;
+		}
 		for (TicketType type : list) {
 			addNewTicketType(type);
 		}
 	}
 
+	private void addNewTicketType(TicketType type) {
+		waitVisibilityAndClick(addTicketTypeButton);
+		AddTicketTypeComponent ticketType = new AddTicketTypeComponent(driver);
+		ticketType.addNewTicketType(type);
+	}
+
+	public void clickOnSaveDraft() {
+		explicitWaitForVisibilityAndClickableWithClick(saveDraftButton);
+	}
+
 	public void clickOnPublish() {
 		waitVisibilityAndClick(publishButton);
+	}
+	
+	public void clickOnUpdateButton() {
+		explicitWaitForVisibilityAndClickableWithClick(updateButton);
 	}
 
 	public boolean checkMessage() {
 		return isNotificationDisplayedWithMessage(MsgConstants.EVENT_PUBLISHED);
+	}
+
+	public boolean checkSaveDraftMessage() {
+		return isNotificationDisplayedWithMessage(MsgConstants.EVENT_SAVED_TO_DRAFT);
 	}
 
 	private void clickOnUploadImage() {
@@ -204,12 +216,16 @@ public class CreateEventPage extends BasePage {
 	 * @return
 	 */
 	private WebElement selectDoorTime(String doorTime) {
-		waitVisibilityAndClick(doorTimeContainer);
-		WebElement selectedDoorTime = doorTimeMenuHours
-				.findElement(By.xpath(".//ul//li[@data-value='" + doorTime + "']"));
-		explicitWaitForVisiblity(selectedDoorTime);
-		selectedDoorTime.click();
-		return selectedDoorTime;
+		if (doorTime != null && !doorTime.isEmpty()) {
+			waitVisibilityAndClick(doorTimeContainer);
+			WebElement selectedDoorTime = doorTimeMenuHours
+					.findElement(By.xpath(".//ul//li[@data-value='" + doorTime + "']"));
+			explicitWaitForVisiblity(selectedDoorTime);
+			selectedDoorTime.click();
+			return selectedDoorTime;
+		} else {
+			return null;
+		}
 	}
 
 	private WebElement selectElementFormVenueDropDown(String venue) {
@@ -229,14 +245,10 @@ public class CreateEventPage extends BasePage {
 	 * @param time
 	 */
 	private void selectTime(WebElement element, String time) {
-		waitVisibilityAndClick(element);
-		explicitWaitForVisiblity(timeMenu);
-		WebElement selectedTime = timeMenu.findElement(By.xpath(".//li[contains(text(),'" + time + "')]"));
-		explicitWaitForVisiblity(selectedTime);
-		explicitWaitForClickable(selectedTime);
-		waitForTime(500);
-		selectedTime.click();
-		explicitWait(5, ExpectedConditions.attributeToBe(element, "value", time));
+		if (time != null && !time.isEmpty()) {
+			TimeMenuDropDown timeDropDown = new TimeMenuDropDown(driver);
+			timeDropDown.selectTime(element, time);
+		}
 
 	}
 

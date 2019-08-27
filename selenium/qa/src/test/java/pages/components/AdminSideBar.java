@@ -22,11 +22,9 @@ public class AdminSideBar extends BaseComponent{
 		PageFactory.initElements(driver, this);
 	}
 	
-	public AdminOrganizationsPage clickOnOrganizations() {
+	public void clickOnOrganizations() {
 		explicitWaitForVisiblity(superAdminOrganizations);
 		superAdminOrganizations.click();
-		return new AdminOrganizationsPage(driver);
-		
 	}
 	
 	public AdminEventsPage clickOnEvents() {

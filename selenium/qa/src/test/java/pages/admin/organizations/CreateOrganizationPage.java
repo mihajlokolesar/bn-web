@@ -6,6 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import model.Organization;
 import pages.BasePage;
 import utils.Constants;
 import utils.MsgConstants;
@@ -39,19 +40,18 @@ public class CreateOrganizationPage extends BasePage {
 		setUrl(Constants.getAdminOrganizationsCreate());
 	}
 
-	public void fillFormAndConfirm(String name, String phoneNumber, String timeZone, String address) {
-		fillForm(name, phoneNumber, timeZone, address);
-		explicitWaitForVisiblity(createButton);
-		createButton.click();
+	public void fillFormAndConfirm(Organization org) {
+		fillForm(org);
+//		explicitWaitForVisibilityAndClickableWithClick(createButton);
 	}
-	
-	public void fillForm(String name, String phoneNumber, String timeZone, String address) {
-		enterOrganizationName(name);
-		enterPhoneNumber(phoneNumber);
-		selectTimeZone(timeZone);
-		enterOrganizationAddress(address);
+
+	private void fillForm(Organization org) {
+		enterOrganizationName(org.getName());
+		enterPhoneNumber(org.getPhoneNumber());
+		selectTimeZone(org.getTimeZone());
+		enterOrganizationAddress(org.getLocation());
 	}
-	
+
 	public void enterOrganizationAddress(String address) {
 		explicitWait(15, ExpectedConditions.visibilityOf(addressAutoSearchField));
 		waitForTime(2000);
@@ -60,21 +60,21 @@ public class CreateOrganizationPage extends BasePage {
 				"//form//div[contains(@class,'autocomplete-dropdown-container')]/div[contains(@class,'suggestion-item')]")));
 		explicitWaitForVisibilityAndClickableWithClick(firstInList);
 	}
-	
-	public void enterPhoneNumber(String phoneNumber) {
+
+	private void enterPhoneNumber(String phoneNumber) {
 		explicitWaitForVisiblity(phoneNumberField);
 		phoneNumberField.sendKeys(phoneNumber);
 	}
-	
-	public void selectTimeZone(String timeZone) {
+
+	private void selectTimeZone(String timeZone) {
 		selectOnTimeZone(timeZone);
 	}
-	
-	public void enterOrganizationName(String organizationName) {
+
+	private void enterOrganizationName(String organizationName) {
 		explicitWaitForVisiblity(nameField);
 		nameField.sendKeys(organizationName);
 	}
-	
+
 	private void selectOnTimeZone(String timeZone) {
 		explicitWaitForVisiblity(timeZoneDropDown);
 		timeZoneDropDown.click();

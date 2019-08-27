@@ -22,10 +22,9 @@ public class AdminOrganizationsPage extends BasePage {
 		setUrl(Constants.getAdminOrganizations());
 	}
 
-	public CreateOrganizationPage clickOnCreateOrganizationButton() {
+	public void clickOnCreateOrganizationButton() {
 		explicitWait(15, ExpectedConditions.visibilityOf(createOrganizationButton));
 		createOrganizationButton.click();
-		return new CreateOrganizationPage(driver);
 	}
 
 }

@@ -9,7 +9,6 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import pages.BaseComponent;
@@ -55,7 +54,7 @@ public class Header extends BaseComponent {
 
 	public void searchEvents(String event) {
 		if (event != null) {
-			searchEvents.sendKeys(event);
+			waitVisibilityAndSendKeys(searchEvents, event);
 			searchEvents.submit();
 		}
 	}

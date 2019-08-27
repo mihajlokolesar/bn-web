@@ -3,6 +3,7 @@ package test;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +15,9 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.logging.LogEntries;
+import org.openqa.selenium.logging.LogEntry;
+import org.openqa.selenium.logging.LogType;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -48,6 +52,8 @@ public class BaseSteps {
 				} else if (result.getStatus() == ITestResult.FAILURE) {
 					updateTestStatus(driver, BrowserStackStatusEnum.FAILED, parameters);
 				}
+			} else {
+				analyzeLog();
 			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -70,6 +76,13 @@ public class BaseSteps {
 			restPutProvider(uri, nameValuePair);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	private void analyzeLog() {
+		LogEntries logEntries = driver.manage().logs().get(LogType.BROWSER);
+		for (LogEntry entry : logEntries) {
+			System.out.println(new Date(entry.getTimestamp()) + " " + entry.getLevel() + " " + entry.getMessage());
 		}
 	}
 

@@ -170,7 +170,7 @@ public class LoginPage extends BasePage {
 		explicitWait(10, 500, ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@role='dialog']//form")));
 		waitVisibilityAndSendKeys(forgotPasswordEmailField, email);
 		explicitWaitForVisibilityAndClickableWithClick(forgotPasswordConfirmButton);
-		message = explicitWait(10, 500, ExpectedConditions.visibilityOf(message));
+		isNotificationDisplayedWithMessage(MsgConstants.resetPasswordMessage(email));
 		return true;
 	}
 
