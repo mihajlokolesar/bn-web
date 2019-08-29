@@ -4,7 +4,6 @@ import { withStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 
-import nl2br from "../../../helpers/nl2br";
 import { textColorPrimary, secondaryHex } from "../../../config/theme";
 import ArtistSummary from "../../elements/event/ArtistSummary";
 import { Link } from "react-router-dom";

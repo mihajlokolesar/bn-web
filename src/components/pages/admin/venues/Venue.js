@@ -45,7 +45,6 @@ class Venue extends Component {
 
 		this.state = {
 			venueId,
-			regionId: "",
 			imageUrl: "",
 			name: "",
 			address: "",
@@ -58,10 +57,11 @@ class Venue extends Component {
 			organizationId: "",
 			timezone: moment.tz.guess(),
 			organizations: null,
-			regions: null,
 			errors: {},
 			isSubmitting: false,
-			showManualEntry: false
+			showManualEntry: false,
+			regionOptions: null,
+			regionId: "none"
 		};
 	}
 
@@ -93,7 +93,7 @@ class Venue extends Component {
 						state: state || "",
 						postal_code: postal_code || "",
 						phone: phone || "",
-						regionId: region_id || null,
+						regionId: region_id || "none",
 						imageUrl: promo_image_url,
 						timezone: timezone || moment.tz.guess()
 					});
@@ -113,7 +113,15 @@ class Venue extends Component {
 			.regions.index()
 			.then(response => {
 				const { data, paging } = response.data; //@TODO Implement pagination
-				this.setState({ regions: data });
+
+				const regionOptions = [{ value: "none", label: "No Region" }].concat(
+					data.map(r => ({
+						value: r.id,
+						label: r.name
+					}))
+				);
+
+				this.setState({ regionOptions });
 			})
 			.catch(error => {
 				console.error(error);
@@ -298,7 +306,7 @@ class Venue extends Component {
 		} = this.state;
 
 		const venueDetails = {
-			region_id: regionId,
+			region_id: regionId === "none" ? undefined : regionId,
 			name,
 			phone,
 			address,
@@ -382,17 +390,11 @@ class Venue extends Component {
 	}
 
 	renderRegions() {
-		const { regionId, regions, errors } = this.state;
-		if (regions === null) {
+		const { regionId, regionOptions, errors } = this.state;
+
+		if (regionOptions === null) {
 			return <Typography variant="body1">Loading regions...</Typography>;
 		}
-
-		const regionOptions = [{ value: null, label: "No Region" }].concat(
-			regions.map(r => ({
-				value: r.id,
-				label: r.name
-			}))
-		);
 
 		return (
 			<SelectGroup

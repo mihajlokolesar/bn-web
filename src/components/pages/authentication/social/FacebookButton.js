@@ -148,7 +148,7 @@ class FacebookButtonDisplay extends Component {
 	}
 
 	render() {
-		const { classes, children } = this.props;
+		const { classes, children, scopes } = this.props;
 		const { authenticated, isAuthenticating } = this.state;
 
 		let text = children || "Continue with facebook";
@@ -156,7 +156,7 @@ class FacebookButtonDisplay extends Component {
 		let onClick = () => {
 			this.setState({ isAuthenticating: true });
 			window.FB.login(this.onFBSignIn.bind(this), {
-				scope: "email"
+				scope: scopes.join(",")
 			});
 		};
 
@@ -194,7 +194,12 @@ class FacebookButtonDisplay extends Component {
 FacebookButtonDisplay.propTypes = {
 	classes: PropTypes.object.isRequired,
 	children: PropTypes.string,
-	onSuccess: PropTypes.func.isRequired
+	onSuccess: PropTypes.func.isRequired,
+	scopes: PropTypes.arrayOf(PropTypes.string)
+};
+
+FacebookButtonDisplay.defaultProps = {
+	scopes: ["email"]
 };
 
 export const FacebookButton = withStyles(styles)(FacebookButtonDisplay);

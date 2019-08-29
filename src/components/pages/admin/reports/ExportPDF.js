@@ -108,7 +108,7 @@ class ExportPDF extends Component {
 	}
 
 	onReportLoad() {
-		window.print();
+		setTimeout(() => window.print(), 500);
 	}
 
 	render() {

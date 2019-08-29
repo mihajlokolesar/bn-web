@@ -663,18 +663,19 @@ class EventDashboardContainer extends Component {
 								</React.Fragment>
 							) : null}
 
-							{/*TODO add back when Mike wants to work on it*/}
-							{/*{event.is_external ? null : (*/}
-							{/*<Typography className={classes.menuText}>*/}
-							{/*{this.renderMarketingMenu()}*/}
-							{/*<StyledLink*/}
-							{/*underlined={subheading === "marketing"}*/}
-							{/*onClick={this.handleMarketingMenu.bind(this)}*/}
-							{/*>*/}
-							{/*Marketing*/}
-							{/*</StyledLink>*/}
-							{/*</Typography>*/}
-							{/*)}*/}
+							{!event.is_external &&
+							event.extra_admin_data &&
+							event.extra_admin_data.preview_facebook_enabled ? (
+									<Typography className={classes.menuText}>
+										{this.renderMarketingMenu()}
+										<StyledLink
+											underlined={subheading === "marketing"}
+											onClick={this.handleMarketingMenu.bind(this)}
+										>
+										Marketing
+										</StyledLink>
+									</Typography>
+								) : null}
 
 							<Hidden smDown>
 								<div className={classes.additionalDesktopMenuContent}>

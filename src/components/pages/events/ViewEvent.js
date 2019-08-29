@@ -41,6 +41,7 @@ import { insertScript } from "../../../helpers/insertScript";
 import replaceIdWithSlug from "../../../helpers/replaceIdWithSlug";
 import analytics from "../../../helpers/analytics";
 import getAllUrlParams from "../../../helpers/getAllUrlParams";
+import LinkifyReact from "linkifyjs/react";
 
 const ADDITIONAL_INFO_CHAR_LIMIT = 300;
 
@@ -448,6 +449,11 @@ class ViewEvent extends Component {
 		//Need to move the description and artist details down and adjust the height of the main container. But we don't know how much space the overlayed div will take.
 		const overlayCardHeightAdjustment = this.state.overlayCardHeight - 150;
 
+		const options = {
+			nl2br: true,
+			className: classes.eventDescriptionLink
+		};
+
 		return (
 			<div className={classes.root}>
 				<OrgAnalytics trackingKeys={tracking_keys}/>
@@ -535,11 +541,16 @@ class ViewEvent extends Component {
 									iconUrl={"/icons/event-detail-black.svg"}
 								>
 									<Typography className={classes.eventDetailText}>
-										{showAllAdditionalInfo
-											? nl2br(additional_info)
-											: nl2br(
-												ellipsis(additional_info, ADDITIONAL_INFO_CHAR_LIMIT)
-											  )}
+										{showAllAdditionalInfo ||
+										additional_info.length <= ADDITIONAL_INFO_CHAR_LIMIT ? (
+												<LinkifyReact options={options}>
+													{additional_info}
+												</LinkifyReact>
+											) : (
+												nl2br(
+													ellipsis(additional_info, ADDITIONAL_INFO_CHAR_LIMIT)
+												)
+											)}
 
 										{additional_info &&
 										additional_info.length > ADDITIONAL_INFO_CHAR_LIMIT ? (
