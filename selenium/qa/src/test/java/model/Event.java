@@ -107,11 +107,10 @@ public class Event implements Serializable {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(this.eventName + "; ")
-				.append(this.artistName + "; ").append(this.venueName + "; ")
-				.append(this.startDate + "; ").append(this.endDate + "; ")
-				.append(this.startTime + "; ").append(this.endTime + "; ")
-				.append(this.getOrganization() != null ? this.getOrganization().getName() : "").append("; ");
+		String[] fields = { this.eventName, this.artistName, this.venueName, this.startDate, this.endDate,
+				this.startTime, this.endDate,
+				this.getOrganization() != null ? this.getOrganization().getName() : null };
+		ProjectUtils.appendFields(fields, sb);
 		return sb.toString();
 
 	}

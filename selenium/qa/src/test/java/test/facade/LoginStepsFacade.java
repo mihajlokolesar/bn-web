@@ -25,4 +25,8 @@ public class LoginStepsFacade extends BaseFacadeSteps {
 		loginPage.login(user);
 		return loginPage;
 	}
+	
+	public void logOut() {
+		loginPage.logOut();
+	}
 }

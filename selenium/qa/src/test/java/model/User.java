@@ -47,11 +47,8 @@ public class User implements Serializable{
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(this.emailAddress + "; ");
-		sb.append(this.firstName +"; ");
-		sb.append(this.lastName + "; ");
-		sb.append(this.pass + "; ");
-		sb.append(this.passConfirm);
+		String[] fields = {this.emailAddress, this.firstName, this.lastName, this.pass, this.passConfirm};
+		ProjectUtils.appendFields(fields, sb);
 		return sb.toString();
 	}
 	

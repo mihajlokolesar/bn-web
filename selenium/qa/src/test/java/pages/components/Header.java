@@ -40,10 +40,10 @@ public class Header extends BaseComponent {
 	private WebElement currentOrganizationDropDown;
 
 	@FindBy(xpath = "//header//span[a[contains(@href,'tickets/confirmation')]]|//header//span/div[contains(@to,'tickets/confirmation')]")
-	public WebElement shoppingBasket;
+	private WebElement shoppingBasket;
 
 	@FindBy(xpath = "//body//header//button[span[contains(text(),'Sign In')]]")
-	public WebElement signInButton;
+	private WebElement signInButton;
 
 	private ProfileMenuDropDown profileMenuDropDown;
 
@@ -99,7 +99,6 @@ public class Header extends BaseComponent {
 		waitVisibilityAndClick(currentOrganizationDropDown);
 		CurrentOrganizationDropDown dropDown = new CurrentOrganizationDropDown(driver);
 		dropDown.selectOrganizationByName(organizationName);
-
 	}
 
 	public boolean isOrganizationPresent(String organizationName) throws Exception {
@@ -116,7 +115,7 @@ public class Header extends BaseComponent {
 				throw new Exception(e);
 			}
 		}
-
+		//close the drop down
 		WebElement element = explicitWait(15,
 				ExpectedConditions.visibilityOfElementLocated(By.xpath("//body//div[@id='menu-appbar']")));
 		element.click();

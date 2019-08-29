@@ -8,7 +8,7 @@ import pages.LoginPage;
 
 public class LoginStepsIT extends BaseSteps {
 
-	@Test(dataProvider = "user_credentials", priority = 1)
+	@Test(dataProvider = "user_credentials", priority = 1 , retryAnalyzer = utils.RetryAnalizer.class)
 	public void regularLogin(String username, String password) {
 		maximizeWindow();
 		LoginPage loginPage = new LoginPage(driver);

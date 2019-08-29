@@ -20,26 +20,31 @@ public class GenericDropDown extends BaseComponent{
 	}
 	
 	public void selectElementFromDropDown(By relativeToContainer, String value) {
-		waitVisibilityAndClick(activateDropDown);
-		explicitWaitForVisiblity(dropDownContainer);
-		WebElement selectedElement = dropDownContainer.findElement(relativeToContainer);
-		explicitWaitForVisiblity(selectedElement);
-		explicitWaitForClickable(selectedElement);
-		waitForTime(500);
-		selectedElement.click();
-		explicitWait(5, ExpectedConditions.attributeToBe(activateDropDown, "value", value));
+		if (value != null) {
+			waitForTime(500);
+			waitVisibilityAndClick(activateDropDown);
+			explicitWaitForVisiblity(dropDownContainer);
+			WebElement selectedElement = dropDownContainer.findElement(relativeToContainer);
+			explicitWaitForVisiblity(selectedElement);
+			explicitWaitForClickable(selectedElement);
+			waitForTime(500);
+			selectedElement.click();
+			explicitWait(5, ExpectedConditions.attributeToBe(activateDropDown, "value", value));
+		}
 	}
 	
 	public void selectElementFromDropDownHiddenInput(By relativeToContainer, String value) {
-		waitForTime(500);
-		waitVisibilityAndClick(activateDropDown);
-		explicitWaitForVisiblity(dropDownContainer);
-		WebElement selectedElement = dropDownContainer.findElement(relativeToContainer);
-		explicitWaitForVisiblity(selectedElement);
-		explicitWaitForClickable(selectedElement);
-		waitForTime(500);
-		selectedElement.click();
-		explicitWait(5, ExpectedConditions.textToBePresentInElement(activateDropDown, value));
+		if (value != null) {
+			waitForTime(500);
+			waitVisibilityAndClick(activateDropDown);
+			explicitWaitForVisiblity(dropDownContainer);
+			WebElement selectedElement = dropDownContainer.findElement(relativeToContainer);
+			explicitWaitForVisiblity(selectedElement);
+			explicitWaitForClickable(selectedElement);
+			waitForTime(500);
+			selectedElement.click();
+			explicitWait(5, ExpectedConditions.textToBePresentInElement(activateDropDown, value));
+		}
 	}
 
 }

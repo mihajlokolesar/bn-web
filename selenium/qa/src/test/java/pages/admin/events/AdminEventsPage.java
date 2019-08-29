@@ -1,6 +1,8 @@
 package pages.admin.events;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -61,21 +63,41 @@ public class AdminEventsPage extends BasePage {
 		}
 	}
 	
-	private List<WebElement> findWebElementsEventByName(String name) {
+	public AdminEventComponent findEvent(String eventName, Predicate<AdminEventComponent> predicate) {
+		if (isEventPresent(eventName)) {
+			List<WebElement> elements = findWebElementsEventByName(eventName);
+			Optional<AdminEventComponent> optionalComponent = elements.stream()
+					.map(e -> new AdminEventComponent(driver, e))
+					.filter(predicate).findFirst();
+			if(optionalComponent != null && optionalComponent.isPresent()) {
+				return optionalComponent.get();
+			}else {
+				return null;
+			}
+		} else {
+			return null;
+		}
+	}
+	
+	private List<WebElement> findWebElementsEventByName(String eventName) {
 		explicitWaitForVisiblity(eventsDashboardContainer);
-		List<WebElement> list = explicitWait(15, ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//main//div[div[div[div[div[a[p[contains(text(),'" + name +"')]]]]]]]")));
+		List<WebElement> list = explicitWait(15, ExpectedConditions.visibilityOfAllElementsLocatedBy(findByNameXpath(eventName)));
 		return list;
 	}
 	
-	private WebElement findWebElementEventByName(String name) {
+	private WebElement findWebElementEventByName(String eventName) {
 		explicitWaitForVisiblity(eventsDashboardContainer);
-		WebElement event = explicitWait(15, ExpectedConditions.visibilityOfElementLocated(By.xpath("//main//div[div[div[div[div[a[p[contains(text(),'" + name +"')]]]]]]]")));
+		WebElement event = explicitWait(15, ExpectedConditions.visibilityOfElementLocated(findByNameXpath(eventName)));
 		return event;
 	}
 		
 	private boolean isEventPresent(String eventName) {
 		explicitWaitForVisiblity(eventsDashboardContainer);
-		return isExplicitlyWaitVisible(6, By.xpath("//main//div[div[div[div[div[a[p[contains(text(),'" + eventName +"')]]]]]]]"));
+		return isExplicitlyWaitVisible(6, findByNameXpath(eventName));
+	}
+	
+	private By findByNameXpath(String eventName) {
+		return By.xpath("//main//div[div[div[div[div[a[p[contains(text(),'" + eventName +"')]]]]]]]");
 	}
 	
 	public void clickCreateEvent() {

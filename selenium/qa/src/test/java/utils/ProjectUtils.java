@@ -1,6 +1,8 @@
 package utils;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Random;
@@ -8,7 +10,8 @@ import java.util.Random;
 public class ProjectUtils {
 	
 	public static final String DATE_FORMAT = "MM/dd/yyyy";
-
+	public static final String ADMIN_EVENT_DATE_TIME_FORMAT = "EEEE, MMMM d yyyy h:mm a";
+	
 	public static Integer generateRandomInt(int size) {
 		Random random = new Random();
 		return random.nextInt(size);
@@ -39,4 +42,32 @@ public class ProjectUtils {
 		return dates.toArray(new String[dates.size()]);
 	}
 	
+	public static LocalDateTime parseDateTime(String pattern, String dateTime) {
+		String removedOrdinalsDate = dateTime.replaceAll("(?<=\\d)(st|nd|rd|th)", "");
+		DateTimeFormatter formater = DateTimeFormatter.ofPattern(pattern);
+		LocalDateTime localDateTime = LocalDateTime.parse(removedOrdinalsDate, formater);
+		return localDateTime;
+	}
+
+	public static LocalDate parseDate(String pattern, String date) {
+		String removedOrdinalsDate = date.replaceAll("(?<=\\d)(st|nd|rd|th)", "");
+		DateTimeFormatter formater = DateTimeFormatter.ofPattern(pattern);
+		LocalDate localDate = LocalDate.parse(removedOrdinalsDate, formater);
+		return localDate;
+	}
+
+	public static LocalDateTime getDateTime(LocalDate date) {
+		LocalDateTime dt = date.atTime(LocalTime.MIDNIGHT);
+		return dt;
+	}
+
+	public static void appendField(String field, StringBuilder sb) {
+		sb.append(field != null ? field + "; " : "");
+	}
+
+	public static void appendFields(String[] fields , StringBuilder sb) {
+		for(String f : fields) {
+			appendField(f, sb);
+		}
+	}
 }

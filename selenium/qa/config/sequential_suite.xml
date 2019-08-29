@@ -13,6 +13,7 @@
       <!-- <class name="test.TransferTicketStepsIT"/> -->
       <class name="test.CancelEventStepsIT"/>
       <class name="test.CreateEventWithAdditionalOptionsStepsIT"/>
+      <class name="test.CreateDraftEventStepsIT"/>
     </classes>
   </test>
   <test name="Firefox">
@@ -27,6 +28,7 @@
      <!--  <class name="test.TransferTicketStepsIT"/> -->
       <class name="test.CancelEventStepsIT"/>
       <class name="test.CreateEventWithAdditionalOptionsStepsIT"/>
+      <class name="test.CreateDraftEventStepsIT"/>
     </classes>
   </test>  
  </suite>
