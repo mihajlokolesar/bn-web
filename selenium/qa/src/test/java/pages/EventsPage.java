@@ -11,7 +11,7 @@ import utils.SeleniumUtils;
 
 public class EventsPage extends BasePage {
 	
-	@FindBy(xpath = "//body//main/div/div/div/div[2]/div/div/div[@class='jss63 jss87']")
+	@FindBy(xpath = "//main/div/div/div/div[2]/div/div/div[2]")
 	private WebElement eventListContainer;
 
 	@FindBy(xpath = "//body//main//header")

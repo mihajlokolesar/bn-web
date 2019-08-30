@@ -120,7 +120,7 @@ public class Event implements Serializable {
 		Organization organization = Organization.generateOrganization();
 		organization.setName("Auto Test12");
 		event.setOrganization(organization);
-		event.setArtistName("The Testers");
+		event.setArtistName("TheTestArtistAuto");
 		event.setEventName("TestNameEvent" + ProjectUtils.generateRandomInt(10000000));
 		event.setVenueName("MSG");
 		String[] dateSpan = ProjectUtils.getDatesWithSpecifiedRangeInDays(2);
