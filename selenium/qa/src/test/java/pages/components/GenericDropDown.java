@@ -7,10 +7,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import pages.BaseComponent;
 
-public class GenericDropDown extends BaseComponent{
-	
+public class GenericDropDown extends BaseComponent {
+
 	private WebElement activateDropDown;
-	
+
 	private WebElement dropDownContainer;
 
 	public GenericDropDown(WebDriver driver, WebElement activateDropDown, WebElement dropDownContainer) {
@@ -18,7 +18,7 @@ public class GenericDropDown extends BaseComponent{
 		this.activateDropDown = activateDropDown;
 		this.dropDownContainer = dropDownContainer;
 	}
-	
+
 	public void selectElementFromDropDown(By relativeToContainer, String value) {
 		if (value != null) {
 			waitForTime(500);
@@ -32,7 +32,18 @@ public class GenericDropDown extends BaseComponent{
 			explicitWait(5, ExpectedConditions.attributeToBe(activateDropDown, "value", value));
 		}
 	}
-	
+
+	public void selectElementFromDropDownNoValueCheck(By relativeToContainer) {
+		waitForTime(500);
+		waitVisibilityAndClick(activateDropDown);
+		explicitWaitForVisiblity(dropDownContainer);
+		WebElement selectedElement = dropDownContainer.findElement(relativeToContainer);
+		explicitWaitForVisiblity(selectedElement);
+		explicitWaitForClickable(selectedElement);
+		waitForTime(500);
+		selectedElement.click();
+	}
+
 	public void selectElementFromDropDownHiddenInput(By relativeToContainer, String value) {
 		if (value != null) {
 			waitForTime(500);

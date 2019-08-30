@@ -16,7 +16,6 @@ public class LoginStepsIT extends BaseSteps {
 		loginPage.logOut();
 		Assert.assertTrue(retVal);
 	}
-
 	@Test(dataProvider = "wrong_user_mail_credentials", priority = 1, retryAnalyzer = utils.RetryAnalizer.class)
 	public void wrongEmailLogin(String username, String password) {
 		maximizeWindow();
@@ -24,7 +23,7 @@ public class LoginStepsIT extends BaseSteps {
 		loginPage.login(username, password);
 		Assert.assertTrue(loginPage.isMailOrPassIncorrectMessageDisplayed());
 	}
-
+	
 	@Test(dataProvider = "wrong_pass_credentials", priority = 1, retryAnalyzer = utils.RetryAnalizer.class)
 	public void wrongPasswordLogin(String username, String password) {
 		maximizeWindow();

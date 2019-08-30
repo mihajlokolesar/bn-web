@@ -39,6 +39,10 @@ public class Constants {
 	public static String getBoxOfficeSell() {
 		return getBaseUrlBigNeon() + "box-office/sell";
 	}
+	
+	public static String getBoxOfficeGuest() {
+		return getBaseUrlBigNeon() + "box-office/guests";
+	}
 
 	public static String getAdminEvents() {
 		return getBaseUrlBigNeon() + "admin/events";

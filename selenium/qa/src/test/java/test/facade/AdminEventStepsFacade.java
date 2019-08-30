@@ -1,8 +1,6 @@
 package test.facade;
 
 import java.net.URISyntaxException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Predicate;
 
 import org.openqa.selenium.WebDriver;
@@ -69,6 +67,15 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		return selectedEvent;
 	}
 	
+	public void whenUserUpdatesDataOfEvent(Event event) {
+		createEventPage.enterEventName(event.getEventName());
+		createEventPage.enterDatesAndTimes(event.getStartDate(), event.getEndDate(), null, null, null);
+	}
+	
+	public void whenUserClicksOnUpdateEvent() {
+		createEventPage.clickOnUpdateButton();
+	}
+
 	public boolean whenUserEntesDataAndClicksOnSaveDraft(Event event) {
 		adminEvents.clickCreateEvent();
 		createEventPage.isAtPage();
@@ -79,15 +86,6 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 
 	}
 	
-	public void whenUserUpdatesDataOfEvent(Event event) {
-		createEventPage.enterEventName(event.getEventName());
-		createEventPage.enterDatesAndTimes(event.getStartDate(), event.getEndDate(), null, null, null);
-	}
-	
-	public void whenUserClicksOnUpdateEvent() {
-		createEventPage.clickOnUpdateButton();
-	}
-
 	public boolean thenEventShouldBeCanceled(Event event) {
 		AdminEventComponent componentEvent = adminEvents.findEventByName(event.getEventName());
 		if (componentEvent != null) {

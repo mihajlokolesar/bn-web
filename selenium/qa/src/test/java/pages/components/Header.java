@@ -1,5 +1,7 @@
 package pages.components;
 
+import java.security.GeneralSecurityException;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -44,6 +46,12 @@ public class Header extends BaseComponent {
 
 	@FindBy(xpath = "//body//header//button[span[contains(text(),'Sign In')]]")
 	private WebElement signInButton;
+
+	@FindBy(xpath = "//header//a[@href='/admin/events']/following-sibling::div[2][span[@aria-owns='menu-appbar' and @aria-haspopup='true']]")
+	private WebElement adminEventDropDownButton;
+
+	@FindBy(id = "menu-appbar")
+	private WebElement adminEventDropDownContainer;
 
 	private ProfileMenuDropDown profileMenuDropDown;
 
@@ -144,6 +152,13 @@ public class Header extends BaseComponent {
 
 	public boolean isLoggedOut() {
 		return isExplicitlyWaitVisible(signInButton);
+	}
+
+	public void selectEventFromAdminDropDown(String eventName) {
+		GenericDropDown dropDown = new GenericDropDown(driver, adminEventDropDownButton, adminEventDropDownContainer);
+		dropDown.selectElementFromDropDownNoValueCheck(
+				By.xpath(".//ul//li//div/span[contains(text(),'" + eventName + "')]"));
+		waitForTime(2000);
 	}
 
 }

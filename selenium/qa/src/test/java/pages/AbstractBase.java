@@ -50,11 +50,6 @@ public class AbstractBase implements Serializable{
 		return explicitWait(time, 500, condition);
 	}
 
-	@SuppressWarnings("unchecked")
-	public <T, V> T explicitWaitNoPooling(int time, Function<? super WebDriver, V> condition) throws TimeoutException {
-		return (T) new WebDriverWait(driver, time).until(condition);
-	}
-
 	public <T, V> T explicitWaitForVisiblity(WebElement element) {
 		return explicitWait(15, ExpectedConditions.visibilityOf(element));
 	}
@@ -77,6 +72,17 @@ public class AbstractBase implements Serializable{
 		boolean retVal = false;
 		try {
 			explicitWait(timeForSeconds, ExpectedConditions.visibilityOf(element));
+			retVal = true;
+		} catch (Exception e) {
+			retVal = false;
+		}
+		return retVal;
+	}
+	
+	public boolean isExplicitConditionTrue(int waitForSeconds, Function<? super WebDriver, Boolean> condition) {
+		boolean retVal = false;
+		try {
+			retVal = explicitWait(waitForSeconds, condition);
 			retVal = true;
 		} catch (Exception e) {
 			retVal = false;

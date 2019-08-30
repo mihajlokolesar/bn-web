@@ -93,7 +93,7 @@ public class LoginPage extends BasePage {
 		login(username, password);
 		boolean retVal = false;
 		try {
-			retVal = explicitWait(10, ExpectedConditions.urlMatches(Constants.getBaseUrlBigNeon()));
+			retVal = explicitWait(10, ExpectedConditions.urlToBe(Constants.getBaseUrlBigNeon()));
 		} catch (TimeoutException e) {
 			retVal = false;
 		}
