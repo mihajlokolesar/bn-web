@@ -8,7 +8,7 @@ import pages.LoginPage;
 
 public class LoginStepsIT extends BaseSteps {
 
-	@Test(dataProvider = "user_credentials", priority = 1)
+	@Test(dataProvider = "user_credentials", priority = 1, retryAnalyzer = utils.RetryAnalizer.class)
 	public void regularLogin(String username, String password) {
 		maximizeWindow();
 		LoginPage loginPage = new LoginPage(driver);
@@ -17,7 +17,7 @@ public class LoginStepsIT extends BaseSteps {
 		Assert.assertTrue(retVal);
 	}
 	
-	@Test(dataProvider = "wrong_user_mail_credentials", priority = 1)
+	@Test(dataProvider = "wrong_user_mail_credentials", priority = 1, retryAnalyzer = utils.RetryAnalizer.class)
 	public void wrongEmailLogin(String username, String password) {
 		maximizeWindow();
 		LoginPage loginPage = new LoginPage(driver);
@@ -25,7 +25,7 @@ public class LoginStepsIT extends BaseSteps {
 		Assert.assertTrue(loginPage.isMailOrPassIncorrectMessageDisplayed());
 	}
 	
-	@Test(dataProvider = "wrong_pass_credentials", priority = 1)
+	@Test(dataProvider = "wrong_pass_credentials", priority = 1, retryAnalyzer = utils.RetryAnalizer.class)
 	public void wrongPasswordLogin(String username, String password) {
 		maximizeWindow();
 		LoginPage loginPage = new LoginPage(driver);

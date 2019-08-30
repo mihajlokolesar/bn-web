@@ -1,5 +1,7 @@
 package pages.components.admin;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.openqa.selenium.By;
@@ -9,6 +11,7 @@ import model.Event;
 import pages.BaseComponent;
 import pages.components.dialogs.CancelEventDialog;
 import pages.components.dialogs.DeleteEventDialog;
+import utils.ProjectUtils;
 import utils.SeleniumUtils;
 
 public class AdminEventComponent extends BaseComponent {
@@ -22,6 +25,12 @@ public class AdminEventComponent extends BaseComponent {
 	private String relativeDropDownXpath = ".//button[@type='button']";
 
 	private String relativeIsCanceledParagraphXpath = ".//div[p[contains(text(),'Cancelled')]]";
+
+	private String relativeIsDraftParagraphPath = ".//div/p[contains(text(),'Draft')]";
+
+	private String relativeVenueParagraphPath = ".//a[contains(@href,'/dashboard')]/following-sibling::p[1]";
+
+	private String relativeDateTimeParagraphPath = ".//a[contains(@href,'/dashboard')]/following-sibling::p[2]";
 
 	private By dropDownCancelEvent = By
 			.xpath("//body//div[@id='long-menu']//ul/li[div[span[contains(text(),'Cancel event')]]]");
@@ -42,6 +51,11 @@ public class AdminEventComponent extends BaseComponent {
 				driver);
 	}
 
+	public boolean isEventDrafted() {
+		return SeleniumUtils.isChildElementVisibleFromParentLocatedBy(event, By.xpath(relativeIsDraftParagraphPath),
+				driver);
+	}
+
 	public void cancelEvent() {
 		openDropDown();
 		findActionAndClickInDropDown(dropDownCancelEvent);
@@ -54,13 +68,20 @@ public class AdminEventComponent extends BaseComponent {
 		findActionAndClickInDropDown(dropDownDeleteEvent);
 		new DeleteEventDialog(driver).clickOnDeleteButton(event.getEventName());
 	}
-	
+
 	public void editEvent(Event event) {
 		openDropDown();
 		findActionAndClickInDropDown(dropDownEditEvent);
 	}
-	
-	
+
+	public boolean checkIfDatesMatch(String startDate) {
+		LocalDateTime eventDateTime = getEventDateTime();
+		LocalDateTime localStartDateTime = ProjectUtils
+				.getDateTime(ProjectUtils.parseDate(ProjectUtils.DATE_FORMAT, startDate));
+		LocalDate eventDate = eventDateTime.toLocalDate();
+		LocalDate localStartDate = localStartDateTime.toLocalDate();
+		return eventDate.isEqual(localStartDate);
+	}
 
 	private WebElement openDropDown() {
 		WebElement dropDown = SeleniumUtils.getChildElementFromParentLocatedBy(event, By.xpath(relativeDropDownXpath),
@@ -83,6 +104,14 @@ public class AdminEventComponent extends BaseComponent {
 				}
 			}
 		}
+	}
+
+	private LocalDateTime getEventDateTime() {
+		WebElement dateTime = SeleniumUtils.getChildElementFromParentLocatedBy(event,
+				By.xpath(relativeDateTimeParagraphPath), driver);
+		String date = dateTime.getText();
+		LocalDateTime localDateTime = ProjectUtils.parseDateTime(ProjectUtils.ADMIN_EVENT_DATE_TIME_FORMAT, date);
+		return localDateTime;
 	}
 
 }

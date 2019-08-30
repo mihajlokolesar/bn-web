@@ -35,6 +35,10 @@ public abstract class BasePage extends AbstractBase {
 	public boolean isAtPage() {
 		return explicitWait(10, ExpectedConditions.urlToBe(getUrl()));
 	}
+	
+	public boolean isExplicitAtPage(int waitForSeconds) {
+		return isExplicitConditionTrue(waitForSeconds, ExpectedConditions.urlToBe(getUrl()));
+	}
 
 	public void logOut() {
 		header.logOut();

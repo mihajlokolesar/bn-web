@@ -1,5 +1,7 @@
 package pages.components;
 
+import java.security.GeneralSecurityException;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -40,10 +42,16 @@ public class Header extends BaseComponent {
 	private WebElement currentOrganizationDropDown;
 
 	@FindBy(xpath = "//header//span[a[contains(@href,'tickets/confirmation')]]|//header//span/div[contains(@to,'tickets/confirmation')]")
-	public WebElement shoppingBasket;
+	private WebElement shoppingBasket;
 
 	@FindBy(xpath = "//body//header//button[span[contains(text(),'Sign In')]]")
-	public WebElement signInButton;
+	private WebElement signInButton;
+
+	@FindBy(xpath = "//header//a[@href='/admin/events']/following-sibling::div[2][span[@aria-owns='menu-appbar' and @aria-haspopup='true']]")
+	private WebElement adminEventDropDownButton;
+
+	@FindBy(id = "menu-appbar")
+	private WebElement adminEventDropDownContainer;
 
 	private ProfileMenuDropDown profileMenuDropDown;
 
@@ -99,7 +107,6 @@ public class Header extends BaseComponent {
 		waitVisibilityAndClick(currentOrganizationDropDown);
 		CurrentOrganizationDropDown dropDown = new CurrentOrganizationDropDown(driver);
 		dropDown.selectOrganizationByName(organizationName);
-
 	}
 
 	public boolean isOrganizationPresent(String organizationName) throws Exception {
@@ -116,7 +123,7 @@ public class Header extends BaseComponent {
 				throw new Exception(e);
 			}
 		}
-
+		// close the drop down
 		WebElement element = explicitWait(15,
 				ExpectedConditions.visibilityOfElementLocated(By.xpath("//body//div[@id='menu-appbar']")));
 		element.click();
@@ -145,6 +152,13 @@ public class Header extends BaseComponent {
 
 	public boolean isLoggedOut() {
 		return isExplicitlyWaitVisible(signInButton);
+	}
+
+	public void selectEventFromAdminDropDown(String eventName) {
+		GenericDropDown dropDown = new GenericDropDown(driver, adminEventDropDownButton, adminEventDropDownContainer);
+		dropDown.selectElementFromDropDownNoValueCheck(
+				By.xpath(".//ul//li//div/span[contains(text(),'" + eventName + "')]"));
+		waitForTime(2000);
 	}
 
 }

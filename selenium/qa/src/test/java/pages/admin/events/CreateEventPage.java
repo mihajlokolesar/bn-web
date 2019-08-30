@@ -73,8 +73,14 @@ public class CreateEventPage extends BasePage {
 	@FindBy(xpath = "//main//div[aside[contains(text(),'Add another ticket type')]]")
 	private WebElement addTicketTypeButton;
 
+	@FindBy(xpath = "//main//div//button[span[contains(text(),'Save draft')]]")
+	private WebElement saveDraftButton;
+
 	@FindBy(xpath = "//main//div//button[span[contains(text(),'Publish')]]")
 	private WebElement publishButton;
+
+	@FindBy(xpath = "//main//div//button[span[contains(text(),'Update')]]")
+	private WebElement updateButton;
 
 	public CreateEventPage(WebDriver driver) {
 		super(driver);
@@ -150,12 +156,17 @@ public class CreateEventPage extends BasePage {
 	}
 
 	private void enterDate(WebElement element, String date) {
-		explicitWaitForVisiblity(element);
-		SeleniumUtils.clearInputField(element, driver);
-		waitVisibilityAndSendKeys(element, date);
+		if (date != null && !date.isEmpty()) {
+			explicitWaitForVisiblity(element);
+			SeleniumUtils.clearInputField(element, driver);
+			waitVisibilityAndSendKeys(element, date);
+		}
 	}
-	
+
 	public void addTicketTypes(List<TicketType> list) {
+		if (list == null) {
+			return;
+		}
 		for (TicketType type : list) {
 			addNewTicketType(type);
 		}
@@ -166,13 +177,25 @@ public class CreateEventPage extends BasePage {
 		AddTicketTypeComponent ticketType = new AddTicketTypeComponent(driver);
 		ticketType.addNewTicketType(type);
 	}
+	
+	public void clickOnSaveDraft() {
+		explicitWaitForVisibilityAndClickableWithClick(saveDraftButton);
+	}
 
 	public void clickOnPublish() {
 		waitVisibilityAndClick(publishButton);
 	}
+	
+	public void clickOnUpdateButton() {
+		explicitWaitForVisibilityAndClickableWithClick(updateButton);
+	}
 
 	public boolean checkMessage() {
 		return isNotificationDisplayedWithMessage(MsgConstants.EVENT_PUBLISHED);
+	}
+	
+	public boolean checkSaveDraftMessage() {
+		return isNotificationDisplayedWithMessage(MsgConstants.EVENT_SAVED_TO_DRAFT);
 	}
 
 	private void clickOnUploadImage() {
@@ -186,12 +209,16 @@ public class CreateEventPage extends BasePage {
 	 * @return
 	 */
 	private WebElement selectDoorTime(String doorTime) {
-		waitVisibilityAndClick(doorTimeContainer);
-		WebElement selectedDoorTime = doorTimeMenuHours
-				.findElement(By.xpath(".//ul//li[@data-value='" + doorTime + "']"));
-		explicitWaitForVisiblity(selectedDoorTime);
-		selectedDoorTime.click();
-		return selectedDoorTime;
+		if (doorTime != null && !doorTime.isEmpty()) {
+			waitVisibilityAndClick(doorTimeContainer);
+			WebElement selectedDoorTime = doorTimeMenuHours
+					.findElement(By.xpath(".//ul//li[@data-value='" + doorTime + "']"));
+			explicitWaitForVisiblity(selectedDoorTime);
+			selectedDoorTime.click();
+			return selectedDoorTime;
+		} else {
+			return null;
+		}
 	}
 
 	private WebElement selectElementFormVenueDropDown(String venue) {

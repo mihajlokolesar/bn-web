@@ -12,6 +12,7 @@ import pages.LoginPage;
 import pages.TicketsConfirmationPage;
 import pages.TicketsPage;
 import pages.TicketsSuccesPage;
+import utils.ProjectUtils;
 
 public class EventStepsFacade extends BaseFacadeSteps {
 
@@ -33,12 +34,16 @@ public class EventStepsFacade extends BaseFacadeSteps {
 
 	public EventsPage givenThatEventExist(Event event,User user) throws Exception {
 		if (!eventsPage.isEventPresent(event.getEventName())) {
+			boolean isLoggedIn = false;
 			if(!loginPage.getHeader().isLoggedOut()) {
+				isLoggedIn = true;
 				loginPage.logOut();
 			}
 			
-			createEvent(event);
-			loginPage.login(user);
+			createEventWithSuperuserLoginAndLogout(event);
+			if (isLoggedIn) {
+				loginPage.login(user);
+			}
 			
 			eventsPage.navigate();
 			driver.navigate().refresh();
@@ -49,9 +54,8 @@ public class EventStepsFacade extends BaseFacadeSteps {
 	public void givenUserIsOnEventPage() {
 		eventsPage.navigate();
 	}
-
-
-	private void createEvent(Event event) throws Exception {
+	
+	private void createEventWithSuperuserLoginAndLogout(Event event) throws Exception {
 
 		if (!loginPage.getHeader().isLoggedOut()) {
 			loginPage.logOut();
@@ -63,6 +67,7 @@ public class EventStepsFacade extends BaseFacadeSteps {
 		OrganizationStepsFacade organizationFacade = new OrganizationStepsFacade(driver);
 
 		organizationFacade.givenOrganizationExist(event.getOrganization());
+		event.setEventName(event.getEventName() + ProjectUtils.generateRandomInt(1000000));
 		boolean retVal = createEvent.createEvent(event);
 		
 		if (!retVal) {

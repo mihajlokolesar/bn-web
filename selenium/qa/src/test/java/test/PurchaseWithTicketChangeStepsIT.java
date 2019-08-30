@@ -13,6 +13,7 @@ import pages.mailinator.MailinatorHomePage;
 import pages.mailinator.inbox.MailinatorInboxPage;
 import test.facade.EventStepsFacade;
 import test.facade.LoginStepsFacade;
+import utils.DataConstants;
 import utils.ProjectUtils;
 
 public class PurchaseWithTicketChangeStepsIT extends BaseSteps {
@@ -64,7 +65,11 @@ public class PurchaseWithTicketChangeStepsIT extends BaseSteps {
 		purchase.setRemoveNumberOfTickets(1);
 		// TODO: replace with some other number
 		purchase.setPhoneNumber("14422460151");
-		return new Object[][] { { User.generateUser(), purchase } };
+		
+		return new Object[][] { 
+			{ User.generateUser(), purchase } };
 	}
+	
+	
 
 }
