@@ -49,8 +49,25 @@ public class AdminBoxOfficeFacade extends BaseFacadeSteps {
 		return whenUserSearchesByUserParams(lastname);
 	}
 	
+	public boolean whenUserSearchesByEmail(User user) {
+		guestPage.enterSearchParameters("");
+		List<WebElement> allGuests = guestPage.searchForAllGuestOnPage();
+		if (allGuests == null || allGuests.isEmpty()) {
+			return false;
+		}
+		
+		guestPage.enterSearchParameters(user.getEmailAddress());
+		
+		List<WebElement> searchResults = guestPage.searchForResultsOfSearch(user.getFirstName());
+		if (searchResults != null && !searchResults.isEmpty()) {
+			return searchResults.size() < allGuests.size();
+		}
+		return false;
+	}
+	
 	public boolean whenUserSearchesByTicketNumber(User user) {
 		String firstname = user.getFirstName();
+		guestPage.enterSearchParameters("");
 		List<WebElement> allGuests = guestPage.searchForAllGuestOnPage();
 		if (allGuests == null || allGuests.isEmpty()) {
 			throw new NoSuchElementException("No guests found on admin guest page");
@@ -68,18 +85,16 @@ public class AdminBoxOfficeFacade extends BaseFacadeSteps {
  		boolean isTicketInSearchResults = guestPage.isTicketNumberInGuestResults(escapedTicketNumber);
  		return isTicketInSearchResults;
 		
-		
-		
 	}
 	
 	private boolean whenUserSearchesByUserParams(String param) {
+		guestPage.enterSearchParameters("");
 		List<WebElement> allGuests = guestPage.searchForAllGuestOnPage();
 		if (allGuests == null || allGuests.isEmpty()) {
 			return false;
 		}
 		
 		guestPage.enterSearchParameters(param);
-		
 		
 		List<WebElement> searchResults = guestPage.searchForResultsOfSearch(param);
 		if (searchResults != null && !searchResults.isEmpty()) {

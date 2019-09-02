@@ -30,8 +30,8 @@ public class PurchaseWithTicketChangeStepsIT extends BaseSteps {
 			eventFacade.whenSearchingForEvent(purchase);
 			eventFacade.givenThatEventExist(purchase.getEvent(), user);
 			eventFacade.whenUserExecutesEventPagesSteps(purchase.getEvent());
+			eventFacade.whenUserSelectsNumberOfTicketsAndClicksOnContinue(purchase);
 		}
-		eventFacade.whenUserSelectsNumberOfTicketsAndClicksOnContinue(purchase);
 		eventFacade.thenUserIsAtConfirmationPage();
 		eventFacade.whenUserChangesTicketOptions(purchase);
 		int ticketNumber = eventFacade.thenTicketQuantityIs();

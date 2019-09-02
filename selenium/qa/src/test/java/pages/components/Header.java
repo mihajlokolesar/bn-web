@@ -70,7 +70,7 @@ public class Header extends BaseComponent {
 	public void clickOnBoxOfficeLink() {
 		explicitWaitForVisiblity(boxOffice);
 		explicitWaitForClickable(boxOffice);
-		waitForTime(500);
+		waitForTime(1000);
 		boxOffice.click();
 	}
 

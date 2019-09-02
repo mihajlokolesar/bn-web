@@ -49,9 +49,13 @@ public class GuestPage extends BasePage {
 		WebElement element = container.findElement(
 				By.xpath(".//div[p[contains(text(),'" + searchedValue + "')]]/following-sibling::div/span/p"));
 		String ticketNumber = element.getText();
+		if (ticketNumber != null) {
+			String[] ticketNumbers = ticketNumber.split(",");
+			ticketNumber = ticketNumbers[0].trim();
+		}
 		return ticketNumber;
 	}
-
+	
 	public boolean isTicketNumberInGuestResults(String ticketNumber) {
 		List<WebElement> elements = container
 				.findElements(By.xpath(".//div/span/p[contains(text(),'" + ticketNumber + "')]"));
