@@ -18,8 +18,7 @@ import utils.DataConstants;
 
 public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 
-	@Test(dataProvider = "search_orders_data", priority = 13, dependsOnMethods = {
-			"userPurchasedTickets" }, retryAnalyzer = utils.RetryAnalizer.class)
+	@Test(dataProvider = "search_orders_data", priority = 13, dependsOnMethods = {"userPurchasedTickets"}, retryAnalyzer = utils.RetryAnalizer.class)
 	public void searchForOrdersOnBoxOfficePage(User superuser, Event event, User one, User two) throws Exception {
 		LoginStepsFacade loginFacade = new LoginStepsFacade(driver);
 		AdminEventStepsFacade adminEventFacade = new AdminEventStepsFacade(driver);
@@ -55,7 +54,7 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 
 	}
 
-	@Test(dataProvider = "purchase_data")
+	@Test(dataProvider = "purchase_data", priority = 13)
 	public void userPurchasedTickets(User user, Purchase purchase) throws Exception {
 		maximizeWindow();
 		EventStepsFacade eventsFacade = new EventStepsFacade(driver);
