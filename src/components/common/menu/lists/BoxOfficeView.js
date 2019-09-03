@@ -6,6 +6,7 @@ import MenuItem from "../../../elements/menu/MenuItem";
 import { observer } from "mobx-react";
 import user from "../../../../stores/user";
 import MobileBoxOfficeMenuItem from "./MobileBoxOfficeMenuItem";
+import boxOffice from "../../../../stores/boxOffice";
 
 const styles = theme => {
 	return {};
@@ -13,6 +14,8 @@ const styles = theme => {
 
 const BoxOfficeList = observer(props => {
 	const { toggleDrawer, openMenuItem, changeOpenMenu } = props;
+
+	const { activeEventId } = boxOffice;
 
 	return (
 		<div>
@@ -35,6 +38,17 @@ const BoxOfficeList = observer(props => {
 			>
 				Guests
 			</MenuItem>
+
+			{user.hasScope("order:read") && activeEventId ? (
+				<MenuItem
+					onClick={toggleDrawer}
+					shortLayout
+					iconName="tickets"
+					to={`/admin/events/${activeEventId}/dashboard/orders/manage`}
+				>
+					Manage orders
+				</MenuItem>
+			) : null}
 
 			<MobileBoxOfficeMenuItem onClick={toggleDrawer}/>
 		</div>

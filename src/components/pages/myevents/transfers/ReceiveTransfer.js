@@ -23,6 +23,7 @@ import SignupForm from "../../authentication/forms/SignupForm";
 import LoginForm from "../../authentication/forms/LoginForm";
 import servedImage from "../../../../helpers/imagePathHelper";
 import SMSLinkForm from "../../../elements/SMSLinkForm";
+import optimizedImageUrl from "../../../../helpers/optimizedImageUrl";
 
 const styles = theme => ({
 	root: {
@@ -342,8 +343,9 @@ class ReceiveTransfer extends Component {
 		const { classes } = this.props;
 		const { isClaiming } = this.state;
 
-		const profilePicUrl =
-			user.profilePicUrl || servedImage("/images/profile-pic-placeholder.png");
+		const profilePicUrl = user.profilePicUrl
+			? optimizedImageUrl(user.profilePicUrl)
+			: servedImage("/images/profile-pic-placeholder.png");
 
 		return (
 			<div className={classes.innerCardContainer}>

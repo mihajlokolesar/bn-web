@@ -143,6 +143,7 @@ import AuthenticateCheckDialog from "../common/AuthenticateCheckDialog";
 import WidgetLinkBuilder from "../widgets/LinkBuilder";
 import analytics from "../../helpers/analytics";
 import getAllUrlParams from "../../helpers/getAllUrlParams";
+import Meta from "./Meta";
 
 const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => {
 	//If isAuthenticated is null then we're still checking the state
@@ -199,6 +200,7 @@ class Routes extends Component {
 			<Router>
 				<MuiPickersUtilsProvider utils={CustomPickerUtils}>
 					<Container>
+						<Meta/>
 						<OnRouteChange>
 							<Switch>
 								<Route

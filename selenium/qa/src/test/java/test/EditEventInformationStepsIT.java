@@ -45,8 +45,7 @@ public class EditEventInformationStepsIT extends BaseSteps {
 	@DataProvider(name = "edit_event_data")
 	public static Object[][] editEventData() {
 		User superuser = User.generateSuperUser();
-		Event event = Event.generateEvent();
-		event.setEventName("TestNameEvent");
+		Event event = Event.generatedEvent(1,5,"TestUNameEvent", false);
 		event.setVenueName("Arcade Empire");
 		return new Object[][] { { superuser, event } };
 	}

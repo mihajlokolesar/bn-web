@@ -20,6 +20,7 @@ import nl2br from "../../../helpers/nl2br";
 import ellipsis from "../../../helpers/ellipsis";
 import Settings from "../../../config/settings";
 import MobileEventTicketRow from "./MobileEventTicketRow";
+import optimizedImageUrl from "../../../helpers/optimizedImageUrl";
 
 const styles = theme => ({
 	cardContent: {
@@ -456,8 +457,11 @@ class EventTicketsCard extends Component {
 						<div
 							className={classes.media}
 							style={{
-								backgroundImage: `url(${promo_image_url ||
-									"/images/event-placeholder.png"})`
+								backgroundImage: `url(${
+									promo_image_url
+										? optimizedImageUrl(promo_image_url)
+										: "/images/event-placeholder.png"
+								})`
 							}}
 						>
 							<DateFlag date={eventDate}/>

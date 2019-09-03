@@ -6,6 +6,7 @@ import Avatar from "@material-ui/core/Avatar";
 import notifications from "../../../stores/notifications";
 import cloudinaryWidget from "../../../helpers/cloudinaryWidget";
 import servedImage from "../../../helpers/imagePathHelper";
+import optimizedImageUrl from "../../../helpers/optimizedImageUrl";
 
 const imageSize = 170;
 
@@ -120,7 +121,9 @@ class ProfilePicture extends Component {
 				{profilePicUrl ? (
 					<div
 						className={classes.imageBackground}
-						style={{ backgroundImage: `url(${profilePicUrl})` }}
+						style={{
+							backgroundImage: `url(${optimizedImageUrl(profilePicUrl)})`
+						}}
 					/>
 				) : (
 					<div className={classes.missingImageContainer}>

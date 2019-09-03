@@ -8,6 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 
 import user from "../../../stores/user";
+import optimizedImageUrl from "../../../helpers/optimizedImageUrl";
 
 const styles = theme => {
 	return {
@@ -45,7 +46,11 @@ const MenuUserProfile = observer(props => {
 			<Link to="/account" className={classes.root} onClick={onClick}>
 				<Avatar
 					alt={fullName}
-					src={profilePicUrl || "/images/profile-pic-placeholder.png"}
+					src={
+						profilePicUrl
+							? optimizedImageUrl(profilePicUrl)
+							: "/images/profile-pic-placeholder.png"
+					}
 					className={classes.avatar}
 					style={{ padding: profilePicUrl ? 0 : 10 }}
 				/>

@@ -14,6 +14,7 @@ import { primaryHex, fontFamilyDemiBold } from "../../../config/theme";
 import { toolBarHeight } from "../../../config/theme";
 import boxOffice from "../../../stores/boxOffice";
 import servedImage from "../../../helpers/imagePathHelper";
+import optimizedImageUrl from "../../../helpers/optimizedImageUrl";
 
 const displayTime = ({ event_start, door_time }) => {
 	const displayDate = moment(event_start).format("ddd, D MMM YYYY");
@@ -200,8 +201,11 @@ class BoxOfficeEventSelection extends React.Component {
 									<div
 										className={classes.promoImage}
 										style={{
-											backgroundImage: `url(${promo_image_url ||
-												"/images/app-promo-background.png"})`
+											backgroundImage: `url(${
+												promo_image_url
+													? optimizedImageUrl(promo_image_url)
+													: "/images/app-promo-background.png"
+											})`
 										}}
 									/>
 								</ListItemIcon>
@@ -239,10 +243,12 @@ class BoxOfficeEventSelection extends React.Component {
 			status,
 			publish_date
 		} = activeEventDetails;
+
 		const displayTimes = {
 			event_start: moment.utc(event_start).local(),
 			door_time: moment.utc(door_time || event_start).local()
 		};
+
 		if (venue.timezone) {
 			displayTimes.event_start = moment.utc(event_start).tz(venue.timezone);
 			displayTimes.door_time = moment
@@ -270,8 +276,11 @@ class BoxOfficeEventSelection extends React.Component {
 						<div
 							className={classes.promoImage}
 							style={{
-								backgroundImage: `url(${promo_image_url ||
-									"/images/app-promo-background.png"})`
+								backgroundImage: `url(${
+									promo_image_url
+										? optimizedImageUrl(promo_image_url)
+										: "/images/app-promo-background.png"
+								})`
 							}}
 						/>
 						<div className={classes.nameDiv}>
@@ -311,8 +320,11 @@ class BoxOfficeEventSelection extends React.Component {
 								<div
 									className={classes.standalonePromoImage}
 									style={{
-										backgroundImage: `url(${promo_image_url ||
-											"/images/app-promo-background.png"})`
+										backgroundImage: `url(${
+											promo_image_url
+												? optimizedImageUrl(promo_image_url)
+												: "/images/app-promo-background.png"
+										})`
 									}}
 								/>
 							</div>

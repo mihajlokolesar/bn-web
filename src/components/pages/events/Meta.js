@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { Helmet } from "react-helmet";
 import Settings from "../../../config/settings";
 import { dollars } from "../../../helpers/money";
+import optimizedImageUrl from "../../../helpers/optimizedImageUrl";
 
 //Reference: https://github.com/nfl/react-helmet
 const structuredEventData = (
@@ -161,10 +162,15 @@ const Meta = props => {
 	const rootEventUrl = `${landingUrl}/events/${id}`;
 	const ticketSelectionUrl = `${rootEventUrl}/tickets`;
 
+	const promoImageUrl = promo_image_url
+		? optimizedImageUrl(promo_image_url)
+		: `${landingUrl}/site/images/bigneon-screen-app.png`;
+
 	let googleStructuredData;
 	let googleBreadcrumbData;
-	let title;
+	let title = name;
 	const description = `${name} - Find tickets to live events and concerts on Big Neon.`;
+
 	//If they're at a later stage of the event checkout, adjust title accordingly
 	switch (type) {
 		case "eventView":
@@ -219,7 +225,7 @@ const Meta = props => {
 				},
 				{
 					property: "og:image",
-					content: promo_image_url
+					content: promoImageUrl
 				},
 				{
 					name: "twitter:site",
@@ -235,7 +241,7 @@ const Meta = props => {
 				},
 				{
 					name: "twitter:image",
-					content: promo_image_url
+					content: promoImageUrl
 				},
 				{
 					name: "description",
@@ -249,7 +255,7 @@ const Meta = props => {
 				},
 				{
 					rel: "image_src",
-					href: promo_image_url
+					href: promoImageUrl
 				}
 			]}
 		>

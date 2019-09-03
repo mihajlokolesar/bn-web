@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import "./index.css";
-import Routes from "./components/routes/Routes";
+import Application from "./components/Application";
 import Bigneon from "./helpers/bigneon";
 import analytics from "./helpers/analytics";
 import errorReporting from "./helpers/errorReporting";
@@ -24,4 +24,4 @@ Settings();
 analytics.init();
 errorReporting.init();
 
-ReactDOM.render(<Routes/>, document.querySelector("#root"));
+ReactDOM.render(<Application/>, document.querySelector("#root"));

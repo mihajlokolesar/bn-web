@@ -14,6 +14,7 @@ import HorizontalBreakdownBar from "../../../elements/charts/HorizontalBreakdown
 import TicketTypeSalesBarChart from "../../../elements/charts/TicketTypeSalesBarChart";
 import DateFlag from "../../../elements/event/DateFlag";
 import servedImage from "../../../../helpers/imagePathHelper";
+import optimizedImageUrl from "../../../../helpers/optimizedImageUrl";
 
 const styles = theme => {
 	return {
@@ -132,7 +133,9 @@ const EventSummaryCard = props => {
 		eventEnded
 	} = props;
 
-	const mediaStyle = imageUrl ? { backgroundImage: `url(${imageUrl})` } : {};
+	const mediaStyle = imageUrl
+		? { backgroundImage: `url(${optimizedImageUrl(imageUrl)})` }
+		: {};
 
 	const displayEventStartDate = eventDate.format("dddd, MMMM Do YYYY h:mm A");
 

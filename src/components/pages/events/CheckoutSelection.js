@@ -157,8 +157,20 @@ class CheckoutSelection extends Component {
 	}
 
 	//Determine the amount to auto add to cart based on increment, limit per person and available tickets
-	getAutoAddQuantity(ticketType) {
-		const { increment, limit_per_person, available } = ticketType;
+	getAutoAddQuantity(index, ticketTypes) {
+		//Check if this ticket type is the only available one. If user has more than one option don't auto select.
+		let otherAvailableTickets = false;
+		ticketTypes.forEach((tt, ttIndex) => {
+			if (ttIndex !== index && tt.status === "Published") {
+				otherAvailableTickets = true;
+			}
+		});
+
+		if (otherAvailableTickets) {
+			return 0;
+		}
+
+		const { increment, limit_per_person, available } = ticketTypes[index];
 		let quantity = AUTO_SELECT_TICKET_AMOUNT;
 
 		//If the default auto select amount is NOT divisible by the increment amount, rather auto select the first increment
@@ -198,14 +210,16 @@ class CheckoutSelection extends Component {
 		//Auto add one ticket if there is only one
 		const { ticket_types } = selectedEvent;
 		if (items === undefined || items.length === 0) {
-			if (ticket_types && ticket_types.length === 1) {
-				const type_id = ticket_types[0].id;
+			if (ticket_types && ticket_types.length > 1) {
+				ticket_types.forEach((type, index) => {
+					const type_id = type.id;
 
-				if (!ticketSelection[type_id]) {
-					ticketSelection[type_id] = {
-						quantity: this.getAutoAddQuantity(ticket_types[0])
-					};
-				}
+					if (!ticketSelection[type_id]) {
+						ticketSelection[type_id] = {
+							quantity: this.getAutoAddQuantity(index, ticket_types)
+						};
+					}
+				});
 
 				this.setState({ ticketSelection });
 			} else {
@@ -220,18 +234,13 @@ class CheckoutSelection extends Component {
 					types => {
 						if (types && types.length) {
 							for (let i = 0; i < types.length; i++) {
-								if (types[i].status !== "Published") {
-									continue;
-								}
 								const type_id = types[i].id;
 
 								//Auto add a ticket after refreshing the event tickets
 								if (!ticketSelection[type_id]) {
-									if (types.length === 1) {
-										ticketSelection[type_id] = {
-											quantity: this.getAutoAddQuantity(types[i])
-										};
-									}
+									ticketSelection[type_id] = {
+										quantity: this.getAutoAddQuantity(i, types)
+									};
 								}
 							}
 						}

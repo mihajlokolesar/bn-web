@@ -16,6 +16,8 @@ import { primaryHex } from "../../../config/theme";
 import { toolBarHeight } from "../../../config/theme";
 import Button from "../Button";
 import servedImage from "../../../helpers/imagePathHelper";
+import layout from "../../../stores/layout";
+import optimizedImageUrl from "../../../helpers/optimizedImageUrl";
 
 const styles = theme => ({
 	root: {
@@ -47,6 +49,11 @@ const styles = theme => ({
 	menuLink: {
 		outline: "none",
 		marginLeft: theme.spacing.unit * 2
+	},
+	onlyShowOnMobileLink: {
+		[theme.breakpoints.up("md")]: {
+			display: "none"
+		}
 	}
 });
 
@@ -102,6 +109,7 @@ class RightHeaderMenu extends React.Component {
 	}
 
 	renderUserMenu() {
+		const { classes } = this.props;
 		const { anchorEl } = this.state;
 		const open = Boolean(anchorEl);
 
@@ -124,13 +132,16 @@ class RightHeaderMenu extends React.Component {
 					<Link to="/admin/events">
 						<MenuItem onClick={this.handleClose.bind(this)}>Admin</MenuItem>
 					</Link>
-				) : user.isOrgBoxOffice ? (
-					<Link to="/box-office/sell">
+				) : null}
+
+				{layout.allowedBoxOffice ? (
+					<Link className={classes.onlyShowOnMobileLink} to="/box-office/sell">
 						<MenuItem onClick={this.handleClose.bind(this)}>
 							Box office
 						</MenuItem>
 					</Link>
 				) : null}
+
 				<Link to="/my-events">
 					<MenuItem onClick={this.handleClose.bind(this)}>My events</MenuItem>
 				</Link>
@@ -169,7 +180,11 @@ class RightHeaderMenu extends React.Component {
 			>
 				<Avatar
 					alt={firstName}
-					src={profilePicUrl || "/images/profile-pic-placeholder.png"}
+					src={
+						profilePicUrl
+							? optimizedImageUrl(profilePicUrl)
+							: "/images/profile-pic-placeholder.png"
+					}
 					className={classes.avatar}
 					style={{ padding: profilePicUrl ? 0 : 10 }}
 				/>
