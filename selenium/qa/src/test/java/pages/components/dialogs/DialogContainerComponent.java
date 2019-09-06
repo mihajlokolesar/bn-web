@@ -19,4 +19,14 @@ public class DialogContainerComponent extends BaseComponent{
 		return isExplicitlyWaitVisible(dialogContainer);
 	}
 
+	public WebElement getDialogContainer() {
+		return dialogContainer;
+	}
+
+	public void setDialogContainer(WebElement dialogContainer) {
+		this.dialogContainer = dialogContainer;
+	}
+	
+	
+
 }

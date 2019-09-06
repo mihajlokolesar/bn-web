@@ -99,6 +99,16 @@ public class SeleniumUtils {
 		return element;
 	}
 
+	public static boolean refreshElement(WebElement toBeRefreshed, WebDriver driver) {
+		try {
+			new WebDriverWait(driver, 10)
+					.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(toBeRefreshed)));
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
 	public static boolean isChildElementVisibleFromParentLocatedBy(WebElement parent, By relativeChildBy,
 			WebDriver driver) {
 		boolean retVal = false;
