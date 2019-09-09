@@ -40,8 +40,7 @@ public class ManageOrdersAdminPage extends BasePage {
 	}
 
 	public ManageOrderComp openOrderWithIndexNumber(int rowNumber) {
-		//try and find some condition to avoid this wait
-		waitForTime(3000);
+		waitForTime(2000);
 		ManageOrderComp orderComponent = findOrderWithIndexNumber(rowNumber);
 		orderComponent.openOrder();
 		return orderComponent;

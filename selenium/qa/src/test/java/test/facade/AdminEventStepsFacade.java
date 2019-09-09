@@ -50,45 +50,47 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 	}
 
 	public AdminEventComponent givenEventExistAndIsNotCanceled(Event event) throws URISyntaxException {
-		AdminEventComponent selectedEvent = adminEvents.findOpenedEventByName(event.getEventName());
+		return givenEventWithNameAndPredicateExists(event, comp -> !comp.isEventCanceled());
+	}
+
+	public AdminEventComponent findEventIsOpenedAndHasSoldItem(Event event) throws URISyntaxException {
+		AdminEventComponent selectedEvent =  adminEvents.findEvent(event.getEventName(),
+				comp -> comp.isEventPublished() && comp.isEventOnSale() && comp.isSoldToAmountGreaterThan(0));
+		return selectedEvent;
+	}
+
+	public AdminEventComponent givenAnyEventWithPredicateExists(Event event, Predicate<AdminEventComponent> predicate)
+			throws URISyntaxException {
+		AdminEventComponent selectedEvent = adminEvents.findEvent(predicate);
 		if (selectedEvent == null) {
-			event.setEventName(event.getEventName() + ProjectUtils.generateRandomInt(10000000));
-			boolean retVal = createEvent(event);
-
-			Assert.assertTrue(retVal,
-					"Event with name: " + event.getEventName() + " does not exist and could not be created");
-			String path = SeleniumUtils.getUrlPath(driver);
-			retVal = retVal && path.contains("edit");
-
-			adminSideBar.clickOnEvents();
-			adminEvents.isAtPage();
-			selectedEvent = adminEvents.findOpenedEventByName(event.getEventName());
+			createNewRandomEvent(event);
+			selectedEvent = adminEvents.findEvent(predicate);
 		}
 		return selectedEvent;
 	}
 
-	public AdminEventComponent givenEventExistsAndPredicateCondition(Event event,
+	public AdminEventComponent givenEventWithNameAndPredicateExists(Event event,
 			Predicate<AdminEventComponent> predicate) throws URISyntaxException {
 		AdminEventComponent selectedEvent = adminEvents.findEvent(event.getEventName(), predicate);
 		if (selectedEvent == null) {
-			event.setEventName(event.getEventName() + ProjectUtils.generateRandomInt(10000000));
-			boolean retVal = createEvent(event);
-
-			Assert.assertTrue(retVal,
-					"Event with name: " + event.getEventName() + " does not exist and could not be created");
-			String path = SeleniumUtils.getUrlPath(driver);
-			retVal = retVal && path.contains("edit");
-			adminSideBar.clickOnEvents();
-			adminEvents.isAtPage();
+			createNewRandomEvent(event);
 			selectedEvent = adminEvents.findEvent(event.getEventName(), predicate);
 		}
 		return selectedEvent;
 	}
 
-	public AdminEventComponent givenEventIsOpenedAndHasSoldItem(Event event) {
-		AdminEventComponent selectedEvent = adminEvents.findEvent(event.getEventName(),
-				comp -> comp.isEventPublished() && comp.isEventOnSale() && comp.isSoldToAmountGreaterThan(0));
-		return selectedEvent;
+	private Event createNewRandomEvent(Event event) throws URISyntaxException {
+		event.setEventName(event.getEventName() + ProjectUtils.generateRandomInt(10000000));
+		boolean retVal = createEvent(event);
+
+		Assert.assertTrue(retVal,
+				"Event with name: " + event.getEventName() + " does not exist and could not be created");
+		String path = SeleniumUtils.getUrlPath(driver);
+		retVal = retVal && path.contains("edit");
+		Assert.assertTrue(retVal);
+		adminSideBar.clickOnEvents();
+		adminEvents.isAtPage();
+		return event;
 	}
 
 	public void whenUserSelectManageOrdersFromToolsDropDown() {

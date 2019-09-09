@@ -24,6 +24,7 @@ public class AdminSideBar extends BaseComponent{
 	}
 	
 	public AdminEventsPage clickOnEvents() {
+		waitForTime(500);
 		explicitWaitForVisibilityAndClickableWithClick(adminEventsLink);
 		return new AdminEventsPage(driver);
 	}

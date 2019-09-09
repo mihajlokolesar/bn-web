@@ -23,7 +23,9 @@ public class ManageOrderComp extends BaseComponent {
 	}
 
 	public void openOrder() {
+		waitForTime(1500);
 		explicitWaitForVisibilityAndClickableWithClick(order);
+		waitForTime(2000);
 	}
 
 	

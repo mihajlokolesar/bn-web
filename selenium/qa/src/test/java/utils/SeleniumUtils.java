@@ -98,6 +98,13 @@ public class SeleniumUtils {
 				.until(ExpectedConditions.visibilityOf(parent.findElement(relativeChildBy)));
 		return element;
 	}
+	
+	public static List<WebElement> getChildElementsFromParentLocatedBy(WebElement parent, By relativeChildBy,
+			WebDriver driver) {
+		List<WebElement> elements = new WebDriverWait(driver, 15)
+				.until(ExpectedConditions.visibilityOfAllElements(parent.findElements(relativeChildBy)));
+		return elements;
+	}
 
 	public static boolean refreshElement(WebElement toBeRefreshed, WebDriver driver) {
 		try {

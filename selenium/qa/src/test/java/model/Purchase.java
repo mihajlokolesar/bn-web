@@ -10,6 +10,18 @@ public class Purchase implements Serializable {
 	private int numberOfTickets;
 	private int removeNumberOfTickets;
 	private String phoneNumber;
+	
+	
+	public Purchase() {
+		super();
+	}
+	
+	public Purchase(Event event, CreditCard creditCard, int numberOfTickets) {
+		super();
+		this.event = event;
+		this.creditCard = creditCard;
+		this.numberOfTickets = numberOfTickets;
+	}
 
 	public Event getEvent() {
 		return event;

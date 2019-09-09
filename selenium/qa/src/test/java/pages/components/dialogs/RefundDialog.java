@@ -19,6 +19,7 @@ public class RefundDialog extends DialogContainerComponent {
 	}
 
 	public void clickOnDialogRefundButton() {
+		waitForTime(1500);
 		WebElement refundButton = SeleniumUtils.getChildElementFromParentLocatedBy(getDialogContainer(),
 				By.xpath(relativeRefundButtonXpath), driver);
 		explicitWaitForVisibilityAndClickableWithClick(refundButton);
@@ -26,13 +27,14 @@ public class RefundDialog extends DialogContainerComponent {
 
 	public void confirmRefundIsSuccess() {
 		//find some condition to wait for, to avoid this wait
-		waitForTime(3000);
-		if (isVisible()) {
-			isRefundSuccess();
+		waitForTime(1500);
+		if (isVisible() && isRefundSuccess()) {
 			WebElement closeButton = SeleniumUtils.getChildElementFromParentLocatedBy(getDialogContainer(),
 					By.xpath(relativeClose), driver);
+			waitForTime(1000);
 			explicitWaitForVisibilityAndClickableWithClick(closeButton);
 		}
+		
 	}
 
 	private boolean isRefundSuccess() {

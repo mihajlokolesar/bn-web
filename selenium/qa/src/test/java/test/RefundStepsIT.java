@@ -1,21 +1,23 @@
 package test;
 
+import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import junit.framework.Assert;
+import model.CreditCard;
 import model.Event;
-import model.Organization;
+import model.Purchase;
 import model.User;
 import pages.components.admin.AdminEventComponent;
 import test.facade.AdminEventStepsFacade;
 import test.facade.LoginStepsFacade;
 import test.facade.OrganizationStepsFacade;
+import test.facade.PurchaseFacade;
 
 public class RefundStepsIT extends BaseSteps {
 
-//	boxneousera@mailinator.com,test1111,neotestbox,officeuser - registered box office user (both on develop, and neon)
-	@Test(dataProvider = "refund_data")
+	@Test(dataProvider = "refund_data", priority = 15, dependsOnMethods = {
+			"ensureThatEventWithSoldTicketExists" }, retryAnalyzer = utils.RetryAnalizer.class)
 	public void refundSteps(User superuser, Event event) throws Exception {
 
 		LoginStepsFacade loginFacade = new LoginStepsFacade(driver);
@@ -26,8 +28,8 @@ public class RefundStepsIT extends BaseSteps {
 		organizationFacade.givenOrganizationExist(event.getOrganization());
 
 		adminEventFacade.givenUserIsOnAdminEventsPage();
-		AdminEventComponent eventComponent = adminEventFacade.givenEventIsOpenedAndHasSoldItem(event);
-		Assert.assertNotNull("No Event with name: " + event.getEventName() + " found", eventComponent);
+		AdminEventComponent eventComponent = adminEventFacade.findEventIsOpenedAndHasSoldItem(event);
+		Assert.assertNotNull(eventComponent, "No Event with name: " + event.getEventName() + " found");
 		eventComponent.clickOnEvent();
 		adminEventFacade.thenUserIsOnEventDashboardPage();
 		adminEventFacade.whenUserSelectManageOrdersFromToolsDropDown();
@@ -40,10 +42,27 @@ public class RefundStepsIT extends BaseSteps {
 
 	}
 
+	@Test(dataProvider = "ensure_event_with_sold_ticket_exists_data", priority = 15)
+	public void ensureThatEventWithSoldTicketExists(Purchase purchase, User user, User superuser) throws Exception {
+		PurchaseFacade purchaseFacade = new PurchaseFacade(driver);
+		maximizeWindow();
+		purchaseFacade.purchaseSteps(purchase, user);
+
+	}
+
 	@DataProvider(name = "refund_data")
-	public Object[][] refundDataProvider() {
-		Event event = Event.generatedEvent(1, 5, "TestNameEvent", false);
+	public static Object[][] refundDataProvider() {
+		Event event = Event.generatedEvent(1, 5, "TestPurchaseSearchEventName", false);
 		return new Object[][] { { User.generateSuperUser(), event } };
+	}
+
+	@DataProvider(name = "ensure_event_with_sold_ticket_exists_data")
+	public static Object[][] refundDataPrepare() {
+		Event event = Event.generatedEvent(1, 5, "TestPurchaseSearchEventName", false);
+		Purchase purchase = new Purchase(event, CreditCard.generateCreditCard(), 2);
+		User user = User.generateUser();
+		return new Object[][] { { purchase, user, User.generateSuperUser() } };
+
 	}
 
 }
