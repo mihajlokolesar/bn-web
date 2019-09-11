@@ -80,9 +80,9 @@ public class Header extends BaseComponent {
 	}
 
 	public void openProfileOptions() {
-		waitForTime(500);
+		waitForTime(1000);
 		explicitWaitForVisibilityAndClickableWithClick(profileOptions);
-		waitForTime(500);
+		waitForTime(1000);
 	}
 
 	public void logOut() {

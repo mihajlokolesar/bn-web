@@ -63,10 +63,14 @@ public class AdminEventComponent extends BaseComponent {
 		new CancelEventDialog(driver).clickOnCancelEventButton();
 	}
 
-	public void deleteEvent(Event event) {
+	public DeleteEventDialog deleteEvent(Event event) {
 		openDropDown();
 		findActionAndClickInDropDown(dropDownDeleteEvent);
-		new DeleteEventDialog(driver).clickOnDeleteButton(event.getEventName());
+		waitForTime(2000);
+		DeleteEventDialog deleteDialog = new DeleteEventDialog(driver);
+		deleteDialog.clickOnDeleteButton(event.getEventName());
+		return deleteDialog;
+		
 	}
 
 	public void editEvent(Event event) {

@@ -147,7 +147,7 @@ public class Event implements Serializable {
 		event.setArtistName("TheTestArtistAuto");
 		event.setEventName(eventName + (addRandomToName? ProjectUtils.generateRandomInt(10000000) : ""));
 		event.setVenueName("MSG");
-		String[] dateSpan = ProjectUtils.getAllDatesWithinGivenRangeAndOffset(daysOffsetStart, dateRange);
+		String[] dateSpan = ProjectUtils.getDatesWithSpecifiedRangeInDaysWithStartOffset(daysOffsetStart, dateRange);
 		String startDate = dateSpan[0];
 		String endDate = dateSpan[1];
 		event.setStartDate(startDate);

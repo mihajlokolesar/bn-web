@@ -11,6 +11,8 @@ import pages.admin.events.AdminEventsPage;
 import pages.admin.events.CreateEventPage;
 import pages.components.admin.AdminEventComponent;
 import pages.components.admin.AdminSideBar;
+import pages.components.dialogs.DeleteEventDialog;
+import utils.MsgConstants;
 import utils.ProjectUtils;
 import utils.SeleniumUtils;
 
@@ -65,6 +67,16 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 			selectedEvent = adminEvents.findEvent(event.getEventName(), predicate);
 		}
 		return selectedEvent;
+	}
+	
+	public boolean whenUserDeletesEvent(Event event) {
+		AdminEventComponent component = adminEvents.findEventByName(event.getEventName());
+		DeleteEventDialog deleteDialog = component.deleteEvent(event);
+		if (adminEvents.isNotificationDisplayedWithMessage(MsgConstants.EVENT_DELETION_FAILED, 4)) {
+			deleteDialog.clickOnKeepEvent();
+			return false;
+		}
+		return true;
 	}
 	
 	public void whenUserUpdatesDataOfEvent(Event event) {
