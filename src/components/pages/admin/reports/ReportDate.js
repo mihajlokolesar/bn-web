@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { Grid, Typography, withStyles } from "@material-ui/core";
 import moment from "moment-timezone";
+import PropTypes from "prop-types";
 
 import Divider from "../../../common/Divider";
 import DateTimePickerGroup from "../../../common/form/DateTimePickerGroup";
 import { fontFamilyDemiBold } from "../../../../config/theme";
 import changeUrlParam from "../../../../helpers/changeUrlParam";
-import PropTypes from "prop-types";
 import Button from "../../../elements/Button";
 import getUrlParam from "../../../../helpers/getUrlParam";
 import servedImage from "../../../../helpers/imagePathHelper";
@@ -87,19 +87,21 @@ class ReportsDate extends Component {
 		this.setState({ startDate, endDate }, this.onDateChange.bind(this));
 	}
 
-	componentDidUpdate(prevProps) {
-		const { salesStart: prevSalesStart } = prevProps;
-		const { salesStart, timezone } = this.props;
+	componentDidUpdate(prevProps, prevState, snapshot) {
+		const { salesStartStringUtc: prevSalesStartStringUtc } = prevProps;
+		const { salesStartStringUtc, timezone } = this.props;
 
-		if (!prevSalesStart && salesStart) {
-			const startDate = moment.utc(salesStart).tz(timezone);
-			const endDate = moment.utc().tz(timezone);
-			this.setState({ startDate, endDate }, this.onDateChange.bind(this));
+		if (prevSalesStartStringUtc !== salesStartStringUtc) {
+			const startDate = moment.utc(salesStartStringUtc).tz(timezone);
+
+			//TODO place back when api returns the first ticket sale date. Make sure it doesn't trigger 2 report calls at the same time.
+			//this.setState({ startDate }, this.onDateChange.bind(this));
 		}
 	}
 
 	onChange(callBack = () => {}) {
 		const { startDate, endDate } = this.state;
+
 		if (startDate && endDate) {
 			if (endDate.isBefore(startDate)) {
 				return this.setState({
@@ -238,7 +240,8 @@ ReportsDate.propTypes = {
 		unit: PropTypes.oneOf(["M", "d"])
 	}), //Pass this through for reports like weekly settlements that needs to be the past week by default
 	onChangeButton: PropTypes.bool, //Pass this through if you want onChange to be called here and not automatically when the date is changed
-	onChangeOnLoad: PropTypes.bool //Use this to trigger onChange the first time the current dates are loaded
+	onChangeOnLoad: PropTypes.bool, //Use this to trigger onChange the first time the current dates are loaded
+	salesStartStringUtc: PropTypes.string
 };
 
 export default withStyles(styles)(ReportsDate);

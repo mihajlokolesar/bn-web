@@ -219,12 +219,12 @@ class RightHeaderMenu extends React.Component {
 			<span className={classes.menuButton}>
 				<Link to="/login" className={classes.menuLink}>
 					<Hidden mdUp>
-						<Button variant="callToAction" size={"small"}>
+						<Button variant="secondary" size={"small"}>
 							Sign In
 						</Button>
 					</Hidden>
 					<Hidden smDown>
-						<Button variant="callToAction">Sign In</Button>
+						<Button variant="secondary">Sign In</Button>
 					</Hidden>
 				</Link>
 			</span>

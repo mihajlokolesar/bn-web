@@ -127,13 +127,15 @@ class EventSummary extends Component {
 
 					const { totalSoldOnlineCount, totalOnlineClientFeesInCents } = totals;
 
+					totalOnlineClientFeesInCentsWithOrderFees += totalOnlineClientFeesInCents;
+
 					return (
 						<div key={ticketId}>
 							<EventSummaryRow ticketTypeRow gray>
 								{[
 									name,
 									" ",
-									dollars(totalOnlineClientFeesInCents),
+									" ",
 									totalSoldOnlineCount,
 									" ",
 									" ",
@@ -163,12 +165,15 @@ class EventSummary extends Component {
 									ticket_pricing_price_in_cents +
 									promo_code_discounted_ticket_price;
 
+								const clientFeesPerSale =
+									client_online_fees_in_cents / online_sale_count;
+
 								return (
 									<EventSummaryRow key={priceIndex}>
 										{[
 											rowName,
 											dollars(priceInCents),
-											dollars(client_online_fees_in_cents),
+											dollars(clientFeesPerSale),
 											online_sale_count,
 											" ",
 											" ",
@@ -185,6 +190,7 @@ class EventSummary extends Component {
 					const rowName = "Order Fees";
 					totalOnlineClientFeesInCentsWithOrderFees =
 						totalOnlineClientFeesInCents + fee;
+
 					return (
 						<EventSummaryRow key={feeIndex} ticketTypeRow>
 							{[rowName, "-", dollars(fee), "-", " ", " ", dollars(fee)]}
@@ -196,7 +202,7 @@ class EventSummary extends Component {
 					{[
 						"Total revenue share",
 						" ",
-						dollars(totalOnlineClientFeesInCentsWithOrderFees),
+						" ",
 						" ",
 						" ",
 						" ",

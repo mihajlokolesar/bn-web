@@ -238,15 +238,15 @@ class EventDashboardContainer extends Component {
 					<span/>
 				)}
 				{/*TODO remove this when new order management is live*/}
-				{user.hasScope("order:refund") ? (
-					<Link to={`/admin/events/${event.id}/manage-orders`}>
-						<MenuItem onClick={this.handleToolsMenuClose.bind(this)}>
-							Manage orders
-						</MenuItem>
-					</Link>
-				) : (
-					<span/>
-				)}
+				{/*{user.hasScope("order:refund") ? (*/}
+				{/*	<Link to={`/admin/events/${event.id}/manage-orders`}>*/}
+				{/*		<MenuItem onClick={this.handleToolsMenuClose.bind(this)}>*/}
+				{/*			Manage orders*/}
+				{/*		</MenuItem>*/}
+				{/*	</Link>*/}
+				{/*) : (*/}
+				{/*	<span/>*/}
+				{/*)}*/}
 				{user.isAdmin ? ( //TODO use scope when API is ready
 					<Link to={`/admin/events/${event.id}/hospitality/last-call`}>
 						<MenuItem onClick={this.handleToolsMenuClose.bind(this)}>
@@ -476,9 +476,7 @@ class EventDashboardContainer extends Component {
 
 		const items = [];
 
-		//TODO this scope will be order:read when it's ready
-		if (user.isAdmin) {
-			//user.hasScope("order:read")
+		if (user.hasScope("order:read")) {
 			items.push(
 				<Link
 					key="manage-orders"

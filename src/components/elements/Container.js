@@ -250,7 +250,7 @@ class Container extends React.Component {
 
 Container.propTypes = {
 	classes: PropTypes.object.isRequired,
-	children: PropTypes.element.isRequired
+	children: PropTypes.oneOfType([PropTypes.element, PropTypes.array]).isRequired
 };
 
 export default withStyles(styles)(withRouter(Container));

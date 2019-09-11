@@ -424,7 +424,7 @@ class Transactions extends Component {
 	}
 
 	render() {
-		const { eventId, classes, printVersion, salesStart } = this.props;
+		const { eventId, classes, printVersion, salesStartStringUtc } = this.props;
 
 		if (printVersion) {
 			return this.renderList();
@@ -491,7 +491,7 @@ class Transactions extends Component {
 						timezone={currentOrgTimezone}
 						onChange={this.updateDateRange.bind(this)}
 						defaultStartTimeBeforeNow={{ value: 1, unit: "M" }}
-						salesStart={salesStart}
+						salesStartStringUtc={salesStartStringUtc}
 						onChangeButton
 						onChangeOnLoad
 					/>
@@ -518,7 +518,8 @@ Transactions.propTypes = {
 	eventId: PropTypes.string,
 	eventName: PropTypes.string,
 	printVersion: PropTypes.bool,
-	onLoad: PropTypes.func
+	onLoad: PropTypes.func,
+	salesStartStringUtc: PropTypes.string
 };
 
 export default withStyles(styles)(Transactions);
