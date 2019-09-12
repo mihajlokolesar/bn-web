@@ -3,6 +3,7 @@ package pages.mailinator;
 import org.openqa.selenium.WebDriver;
 
 import config.MailinatorEnum;
+import pages.mailinator.inbox.BOSellPagePurchaseWithCashMailinatorPage;
 import pages.mailinator.inbox.MailinatorInboxPage;
 import pages.mailinator.inbox.ResetPasswordMailinatorPage;
 import pages.mailinator.inbox.TransferCancelMailinatorPage;
@@ -21,7 +22,9 @@ public class MailinatorFactory {
 		case RESET_PASSWORD:
 			inbox = new ResetPasswordMailinatorPage(driver);
 			break;
-			
+		case BO_SELL_WITH_CASH:
+			inbox = new BOSellPagePurchaseWithCashMailinatorPage(driver);
+			break;
 		}
 		return inbox;
 	}

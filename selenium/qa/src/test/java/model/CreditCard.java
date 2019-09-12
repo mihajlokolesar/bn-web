@@ -2,14 +2,21 @@ package model;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class CreditCard implements Serializable{
 	
 	
 	private static final long serialVersionUID = 4295582882806128546L;
+	@JsonProperty("card_number")
 	private String cardNumber;
+	@JsonProperty("expiration_date")
 	private String expirationDate;
+	@JsonProperty("cvc")
 	private String cvc;
+	@JsonProperty("zip_code")
 	private String zipCode;
+	
 	public String getCardNumber() {
 		return cardNumber;
 	}

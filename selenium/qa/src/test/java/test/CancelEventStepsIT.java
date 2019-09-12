@@ -12,6 +12,7 @@ import pages.components.admin.AdminEventComponent;
 import test.facade.AdminEventStepsFacade;
 import test.facade.LoginStepsFacade;
 import test.facade.OrganizationStepsFacade;
+import utils.DataConstants;
 
 public class CancelEventStepsIT extends BaseSteps {
 
@@ -47,7 +48,7 @@ public class CancelEventStepsIT extends BaseSteps {
 	@DataProvider(name = "cancel_event_steps")
 	public static Object[][] data_new_user() {
 		User superUser = User.generateSuperUser();
-		Event event = Event.generateEvent();
+		Event event = Event.generateEventFromJson(DataConstants.EVENT_DATA_STANARD_KEY, false, 1, 2);
 		event.setEventName("TestNameCancelEvent");
 		return new Object[][] { { superUser, event } };
 	}

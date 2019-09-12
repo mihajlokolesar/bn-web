@@ -18,7 +18,8 @@ import utils.DataConstants;
 
 public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 
-	@Test(dataProvider = "search_orders_data", priority = 13, dependsOnMethods = {"userPurchasedTickets"}, retryAnalyzer = utils.RetryAnalizer.class)
+	@Test(dataProvider = "search_orders_data", priority = 13, dependsOnMethods = {
+			"userPurchasedTickets" }, retryAnalyzer = utils.RetryAnalizer.class)
 	public void searchForOrdersOnBoxOfficePage(User superuser, Event event, User one, User two) throws Exception {
 		LoginStepsFacade loginFacade = new LoginStepsFacade(driver);
 		AdminEventStepsFacade adminEventFacade = new AdminEventStepsFacade(driver);
@@ -44,9 +45,9 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 
 	@DataProvider(name = "search_orders_data")
 	public static Object[][] dataProvider() {
-		User superUser = User.generateSuperUser();
-
-		Event event = Event.generatedEvent(1, 2, "TestPurchaseSearchEventName", false);
+		User superUser = User.generateUserFromJson(DataConstants.SUPERUSER_DATA_KEY);
+		Event event = Event.generateEventFromJson(DataConstants.EVENT_DATA_STANARD_KEY, "TestPurchaseSearchEventName",
+				false, 1, 2);
 		User userOne = User.generateUser(DataConstants.DISTINCT_USER_ONE_FIRST_NAME,
 				DataConstants.DISTINCT_USER_ONE_LAST_NAME);
 		User userTwo = User.generateUser();
@@ -95,7 +96,8 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 		Purchase purchase = new Purchase();
 		purchase.setCreditCard(CreditCard.generateCreditCard());
 		purchase.setNumberOfTickets(1);
-		purchase.setEvent(Event.generatedEvent(1, 2, "TestPurchaseSearchEventName", false));
+		purchase.setEvent(Event.generateEventFromJson(DataConstants.EVENT_DATA_STANARD_KEY,
+				"TestPurchaseSearchEventName", false, 1, 2));
 		return purchase;
 	}
 

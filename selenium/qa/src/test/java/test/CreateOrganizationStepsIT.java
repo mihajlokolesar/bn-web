@@ -8,6 +8,7 @@ import model.Organization;
 import model.User;
 import pages.LoginPage;
 import test.facade.OrganizationStepsFacade;
+import utils.DataConstants;
 
 public class CreateOrganizationStepsIT extends BaseSteps {
 
@@ -26,7 +27,9 @@ public class CreateOrganizationStepsIT extends BaseSteps {
 
 	@DataProvider(name = "create_organization_data")
 	public static Object[][] data() {
-		return new Object[][] { { User.generateSuperUser(), Organization.generateOrganization() } };
+		return new Object[][] {
+			{ User.generateUserFromJson(DataConstants.SUPERUSER_DATA_KEY),
+			  Organization.generateOrganizationFromJson(DataConstants.ORGANIZATION_STD_KEY, true)} };
 	}
 
 }

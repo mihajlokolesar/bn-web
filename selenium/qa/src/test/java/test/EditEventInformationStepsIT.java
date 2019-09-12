@@ -10,6 +10,7 @@ import pages.components.admin.AdminEventComponent;
 import test.facade.AdminEventStepsFacade;
 import test.facade.LoginStepsFacade;
 import test.facade.OrganizationStepsFacade;
+import utils.DataConstants;
 import utils.MsgConstants;
 
 public class EditEventInformationStepsIT extends BaseSteps {
@@ -25,7 +26,7 @@ public class EditEventInformationStepsIT extends BaseSteps {
 		organizationFacade.givenOrganizationExist(event.getOrganization());
 
 		adminEventFacade.givenUserIsOnAdminEventsPage();
-		AdminEventComponent eventComp = adminEventFacade.givenEventExistsAndPredicateCondition(event,
+		AdminEventComponent eventComp = adminEventFacade.givenEventWithNameAndPredicateExists(event,
 				component -> !component.isEventDrafted());
 
 		eventComp.editEvent(event);//userIsOnEventPage
@@ -44,12 +45,9 @@ public class EditEventInformationStepsIT extends BaseSteps {
 
 	@DataProvider(name = "edit_event_data")
 	public static Object[][] editEventData() {
-		User superuser = User.generateSuperUser();
-		Event event = Event.generatedEvent(1,5,"TestUNameEvent", false);
+		User superuser = User.generateUserFromJson(DataConstants.SUPERUSER_DATA_KEY);
+		Event event = Event.generateEventFromJson(DataConstants.EVENT_DATA_STANARD_KEY, "TestUNameEvent", false, 1, 5);
 		event.setVenueName("Arcade Empire");
 		return new Object[][] { { superuser, event } };
 	}
-
-
-
 }

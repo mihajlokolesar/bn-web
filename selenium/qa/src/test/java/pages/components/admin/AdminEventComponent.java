@@ -27,10 +27,18 @@ public class AdminEventComponent extends BaseComponent {
 	private String relativeIsCanceledParagraphXpath = ".//div[p[contains(text(),'Cancelled')]]";
 
 	private String relativeIsDraftParagraphPath = ".//div/p[contains(text(),'Draft')]";
+	
+	private String relativeIsPublishedXPath = ".//p[contains(text(),'Published')]";
+
+	private String relativeIsOnSaleXPath = ".//p[contains(text(),'On sale')]";
 
 	private String relativeVenueParagraphPath = ".//a[contains(@href,'/dashboard')]/following-sibling::p[1]";
 
 	private String relativeDateTimeParagraphPath = ".//a[contains(@href,'/dashboard')]/following-sibling::p[2]";
+	
+	private String relativeImageXPath = ".//a[contains(@href,'/admin/events/')]/div";
+
+	private String relativeSoldToDivXPath = "./div/div[2]/div[2]/div[2]/div/div[p[text()='Sold']]/p[2]";
 
 	private By dropDownCancelEvent = By
 			.xpath("//body//div[@id='long-menu']//ul/li[div[span[contains(text(),'Cancel event')]]]");
@@ -55,6 +63,31 @@ public class AdminEventComponent extends BaseComponent {
 		return SeleniumUtils.isChildElementVisibleFromParentLocatedBy(event, By.xpath(relativeIsDraftParagraphPath),
 				driver);
 	}
+	
+	public boolean isEventPublished() {
+		return SeleniumUtils.isChildElementVisibleFromParentLocatedBy(event, By.xpath(relativeIsPublishedXPath),
+				driver);
+	}
+
+	public boolean isEventOnSale() {
+		return SeleniumUtils.isChildElementVisibleFromParentLocatedBy(event, By.xpath(relativeIsOnSaleXPath), driver);
+	}
+
+	public boolean isSoldToAmountGreaterThan(int amount) {
+		int intElAmount = getSoldToAmount();
+		if (amount < intElAmount) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private int getSoldToAmount() {
+		WebElement amountElement = SeleniumUtils.getChildElementFromParentLocatedBy(event, By.xpath(relativeSoldToDivXPath), driver);
+		String elementAmount = amountElement.getText();
+		int intElAmount = Integer.parseInt(elementAmount);
+		return intElAmount;
+	}
 
 	public void cancelEvent() {
 		openDropDown();
@@ -72,6 +105,11 @@ public class AdminEventComponent extends BaseComponent {
 	public void editEvent(Event event) {
 		openDropDown();
 		findActionAndClickInDropDown(dropDownEditEvent);
+	}
+	
+	public void clickOnEvent() {
+		WebElement image = SeleniumUtils.getChildElementFromParentLocatedBy(event, By.xpath(relativeImageXPath), driver);
+		explicitWaitForVisibilityAndClickableWithClick(image);
 	}
 
 	public boolean checkIfDatesMatch(String startDate) {

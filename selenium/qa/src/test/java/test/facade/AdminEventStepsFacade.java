@@ -1,6 +1,8 @@
 package test.facade;
 
 import java.net.URISyntaxException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Predicate;
 
 import org.openqa.selenium.WebDriver;
@@ -19,52 +21,58 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 	private CreateEventPage createEventPage;
 	private AdminEventsPage adminEvents;
 	private AdminSideBar adminSideBar;
+	
+	private final String MANAGE_ORDER_FIRST_NAME_KEY = "mange_order_first_name";
+	private final String MANAGE_ORDER_LAST_NAME_KEY = "manage_order_last_name";
+	private final String MANAGE_ORDER_TICKET_NUMBER_KEY = "manage_order_ticket_number";
+	
+	private Map<String, Object> dataMap;
 
 	public AdminEventStepsFacade(WebDriver driver) {
 		super(driver);
 		this.createEventPage = new CreateEventPage(driver);
 		this.adminEvents = new AdminEventsPage(driver);
 		this.adminSideBar = new AdminSideBar(driver);
+		this.dataMap = new HashMap<>();
 	}
 
 	public void givenUserIsOnAdminEventsPage() {
 		adminSideBar.clickOnEvents();
 		adminEvents.isAtPage();
 	}
-
+	
 	public AdminEventComponent givenEventExistAndIsNotCanceled(Event event) throws URISyntaxException {
-		AdminEventComponent selectedEvent = adminEvents.findOpenedEventByName(event.getEventName());
+		return givenEventWithNameAndPredicateExists(event, comp -> !comp.isEventCanceled());
+	}
+	
+	public AdminEventComponent findEventIsOpenedAndHasSoldItem(Event event) throws URISyntaxException {
+		AdminEventComponent selectedEvent =  adminEvents.findEvent(event.getEventName(),
+				comp -> comp.isEventPublished() && comp.isEventOnSale() && comp.isSoldToAmountGreaterThan(0));
+		return selectedEvent;
+	}
+	
+	public AdminEventComponent givenEventWithNameAndPredicateExists(Event event,
+			Predicate<AdminEventComponent> predicate) throws URISyntaxException {
+		AdminEventComponent selectedEvent = adminEvents.findEvent(event.getEventName(), predicate);
 		if (selectedEvent == null) {
-			event.setEventName(event.getEventName() + ProjectUtils.generateRandomInt(10000000));
-			boolean retVal = createEvent(event);
-
-			Assert.assertTrue(retVal,
-					"Event with name: " + event.getEventName() + " does not exist and could not be created");
-			String path = SeleniumUtils.getUrlPath(driver);
-			retVal = retVal && path.contains("edit");
-
-			adminSideBar.clickOnEvents();
-			adminEvents.isAtPage();
-			selectedEvent = adminEvents.findOpenedEventByName(event.getEventName());
+			createNewRandomEvent(event);
+			selectedEvent = adminEvents.findEvent(event.getEventName(), predicate);
 		}
 		return selectedEvent;
 	}
 	
-	public AdminEventComponent givenEventExistsAndPredicateCondition(Event event, Predicate<AdminEventComponent> predicate) throws URISyntaxException {
-		AdminEventComponent selectedEvent = adminEvents.findEvent(event.getEventName(), predicate);
-		if (selectedEvent == null) {
-			event.setEventName(event.getEventName() + ProjectUtils.generateRandomInt(10000000));
-			boolean retVal = createEvent(event);
+	private Event createNewRandomEvent(Event event) throws URISyntaxException {
+		event.setEventName(event.getEventName() + ProjectUtils.generateRandomInt(10000000));
+		boolean retVal = createEvent(event);
 
-			Assert.assertTrue(retVal,
-					"Event with name: " + event.getEventName() + " does not exist and could not be created");
-			String path = SeleniumUtils.getUrlPath(driver);
-			retVal = retVal && path.contains("edit");
-			adminSideBar.clickOnEvents();
-			adminEvents.isAtPage();
-			selectedEvent = adminEvents.findEvent(event.getEventName(), predicate);
-		}
-		return selectedEvent;
+		Assert.assertTrue(retVal,
+				"Event with name: " + event.getEventName() + " does not exist and could not be created");
+		String path = SeleniumUtils.getUrlPath(driver);
+		retVal = retVal && path.contains("edit");
+		Assert.assertTrue(retVal);
+		adminSideBar.clickOnEvents();
+		adminEvents.isAtPage();
+		return event;
 	}
 	
 	public void whenUserUpdatesDataOfEvent(Event event) {
@@ -130,5 +138,13 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		createEventPage.enterDatesAndTimes(event.getStartDate(), event.getEndDate(), event.getStartTime(),
 				event.getEndTime(), event.getDoorTime());
 		createEventPage.addTicketTypes(event.getTicketTypes());
+	}
+	
+	private void setData(String key, Object value) {
+		dataMap.put(key, value);
+	}
+
+	private Object getData(String key) {
+		return dataMap.get(key);
 	}
 }

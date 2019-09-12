@@ -4,8 +4,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+
+import org.apache.commons.lang3.SerializationUtils;
+import org.openqa.selenium.WebElement;
 
 public class ProjectUtils {
 	
@@ -70,4 +74,24 @@ public class ProjectUtils {
 			appendField(f, sb);
 		}
 	}
+	
+	public static Object[] createAndFillArrayWithObject(int size, Object original) {
+		Object[] dest = new Object[size];
+		Arrays.fill(dest, original);
+		return dest;
+	}
+	
+	public static Object[][] composeData(Object[][] dest, Object[] src, int destinationColumn) {
+		for (int i = 0; i < src.length; i++) {
+			dest[i][destinationColumn] = src[i];
+		}
+		return dest;
+	}
+	
+	public static String getTextForElementAndReplace(WebElement element, String oldChar, String newChar ) {
+		String text = element.getText();
+		return text.replace(oldChar, newChar);
+		
+	}
+	
 }

@@ -1,0 +1,204 @@
+{
+	"user_credentials": {
+		"email_address": "testuser@mailinator.com",
+		"password": "test1111",
+		"test": true
+	},
+	"wrong_user_mail_credentials": {
+		"email_address": "wrongmailuserblue@mailinator.com",
+		"password": "test1111"
+	},
+	"wrong_pass_credentials": {
+		"email_address": "tusertrqa@gmail.com",
+		"password": "wrongpas"
+	},
+	"user_fb_credentials": {
+		"email_address": "tusertrqa@gmail.com",
+		"password": "test/1111/"
+	},
+	"reset_password_credentials": [
+		{
+			"email_address": "bluetestneouser@mailinator.com",
+			"password": "test1111",
+			"confirm_password": "test2222",
+			"test": false
+		},
+		{
+			"email_address": "bluetestneouser@mailinator.com",
+			"password": "test1111",
+			"confirm_password": "test1111",
+			"test": true
+		}
+	],
+	"super_user_std": {
+		"email_address": "superuser@test.com",
+		"password": "password"
+	},
+	"_comment_for_box_office_user": "this box office user is tied to 'auto_test_organization_box_office_user' organization object",
+	"box_office_user_std": {
+		"email_address": "boxneousera@mailinator.com",
+		"password": "test1111",
+		"confirm_password": "test1111",
+		"first_name": "neotestbox",
+		"last_name": "officeuser"
+	},
+	"user_data_std": {
+		"email_address": "bluetestneouser@mailinator.com",
+		"password": "test1111",
+		"confirm_password": "test1111",
+		"first_name": "test",
+		"last_name": "testqa"
+	},
+	"generate_new_user_data": {
+		"email_address": "",
+		"password": "seleniumpassword",
+		"confirm_password": "seleniumpassword",
+		"first_name": "seleniumtest",
+		"last_name": "qaselenium"
+	},
+	"auto_test_organization_std": {
+		"name": "Auto test ",
+		"phone_number": "1111111111",
+		"time_zone": "Africa/Johannesburg",
+		"location": "Johannesburg, South Africa"
+	},
+	"auto_test_organization_box_office_user": {
+		"name": "4000 Tix Org",
+		"time_zone": "America/Los_Angeles"
+	},
+	"credit_card_data_std": {
+		"card_number": "4242424242424242",
+		"expiration_date": "0442",
+		"cvc": "424",
+		"zip_code": "24242"
+	},
+	"_comment_for_time_format_correct_format": " is example 08:00 AM, with 30 min increments, space and : are mandatory",
+	"_comment_for_dates": "dates must be generated inside the test themself, most of the time dates are generated as span of few days from current day, and possiblly some offset for start date",
+	"event_data_std": {
+		"organization": {
+			"name": "Auto Test12",
+			"phone_number": "1111111111",
+			"time_zone": "Africa/Johannesburg",
+			"location": "Johannesburg, South Africa"
+		},
+		"artist_name": "TheTestArtistAuto",
+		"event_name": "TestNameEvent",
+		"venue_name": "MSG",
+		"start_time": "08:30 PM",
+		"end_time": "10:00 PM",
+		"door_time": "1",
+		"ticket_types": [
+			{
+				"ticket_type_name": "GA",
+				"capacity": "100",
+				"price": "1"
+			},
+			{
+				"ticket_type_name": "VIP",
+				"capacity": "70",
+				"price": "2"
+			}
+		]
+	},
+	"event_data_with_additional_steps_std": {
+		"organization": {
+			"name": "Auto Test12",
+			"phone_number": "1111111111",
+			"time_zone": "Africa/Johannesburg",
+			"location": "Johannesburg, South Africa"
+		},
+		"artist_name": "TheTestArtistAuto",
+		"event_name": "TestNameEvent",
+		"venue_name": "MSG",
+		"start_time": "08:30 PM",
+		"end_time": "10:00 PM",
+		"door_time": "1",
+		"ticket_types": [
+			{
+				"ticket_type_name": "GA",
+				"capacity": "100",
+				"price": "1",
+				"additional_options": {
+					"sale_start": {
+						"label": "Immediately",
+						"value": "immediately"
+					}
+				}
+			},
+			{
+				"ticket_type_name": "VIP",
+				"capacity": "70",
+				"price": "2",
+				"additional_options": {
+					"sale_start": {
+						"label": "At a specific time",
+						"value": "custom"
+					},
+					"start_sale_time": "07:00 AM"
+				}
+			},
+			{
+				"ticket_type_name": "Special",
+				"capacity": "50",
+				"price": "1",
+				"additional_options": {
+					"sale_start": {
+						"label": "When sales end for...",
+						"value": "parent"
+					},
+					"start_sale_ticket_type": "GA"
+				}
+			}
+		]
+	},
+	"regular_user_purchase_std": {
+		"credit_card": {
+			"card_number": "4242424242424242",
+			"expiration_date": "0442",
+			"cvc": "424",
+			"zip_code": "24242"
+		},
+		"add_ticket_number": 3,
+		"remove_ticket_number": 2,
+		"order_note": "some pretty text note",
+		"additional_tendered_amount": 3,
+		"phone_number": ""
+	},
+	"box_office_sell_event_std": {
+		"organization": {
+			"name": "Big Neon",
+			"time_zone": "America/Los_Angeles"
+		},
+		"artist_name": "TheTestArtistAuto",
+		"event_name": "TestNameEventBO4000",
+		"venue_name": "MSG",
+		"start_time": "08:30 PM",
+		"end_time": "10:00 PM",
+		"door_time": "1",
+		"ticket_types": [
+			{
+				"ticket_type_name": "GA",
+				"capacity": "100",
+				"price": "1"
+			},
+			{
+				"ticket_type_name": "VIP",
+				"capacity": "70",
+				"price": "2"
+			}
+		]
+	},
+	"_comment_for_box_office_sell_purchase": "this purchase is tied to 'box_office_sell_event_std' object(list) latter in code",
+	"box_office_sell_purchase_std": {
+		"credit_card": {
+			"card_number": "4242424242424242",
+			"expiration_date": "0442",
+			"cvc": "424",
+			"zip_code": "24242"
+		},
+		"add_ticket_number": 5,
+		"remove_ticket_number": 3,
+		"order_note": "some pretty text note",
+		"additional_tendered_amount": 3
+	}
+}

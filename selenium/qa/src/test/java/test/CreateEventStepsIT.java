@@ -10,9 +10,10 @@ import pages.LoginPage;
 import test.facade.AdminEventStepsFacade;
 import test.facade.LoginStepsFacade;
 import test.facade.OrganizationStepsFacade;
+import utils.DataConstants;
 
 public class CreateEventStepsIT extends BaseSteps {
-
+	
 	@Test(dataProvider = "create_event_data", priority = 6, retryAnalyzer = utils.RetryAnalizer.class)
 	public void createEvent(User superuser, Event event) throws Exception {
 		
@@ -38,7 +39,9 @@ public class CreateEventStepsIT extends BaseSteps {
 	}
 	
 	@DataProvider(name = "create_event_data")
-	public static Object[][] data() {
-		return new Object[][] { { User.generateSuperUser(), Event.generateEvent()} };
+	public static Object[][] data() throws Exception {
+		Event event = Event.generateEventFromJson(DataConstants.EVENT_DATA_STANARD_KEY, true, 1, 4);
+		User superuser = User.generateUserFromJson(DataConstants.SUPERUSER_DATA_KEY);
+		return new Object[][] {{superuser, event}};
 	}
 }

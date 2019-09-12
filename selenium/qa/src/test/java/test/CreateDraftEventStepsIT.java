@@ -12,6 +12,7 @@ import pages.LoginPage;
 import test.facade.AdminEventStepsFacade;
 import test.facade.LoginStepsFacade;
 import test.facade.OrganizationStepsFacade;
+import utils.DataConstants;
 import utils.ProjectUtils;
 
 public class CreateDraftEventStepsIT extends BaseSteps {
@@ -41,8 +42,8 @@ public class CreateDraftEventStepsIT extends BaseSteps {
 	@DataProvider(name = "event_save_as_draft")
 	public static Object[][] data() {
 		User superuser = User.generateSuperUser();
-		Event event = Event.generateEvent();
-		event.setEventName("TestNameEventDraft" + ProjectUtils.generateRandomInt(10000000));
+		Event event = Event.generateEventFromJson(DataConstants.EVENT_DATA_STANARD_KEY,
+				"TestNameEventDraft", true, 1, 2);
 		event.setEndDate(null);
 		event.setEndTime(null);
 		event.setStartDate(null);

@@ -2,12 +2,18 @@ package model;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class TicketType implements Serializable{
 	
 	private static final long serialVersionUID = 4807652309876731369L;
+	@JsonProperty("ticket_type_name")
 	private String ticketTypeName;
+	@JsonProperty("capacity")
 	private String capacity;
+	@JsonProperty("price")
 	private String price;
+	@JsonProperty("additional_options")
 	private AdditionalOptionsTicketType additionalOptions;
 	
 		
