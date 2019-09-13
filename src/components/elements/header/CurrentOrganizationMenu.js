@@ -66,7 +66,18 @@ class CurrentOrganizationMenu extends React.Component {
 		const { anchorEl } = this.state;
 		const open = Boolean(anchorEl);
 		const { organizationRoles, currentOrganizationId, organizations } = user;
-
+		const sortedOrganizations = [];
+		for (const id in organizations) {
+			if (organizationRoles.hasOwnProperty(id)) {
+				const name = organizations[id];
+				sortedOrganizations.push({ id, name });
+			}
+		}
+		sortedOrganizations.sort((a, b) => {
+			const name1 = a.name.toLowerCase();
+			const name2 = b.name.toLowerCase();
+			return name1 < name2 ? -1 : name1 > name2 ? 1 : 0;
+		});
 		return (
 			<Menu
 				id="menu-appbar"
@@ -82,20 +93,18 @@ class CurrentOrganizationMenu extends React.Component {
 				open={open}
 				onClose={this.handleClose.bind(this)}
 			>
-				{Object.keys(organizationRoles)
-					.sort()
-					.map(id => (
-						<MenuItem
-							key={id}
-							onClick={() => {
-								user.setCurrentOrganizationRolesAndScopes(id, true);
-								this.handleClose();
-							}}
-							selected={id === currentOrganizationId}
-						>
-							{organizations[id] || "..."}
-						</MenuItem>
-					))}
+				{sortedOrganizations.map(org => (
+					<MenuItem
+						key={org.id}
+						onClick={() => {
+							user.setCurrentOrganizationRolesAndScopes(org.id, true);
+							this.handleClose();
+						}}
+						selected={org.id === currentOrganizationId}
+					>
+						{org.name || "..."}
+					</MenuItem>
+				))}
 			</Menu>
 		);
 	}

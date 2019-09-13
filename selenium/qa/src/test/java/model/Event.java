@@ -120,7 +120,7 @@ public class Event implements Serializable {
 	}
 	
 	public void setDates(int offset, int range) {
-		String[] dateSpan = ProjectUtils.getAllDatesWithinGivenRangeAndOffset(offset, range);
+		String[] dateSpan = ProjectUtils.getDatesWithSpecifiedRangeInDaysWithStartOffset(offset, range);
 		this.startDate = dateSpan[0];
 		this.endDate = dateSpan[1];
 	}
@@ -180,6 +180,30 @@ public class Event implements Serializable {
 		if(randomizeName) {
 			event.randomizeName();
 		}
+		return event;
+	}
+
+	public static Event generatedEvent(int daysOffsetStart, int dateRange, String eventName, boolean addRandomToName) {
+		Event event = new Event();
+		Organization organization = Organization.generateOrganization();
+		organization.setName("Auto Test12");
+		event.setOrganization(organization);
+		event.setArtistName("TheTestArtistAuto");
+		event.setEventName(eventName + (addRandomToName? ProjectUtils.generateRandomInt(10000000) : ""));
+		event.setVenueName("MSG");
+		String[] dateSpan = ProjectUtils.getDatesWithSpecifiedRangeInDaysWithStartOffset(daysOffsetStart, dateRange);
+		String startDate = dateSpan[0];
+		String endDate = dateSpan[1];
+		event.setStartDate(startDate);
+		event.setEndDate(endDate);
+		event.setStartTime("08:30 PM");
+		event.setEndTime("10:00 PM");
+		event.setDoorTime("1");
+		TicketType ticketType1 = new TicketType("GA", "100", "1");
+		TicketType ticketType2 = new TicketType("VIP", "70", "2");
+		event.addTicketType(ticketType1);
+		event.addTicketType(ticketType2);
+
 		return event;
 	}
 	

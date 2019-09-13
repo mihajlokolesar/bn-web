@@ -45,7 +45,6 @@ public class BoxOfficeSellTicketStepsIT extends BaseSteps {
 		
 		boolean isChangeDueCorrect = boxOfficeFacade.whenUserEntersTenderedAndChecksChangeDueIsCorrect(ticketTypeRow, addToTendered);
 		Assert.assertTrue(isChangeDueCorrect);
-		boxOfficeFacade.whenUserChecksOrderTotal();
 		Double totalAmount = boxOfficeFacade.whenUserChecksOrderTotal();
 		boxOfficeFacade.whenUserEntersGuestInformationAndClicksOnCompleteOrder(receiverOfTickets, purchase.getOrderNote());
 		boxOfficeFacade.thenUserShouldSeeOrderCompleteDialogAndGetOrderNumber();

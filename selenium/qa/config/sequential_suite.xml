@@ -16,6 +16,7 @@
       <class name="test.CreateDraftEventStepsIT"/>
       <class name="test.EditEventInformationStepsIT"/>
       <class name="test.OrderManagmentSearchForOrdersStepsIT"/>
+      <class name="test.PublishEventWithDeleteEventIT"/>
       <class name="test.BoxOfficeSellTicketStepsIT"/>
     </classes>
   </test>
@@ -34,7 +35,8 @@
       <class name="test.CreateDraftEventStepsIT"/>
       <class name="test.EditEventInformationStepsIT"/>
       <class name="test.OrderManagmentSearchForOrdersStepsIT"/>
+      <class name="test.PublishEventWithDeleteEventIT"/>
       <class name="test.BoxOfficeSellTicketStepsIT"/>
-    </classes>
+     </classes>
   </test>  
  </suite>

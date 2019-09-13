@@ -144,7 +144,7 @@ public class AdminBoxOfficeFacade extends BaseFacadeSteps {
 	public boolean thenCheckoutDialogIsVisible() {
 		return checkoutDialog.isVisible();
 	}
-
+	
 	public void whenUserClicksOnChangeTicketOnCheckoutDialog() {
 		checkoutDialog.clickOnChangeTicketLink();
 	}

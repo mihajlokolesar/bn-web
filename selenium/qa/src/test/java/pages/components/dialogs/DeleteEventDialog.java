@@ -32,4 +32,8 @@ public class DeleteEventDialog extends DialogContainerComponent {
 			throw new NoSuchElementException("Event name on delete dialog is not same as: " + eventName);
 		}
 	}
+	
+	public void clickOnKeepEvent() {
+		explicitWaitForVisibilityAndClickableWithClick(keepEventButton);
+	}
 }

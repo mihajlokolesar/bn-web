@@ -72,7 +72,7 @@ class Transactions extends Component {
 	componentDidMount() {
 		const { printVersion } = this.props;
 		if (printVersion) {
-			this.refreshData({}, 0, UNLIMITED_LINE_LIMIT); //TODO api needs to allow for all
+			this.refreshData();
 		}
 	}
 
@@ -264,14 +264,16 @@ class Transactions extends Component {
 			page = 0
 		} = this.state;
 
-		const { eventId, organizationId, onLoad } = this.props;
+		const { eventId, organizationId, onLoad, printVersion } = this.props;
+
+		const limit = printVersion ? UNLIMITED_LINE_LIMIT : LINE_LIMIT_PER_PAGE;
 
 		let queryParams = {
 			organization_id: organizationId,
 			start_utc,
 			end_utc,
 			page,
-			limit: LINE_LIMIT_PER_PAGE,
+			limit,
 			query: searchQuery
 		};
 

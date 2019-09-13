@@ -154,13 +154,14 @@ const Meta = props => {
 		event_start,
 		event_end,
 		ticket_types,
+		slug,
 		...event
 	} = props;
 
 	//TODO use slug when it's ready
 	const landingUrl = Settings().webUrl;
-	const rootEventUrl = `${landingUrl}/events/${id}`;
-	const ticketSelectionUrl = `${rootEventUrl}/tickets`;
+	const slugEventUrl = `${landingUrl}/events/${slug}`;
+	const ticketSelectionUrl = `${slugEventUrl}/tickets`;
 
 	const promoImageUrl = promo_image_url
 		? optimizedImageUrl(promo_image_url)
@@ -178,7 +179,7 @@ const Meta = props => {
 			googleBreadcrumbData = structuredBreadcrumbData(
 				name,
 				landingUrl,
-				rootEventUrl,
+				slugEventUrl,
 				""
 			);
 			break;
@@ -188,7 +189,7 @@ const Meta = props => {
 			googleBreadcrumbData = structuredBreadcrumbData(
 				name,
 				landingUrl,
-				rootEventUrl,
+				slugEventUrl,
 				ticketSelectionUrl
 			);
 
@@ -217,7 +218,7 @@ const Meta = props => {
 				},
 				{
 					property: "og:url",
-					content: rootEventUrl
+					content: slugEventUrl
 				},
 				{
 					property: "og:description",
@@ -251,7 +252,7 @@ const Meta = props => {
 			link={[
 				{
 					rel: "canonical",
-					href: rootEventUrl
+					href: slugEventUrl
 				},
 				{
 					rel: "image_src",

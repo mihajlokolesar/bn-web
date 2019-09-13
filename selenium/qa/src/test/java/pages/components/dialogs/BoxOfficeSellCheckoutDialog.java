@@ -64,6 +64,7 @@ public class BoxOfficeSellCheckoutDialog extends DialogContainerComponent {
 
 	public void clickOnChangeTicketLink() {
 		explicitWaitForVisibilityAndClickableWithClick(changeTicketLink);
+		waitForTime(3000);
 	}
 
 	public void clickOnPayWithCash() {
