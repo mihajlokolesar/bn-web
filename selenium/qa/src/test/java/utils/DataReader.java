@@ -38,14 +38,14 @@ public class DataReader {
 				fileName = "develop_" + dataProviderFile;
 			} else if (baseUrl.contains("beta")) {
 				fileName = "beta_" + dataProviderFile;
-			} else if (baseUrl.contains("local")) {// ???
+			} else if (baseUrl.contains("local")) {
 				fileName = "local_" + dataProviderFile;
 			} else {
 				fileName = "develop_" + dataProviderFile;
 			}
 			jsonObject = (JSONObject) parser.parse(new FileReader("src/test/resources/conf/" + fileName));
 		} catch (Exception e) {
-			// TODO:do some logging
+			e.printStackTrace();
 		}
 	}
 

@@ -103,7 +103,6 @@ public class AdminBoxOfficeFacade extends BaseFacadeSteps {
 
 	}
 
-	// clean up these methods, it is unmaintainable
 	private boolean whenUserSearchesByUserParams(String param) {
 		guestPage.enterSearchParameters("");
 		List<WebElement> allGuests = guestPage.searchForAllGuestOnPage();

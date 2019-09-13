@@ -30,7 +30,5 @@ public class DataConstants {
 	public static final String BOX_OFFICE_SELL_PURCHASE_STD_KEY = "box_office_sell_purchase_std";
 	public static final String BOX_OFFICE_USER_KEY = "box_office_user_std";
 	public static int RANDOM_NUMBER_SIZE_10M = 10000000;
-	
-//	boxneousera@mailinator.com,test1111,neotestbox,officeuser - registered box office user (both on develop, and neon)
 
 }
