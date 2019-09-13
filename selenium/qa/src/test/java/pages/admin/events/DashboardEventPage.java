@@ -17,6 +17,12 @@ public class DashboardEventPage extends BasePage {
 
 	@FindBy(id = "menu-appbar")
 	private WebElement toolsDropDownContainer;
+	
+	@FindBy(xpath = "//body//main//a/span[contains(text(),'Orders')]")
+	private WebElement ordersLink;
+	
+	@FindBy(id = "menu-appbar")
+	private WebElement ordersDropDownContainer;
 
 	public DashboardEventPage(WebDriver driver) {
 		super(driver);
@@ -34,6 +40,11 @@ public class DashboardEventPage extends BasePage {
 	
 	public void selectManageOrdersFromTools() {
 		GenericDropDown dropDown = new GenericDropDown(driver, toolsLink, toolsDropDownContainer);
+		dropDown.selectElementFromDropDownNoValueCheck(getByXpathForToolsDropDown("Manage orders"));
+	}
+	
+	public void selectManageOrdersFromOrdersTab() {
+		GenericDropDown dropDown = new GenericDropDown(driver, ordersLink, ordersDropDownContainer);
 		dropDown.selectElementFromDropDownNoValueCheck(getByXpathForToolsDropDown("Manage orders"));
 	}
 

@@ -1,15 +1,13 @@
 package test.facade;
 
-import java.util.List;
-
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 
 import model.User;
 import pages.admin.boxoffice.GuestPage;
 import pages.admin.boxoffice.SellPage;
 import pages.components.admin.AdminBoxOfficeSideBar;
+import utils.ProjectUtils;
 
 public class AdminBoxOfficeFacade extends BaseFacadeSteps {
 
@@ -50,56 +48,37 @@ public class AdminBoxOfficeFacade extends BaseFacadeSteps {
 	}
 	
 	public boolean whenUserSearchesByEmail(User user) {
-		guestPage.enterSearchParameters("");
-		List<WebElement> allGuests = guestPage.searchForAllGuestOnPage();
-		if (allGuests == null || allGuests.isEmpty()) {
-			return false;
-		}
-		
+		Integer allGuests = cleanSearchAndGetNumberOfResults();
 		guestPage.enterSearchParameters(user.getEmailAddress());
-		
-		List<WebElement> searchResults = guestPage.searchForResultsOfSearch(user.getFirstName());
-		if (searchResults != null && !searchResults.isEmpty()) {
-			return searchResults.size() < allGuests.size();
-		}
-		return false;
+		Integer searchResults = guestPage.getNumberOfResultsOfSearch(user.getFirstName());
+		return searchResults.compareTo(allGuests) < 0;
 	}
 	
-	public boolean whenUserSearchesByTicketNumber(User user) {
+	public boolean whenUserSearchesByFirstNameAndTicketNumber(User user) {
 		String firstname = user.getFirstName();
-		guestPage.enterSearchParameters("");
-		List<WebElement> allGuests = guestPage.searchForAllGuestOnPage();
-		if (allGuests == null || allGuests.isEmpty()) {
-			throw new NoSuchElementException("No guests found on admin guest page");
-		}
-		guestPage.enterSearchParameters(firstname);
-		
-		List<WebElement> searchResults = guestPage.searchForResultsOfSearch(firstname);
-		if (searchResults == null || searchResults.isEmpty()) {
-			throw new NoSuchElementException("No guest found on admin guest page after search");
-		}
+		boolean isNameSearchValid = whenUserSearchesByUserParams(firstname);
 		String ticketNumber = guestPage.getTicketNumber(firstname);
-		String escapedTicketNumber = ticketNumber.replace("#", "");
- 		guestPage.enterSearchParameters(escapedTicketNumber);
+ 		guestPage.enterSearchParameters(ticketNumber);
  		
- 		boolean isTicketInSearchResults = guestPage.isTicketNumberInGuestResults(escapedTicketNumber);
- 		return isTicketInSearchResults;
+ 		boolean isTicketInSearchResults = guestPage.isTicketNumberInGuestResults(ticketNumber);
+ 		return isTicketInSearchResults && isNameSearchValid;
 		
 	}
 	
 	private boolean whenUserSearchesByUserParams(String param) {
-		guestPage.enterSearchParameters("");
-		List<WebElement> allGuests = guestPage.searchForAllGuestOnPage();
-		if (allGuests == null || allGuests.isEmpty()) {
-			return false;
-		}
-		
+		Integer allGuests = cleanSearchAndGetNumberOfResults();
 		guestPage.enterSearchParameters(param);
-		
-		List<WebElement> searchResults = guestPage.searchForResultsOfSearch(param);
-		if (searchResults != null && !searchResults.isEmpty()) {
-			return searchResults.size() < allGuests.size();
-		}
-		return false;
+		Integer searchResults = guestPage.getNumberOfResultsOfSearch(param);
+		return searchResults.compareTo(allGuests) < 0;
 	}
+	
+	private Integer cleanSearchAndGetNumberOfResults() {
+		guestPage.enterSearchParameters("");
+		Integer numberOfAllGuests = guestPage.getNumberOfAllGuestOnPage();
+		if (!ProjectUtils.isNumberGreaterThan(numberOfAllGuests, 0)) {
+			throw new NoSuchElementException("No guests found on admin guest page");
+		}
+		return numberOfAllGuests;
+	}
+	
 }

@@ -25,8 +25,6 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 	private CreateEventPage createEventPage;
 	private AdminEventsPage adminEvents;
 	private AdminSideBar adminSideBar;
-	private DashboardEventPage dashboardEventPage;
-	private ManageOrdersAdminPage manageOrdersPage;
 
 	private final String MANAGE_ORDER_FIRST_NAME_KEY = "mange_order_first_name";
 	private final String MANAGE_ORDER_LAST_NAME_KEY = "manage_order_last_name";
@@ -39,8 +37,6 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		this.createEventPage = new CreateEventPage(driver);
 		this.adminEvents = new AdminEventsPage(driver);
 		this.adminSideBar = new AdminSideBar(driver);
-		this.dashboardEventPage = new DashboardEventPage(driver);
-		this.manageOrdersPage = new ManageOrdersAdminPage(driver);
 		this.dataMap = new HashMap<>();
 	}
 
@@ -51,6 +47,10 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 
 	public AdminEventComponent givenEventExistAndIsNotCanceled(Event event) throws URISyntaxException {
 		return givenEventWithNameAndPredicateExists(event, comp -> !comp.isEventCanceled());
+	}
+	
+	public AdminEventComponent findEventWithName(Event event) {
+		return adminEvents.findEventByName(event.getEventName());
 	}
 
 	public AdminEventComponent findEventIsOpenedAndHasSoldItem(Event event) throws URISyntaxException {
@@ -91,39 +91,6 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		adminSideBar.clickOnEvents();
 		adminEvents.isAtPage();
 		return event;
-	}
-
-	public void whenUserSelectManageOrdersFromToolsDropDown() {
-		dashboardEventPage.selectManageOrdersFromTools();
-	}
-
-	public void whenUserSelectsTicketForRefundAndClicksOnRefundButton() {
-		ManageOrderComp orderComponent = manageOrdersPage.openOrderWithIndexNumber(1);
-		setData(MANAGE_ORDER_FIRST_NAME_KEY, orderComponent.getFirstNameOfUser());
-		setData(MANAGE_ORDER_LAST_NAME_KEY, orderComponent.getLastNameOfUser());
-		setData(MANAGE_ORDER_TICKET_NUMBER_KEY, orderComponent.selectTicketForRefund());
-		manageOrdersPage.clickOnRefundButton();
-		RefundDialog refundDialog = new RefundDialog(driver);
-		refundDialog.clickOnDialogRefundButton();
-	}
-
-	public void whenUserGetConfirmationsOfSuccessfulRefund() {
-		new RefundDialog(driver).confirmRefundIsSuccess();
-	}
-
-	public boolean thenTicketShouldNotBePresent() {
-		String ticketNumber = (String) getData(MANAGE_ORDER_TICKET_NUMBER_KEY);
-		String firstName = (String) getData(MANAGE_ORDER_FIRST_NAME_KEY);
-		String lastName = (String) getData(MANAGE_ORDER_LAST_NAME_KEY);
-		return manageOrdersPage.isTicketPresentInOrder(ticketNumber, firstName, lastName);
-	}
-
-	public void thenUserIsOnManageOrdersPage() {
-		manageOrdersPage.isAtPage();
-	}
-
-	public void thenUserIsOnEventDashboardPage() {
-		dashboardEventPage.isAtPage();
 	}
 
 	public void whenUserUpdatesDataOfEvent(Event event) {

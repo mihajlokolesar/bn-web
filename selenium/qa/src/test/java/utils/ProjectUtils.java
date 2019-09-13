@@ -70,4 +70,13 @@ public class ProjectUtils {
 			appendField(f, sb);
 		}
 	}
+	public static boolean isNumberGreaterThan(Integer number, Integer greaterThan) {
+		if (number != null && greaterThan != null) {
+			if(number.compareTo(greaterThan) > 0) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 }

@@ -9,7 +9,10 @@ import model.Event;
 import model.Purchase;
 import model.User;
 import pages.EventsPage;
+import pages.components.admin.AdminEventComponent;
+import pages.components.admin.orders.manage.ManageOrderRow;
 import test.facade.AdminBoxOfficeFacade;
+import test.facade.AdminEventDashboardFacade;
 import test.facade.AdminEventStepsFacade;
 import test.facade.EventStepsFacade;
 import test.facade.LoginStepsFacade;
@@ -18,12 +21,20 @@ import utils.DataConstants;
 
 public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 
-	@Test(dataProvider = "search_orders_data", priority = 13, dependsOnMethods = {"userPurchasedTickets"}, retryAnalyzer = utils.RetryAnalizer.class)
-	public void searchForOrdersOnBoxOfficePage(User superuser, Event event, User one, User two) throws Exception {
+	private static final String EVENT_NAME = "TestSearchOrdersEventName";
+	private static final Integer START_DAY_OFFSET = 1;
+	private static final Integer DAYS_RANGE = 2;
+	private static final Integer PURCHASE_QUANTITY = 1;
+	private Purchase purchase;
+
+	@Test(dataProvider = "guest_page_search_data", priority = 13, 
+			 dependsOnMethods = {"userPurchasedTickets"},  retryAnalyzer = utils.RetryAnalizer.class)
+	public void guestPageSearchTest(User superuser, Event event, User one, User two) throws Exception {
 		LoginStepsFacade loginFacade = new LoginStepsFacade(driver);
+		AdminBoxOfficeFacade boxOfficeFacade = new AdminBoxOfficeFacade(driver);
 		AdminEventStepsFacade adminEventFacade = new AdminEventStepsFacade(driver);
 		OrganizationStepsFacade organizationFacade = new OrganizationStepsFacade(driver);
-		AdminBoxOfficeFacade boxOfficeFacade = new AdminBoxOfficeFacade(driver);
+		
 		maximizeWindow();
 		loginFacade.givenAdminUserIsLogedIn(superuser);
 		adminEventFacade.givenUserIsOnAdminEventsPage();
@@ -34,7 +45,7 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 		boxOfficeFacade.givenUserIsOnGuestPage();
 
 		boolean isLastNameTest = boxOfficeFacade.whenUserSearchesByLastName(one);
-		boolean isTicketInSearchResults = boxOfficeFacade.whenUserSearchesByTicketNumber(one);
+		boolean isTicketInSearchResults = boxOfficeFacade.whenUserSearchesByFirstNameAndTicketNumber(one);
 		boolean isEmailSearchTest = boxOfficeFacade.whenUserSearchesByEmail(two);
 
 		Assert.assertTrue(isLastNameTest && isTicketInSearchResults && isEmailSearchTest);
@@ -42,16 +53,70 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 
 	}
 
-	@DataProvider(name = "search_orders_data")
-	public static Object[][] dataProvider() {
+	@DataProvider(name = "guest_page_search_data")
+	public static Object[][] guestSearchData() {
 		User superUser = User.generateSuperUser();
 
-		Event event = Event.generatedEvent(1, 2, "TestPurchaseSearchEventName", false);
+		Event event = preparePurchase().getEvent();
 		User userOne = User.generateUser(DataConstants.DISTINCT_USER_ONE_FIRST_NAME,
 				DataConstants.DISTINCT_USER_ONE_LAST_NAME);
 		User userTwo = User.generateUser();
 		return new Object[][] { { superUser, event, userOne, userTwo } };
 
+	}
+
+	@Test(dataProvider = "manage_orders_page_search_data", priority = 14, retryAnalyzer = utils.RetryAnalizer.class)
+	public void manageOrdersPageSearchTest(User orgAdmin, User customer, User customerTwo, Event event)
+			throws Exception {
+
+		LoginStepsFacade loginFacade = new LoginStepsFacade(driver);
+		AdminEventStepsFacade adminEventFacade = new AdminEventStepsFacade(driver);
+		OrganizationStepsFacade organizationFacade = new OrganizationStepsFacade(driver);
+		AdminEventDashboardFacade dashboardFacade = new AdminEventDashboardFacade(driver);
+
+		maximizeWindow();
+		loginFacade.givenAdminUserIsLogedIn(orgAdmin);
+		organizationFacade.givenOrganizationExist(event.getOrganization());
+
+		adminEventFacade.givenUserIsOnAdminEventsPage();
+		AdminEventComponent eventComponent = adminEventFacade.findEventIsOpenedAndHasSoldItem(event);
+		Assert.assertNotNull(eventComponent, "No Event with name: " + event.getEventName() + " found");
+		eventComponent.clickOnEvent();
+
+		dashboardFacade.thenUserIsOnEventDashboardPage();
+		dashboardFacade.whenUserSelectsManageOrdersFromOrdersDropDown();
+		dashboardFacade.thenUserIsOnOrderManagePage();
+
+		ManageOrderRow orderRow = dashboardFacade.getManageOrdersFirstOrder();
+
+		String orderNumber = orderRow.getOrderNumber();
+
+		boolean retVal = false;
+		retVal = dashboardFacade.whenUserDoesSearchCheckByEmail(customer);
+		retVal &= dashboardFacade.whenUserDoesSearchCheckByFirstname(customerTwo);
+		retVal &= dashboardFacade.whenUserDoesSearchCheckByLastName(customerTwo);
+		retVal &= dashboardFacade.whenUserDoesSearchCheckByOrderNumber(orderNumber);
+		retVal &= dashboardFacade.whenUserChecksOrderQuantityForSpecificUser(customer, PURCHASE_QUANTITY);
+
+		Assert.assertTrue(retVal);
+		
+		adminEventFacade.givenUserIsOnAdminEventsPage();
+		AdminEventComponent eComponent = adminEventFacade.findEventIsOpenedAndHasSoldItem(event);
+		eComponent.cancelEvent();
+		
+		loginFacade.logOut();
+
+	}
+
+	@DataProvider(name = "manage_orders_page_search_data")
+	public static Object[][] dataProvider() {
+		Event event = preparePurchase().getEvent();
+		User orgAdminUser = new User();
+		orgAdminUser.setEmailAddress("orgadmneouser@mailinator.com");
+		orgAdminUser.setPass("test1111");
+		User one = User.generateUser(DataConstants.DISTINCT_USER_ONE_FIRST_NAME,
+				DataConstants.DISTINCT_USER_ONE_LAST_NAME);
+		return new Object[][] { { orgAdminUser, User.generateUser(), one, event } };
 	}
 
 	@Test(dataProvider = "purchase_data", priority = 13)
@@ -61,10 +126,11 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 
 		// given
 		eventsFacade.givenUserIsOnEventPage();
-		EventsPage eventsPage = eventsFacade.givenThatEventExist(purchase.getEvent(), user);
 
+		EventsPage eventsPage = eventsFacade.givenThatEventExist(purchase.getEvent(), user);
+		this.purchase = purchase;
 		// when
-		eventsFacade.whenUserExecutesEventPagesSteps(purchase.getEvent());
+		eventsFacade.whenUserExecutesEventPagesStepsWithoutMapView(purchase.getEvent());
 
 		Assert.assertTrue(eventsFacade.thenUserIsAtTicketsPage());
 
@@ -94,8 +160,8 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 	private static Purchase preparePurchase() {
 		Purchase purchase = new Purchase();
 		purchase.setCreditCard(CreditCard.generateCreditCard());
-		purchase.setNumberOfTickets(1);
-		purchase.setEvent(Event.generatedEvent(1, 2, "TestPurchaseSearchEventName", false));
+		purchase.setNumberOfTickets(PURCHASE_QUANTITY);
+		purchase.setEvent(Event.generatedEvent(START_DAY_OFFSET, DAYS_RANGE, EVENT_NAME, false));
 		return purchase;
 	}
 
