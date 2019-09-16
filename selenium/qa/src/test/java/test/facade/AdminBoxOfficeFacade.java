@@ -47,13 +47,6 @@ public class AdminBoxOfficeFacade extends BaseFacadeSteps {
 		return whenUserSearchesByUserParams(lastname);
 	}
 	
-	public boolean whenUserSearchesByEmail(User user) {
-		Integer allGuests = cleanSearchAndGetNumberOfResults();
-		guestPage.enterSearchParameters(user.getEmailAddress());
-		Integer searchResults = guestPage.getNumberOfResultsOfSearch(user.getFirstName());
-		return searchResults.compareTo(allGuests) < 0;
-	}
-	
 	public boolean whenUserSearchesByFirstNameAndTicketNumber(User user) {
 		String firstname = user.getFirstName();
 		boolean isNameSearchValid = whenUserSearchesByUserParams(firstname);
@@ -64,6 +57,14 @@ public class AdminBoxOfficeFacade extends BaseFacadeSteps {
  		return isTicketInSearchResults && isNameSearchValid;
 		
 	}
+	
+	public boolean whenUserSearchesByEmail(User user) {
+		Integer allGuests = cleanSearchAndGetNumberOfResults();
+		guestPage.enterSearchParameters(user.getEmailAddress());
+		Integer searchResults = guestPage.getNumberOfResultsOfSearch(user.getFirstName());
+		return searchResults.compareTo(allGuests) < 0;
+	}
+	
 	
 	private boolean whenUserSearchesByUserParams(String param) {
 		Integer allGuests = cleanSearchAndGetNumberOfResults();

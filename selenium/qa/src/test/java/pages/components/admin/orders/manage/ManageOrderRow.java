@@ -22,6 +22,15 @@ public class ManageOrderRow extends BaseComponent{
 		explicitWaitForClickable(el);
 		el.click();
 	}
+	
+	public String getOrderId() {
+		WebElement el = getOrderNumberLinkElement();
+		String text = el.getAttribute("href");
+		String searchForExpression = "/manage/";
+		int indexOfExpression = text.indexOf(searchForExpression);
+		String id = text.substring(indexOfExpression + searchForExpression.length());
+		return id;
+	}
 
 	public void clickOnCustomerLink() {
 		WebElement el = getCustomerElement();

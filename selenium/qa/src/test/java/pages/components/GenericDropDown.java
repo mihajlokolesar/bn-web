@@ -13,12 +13,27 @@ public class GenericDropDown extends BaseComponent {
 
 	private WebElement dropDownContainer;
 
+	/**
+	 * activateDropDown param is element that activtes(opens) drop down. Oftenly it's some div on input element
+	 * dropDownContainer param is element that holds the the list of options in drop down,
+	 * most oftenly in the project it's a div with some unique id, often starting with menu-*.*. 
+	 * @param driver
+	 * @param activateDropDown
+	 * @param dropDownContainer
+	 */
 	public GenericDropDown(WebDriver driver, WebElement activateDropDown, WebElement dropDownContainer) {
 		super(driver);
 		this.activateDropDown = activateDropDown;
 		this.dropDownContainer = dropDownContainer;
 	}
 
+	/**
+	 * Check if value parameter is present in "value" attribute of activateDropDown element passed to
+	 * constructor
+	 * @param relativeToContainer
+	 * @param value
+	 */
+	
 	public void selectElementFromDropDown(By relativeToContainer, String value) {
 		if (value != null) {
 			waitForTime(500);
@@ -43,7 +58,11 @@ public class GenericDropDown extends BaseComponent {
 		waitForTime(500);
 		selectedElement.click();
 	}
-
+	/**
+	 * Does the check if value parameter is text present in activateDropDown element passed to constructor 
+	 * @param relativeToContainer
+	 * @param value
+	 */
 	public void selectElementFromDropDownHiddenInput(By relativeToContainer, String value) {
 		if (value != null) {
 			waitForTime(500);

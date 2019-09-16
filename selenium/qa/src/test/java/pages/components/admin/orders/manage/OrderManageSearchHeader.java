@@ -21,7 +21,6 @@ public class OrderManageSearchHeader extends BaseComponent {
 		super(driver);
 	}
 	
-	
 	public void enterSearchValue(String value) {
 		SeleniumUtils.clearInputField(searchField, driver);
 		waitVisibilityAndSendKeys(searchField, value);

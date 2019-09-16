@@ -154,6 +154,10 @@ public class Header extends BaseComponent {
 		return isExplicitlyWaitVisible(signInButton);
 	}
 
+	/**
+	 * opens event select drop down for superadmin users 
+	 * @param eventName
+	 */
 	public void selectEventFromAdminDropDown(String eventName) {
 		GenericDropDown dropDown = new GenericDropDown(driver, adminEventDropDownButton, adminEventDropDownContainer);
 		dropDown.selectElementFromDropDownNoValueCheck(

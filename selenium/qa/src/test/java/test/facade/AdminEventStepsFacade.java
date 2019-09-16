@@ -12,7 +12,7 @@ import model.Event;
 import pages.admin.events.AdminEventsPage;
 import pages.admin.events.CreateEventPage;
 import pages.admin.events.DashboardEventPage;
-import pages.admin.events.ManageOrdersAdminPage;
+import pages.admin.orders.ManageOrdersAdminPage;
 import pages.components.admin.AdminEventComponent;
 import pages.components.admin.AdminSideBar;
 import pages.components.admin.ManageOrderComp;

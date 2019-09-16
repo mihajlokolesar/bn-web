@@ -1,4 +1,4 @@
-package pages.admin.events;
+package pages.admin.orders;
 
 import java.util.function.Function;
 
@@ -25,7 +25,6 @@ public class OrdersManageAdminPage extends BasePage {
 
 	@Override
 	public void presetUrl() {
-
 	}
 
 	@Override

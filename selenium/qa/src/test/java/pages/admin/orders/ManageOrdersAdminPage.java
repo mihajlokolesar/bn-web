@@ -1,4 +1,4 @@
-package pages.admin.events;
+package pages.admin.orders;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -27,7 +27,6 @@ public class ManageOrdersAdminPage extends BasePage {
 
 	@Override
 	public void presetUrl() {
-
 	}
 
 	@Override
@@ -47,7 +46,6 @@ public class ManageOrdersAdminPage extends BasePage {
 	}
 
 	public boolean isTicketPresentInOrder(String ticketNumber, String firstName, String lastName) {
-		
 		if (isOrderWithUserPresent(firstName, lastName)) {
 			ManageOrderComp orderComponent = null;
 			WebElement order = findOrderWithUser(firstName, lastName);
