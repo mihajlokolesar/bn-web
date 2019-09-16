@@ -11,6 +11,7 @@ import model.User;
 import pages.EventsPage;
 import pages.components.admin.AdminEventComponent;
 import pages.components.admin.orders.manage.ManageOrderRow;
+import pages.components.dialogs.IssueRefundDialog.RefundReason;
 import test.facade.AdminBoxOfficeFacade;
 import test.facade.AdminEventDashboardFacade;
 import test.facade.AdminEventStepsFacade;
@@ -29,7 +30,7 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 
 	@Test(dataProvider = "guest_page_search_data", priority = 13, 
 			 dependsOnMethods = {"userPurchasedTickets"},  retryAnalyzer = utils.RetryAnalizer.class)
-	public void guestPageSearchTest(User superuser, Event event, User one, User two) throws Exception {
+	public void aguestPageSearchTest(User superuser, Event event, User one, User two) throws Exception {
 		LoginStepsFacade loginFacade = new LoginStepsFacade(driver);
 		AdminBoxOfficeFacade boxOfficeFacade = new AdminBoxOfficeFacade(driver);
 		AdminEventStepsFacade adminEventFacade = new AdminEventStepsFacade(driver);
@@ -66,7 +67,7 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 	}
 
 	@Test(dataProvider = "manage_orders_page_search_data", priority = 14, retryAnalyzer = utils.RetryAnalizer.class)
-	public void manageOrdersPageSearchTest(User orgAdmin, User customer, User customerTwo, Event event)
+	public void bmanageOrdersPageSearchTest(User orgAdmin, User customer, User customerTwo, Event event)
 			throws Exception {
 
 		LoginStepsFacade loginFacade = new LoginStepsFacade(driver);
@@ -99,6 +100,53 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 		retVal &= dashboardFacade.whenUserChecksOrderQuantityForSpecificUser(customer, PURCHASE_QUANTITY);
 
 		Assert.assertTrue(retVal);
+		
+		loginFacade.logOut();
+
+	}
+	
+	@Test(dataProvider = "manage_orders_page_search_data", priority = 14)
+	public void cmanageOrdersSearchAndRefundTickets(User orgAdmin, User customer, User customerTwo, Event event) throws Exception {
+		LoginStepsFacade loginFacade = new LoginStepsFacade(driver);
+		AdminEventStepsFacade adminEventFacade = new AdminEventStepsFacade(driver);
+		OrganizationStepsFacade organizationFacade = new OrganizationStepsFacade(driver);
+		AdminEventDashboardFacade dashboardFacade = new AdminEventDashboardFacade(driver);
+
+		maximizeWindow();
+		loginFacade.givenAdminUserIsLogedIn(orgAdmin);
+		organizationFacade.givenOrganizationExist(event.getOrganization());
+
+		adminEventFacade.givenUserIsOnAdminEventsPage();
+		AdminEventComponent eventComponent = adminEventFacade.findEventIsOpenedAndHasSoldItem(event);
+		Assert.assertNotNull(eventComponent, "No Event with name: " + event.getEventName() + " found");
+		eventComponent.clickOnEvent();
+
+		dashboardFacade.thenUserIsOnEventDashboardPage();
+		dashboardFacade.whenUserSelectsManageOrdersFromOrdersDropDown();
+		dashboardFacade.thenUserIsOnOrderManagePage();
+
+		ManageOrderRow orderRow = dashboardFacade.getManageOrdersFirstOrder();
+
+		String orderNumber = orderRow.getOrderNumber();
+
+		boolean retVal = false;
+		retVal = dashboardFacade.whenUserDoesSearchCheckByEmail(customer);
+		retVal &= dashboardFacade.whenUserDoesSearchCheckByFirstname(customerTwo);
+		retVal &= dashboardFacade.whenUserDoesSearchCheckByLastName(customerTwo);
+		retVal &= dashboardFacade.whenUserDoesSearchCheckByOrderNumber(orderNumber);
+		retVal &= dashboardFacade.whenUserChecksOrderQuantityForSpecificUser(customer, PURCHASE_QUANTITY);
+		
+		Assert.assertTrue(retVal);
+		
+		dashboardFacade.whenUserClicksOnOrderLinkOfGivenUser(customer);
+		boolean isExpanded = dashboardFacade.whenUserExpandOrderDetailsAndCheckIfExpanded();
+		Assert.assertTrue(isExpanded);
+		dashboardFacade.whenUserSelectsTicketForRefundAndClicksOnRefundButton();
+		dashboardFacade.thenRefundDialogShouldBeVisible();
+		//this argument belongs in data provider
+		dashboardFacade.whenUserSelectRefundReasonAndClicksOnConfirmButton(RefundReason.OTHER);
+		dashboardFacade.thenRefundDialogShouldBeVisible();
+		dashboardFacade.whenUserClicksOnGotItButtonOnRefundSuccessDialog();
 		
 		adminEventFacade.givenUserIsOnAdminEventsPage();
 		AdminEventComponent eComponent = adminEventFacade.findEventIsOpenedAndHasSoldItem(event);
