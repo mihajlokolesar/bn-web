@@ -31,10 +31,6 @@ public class AdminEventDashboardFacade extends BaseFacadeSteps {
 		this.dataMap = new HashMap<String, Object>();
 	}
 
-//	public void whenUserSelectManageOrdersFromToolsDropDown() {
-//		dashboardEventPage.selectManageOrdersFromTools();
-//	}
-
 	public void whenUserSelectsManageOrdersFromOrdersDropDown() {
 		dashboardEventPage.selectManageOrdersFromOrdersTab();
 	}
@@ -69,33 +65,6 @@ public class AdminEventDashboardFacade extends BaseFacadeSteps {
 		Integer orderQty = order.getQuantity();
 		return orderQty.compareTo(purchaseQuantity) == 0;
 	}
-
-//
-//	public void whenUserSelectsTicketForRefundAndClicksOnRefundButton() {
-//		ManageOrderComp orderComponent = manageOrdersPage.openOrderWithIndexNumber(1);
-//		setData(MANAGE_ORDER_FIRST_NAME_KEY, orderComponent.getFirstNameOfUser());
-//		setData(MANAGE_ORDER_LAST_NAME_KEY, orderComponent.getLastNameOfUser());
-//		setData(MANAGE_ORDER_TICKET_NUMBER_KEY, orderComponent.selectTicketForRefund());
-//		manageOrdersPage.clickOnRefundButton();
-//		RefundDialog refundDialog = new RefundDialog(driver);
-//		refundDialog.clickOnDialogRefundButton();
-//	}
-//
-//	public void whenUserGetConfirmationsOfSuccessfulRefund() {
-//		new RefundDialog(driver).confirmRefundIsSuccess();
-//	}
-//
-//	public boolean thenTicketShouldNotBePresent() {
-//		String ticketNumber = (String) getData(MANAGE_ORDER_TICKET_NUMBER_KEY);
-//		String firstName = (String) getData(MANAGE_ORDER_FIRST_NAME_KEY);
-//		String lastName = (String) getData(MANAGE_ORDER_LAST_NAME_KEY);
-//		return manageOrdersPage.isTicketPresentInOrder(ticketNumber, firstName, lastName);
-//	}
-//
-//	public void thenUserIsOnManageOrdersPage() {
-//		manageOrdersPage.isAtPage();
-//	}
-//
 
 	public void whenUserClicksOnOrderLinkOfGivenUser(User owner) {
 		ManageOrderRow orderRow = ordersManagePage.findOrderRowWithUserName(owner.getFirstName() + " ");

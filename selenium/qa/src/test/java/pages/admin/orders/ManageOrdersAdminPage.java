@@ -10,7 +10,12 @@ import pages.BasePage;
 import pages.components.admin.ManageOrderComp;
 import utils.Constants;
 import utils.SeleniumUtils;
-
+/**
+ * Currently this page is for Refund ticket that was under Tools - > Manage Orders menu steps, if that is returned 
+ * we can bring it back
+ * @author simpletask
+ *
+ */
 public class ManageOrdersAdminPage extends BasePage {
 
 	@FindBy(xpath = "//body//main//div[div[div[div[div[p[contains(text(),'Manage orders')]]]]]]")

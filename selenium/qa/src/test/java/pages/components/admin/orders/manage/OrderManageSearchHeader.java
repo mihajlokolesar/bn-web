@@ -4,9 +4,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import model.User;
 import pages.BaseComponent;
-import pages.BasePage;
 import utils.SeleniumUtils;
 
 public class OrderManageSearchHeader extends BaseComponent {
