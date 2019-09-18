@@ -64,7 +64,7 @@ const validateFields = event => {
 	}
 
 	if (!eventType) {
-		errors.eventType = "Invalid Event Type.";
+		errors.eventType = "Invalid Event Category.";
 	}
 
 	if (privateAccessCode && privateAccessCode.length > 6) {
@@ -510,7 +510,7 @@ class Details extends Component {
 				items={eventTypes}
 				error={errors.eventType}
 				name={"event-types"}
-				label={"Event Type *"}
+				label={"Event Category *"}
 				onChange={e => {
 					const eventType = e.target.value;
 					this.changeDetails({ eventType });

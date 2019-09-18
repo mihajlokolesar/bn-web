@@ -16,7 +16,8 @@
       <class name="test.CreateDraftEventStepsIT"/>
       <class name="test.EditEventInformationStepsIT"/>
       <class name="test.OrderManagmentSearchForOrdersStepsIT"/>
-      <class name="test.RefundStepsIT"/>
+      <class name="test.PublishEventWithDeleteEventIT"/>
+      <class name="test.BoxOfficeSellTicketStepsIT"/>
     </classes>
   </test>
   <test name="Firefox">
@@ -34,7 +35,8 @@
       <class name="test.CreateDraftEventStepsIT"/>
       <class name="test.EditEventInformationStepsIT"/>
       <class name="test.OrderManagmentSearchForOrdersStepsIT"/>
-      <class name="test.RefundStepsIT"/>
-    </classes>
+      <class name="test.PublishEventWithDeleteEventIT"/>
+      <class name="test.BoxOfficeSellTicketStepsIT"/>
+     </classes>
   </test>  
  </suite>

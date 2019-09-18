@@ -13,6 +13,7 @@ import VerticalBarChart from "../../../../elements/charts/VerticalBarChart";
 import Container from "./Container";
 import Bigneon from "../../../../../helpers/bigneon";
 import notifications from "../../../../../stores/notifications";
+import user from "../../../../../stores/user";
 import Loader from "../../../../elements/loaders/Loader";
 import { observer } from "mobx-react";
 import servedImage from "../../../../../helpers/imagePathHelper";
@@ -139,6 +140,7 @@ class Summary extends Component {
 						moment(event.event_start).diff(moment(), "days")
 					)
 				});
+				user.setCurrentOrganizationRolesAndScopes(event.organization_id, false);
 			})
 			.catch(error => {
 				console.error(error);

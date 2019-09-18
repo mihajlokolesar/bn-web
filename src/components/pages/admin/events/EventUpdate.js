@@ -81,16 +81,17 @@ class Event extends Component {
 			this.props.match.params.id
 		) {
 			const id = this.props.match.params.id;
-			eventUpdateStore.loadDetails(id);
+			eventUpdateStore.loadDetails(id, event => {
+				user.setCurrentOrganizationRolesAndScopes(event.organizationId);
+				this.setOrganizationId();
+			});
 			//On loading an event, don't automatically change ticket times
 			this.setState({ ticketTimesDirty: true });
 		} else {
 			eventUpdateStore.clearDetails();
-
 			this.setState({ showImportPreviousEventDialog: true });
+			this.setOrganizationId();
 		}
-
-		this.setOrganizationId();
 	}
 
 	componentWillUnmount() {

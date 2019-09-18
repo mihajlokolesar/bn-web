@@ -5,31 +5,34 @@ import org.testng.annotations.Test;
 
 import config.MailinatorEnum;
 import junit.framework.Assert;
+import model.User;
 import pages.AccountPage;
 import pages.LoginPage;
 import pages.ResetPasswordPage;
 import pages.mailinator.MailinatorFactory;
 import pages.mailinator.inbox.ResetPasswordMailinatorPage;
+import utils.DataConstants;
+import utils.ProjectUtils;
 
 public class ForgotPasswordStepsIT extends BaseSteps {
 
 	@Test(dataProvider = "reset_password", priority = 3, retryAnalyzer = utils.RetryAnalizer.class)
-	public void forgotPasswordFunctionallity(String email, String newPass, String confirmPass, boolean test) {
+	public void forgotPasswordFunctionallity(User user) {
 		LoginPage loginPage = new LoginPage(driver);
 		maximizeWindow();
 		loginPage.navigate();
 		loginPage.clickOnForgotPassword();
-		boolean mailSent = loginPage.enterMailAndClickOnResetPassword(email);
+		boolean mailSent = loginPage.enterMailAndClickOnResetPassword(user.getEmailAddress());
 		Assert.assertEquals(true, mailSent);
 
 		ResetPasswordMailinatorPage resetPassInbox = (ResetPasswordMailinatorPage) MailinatorFactory
-				.getInboxPage(MailinatorEnum.RESET_PASSWORD, driver, email);
+				.getInboxPage(MailinatorEnum.RESET_PASSWORD, driver, user.getEmailAddress());
 		resetPassInbox.clickOnResetPasswordLinkInMail();
 
 		ResetPasswordPage resetPasswordPage = new ResetPasswordPage(driver);
-		resetPasswordPage.fillForm(newPass, confirmPass);
+		resetPasswordPage.fillForm(user.getPass(), user.getPassConfirm());
 		resetPasswordPage.clickResetButton();
-		if (!newPass.equals(confirmPass)) {
+		if (!user.getPass().equals(user.getPassConfirm())) {
 			boolean isUnamatched = resetPasswordPage.isUnmatchedPasswordError();
 			Assert.assertTrue(isUnamatched);
 		} else {
@@ -38,7 +41,7 @@ public class ForgotPasswordStepsIT extends BaseSteps {
 			boolean isAccountPage = accountPage.isAtPage();
 			accountPage.clickSave();
 			boolean isAccountUpdated = accountPage.isAccountUpdatedMsg();
-			Assert.assertEquals(test, isAccountUpdated && isAccountPage);
+			Assert.assertEquals(user.isTest(), isAccountUpdated && isAccountPage);
 
 			accountPage.logOut();
 		}
@@ -47,9 +50,9 @@ public class ForgotPasswordStepsIT extends BaseSteps {
 
 	@DataProvider(name = "reset_password")
 	public static Object[][] data() {
-		return new Object[][] { 
-				{ "bluetestneouser@mailinator.com", "test1111", "test2222", false },
-				{ "bluetestneouser@mailinator.com", "test1111", "test1111", true } };
+		Object[] users = User.generateUsersFromJson(DataConstants.FORGOT_PASS_CREDS_KEY);
+		Object[][] data = ProjectUtils.composeData(new Object[users.length][1], users, 0);
+		return data;
 	}
 
 }

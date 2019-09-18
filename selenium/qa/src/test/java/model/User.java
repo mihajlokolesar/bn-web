@@ -1,18 +1,30 @@
 package model;
 
 import java.io.Serializable;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 import utils.DataConstants;
+import utils.DataReader;
 import utils.ProjectUtils;
 
-public class User implements Serializable {
+public class User extends TestModel implements Serializable {
 
 	private static final long serialVersionUID = 8184904779942132639L;
+	@JsonProperty("email_address")
 	private String emailAddress;
+	@JsonProperty("password")
 	private String pass;
+	@JsonProperty("confirm_password")
 	private String passConfirm;
+	@JsonProperty("first_name")
 	private String firstName;
+	@JsonProperty("last_name")
 	private String lastName;
+	@JsonProperty("phone_number")
+	private String phoneNumber;
 
 	public String getEmailAddress() {
 		return emailAddress;
@@ -53,6 +65,14 @@ public class User implements Serializable {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+	
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
 
 	@Override
 	public String toString() {
@@ -62,11 +82,27 @@ public class User implements Serializable {
 		return sb.toString();
 	}
 
+	public static TypeReference<List<User>> getListTypeReference() {
+		return new TypeReference<List<User>>() {
+		};
+	}
+	
+	public static TypeReference<User> getTypeReference() {
+		return new TypeReference<User>() {
+		};
+	}
+
 	public static User generateSuperUser() {
-		User user = new User();
-		user.setEmailAddress("superuser@test.com");
-		user.setPass("password");
-		return user;
+		return generateUserFromJson(DataConstants.SUPERUSER_DATA_KEY);
+	}
+	
+	public static User generateUserFromJson(String key) {
+		return (User) DataReader.getInstance().getObject(key, User.getTypeReference());
+	}
+	
+	public static Object[] generateUsersFromJson(String key) {
+		Object[] users = DataReader.getInstance().getObjects(key, User.getListTypeReference());
+		return users;
 	}
 
 	public static User generateUser() {

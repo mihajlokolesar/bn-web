@@ -49,6 +49,9 @@ public class Header extends BaseComponent {
 
 	@FindBy(xpath = "//header//a[@href='/admin/events']/following-sibling::div[2][span[@aria-owns='menu-appbar' and @aria-haspopup='true']]")
 	private WebElement adminEventDropDownButton;
+	
+	@FindBy(xpath = "//header/div/div[2]//span[@aria-owns='menu-appbar' and @aria-haspopup='true']")
+	private WebElement boxOfficeEventDropDownButton;
 
 	@FindBy(id = "menu-appbar")
 	private WebElement adminEventDropDownContainer;
@@ -82,7 +85,7 @@ public class Header extends BaseComponent {
 	public void openProfileOptions() {
 		waitForTime(1000);
 		explicitWaitForVisibilityAndClickableWithClick(profileOptions);
-		waitForTime(800);
+		waitForTime(1000);
 	}
 
 	public void logOut() {
@@ -162,6 +165,12 @@ public class Header extends BaseComponent {
 		GenericDropDown dropDown = new GenericDropDown(driver, adminEventDropDownButton, adminEventDropDownContainer);
 		dropDown.selectElementFromDropDownNoValueCheck(
 				By.xpath(".//ul//li//div/span[contains(text(),'" + eventName + "')]"));
+		waitForTime(2000);
+	}
+	
+	public void selectEventFromBoxOfficeDropDown(String eventName) {
+		GenericDropDown dropDown = new GenericDropDown(driver, boxOfficeEventDropDownButton, adminEventDropDownContainer);
+		dropDown.selectElementFromDropDownNoValueCheck(By.xpath(".//ul//li//div/span[contains(text(),'" + eventName + "')]"));
 		waitForTime(2000);
 	}
 

@@ -14,6 +14,9 @@ public class PurchaseMailFrame extends BaseComponent {
 	@FindBy(xpath = "//table//tr[th[contains(text(),'Units')]]/following-sibling::tr/td[2]")
 	private WebElement eventName;
 	
+	@FindBy(xpath = "//table//td[contains(text(),'Order Total')]")
+	private WebElement orderTotal;
+	
 	public PurchaseMailFrame(WebDriver driver) {
 		super(driver);
 	}
@@ -27,5 +30,12 @@ public class PurchaseMailFrame extends BaseComponent {
     	explicitWaitForVisiblity(eventName);
     	return eventName.getText();
     }
-	
+    
+    public Double getOrderTotal() {
+    	explicitWaitForVisiblity(orderTotal);
+    	String text = orderTotal.getText().trim();
+    	String[] tokens = text.split("\\$");
+    	Double orderTotal = Double.parseDouble(tokens[1]);
+    	return orderTotal;
+    }
 }

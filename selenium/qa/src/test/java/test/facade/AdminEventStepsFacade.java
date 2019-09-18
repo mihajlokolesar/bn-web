@@ -17,6 +17,8 @@ import pages.components.admin.AdminEventComponent;
 import pages.components.admin.AdminSideBar;
 import pages.components.admin.ManageOrderComp;
 import pages.components.dialogs.RefundDialog;
+import pages.components.dialogs.DeleteEventDialog;
+import utils.MsgConstants;
 import utils.ProjectUtils;
 import utils.SeleniumUtils;
 
@@ -25,11 +27,11 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 	private CreateEventPage createEventPage;
 	private AdminEventsPage adminEvents;
 	private AdminSideBar adminSideBar;
-
+	
 	private final String MANAGE_ORDER_FIRST_NAME_KEY = "mange_order_first_name";
 	private final String MANAGE_ORDER_LAST_NAME_KEY = "manage_order_last_name";
 	private final String MANAGE_ORDER_TICKET_NUMBER_KEY = "manage_order_ticket_number";
-
+	
 	private Map<String, Object> dataMap;
 
 	public AdminEventStepsFacade(WebDriver driver) {
@@ -44,7 +46,7 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		adminSideBar.clickOnEvents();
 		adminEvents.isAtPage();
 	}
-
+	
 	public AdminEventComponent givenEventExistAndIsNotCanceled(Event event) throws URISyntaxException {
 		return givenEventWithNameAndPredicateExists(event, comp -> !comp.isEventCanceled());
 	}
@@ -79,6 +81,7 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		return selectedEvent;
 	}
 
+	
 	private Event createNewRandomEvent(Event event) throws URISyntaxException {
 		event.setEventName(event.getEventName() + ProjectUtils.generateRandomInt(10000000));
 		boolean retVal = createEvent(event);
@@ -93,6 +96,17 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		return event;
 	}
 
+	
+	public boolean whenUserDeletesEvent(Event event) {
+		AdminEventComponent component = adminEvents.findEventByName(event.getEventName());
+		DeleteEventDialog deleteDialog = component.deleteEvent(event);
+		if (adminEvents.isNotificationDisplayedWithMessage(MsgConstants.EVENT_DELETION_FAILED, 4)) {
+			deleteDialog.clickOnKeepEvent();
+			return false;
+		}
+		return true;
+	}
+	
 	public void whenUserUpdatesDataOfEvent(Event event) {
 		createEventPage.enterEventName(event.getEventName());
 		createEventPage.enterDatesAndTimes(event.getStartDate(), event.getEndDate(), null, null, null);
@@ -158,6 +172,7 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		createEventPage.addTicketTypes(event.getTicketTypes());
 	}
 
+	
 	private void setData(String key, Object value) {
 		dataMap.put(key, value);
 	}

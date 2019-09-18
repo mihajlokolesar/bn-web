@@ -18,7 +18,7 @@ public class DialogContainerComponent extends BaseComponent{
 	public boolean isVisible() {
 		return isExplicitlyWaitVisible(dialogContainer);
 	}
-
+	
 	public WebElement getDialogContainer() {
 		return dialogContainer;
 	}
@@ -26,7 +26,5 @@ public class DialogContainerComponent extends BaseComponent{
 	public void setDialogContainer(WebElement dialogContainer) {
 		this.dialogContainer = dialogContainer;
 	}
-	
-	
 
 }

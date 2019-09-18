@@ -27,7 +27,7 @@ public class AdminEventComponent extends BaseComponent {
 	private String relativeIsCanceledParagraphXpath = ".//div[p[contains(text(),'Cancelled')]]";
 
 	private String relativeIsDraftParagraphPath = ".//div/p[contains(text(),'Draft')]";
-
+	
 	private String relativeIsPublishedXPath = ".//p[contains(text(),'Published')]";
 
 	private String relativeIsOnSaleXPath = ".//p[contains(text(),'On sale')]";
@@ -63,7 +63,7 @@ public class AdminEventComponent extends BaseComponent {
 		return SeleniumUtils.isChildElementVisibleFromParentLocatedBy(event, By.xpath(relativeIsDraftParagraphPath),
 				driver);
 	}
-
+	
 	public boolean isEventPublished() {
 		return SeleniumUtils.isChildElementVisibleFromParentLocatedBy(event, By.xpath(relativeIsPublishedXPath),
 				driver);
@@ -72,7 +72,7 @@ public class AdminEventComponent extends BaseComponent {
 	public boolean isEventOnSale() {
 		return SeleniumUtils.isChildElementVisibleFromParentLocatedBy(event, By.xpath(relativeIsOnSaleXPath), driver);
 	}
-	
+
 	public boolean isSoldToAmountGreaterThan(int amount) {
 		int intElAmount = getSoldToAmount();
 		if (amount < intElAmount) {
@@ -81,7 +81,7 @@ public class AdminEventComponent extends BaseComponent {
 			return false;
 		}
 	}
-	
+
 	private int getSoldToAmount() {
 		WebElement amountElement = SeleniumUtils.getChildElementFromParentLocatedBy(event, By.xpath(relativeSoldToDivXPath), driver);
 		String elementAmount = amountElement.getText();
@@ -96,10 +96,14 @@ public class AdminEventComponent extends BaseComponent {
 		new CancelEventDialog(driver).clickOnCancelEventButton();
 	}
 
-	public void deleteEvent(Event event) {
+	public DeleteEventDialog deleteEvent(Event event) {
 		openDropDown();
 		findActionAndClickInDropDown(dropDownDeleteEvent);
-		new DeleteEventDialog(driver).clickOnDeleteButton(event.getEventName());
+		waitForTime(2000);
+		DeleteEventDialog deleteDialog = new DeleteEventDialog(driver);
+		deleteDialog.clickOnDeleteButton(event.getEventName());
+		return deleteDialog;
+		
 	}
 
 	public void editEvent(Event event) {

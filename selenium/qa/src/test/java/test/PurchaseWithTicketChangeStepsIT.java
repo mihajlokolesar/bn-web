@@ -53,18 +53,12 @@ public class PurchaseWithTicketChangeStepsIT extends BaseSteps {
 
 	@DataProvider(name = "purchase_data")
 	public static Object[][] data() {
-		Purchase purchase = new Purchase();
-		Event event = Event.generateEvent();
-		String[] dates = ProjectUtils.getDatesWithSpecifiedRangeInDaysWithStartOffset(7, 30);
-		event.setStartDate(dates[0]);
-		event.setEndDate(dates[1]);
+		Purchase purchase = Purchase.generatePurchaseFromJson(DataConstants.REGULAR_USER_PURCHASE_KEY);
+		Event event = Event.generateEventFromJson(DataConstants.EVENT_DATA_STANARD_KEY, false, 7, 30);
 		event.setEventName("TestNameEvent");
 		purchase.setEvent(event);
-		purchase.setCreditCard(CreditCard.generateCreditCard());
 		purchase.setNumberOfTickets(2);
 		purchase.setRemoveNumberOfTickets(1);
-		// TODO: replace with some other number
-		purchase.setPhoneNumber("14422460151");
 		
 		return new Object[][] { 
 			{ User.generateUser(), purchase } };

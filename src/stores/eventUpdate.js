@@ -52,7 +52,8 @@ class EventUpdate {
 	timezone = "";
 
 	@action
-	loadDetails(id) {
+	loadDetails(id, callback) {
+		callback = callback || function() {};
 		this.id = id;
 
 		Bigneon()
@@ -75,6 +76,7 @@ class EventUpdate {
 				);
 
 				this.checkIfSalesStarted(id);
+				callback(this);
 			})
 			.catch(error => {
 				console.error(error);

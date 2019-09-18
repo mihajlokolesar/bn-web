@@ -2,14 +2,23 @@ package model;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.type.TypeReference;
+
+import utils.DataConstants;
+import utils.DataReader;
 import utils.ProjectUtils;
 
 public class Organization implements Serializable {
 	
 	private static final long serialVersionUID = -2120443225758565920L;
+	@JsonProperty("name")
 	private String name;
+	@JsonProperty("phone_number")
 	private String phoneNumber;
+	@JsonProperty("time_zone")
 	private String timeZone;
+	@JsonProperty("location")
 	private String location;
 		
 	public String getName() {
@@ -36,6 +45,10 @@ public class Organization implements Serializable {
 	public void setLocation(String location) {
 		this.location = location;
 	}
+	
+	public void randomizeName() {
+		this.name = this.name + ProjectUtils.generateRandomInt(DataConstants.RANDOM_NUMBER_SIZE_10M);
+	}
 		
 	public static Organization generateOrganization() {
 		Organization organization = new Organization();
@@ -43,6 +56,15 @@ public class Organization implements Serializable {
 		organization.setPhoneNumber("1111111111");
 		organization.setTimeZone("Africa/Johannesburg");
 		organization.setLocation("Johannesburg, South Africa");
+		return organization;
+	}
+	
+	public static Organization generateOrganizationFromJson(String key, boolean randomizeName) {
+		Organization organization = (Organization) DataReader.getInstance().getObject(key, new TypeReference<Organization>() {
+		});
+		if (randomizeName) {
+			organization.randomizeName();
+		}
 		return organization;
 	}
 	

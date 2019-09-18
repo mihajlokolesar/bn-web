@@ -42,7 +42,7 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 		organizationFacade.givenOrganizationExist(event.getOrganization());
 
 		boxOfficeFacade.givenUserIsOnBoxOfficePage();
-		boxOfficeFacade.givenEventIsSelected(event.getEventName());
+		boxOfficeFacade.givenEventIsSelected(purchase.getEvent().getEventName());
 		boxOfficeFacade.givenUserIsOnGuestPage();
 
 		boolean isLastNameTest = boxOfficeFacade.whenUserSearchesByLastName(one);
@@ -56,9 +56,9 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 
 	@DataProvider(name = "guest_page_search_data")
 	public static Object[][] guestSearchData() {
-		User superUser = User.generateSuperUser();
-
-		Event event = preparePurchase().getEvent();
+		User superUser = User.generateUserFromJson(DataConstants.SUPERUSER_DATA_KEY);
+		Event event = Event.generateEventFromJson(DataConstants.EVENT_DATA_STANARD_KEY, EVENT_NAME,
+				false, START_DAY_OFFSET, DAYS_RANGE);
 		User userOne = User.generateUser(DataConstants.DISTINCT_USER_ONE_FIRST_NAME,
 				DataConstants.DISTINCT_USER_ONE_LAST_NAME);
 		User userTwo = User.generateUser();
@@ -80,7 +80,7 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 		organizationFacade.givenOrganizationExist(event.getOrganization());
 
 		adminEventFacade.givenUserIsOnAdminEventsPage();
-		AdminEventComponent eventComponent = adminEventFacade.findEventIsOpenedAndHasSoldItem(event);
+		AdminEventComponent eventComponent = adminEventFacade.findEventIsOpenedAndHasSoldItem(purchase.getEvent());
 		Assert.assertNotNull(eventComponent, "No Event with name: " + event.getEventName() + " found");
 		eventComponent.clickOnEvent();
 
@@ -117,7 +117,7 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 		organizationFacade.givenOrganizationExist(event.getOrganization());
 
 		adminEventFacade.givenUserIsOnAdminEventsPage();
-		AdminEventComponent eventComponent = adminEventFacade.findEventIsOpenedAndHasSoldItem(event);
+		AdminEventComponent eventComponent = adminEventFacade.findEventIsOpenedAndHasSoldItem(purchase.getEvent());
 		Assert.assertNotNull(eventComponent, "No Event with name: " + event.getEventName() + " found");
 		eventComponent.clickOnEvent();
 
@@ -143,7 +143,6 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 		Assert.assertTrue(isExpanded);
 		dashboardFacade.whenUserSelectsTicketForRefundAndClicksOnRefundButton();
 		dashboardFacade.thenRefundDialogShouldBeVisible();
-		//this argument belongs in data provider
 		dashboardFacade.whenUserSelectRefundReasonAndClicksOnConfirmButton(RefundReason.OTHER);
 		dashboardFacade.thenRefundDialogShouldBeVisible();
 		dashboardFacade.whenUserClicksOnGotItButtonOnRefundSuccessDialog();
@@ -159,12 +158,13 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 	@DataProvider(name = "manage_orders_page_search_data")
 	public static Object[][] dataProvider() {
 		Event event = preparePurchase().getEvent();
-		User orgAdminUser = new User();
-		orgAdminUser.setEmailAddress("orgadmneouser@mailinator.com");
-		orgAdminUser.setPass("test1111");
+		User orgAdminUser = User.generateUserFromJson(DataConstants.ORGANIZATION_ADMIN_USER_KEY);
+		User customer = User.generateUserFromJson(DataConstants.USER_STANDARD_KEY);
+		
 		User one = User.generateUser(DataConstants.DISTINCT_USER_ONE_FIRST_NAME,
 				DataConstants.DISTINCT_USER_ONE_LAST_NAME);
-		return new Object[][] { { orgAdminUser, User.generateUser(), one, event } };
+		
+		return new Object[][] { { orgAdminUser, customer, one, event } };
 	}
 
 	@Test(dataProvider = "purchase_data", priority = 13)
@@ -201,15 +201,17 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 				DataConstants.DISTINCT_USER_ONE_LAST_NAME);
 		User two = User.generateUser(DataConstants.DISTINCT_USER_TWO_FIRST_NAME,
 				DataConstants.DISTINCT_USER_TWO_LAST_NAME);
-		User three = User.generateUser();
+		User three = User.generateUserFromJson(DataConstants.USER_STANDARD_KEY);
 		return new Object[][] { { one, purchaseOne }, { two, purchaseOne }, { three, purchaseOne } };
 	}
 
 	private static Purchase preparePurchase() {
-		Purchase purchase = new Purchase();
+		Purchase purchase = Purchase.generatePurchaseFromJson(DataConstants.REGULAR_USER_PURCHASE_KEY);
 		purchase.setCreditCard(CreditCard.generateCreditCard());
 		purchase.setNumberOfTickets(PURCHASE_QUANTITY);
-		purchase.setEvent(Event.generatedEvent(START_DAY_OFFSET, DAYS_RANGE, EVENT_NAME, false));
+		purchase.setNumberOfTickets(1);
+		purchase.setEvent(Event.generateEventFromJson(DataConstants.EVENT_DATA_STANARD_KEY,
+				EVENT_NAME, false, START_DAY_OFFSET, DAYS_RANGE));
 		return purchase;
 	}
 
