@@ -48,9 +48,8 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 		User superUser = User.generateUserFromJson(DataConstants.SUPERUSER_DATA_KEY);
 		Event event = Event.generateEventFromJson(DataConstants.EVENT_DATA_STANARD_KEY, "TestPurchaseSearchEventName",
 				false, 1, 2);
-		User userOne = User.generateUser(DataConstants.DISTINCT_USER_ONE_FIRST_NAME,
-				DataConstants.DISTINCT_USER_ONE_LAST_NAME);
-		User userTwo = User.generateUser();
+		User userOne = User.generateUserFromJson(DataConstants.DISTINCT_USER_ONE_KEY);
+		User userTwo = User.generateUserFromJson(DataConstants.USER_STANDARD_KEY);
 		return new Object[][] { { superUser, event, userOne, userTwo } };
 
 	}
@@ -84,11 +83,9 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 	public static Object[][] data() {
 		Purchase purchaseOne = preparePurchase();
 
-		User one = User.generateUser(DataConstants.DISTINCT_USER_ONE_FIRST_NAME,
-				DataConstants.DISTINCT_USER_ONE_LAST_NAME);
-		User two = User.generateUser(DataConstants.DISTINCT_USER_TWO_FIRST_NAME,
-				DataConstants.DISTINCT_USER_TWO_LAST_NAME);
-		User three = User.generateUser();
+		User one = User.generateUserFromJson(DataConstants.DISTINCT_USER_ONE_KEY);
+		User two = User.generateUserFromJson(DataConstants.DISTINCT_USER_TWO_KEY);
+		User three = User.generateUserFromJson(DataConstants.USER_STANDARD_KEY);
 		return new Object[][] { { one, purchaseOne }, { two, purchaseOne }, { three, purchaseOne } };
 	}
 

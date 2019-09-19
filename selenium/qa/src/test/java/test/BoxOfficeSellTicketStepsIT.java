@@ -19,10 +19,10 @@ import utils.DataConstants;
 import utils.ProjectUtils;
 
 public class BoxOfficeSellTicketStepsIT extends BaseSteps {
-
-	@Test(dataProvider = "box_office_sell_ticket_cash_payment", dependsOnMethods = {"prepareEventDataForBoxOfficeOrg"},
-			priority = 16, retryAnalyzer = utils.RetryAnalizer.class)
-	public void boxOfficeSellTicketCashPayment(User boxOfficeUser, Purchase purchase, User receiverOfTickets) {
+	
+//	@Test(dataProvider = "box_office_sell_ticket_cash_payment", dependsOnMethods = {"prepareEventDataForBoxOfficeOrg"},
+//			priority = 16, retryAnalyzer = utils.RetryAnalizer.class)
+	public void aboxOfficeSellTicketCashPayment(User boxOfficeUser, Purchase purchase, User receiverOfTickets) {
 		int ticketNumAdd = purchase.getNumberOfTickets();
 		int ticketNumRemove = purchase.getRemoveNumberOfTickets();
 		int addToTendered = purchase.getAdditionalTenderedAmount();
@@ -54,8 +54,50 @@ public class BoxOfficeSellTicketStepsIT extends BaseSteps {
 		boolean isCorrectAmountInMail = mailPage.openMailAndCheckValidity(totalAmount);
 		Assert.assertTrue(isCorrectAmountInMail);
 	}
+	
+	@Test(dataProvider = "box_office_sell_ticket_cash_payment", priority = 16, retryAnalyzer = utils.RetryAnalizer.class)
+	public void bboxOfficeSellTicketCardPayment(User boxOfficeUser, Purchase purchase, User receiverOfTickets) {
+		int ticketNumAdd = purchase.getNumberOfTickets();
+		int ticketNumRemove = purchase.getRemoveNumberOfTickets();
+		int addToTendered = purchase.getAdditionalTenderedAmount();
+		maximizeWindow();
+		LoginStepsFacade loginStepsFacade = new LoginStepsFacade(driver);
+		AdminBoxOfficeFacade boxOfficeFacade = new AdminBoxOfficeFacade(driver);
 
-	@Test(dataProvider = "prepare_event_for_box_office_cash_payment_data", priority = 16)
+		loginStepsFacade.givenUserIsLogedIn(boxOfficeUser);
+		
+		boxOfficeFacade.givenUserIsOnBoxOfficePage();
+		boxOfficeFacade.givenBoxOfficeEventIsSelected(purchase.getEvent().getEventName());
+		boxOfficeFacade.thenUserIsAtSellPage();
+
+		TicketTypeRowComponent ticketTypeRow = boxOfficeFacade.whenUserSelectsTicketType();
+		boxOfficeFacade.whenUserAddsQuantityAndClicksCheckout(ticketTypeRow, ticketNumAdd);
+		boxOfficeFacade.thenCheckoutDialogIsVisible();
+		boxOfficeFacade.whenUserClicksOnChangeTicketOnCheckoutDialog();
+		boxOfficeFacade.whenUserRemovesQuantityAndClicksCheckout(ticketTypeRow, ticketNumRemove);
+		boxOfficeFacade.whenUserPicksCardOption();
+		Double totalAmount = boxOfficeFacade.whenUserChecksOrderTotal();
+		
+		boxOfficeFacade.whenUserEntersGuestInformationAndClicksOnCompleteOrder(receiverOfTickets, purchase.getOrderNote());
+		boxOfficeFacade.thenUserShouldSeeOrderCompleteDialogAndGetOrderNumber();
+		
+		BOSellPagePurchaseWithCashMailinatorPage mailPage = (BOSellPagePurchaseWithCashMailinatorPage) MailinatorFactory
+				.getInboxPage(MailinatorEnum.BO_SELL_WITH_CASH, driver, receiverOfTickets.getEmailAddress());
+		boolean isCorrectAmountInMail = mailPage.openMailAndCheckValidity(totalAmount);
+		Assert.assertTrue(isCorrectAmountInMail);
+	}
+	
+	@DataProvider(name = "box_office_sell_ticket_cash_payment")
+	public static Object[][] prepareEvent() throws Exception {
+		Event event = (Event) Event.generateEventFromJson(DataConstants.BOX_OFFICE_USER_EVENTS_KEY, false, 1, 4);
+		Purchase purchase = Purchase.generatePurchaseFromJson(DataConstants.BOX_OFFICE_SELL_PURCHASE_STD_KEY);
+		purchase.setEvent(event);
+		User boxOfficeUser = User.generateUserFromJson(DataConstants.BOX_OFFICE_USER_KEY);
+		User receiver = User.generateUserFromJson(DataConstants.USER_STANDARD_KEY);
+		return new Object[][] {{boxOfficeUser,purchase,receiver}};
+	}
+
+//	@Test(dataProvider = "prepare_event_for_box_office_cash_payment_data", priority = 16)
 	public void prepareEventDataForBoxOfficeOrg(Event event, User superuser) throws Exception {
 		maximizeWindow();
 		LoginStepsFacade loginStepsFacade = new LoginStepsFacade(driver);
@@ -76,15 +118,6 @@ public class BoxOfficeSellTicketStepsIT extends BaseSteps {
 	
 		return new Object[][] {{event, user}};
 	}
-
-	@DataProvider(name = "box_office_sell_ticket_cash_payment")
-	public static Object[][] prepareEvent() throws Exception {
-		Event event = (Event) Event.generateEventFromJson(DataConstants.BOX_OFFICE_USER_EVENTS_KEY, false, 1, 4);
-		Purchase purchase = Purchase.generatePurchaseFromJson(DataConstants.BOX_OFFICE_SELL_PURCHASE_STD_KEY);
-		purchase.setEvent(event);
-		User boxOfficeUser = User.generateUserFromJson(DataConstants.BOX_OFFICE_USER_KEY);
-		User receiver = User.generateUserFromJson(DataConstants.USER_STANDARD_KEY);
-		return new Object[][] {{boxOfficeUser,purchase,receiver}};
-	}
+		
 
 }

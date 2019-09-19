@@ -30,6 +30,27 @@
 			"test": true
 		}
 	],
+	"distinct_user_one":{
+		"email_address": "jean-luc.picard@mailinator.com",
+		"password": "test1111",
+		"confirm_password": "test1111",
+		"first_name": "jean-luc",
+		"last_name": "picard"
+	},
+	"distinct_user_two":{
+		"email_address": "ben.sisko@mailinator.com",
+		"password": "test1111",
+		"confirm_password": "test1111",
+		"first_name": "ben",
+		"last_name": "sisko"
+	},
+	"distinct_user_three":{
+		"email_address": "james.kirk@mailinator.com",
+		"password": "test1111",
+		"confirm_password": "test1111",
+		"first_name": "james",
+		"last_name": "kirk"
+	},
 	"super_user_std": {
 		"email_address": "superuser@test.com",
 		"password": "password"

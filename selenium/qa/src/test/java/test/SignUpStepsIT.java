@@ -46,9 +46,9 @@ public class SignUpStepsIT extends BaseSteps {
 	
 	@DataProvider(name = "predifined_user_data")
 	public static Object[][] predifinedUsersDataProvider() {
-		User userOne = User.generateUser(DataConstants.DISTINCT_USER_ONE_FIRST_NAME, DataConstants.DISTINCT_USER_ONE_LAST_NAME);
-		User userTwo = User.generateUser(DataConstants.DISTINCT_USER_TWO_FIRST_NAME, DataConstants.DISTINCT_USER_TWO_LAST_NAME);
-		User userThree = User.generateUser(DataConstants.DISTINCT_USER_THREE_FIRST_NAME, DataConstants.DISTINCT_USER_THREE_LAST_NAME);
+		User userOne = User.generateUserFromJson(DataConstants.DISTINCT_USER_ONE_KEY);
+		User userTwo = User.generateUserFromJson(DataConstants.DISTINCT_USER_TWO_KEY);
+		User userThree = User.generateUserFromJson(DataConstants.DISTINCT_USER_THREE_KEY);
 		
 		return new Object[][] {
 			{userOne},
