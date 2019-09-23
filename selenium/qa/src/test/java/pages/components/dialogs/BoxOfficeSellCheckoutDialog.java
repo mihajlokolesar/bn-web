@@ -11,7 +11,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import pages.BaseComponent;
-import utils.ProjectUtils;
 import utils.SeleniumUtils;
 
 public class BoxOfficeSellCheckoutDialog extends DialogContainerComponent {

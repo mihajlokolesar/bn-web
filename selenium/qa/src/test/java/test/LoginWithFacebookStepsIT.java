@@ -8,7 +8,6 @@ import model.User;
 import pages.HomePage;
 import pages.LoginPage;
 import utils.DataConstants;
-import utils.DataReader;
 
 public class LoginWithFacebookStepsIT extends BaseSteps {
 

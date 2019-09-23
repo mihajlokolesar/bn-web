@@ -24,7 +24,8 @@ public class Purchase implements Serializable {
 	private int additionalTenderedAmount;
 	@JsonProperty("phone_number")
 	private String phoneNumber;
-
+	
+	
 	public Purchase() {
 		super();
 	}

@@ -31,7 +31,8 @@ public class EventStepsFacade extends BaseFacadeSteps {
 		this.succesPage = new TicketsSuccesPage(driver);
 		this.loginPage = new LoginPage(driver);
 	}
-
+	
+	
 	public EventsPage givenThatEventExist(Event event,User user) throws Exception {
 		if (!eventsPage.isEventPresent(event.getEventName())) {
 			boolean isLoggedIn = false;
@@ -96,6 +97,11 @@ public class EventStepsFacade extends BaseFacadeSteps {
 	public void whenUserExecutesEventPagesSteps(Event event) throws Exception {
 		whenUserClicksOnEvent(event);
 		whenUserClickOnViewMap();
+		whenUserClicksOnPurchaseTicketLink();
+	}
+	
+	public void whenUserExecutesEventPagesStepsWithoutMapView(Event event) throws Exception {
+		whenUserClicksOnEvent(event);
 		whenUserClicksOnPurchaseTicketLink();
 	}
 	

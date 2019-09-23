@@ -110,7 +110,7 @@ public class SeleniumUtils {
 				.until(ExpectedConditions.visibilityOfAllElements(parent.findElements(relativeChildBy)));
 		return elements;
 	}
-	
+
 	public static Integer getIntAmount(WebElement parent, String relativeElPath, WebDriver driver) {
 		if(!SeleniumUtils.isChildElementVisibleFromParentLocatedBy(parent, By.xpath(relativeElPath), 3 ,driver)){
 			return null;
