@@ -107,7 +107,10 @@ public class AdminEventDashboardFacade extends BaseFacadeSteps {
 		refundDialog.clickOnGotItButton();
 	}
 	
-
+	public Integer thenNumberOfOrdersIs() {
+		return ordersManagePage.getNumberOfAllVisibleOrders();
+	}
+	
 	public void thenUserIsOnEventDashboardPage() {
 		dashboardEventPage.isAtPage();
 	}

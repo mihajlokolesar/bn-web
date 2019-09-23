@@ -39,6 +39,9 @@ public class AdminEventComponent extends BaseComponent {
 	private String relativeImageXPath = ".//a[contains(@href,'/admin/events/')]/div";
 	
 	private String relativeSoldToDivXPath = "./div/div[2]/div[2]/div[2]/div/div[p[text()='Sold']]/p[2]";
+	
+	private By dropDownOpenDashboard = By
+			.xpath("//body//div[@id='long-menu']//ul/li[div[span[contains(text(),'Dashboard')]]]");
 
 	private By dropDownCancelEvent = By
 			.xpath("//body//div[@id='long-menu']//ul/li[div[span[contains(text(),'Cancel event')]]]");
@@ -87,6 +90,12 @@ public class AdminEventComponent extends BaseComponent {
 		String elementAmount = amountElement.getText();
 		int intElAmount = Integer.parseInt(elementAmount);
 		return intElAmount;
+	}
+	
+	public void clickOnDashboardOption() {
+		openDropDown();
+		findActionAndClickInDropDown(dropDownOpenDashboard);
+		waitForTime(2000);
 	}
 
 	public void cancelEvent() {
