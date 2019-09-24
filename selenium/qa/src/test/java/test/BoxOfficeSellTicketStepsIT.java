@@ -31,6 +31,8 @@ public class BoxOfficeSellTicketStepsIT extends BaseSteps {
 
 		loginStepsFacade.givenUserIsLogedIn(boxOfficeUser);
 		
+		
+		loginStepsFacade.whenUserSelectsMyEventsFromProfileDropDown();
 		boxOfficeFacade.givenUserIsOnBoxOfficePage();
 		boxOfficeFacade.givenBoxOfficeEventIsSelected(purchase.getEvent().getEventName());
 		boxOfficeFacade.thenUserIsAtSellPage();

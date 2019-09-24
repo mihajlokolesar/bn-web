@@ -59,4 +59,8 @@ public class LoginStepsFacade extends BaseFacadeSteps {
 	public void logOut() {
 		loginPage.logOut();
 	}
+
+	public void whenUserSelectsMyEventsFromProfileDropDown() {
+		loginPage.getHeader().clickOnMyEvents();
+	}
 }

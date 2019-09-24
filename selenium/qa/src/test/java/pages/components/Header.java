@@ -112,6 +112,12 @@ public class Header extends BaseComponent {
 		}
 		waitForTime(1000);
 	}
+	
+	
+	public void clickOnMyEvents() {
+		openProfileOptions();
+		profileMenuDropDown.myEventsClick();
+	}
 
 	public void logOut() {
 		openProfileOptions();
