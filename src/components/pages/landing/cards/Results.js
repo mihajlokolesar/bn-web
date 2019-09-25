@@ -2,7 +2,7 @@ import React from "react";
 import { observer } from "mobx-react";
 import { withStyles, Typography } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
-
+import { fontFamilyBebas } from "../../../../config/theme";
 import ResultsRegionFilter from "./ResultsRegionFilter";
 import eventResults from "../../../../stores/eventResults";
 import EventResultCard from "../../../elements/event/EventResultCard";
@@ -31,6 +31,21 @@ const styles = theme => ({
 	},
 	noResultText: {
 		marginBottom: theme.spacing.unit * 2
+	},
+	eventHeading: {
+		textAlign: "center",
+		fontSize: theme.typography.fontSize * 1.8,
+		letterSpacing: "4px",
+		fontFamily: fontFamilyBebas,
+		paddingTop: theme.spacing.unit * 4,
+		paddingBottom: theme.spacing.unit * 4,
+
+		[theme.breakpoints.down("sm")]: {
+			paddingTop: theme.spacing.unit * 2,
+			paddingBottom: theme.spacing.unit * 2,
+			fontSize: theme.typography.fontSize * 1.4,
+			letterSpacing: "3px"
+		}
 	}
 });
 
@@ -57,10 +72,15 @@ const EventsList = ({ events }) => {
 					return null;
 				}
 				event.door_time = event.door_time || event.event_start;
-				const { timezone } = venue;
+				const { timezone, address } = venue;
+
 				return (
 					<Grid item xs={12} sm={6} lg={4} key={event.id}>
-						<EventResultCard venueTimezone={timezone} {...event}/>
+						<EventResultCard
+							venueTimezone={timezone}
+							address={address}
+							{...event}
+						/>
 					</Grid>
 				);
 			})}
@@ -85,7 +105,8 @@ const Results = observer(props => {
 
 	return (
 		<div className={classes.root}>
-			<ResultsRegionFilter/>
+			{/*<ResultsRegionFilter/>*/}
+			<Typography className={classes.eventHeading}>Upcoming events</Typography>
 
 			{hasResults === true ? <EventsList events={events}/> : null}
 

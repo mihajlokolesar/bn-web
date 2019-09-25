@@ -55,7 +55,7 @@ public class TicketsConfirmationPage extends BasePage {
 
 	public void clickOnChangeTicketLink() {
 		explicitWaitForVisiblity(changeTicketLink);
-		SeleniumUtils.clickOnLink(changeTicketLink, driver);
+		SeleniumUtils.clickOnElement(changeTicketLink, driver);
 	}
 
 	public void enterCreditCardDetails(String creditNumber, String expDate, String cvc, String zip) {
@@ -75,7 +75,7 @@ public class TicketsConfirmationPage extends BasePage {
 
 	private void confirmPaymentMethod(String method) {
 		if (method.equals("card")) {
-			if (isExplicitlyWaitVisible(5, paymentMethodCard)) {
+			if (isExplicitlyWaitVisible(3, paymentMethodCard)) {
 				paymentMethodCard.click();
 			}
 		}

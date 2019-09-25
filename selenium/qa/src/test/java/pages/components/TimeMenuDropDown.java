@@ -19,13 +19,13 @@ public class TimeMenuDropDown extends BaseComponent {
 
 	public void selectTime(WebElement element, String time) {
 		if (time != null && !time.isEmpty()) {
-			waitVisibilityAndClick(element);
+			waitVisibilityAndBrowserCheckClick(element);
 			explicitWaitForVisiblity(timeMenu);
 			WebElement selectedTime = timeMenu.findElement(By.xpath(".//li[contains(text(),'" + time + "')]"));
 			explicitWaitForVisiblity(selectedTime);
 			explicitWaitForClickable(selectedTime);
 			waitForTime(1000);
-			selectedTime.click();
+			waitVisibilityAndBrowserCheckClick(selectedTime);
 			explicitWait(5, ExpectedConditions.attributeToBe(element, "value", time));
 		}
 	}

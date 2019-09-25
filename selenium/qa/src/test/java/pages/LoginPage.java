@@ -61,6 +61,13 @@ public class LoginPage extends BasePage {
 	public void navigate() {
 		driver.get(getUrl());
 	}
+	
+	public void manualNavigateLogin(User user) {
+		HomePage homePage = new HomePage(driver);
+		homePage.navigate();
+		getHeader().clickOnSignInButton();
+		loginWithoutNavigate(user.getEmailAddress(), user.getPass());
+	}
 
 	public void login(User user) {
 		login(user.getEmailAddress(), user.getPass());
@@ -98,6 +105,10 @@ public class LoginPage extends BasePage {
 			retVal = false;
 		}
 		return retVal;
+	}
+	
+	public boolean isOnHomePage() {
+		return explicitWait(10, ExpectedConditions.urlToBe(Constants.getBaseUrlBigNeon()));
 	}
 
 	private boolean checkForLoginFailedMessage() {

@@ -9,10 +9,10 @@ import pages.BaseComponent;
 public class AdminBoxOfficeSideBar extends BaseComponent{
 	
 	
-	@FindBy(xpath = "//body//nav//a[@href='/box-office/sell']")
+	@FindBy(xpath = "//body//nav//a[@href='/box-office/sell']/div")
 	private WebElement sellLink;
 	
-	@FindBy(xpath = "//body//nav//a[@href='/box-office/guests']")
+	@FindBy(xpath = "//body//nav//a[@href='/box-office/guests']/div")
 	private WebElement guestsLink;
 
 	public AdminBoxOfficeSideBar(WebDriver driver) {

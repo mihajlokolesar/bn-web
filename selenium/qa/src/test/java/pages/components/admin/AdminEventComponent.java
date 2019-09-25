@@ -15,7 +15,7 @@ import utils.ProjectUtils;
 import utils.SeleniumUtils;
 
 public class AdminEventComponent extends BaseComponent {
-	
+
 	private static final long serialVersionUID = 3498843919257980311L;
 
 	// NOTE: all relative paths are relative to event field
@@ -37,7 +37,7 @@ public class AdminEventComponent extends BaseComponent {
 	private String relativeDateTimeParagraphPath = ".//a[contains(@href,'/dashboard')]/following-sibling::p[2]";
 	
 	private String relativeImageXPath = ".//a[contains(@href,'/admin/events/')]/div";
-
+	
 	private String relativeSoldToDivXPath = "./div/div[2]/div[2]/div[2]/div/div[p[text()='Sold']]/p[2]";
 
 	private By dropDownCancelEvent = By
@@ -113,7 +113,7 @@ public class AdminEventComponent extends BaseComponent {
 	
 	public void clickOnEvent() {
 		WebElement image = SeleniumUtils.getChildElementFromParentLocatedBy(event, By.xpath(relativeImageXPath), driver);
-		explicitWaitForVisibilityAndClickableWithClick(image);
+		waitVisibilityAndBrowserCheckClick(image);
 	}
 
 	public boolean checkIfDatesMatch(String startDate) {
@@ -128,7 +128,7 @@ public class AdminEventComponent extends BaseComponent {
 	private WebElement openDropDown() {
 		WebElement dropDown = SeleniumUtils.getChildElementFromParentLocatedBy(event, By.xpath(relativeDropDownXpath),
 				driver);
-		explicitWaitForVisibilityAndClickableWithClick(dropDown);
+		waitVisibilityAndBrowserCheckClick(dropDown);
 		return dropDown;
 	}
 

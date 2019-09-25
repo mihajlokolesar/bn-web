@@ -30,16 +30,15 @@ const styles = theme => ({
 		flexDirection: "column"
 	},
 	name: {
-		color: "#FFFFFF",
+		color: "#000000",
 		fontFamily: fontFamilyDemiBold,
-		fontSize: theme.typography.fontSize * 1.2,
-		lineHeight: 1
+		fontSize: theme.typography.fontSize * 1.3,
+		lineHeight: 1.2
 	},
 	detailsContent: {
-		height: 65,
+		height: 105,
 		display: "flex",
-		paddingLeft: theme.spacing.unit * 2,
-		paddingRight: theme.spacing.unit * 2
+		padding: theme.spacing.unit * 2
 	},
 	singleDetail: {
 		flex: 1,
@@ -48,15 +47,19 @@ const styles = theme => ({
 		justifyContent: "center"
 	},
 	label: {
-		fontSize: theme.typography.fontSize * 0.75,
+		fontSize: theme.typography.fontSize,
 		textTransform: "uppercase",
 		color: "#cccfd9"
 	},
+	date: {
+		color: secondaryHex
+	},
 	value: {
-		fontSize: theme.typography.fontSize * 0.8
+		fontSize: theme.typography.fontSize,
+		color: "#9DA3B4"
 	},
 	priceTag: {
-		backgroundColor: "#FFFFFF",
+		backgroundColor: "#fff4fb",
 		padding: theme.spacing.unit,
 		paddingTop: theme.spacing.unit + 3,
 		borderRadius: "6px 6px 6px 0px",
@@ -96,6 +99,7 @@ const EventResultCard = ({
 	name,
 	promo_image_url,
 	event_start,
+	address,
 	door_time,
 	min_ticket_price,
 	max_ticket_price,
@@ -124,25 +128,23 @@ const EventResultCard = ({
 		<Link to={`/events/${slug || id}`}>
 			<Card borderLess variant="default">
 				<MaintainAspectRatio aspectRatio={Settings().promoImageAspectRatio}>
-					<div className={classes.media} style={style}>
+					<div className={classes.media} style={style}/>
+				</MaintainAspectRatio>
+				<div className={classes.detailsContent}>
+					<div className={classes.singleDetail} style={{ textAlign: "left" }}>
+						<Typography className={classes.value}>
+							<span className={classes.date}>{displayEventStartDate}</span>{" "}
+							&middot; {displayShowTime}
+						</Typography>
+						<Typography className={classes.name}>{name}</Typography>
+						<Typography className={classes.value}>@ {address}</Typography>
+					</div>
+					<div style={{ textAlign: "right" }}>
 						<PriceTag
 							min={min_ticket_price}
 							max={max_ticket_price}
 							classes={classes}
 						/>
-						<Typography className={classes.name}>{name}</Typography>
-					</div>
-				</MaintainAspectRatio>
-				<div className={classes.detailsContent}>
-					<div className={classes.singleDetail} style={{ textAlign: "left" }}>
-						<Typography className={classes.label}>Date</Typography>
-						<Typography className={classes.value}>
-							{displayEventStartDate}
-						</Typography>
-					</div>
-					<div className={classes.singleDetail} style={{ textAlign: "right" }}>
-						<Typography className={classes.label}>Showtime</Typography>
-						<Typography className={classes.value}>{displayShowTime}</Typography>
 					</div>
 				</div>
 			</Card>

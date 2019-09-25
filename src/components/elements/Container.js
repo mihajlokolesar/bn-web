@@ -23,6 +23,7 @@ import BoxOfficeAppBar from "./header/BoxOfficeAppBar";
 import Footer from "./footers/FooterOne";
 import CaptureMissingEmail from "../pages/authentication/social/FacebookButton";
 import CaptureMissingEmailDialog from "../pages/authentication/CaptureMissingEmailDialog";
+import LandingFooter from "./footers/LandingFooter";
 
 const drawerWidth = 240;
 
@@ -103,6 +104,7 @@ class Container extends React.Component {
 			showSideMenu,
 			includeContainerPadding,
 			useContainer,
+			isLanding,
 			isBoxOffice
 		} = layout;
 		const { classes, history, children } = this.props;
@@ -144,6 +146,14 @@ class Container extends React.Component {
 						history={history}
 						homeLink={homeLink}
 					/>
+				) : isLanding ? (
+					<Hidden smUp>
+						<AppBar
+							handleDrawerToggle={this.handleDrawerToggle.bind(this)}
+							history={history}
+							homeLink={homeLink}
+						/>
+					</Hidden>
 				) : (
 					<AppBar
 						handleDrawerToggle={this.handleDrawerToggle.bind(this)}
@@ -232,7 +242,7 @@ class Container extends React.Component {
 						<Notification/>
 
 						{layout.showFooter ? (
-							<Footer/>
+							<LandingFooter/>
 						) : (
 							<div className={classes.footerPlaceholder}/>
 						)}

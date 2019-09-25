@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import model.TicketType;
 import pages.BasePage;
+import pages.components.GenericDropDown;
 import pages.components.TimeMenuDropDown;
 import pages.components.admin.AddTicketTypeComponent;
 import utils.Constants;
@@ -45,8 +46,12 @@ public class CreateEventPage extends BasePage {
 	@FindBy(id = "eventName")
 	private WebElement eventNameField;
 
-	@FindBy(xpath = "//main//div[@aria-describedby='%venues-error-text']//div[div[@role='button'] and div[@aria-haspopup='true']]")
+//	@FindBy(xpath = "//main//div[@aria-describedby='%venues-error-text']//div[div[@role='button'] and div[@aria-haspopup='true']]")
+	@FindBy(xpath = "//input[@id='venues']/preceding-sibling::div")
 	private WebElement venueDropDownSelect;
+
+	@FindBy(xpath = "menu-venues")
+	private WebElement venueDropDownContainer;
 
 	@FindBy(id = "eventDate")
 	private WebElement startDateField;
@@ -64,11 +69,12 @@ public class CreateEventPage extends BasePage {
 	@FindBy(id = "time-menu")
 	private WebElement timeMenu;
 
-	@FindBy(xpath = "//main//div//div[div[input[@id='doorTimeHours' and @type='hidden']]]")
-	private WebElement doorTimeContainer;
+//	@FindBy(xpath = "//main//div//div[div[input[@id='doorTimeHours' and @type='hidden']]]")
+	@FindBy(xpath = "//input[@id='doorTimeHours' and type='hidden']/preciding-sibling::div")
+	private WebElement doorTimeDropDownActivate;
 
 	@FindBy(id = "menu-doorTimeHours")
-	private WebElement doorTimeMenuHours;
+	private WebElement doorTimeMenuHoursContainer;
 
 	@FindBy(xpath = "//main//div[aside[contains(text(),'Add another ticket type')]]")
 	private WebElement addTicketTypeButton;
@@ -149,16 +155,17 @@ public class CreateEventPage extends BasePage {
 	}
 
 	public void selectVenue(String venueName) {
-		waitVisibilityAndClick(venueDropDownSelect);
-		selectElementFormVenueDropDown(venueName);
-		waitForTime(1000);
-		explicitWait(5, ExpectedConditions.textToBePresentInElement(venueDropDownSelect, venueName));
+		GenericDropDown dropDown = new GenericDropDown(driver, venueDropDownSelect, venueDropDownContainer);
+		dropDown.selectElementFromDropDownHiddenInput(
+				By.xpath(".//ul//li[contains(text(),'" + venueName + "')]"),
+				venueName);
 	}
 
 	private void enterDate(WebElement element, String date) {
 		if (date != null && !date.isEmpty()) {
 			explicitWaitForVisiblity(element);
 			SeleniumUtils.clearInputField(element, driver);
+			waitForTime(500);
 			waitVisibilityAndSendKeys(element, date);
 		}
 	}
@@ -173,27 +180,27 @@ public class CreateEventPage extends BasePage {
 	}
 
 	private void addNewTicketType(TicketType type) {
-		waitVisibilityAndClick(addTicketTypeButton);
+		waitVisibilityAndBrowserCheckClick(addTicketTypeButton);
 		AddTicketTypeComponent ticketType = new AddTicketTypeComponent(driver);
 		ticketType.addNewTicketType(type);
 	}
-	
+
 	public void clickOnSaveDraft() {
-		explicitWaitForVisibilityAndClickableWithClick(saveDraftButton);
+		waitVisibilityAndBrowserCheckClick(saveDraftButton);
 	}
 
 	public void clickOnPublish() {
-		waitVisibilityAndClick(publishButton);
+		waitVisibilityAndBrowserCheckClick(publishButton);
 	}
-	
+
 	public void clickOnUpdateButton() {
-		explicitWaitForVisibilityAndClickableWithClick(updateButton);
+		waitVisibilityAndBrowserCheckClick(updateButton);
 	}
 
 	public boolean checkMessage() {
 		return isNotificationDisplayedWithMessage(MsgConstants.EVENT_PUBLISHED);
 	}
-	
+
 	public boolean checkSaveDraftMessage() {
 		return isNotificationDisplayedWithMessage(MsgConstants.EVENT_SAVED_TO_DRAFT);
 	}
@@ -208,25 +215,11 @@ public class CreateEventPage extends BasePage {
 	 * @param doorTime
 	 * @return
 	 */
-	private WebElement selectDoorTime(String doorTime) {
+	private void selectDoorTime(String doorTime) {
 		if (doorTime != null && !doorTime.isEmpty()) {
-			waitVisibilityAndClick(doorTimeContainer);
-			WebElement selectedDoorTime = doorTimeMenuHours
-					.findElement(By.xpath(".//ul//li[@data-value='" + doorTime + "']"));
-			explicitWaitForVisiblity(selectedDoorTime);
-			selectedDoorTime.click();
-			return selectedDoorTime;
-		} else {
-			return null;
+			GenericDropDown dropDown = new GenericDropDown(driver, doorTimeDropDownActivate, doorTimeMenuHoursContainer);
+			dropDown.selectElementFromDropDownNoValueCheck(By.xpath(".//ul//li[@data-value='" + doorTime + "']"));
 		}
-	}
-
-	private WebElement selectElementFormVenueDropDown(String venue) {
-		WebElement selectedElement = driver
-				.findElement(By.xpath("//div[@id='menu-venues']//ul//li[contains(text(),'" + venue + "')]"));
-		explicitWaitForVisiblity(selectedElement);
-		selectedElement.click();
-		return selectedElement;
 	}
 
 	/**

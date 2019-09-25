@@ -16,7 +16,6 @@ import test.facade.AdminEventStepsFacade;
 import test.facade.LoginStepsFacade;
 import test.facade.OrganizationStepsFacade;
 import utils.DataConstants;
-import utils.ProjectUtils;
 
 public class BoxOfficeSellTicketStepsIT extends BaseSteps {
 	
@@ -32,6 +31,8 @@ public class BoxOfficeSellTicketStepsIT extends BaseSteps {
 
 		loginStepsFacade.givenUserIsLogedIn(boxOfficeUser);
 		
+		
+		loginStepsFacade.whenUserSelectsMyEventsFromProfileDropDown();
 		boxOfficeFacade.givenUserIsOnBoxOfficePage();
 		boxOfficeFacade.givenBoxOfficeEventIsSelected(purchase.getEvent().getEventName());
 		boxOfficeFacade.thenUserIsAtSellPage();
@@ -59,13 +60,13 @@ public class BoxOfficeSellTicketStepsIT extends BaseSteps {
 	public void bboxOfficeSellTicketCardPayment(User boxOfficeUser, Purchase purchase, User receiverOfTickets) {
 		int ticketNumAdd = purchase.getNumberOfTickets();
 		int ticketNumRemove = purchase.getRemoveNumberOfTickets();
-		int addToTendered = purchase.getAdditionalTenderedAmount();
 		maximizeWindow();
 		LoginStepsFacade loginStepsFacade = new LoginStepsFacade(driver);
 		AdminBoxOfficeFacade boxOfficeFacade = new AdminBoxOfficeFacade(driver);
 
 		loginStepsFacade.givenUserIsLogedIn(boxOfficeUser);
 		
+		loginStepsFacade.whenUserSelectsMyEventsFromProfileDropDown();
 		boxOfficeFacade.givenUserIsOnBoxOfficePage();
 		boxOfficeFacade.givenBoxOfficeEventIsSelected(purchase.getEvent().getEventName());
 		boxOfficeFacade.thenUserIsAtSellPage();
@@ -89,7 +90,7 @@ public class BoxOfficeSellTicketStepsIT extends BaseSteps {
 	
 	@DataProvider(name = "box_office_sell_ticket_cash_payment")
 	public static Object[][] prepareEvent() throws Exception {
-		Event event = (Event) Event.generateEventFromJson(DataConstants.BOX_OFFICE_USER_EVENTS_KEY, false, 1, 4);
+		Event event = (Event) Event.generateEventFromJson(DataConstants.BOX_OFFICE_USER_EVENTS_KEY, false, 1, 30);
 		Purchase purchase = Purchase.generatePurchaseFromJson(DataConstants.BOX_OFFICE_SELL_PURCHASE_STD_KEY);
 		purchase.setEvent(event);
 		User boxOfficeUser = User.generateUserFromJson(DataConstants.BOX_OFFICE_USER_KEY);
@@ -113,7 +114,7 @@ public class BoxOfficeSellTicketStepsIT extends BaseSteps {
 
 	@DataProvider(name = "prepare_event_for_box_office_cash_payment_data")
 	public static Object[][] prepareData() throws Exception {
-		Event event = Event.generateEventFromJson(DataConstants.BOX_OFFICE_USER_EVENTS_KEY, false, 1, 4);
+		Event event = Event.generateEventFromJson(DataConstants.BOX_OFFICE_USER_EVENTS_KEY, false, 1, 30);
 		User user = User.generateUserFromJson(DataConstants.SUPERUSER_DATA_KEY);
 	
 		return new Object[][] {{event, user}};

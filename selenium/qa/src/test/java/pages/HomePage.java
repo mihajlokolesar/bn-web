@@ -7,7 +7,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import utils.Constants;
 
-
 public class HomePage extends BasePage {
 
 	public HomePage(WebDriver driver) {
@@ -19,11 +18,15 @@ public class HomePage extends BasePage {
 		setUrl(Constants.getBaseUrlBigNeon());
 	}
 
+	public void navigate() {
+		driver.get(getUrl());
+	}
+
 	public List<WebElement> checkForResultOfSearch(String searchParam) {
-		List<WebElement> elements = driver.findElements(By.xpath("a[contains(@href,'"+searchParam+"']"));
+		List<WebElement> elements = driver.findElements(By.xpath("a[contains(@href,'" + searchParam + "']"));
 		return elements;
 	}
-	
+
 	public boolean selectFirstFromFilteredList(String searchParam) {
 		List<WebElement> elements = checkForResultOfSearch(searchParam);
 		if (!elements.isEmpty()) {

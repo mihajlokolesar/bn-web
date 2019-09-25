@@ -1,23 +1,14 @@
 package utils;
 
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.List;
-
-import javax.jws.soap.SOAPBinding;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.testng.annotations.DataProvider;
-
-import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import model.User;
 
 public class DataReader {
 

@@ -261,14 +261,14 @@ class ViewEvent extends Component {
 				return { ctaText: "Sale Ended", enabled: false };
 			case "PurchaseTickets":
 			default:
-				if (hasAvailableTickets === false && !event.is_external) {
-					return { ctaText: "No available tickets", enabled: false };
-				} else {
-					return {
-						ctaText: "Purchase Tickets",
-						enabled: true
-					};
-				}
+				// if (hasAvailableTickets === false && !event.is_external) {
+				// 	return { ctaText: "No available tickets", enabled: false };
+				// } else {
+				return {
+					ctaText: "Purchase Tickets",
+					enabled: true
+				};
+			//}
 		}
 	}
 

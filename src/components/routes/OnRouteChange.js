@@ -54,6 +54,7 @@ class OnRouteChange extends Component {
 		let showFooter = false;
 		let showPadding = true;
 		let isBoxOffice = false;
+		let isLanding = false;
 		let useContainer = true;
 		let showStudioLogo = false;
 		let showBottomMobileCartBar = true;
@@ -119,6 +120,10 @@ class OnRouteChange extends Component {
 					return;
 				}
 			});
+
+			if (window.location.pathname === "/") {
+				isLanding = true;
+			}
 		}
 
 		//Set layout based on above checks
@@ -126,6 +131,7 @@ class OnRouteChange extends Component {
 		layout.toggleContainerPadding(showPadding);
 		layout.toggleShowFooter(showFooter);
 		layout.toggleBoxOffice(isBoxOffice);
+		layout.toggleLanding(isLanding);
 		layout.toggleContainer(useContainer);
 		layout.toggleShowStudioLogo(showStudioLogo);
 		layout.toggleBottomMobileCartBar(showBottomMobileCartBar);

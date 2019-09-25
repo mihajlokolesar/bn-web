@@ -412,7 +412,7 @@ class OrderItems extends Component {
 
 		//Hide the button if there are no available menu options
 		const moreIcon =
-			orderControlOptions.length > 1 ? (
+			orderControlOptions.length >= 1 ? (
 				<IconButton onClick={this.handleOptionsMenu.bind(this)}>
 					<MoreHorizIcon nativeColor="#2c3136"/>
 				</IconButton>

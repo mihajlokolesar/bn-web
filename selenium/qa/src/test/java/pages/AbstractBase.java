@@ -21,6 +21,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import config.BrowsersEnum;
 import config.DriverFactory;
+import utils.SeleniumUtils;
 
 public class AbstractBase implements Serializable{
 
@@ -130,6 +131,13 @@ public class AbstractBase implements Serializable{
 		element.click();
 	}
 
+	public void waitVisibilityAndBrowserCheckClick(WebElement element) {
+		if (isSafari()) {
+			SeleniumUtils.clickOnElement(element, driver);
+		} else {
+			explicitWaitForVisibilityAndClickableWithClick(element);
+		}
+	}
 	public void waitVisibilityAndSendKeysSlow(WebElement element, String value) {
 		if (value == null) {
 			return;

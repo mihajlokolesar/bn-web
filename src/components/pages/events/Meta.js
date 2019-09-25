@@ -4,7 +4,9 @@ import { Helmet } from "react-helmet";
 import Settings from "../../../config/settings";
 import { dollars } from "../../../helpers/money";
 import optimizedImageUrl from "../../../helpers/optimizedImageUrl";
+import moment from "moment-timezone";
 
+const URL_DATE_FORMAT = moment.HTML5_FMT.DATETIME_LOCAL_MS;
 //Reference: https://github.com/nfl/react-helmet
 const structuredEventData = (
 	{
@@ -22,6 +24,7 @@ const structuredEventData = (
 	},
 	ticketSelectionUrl
 ) => {
+	const { timezone } = venue || {};
 	const offers = [];
 	if (ticket_types) {
 		ticket_types.forEach(tt => {
@@ -57,6 +60,10 @@ const structuredEventData = (
 
 				if (availability) {
 					const { price_in_cents } = ticket_pricing;
+					const startDate = moment
+						.utc(start_date, URL_DATE_FORMAT)
+						.tz(timezone)
+						.format();
 
 					offers.push({
 						"@type": "Offer",
@@ -64,13 +71,21 @@ const structuredEventData = (
 						price: price_in_cents ? dollars(price_in_cents, true, "") : "",
 						priceCurrency: "USD",
 						availability,
-						validFrom: start_date
+						validFrom: startDate
 					});
 				}
 			}
 		});
 	}
 
+	const startDate = moment
+		.utc(event_start, URL_DATE_FORMAT)
+		.tz(timezone)
+		.format();
+	const endDate = moment
+		.utc(event_end, URL_DATE_FORMAT)
+		.tz(timezone)
+		.format();
 	const result = {
 		"@context": "https://schema.org",
 		"@type": "Event",
@@ -78,8 +93,8 @@ const structuredEventData = (
 		description:
 			additional_info ||
 			"Big Neon - Mobile-first event ticketing. We’re relentlessly focused on serving the needs of independent live music promoters.",
-		startDate: event_start,
-		endDate: event_end,
+		startDate,
+		endDate,
 		location: {
 			"@type": "Place",
 			name: venue.name,

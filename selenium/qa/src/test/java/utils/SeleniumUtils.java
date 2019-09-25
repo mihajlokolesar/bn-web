@@ -75,7 +75,7 @@ public class SeleniumUtils {
 		return parentHandle;
 	}
 
-	public static void clickOnLink(WebElement element, WebDriver driver) {
+	public static void clickOnElement(WebElement element, WebDriver driver) {
 		String jsScript = "arguments[0].click();";
 		JavascriptExecutor executor = (JavascriptExecutor) driver;
 		executor.executeScript(jsScript, element);
@@ -103,38 +103,38 @@ public class SeleniumUtils {
 				.until(ExpectedConditions.visibilityOf(parent.findElement(relativeChildBy)));
 		return element;
 	}
-	
+
 	public static List<WebElement> getChildElementsFromParentLocatedBy(WebElement parent, By relativeChildBy,
 			WebDriver driver) {
 		List<WebElement> elements = new WebDriverWait(driver, 15)
 				.until(ExpectedConditions.visibilityOfAllElements(parent.findElements(relativeChildBy)));
 		return elements;
 	}
-	
+
 	public static Integer getIntAmount(WebElement parent, String relativeElPath, WebDriver driver) {
-		if(!SeleniumUtils.isChildElementVisibleFromParentLocatedBy(parent, By.xpath(relativeElPath), 3 ,driver)){
+		if (!SeleniumUtils.isChildElementVisibleFromParentLocatedBy(parent, By.xpath(relativeElPath), 3, driver)) {
 			return null;
 		}
 		WebElement el = SeleniumUtils.getChildElementFromParentLocatedBy(parent, By.xpath(relativeElPath), driver);
 		return getIntegerAmount(el, "$", "");
 	}
-	
+
 	public static Integer getIntegerAmount(WebElement element, String oldChar, String newChar) {
 		String text = ProjectUtils.getTextForElementAndReplace(element, oldChar, newChar);
-		if(text.isEmpty()) {
+		if (text.isEmpty()) {
 			return null;
 		}
 		return Integer.parseInt(text.trim());
 	}
-	
+
 	public static Double getDoubleAmount(WebElement parent, String relativeElPath, WebDriver driver) {
-		if(!SeleniumUtils.isChildElementVisibleFromParentLocatedBy(parent, By.xpath(relativeElPath), 3 ,driver)){
+		if (!SeleniumUtils.isChildElementVisibleFromParentLocatedBy(parent, By.xpath(relativeElPath), 3, driver)) {
 			return null;
 		}
 		WebElement el = SeleniumUtils.getChildElementFromParentLocatedBy(parent, By.xpath(relativeElPath), driver);
 		return getDoubleAmount(el, "$", "");
 	}
-	
+
 	public static Double getDoubleAmount(WebElement element, String oldChar, String newChar) {
 		String text = ProjectUtils.getTextForElementAndReplace(element, oldChar, newChar);
 		if (text.isEmpty()) {
@@ -142,7 +142,7 @@ public class SeleniumUtils {
 		}
 		return Double.parseDouble(text.trim());
 	}
-	
+
 	public static boolean refreshElement(WebElement toBeRefreshed, WebDriver driver) {
 		try {
 			new WebDriverWait(driver, 10)
@@ -157,7 +157,7 @@ public class SeleniumUtils {
 			WebDriver driver) {
 		return isChildElementVisibleFromParentLocatedBy(parent, relativeChildBy, 15, driver);
 	}
-	
+
 	public static boolean isChildElementVisibleFromParentLocatedBy(WebElement parent, By relativeChildBy, int seconds,
 			WebDriver driver) {
 		boolean retVal = false;
@@ -169,11 +169,11 @@ public class SeleniumUtils {
 		}
 		return retVal;
 	}
-	
+
 	public static void clearInputField(WebElement inputField, WebDriver driver) {
 		new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOf(inputField));
 		String text = inputField.getAttribute("value");
-		for (int i = 0; i < text.length(); i++) {
+		for (int i = 0; i < text.length() + 4; i++) {
 			inputField.sendKeys(Keys.BACK_SPACE);
 		}
 	}

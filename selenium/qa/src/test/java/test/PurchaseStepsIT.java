@@ -3,7 +3,6 @@ package test;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import model.CreditCard;
 import model.Event;
 import model.Purchase;
 import model.User;
@@ -12,7 +11,6 @@ import pages.mailinator.MailinatorHomePage;
 import pages.mailinator.inbox.MailinatorInboxPage;
 import test.facade.EventStepsFacade;
 import utils.DataConstants;
-import utils.ProjectUtils;
 
 public class PurchaseStepsIT extends BaseSteps {
 

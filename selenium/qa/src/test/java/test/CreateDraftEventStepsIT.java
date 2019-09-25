@@ -13,7 +13,6 @@ import test.facade.AdminEventStepsFacade;
 import test.facade.LoginStepsFacade;
 import test.facade.OrganizationStepsFacade;
 import utils.DataConstants;
-import utils.ProjectUtils;
 
 public class CreateDraftEventStepsIT extends BaseSteps {
 	
