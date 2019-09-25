@@ -2,13 +2,6 @@ package utils;
 
 public class DataConstants {
 	
-//	public static final String DISTINCT_USER_ONE_FIRST_NAME = "jean-luc";
-//	public static final String DISTINCT_USER_ONE_LAST_NAME = "picard";
-//	public static final String DISTINCT_USER_TWO_FIRST_NAME = "ben";
-//	public static final String DISTINCT_USER_TWO_LAST_NAME = "sisko";
-//	public static final String DISTINCT_USER_THREE_FIRST_NAME = "james";
-//	public static final String DISTINCT_USER_THREE_LAST_NAME = "kirk";
-//	public static final String BLUE_TEST_NEO_USER_MAIL = "bluetestneouser";
 	public static final String MAILINATOR_MAIL_DOMAIN = "mailinator.com";
 	public static final String USER_PASS = "test1111";
 	

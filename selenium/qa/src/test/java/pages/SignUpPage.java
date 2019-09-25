@@ -66,7 +66,7 @@ public class SignUpPage extends BasePage {
 		waitVisibilityAndSendKeys(passwordField, password);
 		waitVisibilityAndSendKeys(confirmPasswordField, confirmPassword);
 		new RecaptchaFrame(driver).clickOnRecaptcha();
-		waitVisibilityAndClick(createAccountButton);
+		waitVisibilityAndBrowserCheckClick(createAccountButton);
 	}
 
 	public void navigate() {
