@@ -32,3 +32,4 @@ ui-tests/node_modules
 /selenium/**/.project
 /selenium/**/.settings/
 /selenium/**/bin/
+/selenium/**/test-output

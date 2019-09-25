@@ -1,7 +1,5 @@
 package pages.components;
 
-import java.security.GeneralSecurityException;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -198,6 +196,10 @@ public class Header extends BaseComponent {
 		return isSignInButtonVisible;
 	}
 
+	/**
+	 * opens event select drop down for superadmin users 
+	 * @param eventName
+	 */
 	public void selectEventFromAdminDropDown(String eventName) {
 		GenericDropDown dropDown = new GenericDropDown(driver, boxOfficeEventDropDownButton, adminEventDropDownContainer);
 		dropDown.selectElementFromDropDownNoValueCheck(
@@ -205,6 +207,10 @@ public class Header extends BaseComponent {
 		waitForTime(2000);
 	}
 	
+	/**
+	 * opens event select drop down for boxOffice user
+	 * @param eventName
+	 */
 	public void selectEventFromBoxOfficeDropDown(String eventName) {
 		GenericDropDown dropDown = new GenericDropDown(driver, boxOfficeEventDropDownButton, adminEventDropDownContainer);
 		dropDown.selectElementFromDropDownNoValueCheck(By.xpath(".//ul//li//div/span[contains(text(),'" + eventName + "')]"));

@@ -1,19 +1,18 @@
 package test.facade;
 
-import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.testng.Assert;
 
 import model.User;
 import pages.admin.boxoffice.GuestPage;
 import pages.admin.boxoffice.SellPage;
 import pages.components.admin.AdminBoxOfficeSideBar;
+import utils.ProjectUtils;
 import pages.components.admin.TicketTypeRowComponent;
 import pages.components.dialogs.BoxOfficeSellCheckoutDialog;
 import pages.components.dialogs.BoxOfficeSellOrderCompleteDialog;
@@ -64,59 +63,40 @@ public class AdminBoxOfficeFacade extends BaseFacadeSteps {
 		String lastname = user.getLastName();
 		return whenUserSearchesByUserParams(lastname);
 	}
-
-	public boolean whenUserSearchesByEmail(User user) {
-		guestPage.enterSearchParameters("");
-		List<WebElement> allGuests = guestPage.searchForAllGuestOnPage();
-		if (allGuests == null || allGuests.isEmpty()) {
-			return false;
-		}
-
-		guestPage.enterSearchParameters(user.getEmailAddress());
-
-		List<WebElement> searchResults = guestPage.searchForResultsOfSearch(user.getFirstName());
-		if (searchResults != null && !searchResults.isEmpty()) {
-			return searchResults.size() < allGuests.size();
-		}
-		return false;
-	}
-
-	public boolean whenUserSearchesByTicketNumber(User user) {
+	
+	public boolean whenUserSearchesByFirstNameAndTicketNumber(User user) {
 		String firstname = user.getFirstName();
+		boolean isNameSearchValid = whenUserSearchesByUserParams(firstname);
+		String ticketNumber = guestPage.getTicketNumber(firstname);
+ 		guestPage.enterSearchParameters(ticketNumber);
+ 		
+ 		boolean isTicketInSearchResults = guestPage.isTicketNumberInGuestResults(ticketNumber);
+ 		return isTicketInSearchResults && isNameSearchValid;
+		
+	}
+	
+	public boolean whenUserSearchesByEmail(User user) {
+		Integer allGuests = cleanSearchAndGetNumberOfResults();
+		guestPage.enterSearchParameters(user.getEmailAddress());
+		Integer searchResults = guestPage.getNumberOfResultsOfSearch(user.getFirstName());
+		return searchResults.compareTo(allGuests) < 0;
+	}
+	
+	
+	private boolean whenUserSearchesByUserParams(String param) {
+		Integer allGuests = cleanSearchAndGetNumberOfResults();
+		guestPage.enterSearchParameters(param);
+		Integer searchResults = guestPage.getNumberOfResultsOfSearch(param);
+		return searchResults.compareTo(allGuests) < 0;
+	}
+	
+	private Integer cleanSearchAndGetNumberOfResults() {
 		guestPage.enterSearchParameters("");
-		List<WebElement> allGuests = guestPage.searchForAllGuestOnPage();
-		if (allGuests == null || allGuests.isEmpty()) {
+		Integer numberOfAllGuests = guestPage.getNumberOfAllGuestOnPage();
+		if (!ProjectUtils.isNumberGreaterThan(numberOfAllGuests, 0)) {
 			throw new NoSuchElementException("No guests found on admin guest page");
 		}
-		guestPage.enterSearchParameters(firstname);
-
-		List<WebElement> searchResults = guestPage.searchForResultsOfSearch(firstname);
-		if (searchResults == null || searchResults.isEmpty()) {
-			throw new NoSuchElementException("No guest found on admin guest page after search");
-		}
-		String ticketNumber = guestPage.getTicketNumber(firstname);
-		String escapedTicketNumber = ticketNumber.replace("#", "");
-		guestPage.enterSearchParameters(escapedTicketNumber);
-
-		boolean isTicketInSearchResults = guestPage.isTicketNumberInGuestResults(escapedTicketNumber);
-		return isTicketInSearchResults;
-
-	}
-
-	private boolean whenUserSearchesByUserParams(String param) {
-		guestPage.enterSearchParameters("");
-		List<WebElement> allGuests = guestPage.searchForAllGuestOnPage();
-		if (allGuests == null || allGuests.isEmpty()) {
-			return false;
-		}
-
-		guestPage.enterSearchParameters(param);
-
-		List<WebElement> searchResults = guestPage.searchForResultsOfSearch(param);
-		if (searchResults != null && !searchResults.isEmpty()) {
-			return searchResults.size() < allGuests.size();
-		}
-		return false;
+		return numberOfAllGuests;
 	}
 
 	public TicketTypeRowComponent whenUserSelectsTicketType() {
@@ -154,7 +134,6 @@ public class AdminBoxOfficeFacade extends BaseFacadeSteps {
 
 	public boolean whenUserEntersTenderedAndChecksChangeDueIsCorrect(TicketTypeRowComponent row, int tenderedAmount) {
 		checkoutDialog.enterAmountToTenderedField(tenderedAmount);
-		
 		
 		Double doubleCheckoutDue = checkoutDialog.getChangeDueAmount();
 		Double doubleOrderTotal = checkoutDialog.getOrderTotal();

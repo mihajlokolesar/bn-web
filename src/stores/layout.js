@@ -18,6 +18,9 @@ class Layout {
 	isBoxOffice = false;
 
 	@observable
+	isLanding = false;
+
+	@observable
 	useContainer = true;
 
 	@observable
@@ -65,6 +68,11 @@ class Layout {
 	@action
 	toggleBoxOffice(state) {
 		this.isBoxOffice = state;
+	}
+
+	@action
+	toggleLanding(state) {
+		this.isLanding = state;
 	}
 
 	@action

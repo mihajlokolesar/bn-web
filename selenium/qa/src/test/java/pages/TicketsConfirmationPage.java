@@ -75,7 +75,7 @@ public class TicketsConfirmationPage extends BasePage {
 
 	private void confirmPaymentMethod(String method) {
 		if (method.equals("card")) {
-			if (isExplicitlyWaitVisible(5, paymentMethodCard)) {
+			if (isExplicitlyWaitVisible(3, paymentMethodCard)) {
 				paymentMethodCard.click();
 			}
 		}

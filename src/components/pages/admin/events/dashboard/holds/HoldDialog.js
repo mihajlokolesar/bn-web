@@ -596,7 +596,7 @@ class HoldDialog extends React.Component {
 						value={hold.redemption_code}
 						name="redemption_code"
 						label="Redemption Code"
-						placeholder="- Please enter code (min 6 chars)"
+						placeholder="- Please enter code"
 						type="text"
 						onChange={e => {
 							hold.redemption_code = e.target.value

@@ -7,7 +7,6 @@ import org.testng.annotations.Test;
 import model.User;
 import pages.LoginPage;
 import utils.DataConstants;
-import utils.DataReader;
 
 public class LoginStepsIT extends BaseSteps {
 

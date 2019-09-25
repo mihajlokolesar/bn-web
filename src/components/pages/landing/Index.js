@@ -6,6 +6,9 @@ import eventResults from "../../../stores/eventResults";
 import notifications from "../../../stores/notifications";
 import Meta from "./Meta";
 import getUrlParam from "../../../helpers/getUrlParam";
+import LandingAppBar from "../../elements/header/LandingAppBar";
+import user from "../../../stores/user";
+import Hidden from "@material-ui/core/es/Hidden/Hidden";
 
 class Home extends Component {
 	constructor(props) {
@@ -28,10 +31,18 @@ class Home extends Component {
 	}
 
 	render() {
+		const { history } = this.props;
 		return (
 			<div>
 				<Meta/>
-				<Hero/>
+				<Hidden smDown>
+					<LandingAppBar
+						isAuthenticated={user.isAuthenticated}
+						history={history}
+					/>
+				</Hidden>
+
+				<Hero history={history}/>
 				<Grid container justify="center">
 					<Grid item xs={11} sm={11} lg={10}>
 						<Results/>

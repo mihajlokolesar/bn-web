@@ -9,7 +9,7 @@ import Warning from "@material-ui/icons/Warning";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import Hidden from "@material-ui/core/Hidden";
-
+import classnames from "classnames";
 import user from "../../../stores/user";
 import NotificationList from "../../common/NotificationList";
 import { primaryHex } from "../../../config/theme";
@@ -54,6 +54,9 @@ const styles = theme => ({
 		[theme.breakpoints.up("md")]: {
 			display: "none"
 		}
+	},
+	whiteText: {
+		color: "#fff"
 	}
 });
 
@@ -112,7 +115,6 @@ class RightHeaderMenu extends React.Component {
 		const { classes } = this.props;
 		const { anchorEl } = this.state;
 		const open = Boolean(anchorEl);
-
 		return (
 			<Menu
 				id="menu-appbar"
@@ -168,7 +170,7 @@ class RightHeaderMenu extends React.Component {
 	}
 
 	renderAuthenticated() {
-		const { classes } = this.props;
+		const { classes, whiteText } = this.props;
 		const { firstName, lastName, profilePicUrl } = user;
 
 		return (
@@ -191,11 +193,22 @@ class RightHeaderMenu extends React.Component {
 
 				<Hidden smDown implementation="css">
 					<div className={classes.nameDiv}>
-						<Typography style={{}} variant="caption">
+						<Typography
+							className={classnames({
+								[classes.whiteText]: whiteText
+							})}
+							style={{}}
+							variant="caption"
+						>
 							Welcome back
 						</Typography>
 
-						<Typography variant="subheading">
+						<Typography
+							className={classnames({
+								[classes.whiteText]: whiteText
+							})}
+							variant="subheading"
+						>
 							{firstName}
 							&nbsp;
 							{lastName}

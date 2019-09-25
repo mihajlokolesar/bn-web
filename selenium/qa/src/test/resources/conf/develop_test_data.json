@@ -42,6 +42,15 @@
 		"first_name": "neotestbox",
 		"last_name": "officeuser"
 	},
+	"_comment_for_organization_admin_user":"this user is tied to organization Auto Test12",
+	"organization_admin_user": {
+		"email_address": "orgadmneouser@mailinator.com",
+		"password": "test1111",
+		"confirm_password": "test1111",
+		"first_name": "orgadmin",
+		"last_name": "neouser"
+	},
+	
 	"user_data_std": {
 		"email_address": "bluetestneouser@mailinator.com",
 		"password": "test1111",

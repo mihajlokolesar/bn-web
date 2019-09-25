@@ -47,12 +47,26 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		return givenEventWithNameAndPredicateExists(event, comp -> !comp.isEventCanceled());
 	}
 	
+	public AdminEventComponent findEventWithName(Event event) {
+		return adminEvents.findEventByName(event.getEventName());
+	}
+
 	public AdminEventComponent findEventIsOpenedAndHasSoldItem(Event event) throws URISyntaxException {
 		AdminEventComponent selectedEvent =  adminEvents.findEvent(event.getEventName(),
 				comp -> comp.isEventPublished() && comp.isEventOnSale() && comp.isSoldToAmountGreaterThan(0));
 		return selectedEvent;
 	}
-	
+
+	public AdminEventComponent givenAnyEventWithPredicateExists(Event event, Predicate<AdminEventComponent> predicate)
+			throws URISyntaxException {
+		AdminEventComponent selectedEvent = adminEvents.findEvent(predicate);
+		if (selectedEvent == null) {
+			createNewRandomEvent(event);
+			selectedEvent = adminEvents.findEvent(predicate);
+		}
+		return selectedEvent;
+	}
+
 	public AdminEventComponent givenEventWithNameAndPredicateExists(Event event,
 			Predicate<AdminEventComponent> predicate) throws URISyntaxException {
 		AdminEventComponent selectedEvent = adminEvents.findEvent(event.getEventName(), predicate);
@@ -62,6 +76,7 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		}
 		return selectedEvent;
 	}
+
 	
 	private Event createNewRandomEvent(Event event) throws URISyntaxException {
 		event.setEventName(event.getEventName() + ProjectUtils.generateRandomInt(10000000));
@@ -76,6 +91,7 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		adminEvents.isAtPage();
 		return event;
 	}
+
 	
 	public boolean whenUserDeletesEvent(Event event) {
 		AdminEventComponent component = adminEvents.findEventByName(event.getEventName());
@@ -91,7 +107,7 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		createEventPage.enterEventName(event.getEventName());
 		createEventPage.enterDatesAndTimes(event.getStartDate(), event.getEndDate(), null, null, null);
 	}
-	
+
 	public void whenUserClicksOnUpdateEvent() {
 		createEventPage.clickOnUpdateButton();
 	}
@@ -105,7 +121,7 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		return retVal;
 
 	}
-	
+
 	public boolean thenEventShouldBeCanceled(Event event) {
 		AdminEventComponent componentEvent = adminEvents.findEventByName(event.getEventName());
 		if (componentEvent != null) {
@@ -114,20 +130,20 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 			return false;
 		}
 	}
-	
+
 	public boolean thenUpdatedEventShoudExist(Event event) {
 		AdminEventComponent component = this.adminEvents.findEventByName(event.getEventName());
-		if (component != null ) {
+		if (component != null) {
 			return component.checkIfDatesMatch(event.getStartDate());
 		} else {
 			return false;
 		}
 	}
-	
+
 	public boolean thenMessageNotificationShouldAppear(String msg) {
 		return createEventPage.isNotificationDisplayedWithMessage(msg);
 	}
-	
+
 	public boolean thenEventShouldBeDrafted(Event event) {
 		AdminEventComponent component = adminEvents.findEventByName(event.getEventName());
 		return component.isEventDrafted();
@@ -141,7 +157,7 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		boolean retVal = createEventPage.checkMessage();
 		return retVal;
 	}
-	
+
 	private void createEventFillData(Event event) {
 		createEventPage.clickOnImportSettingDialogNoThanks();
 		createEventPage.enterArtistName(event.getArtistName());
@@ -151,6 +167,7 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 				event.getEndTime(), event.getDoorTime());
 		createEventPage.addTicketTypes(event.getTicketTypes());
 	}
+
 	
 	private void setData(String key, Object value) {
 		dataMap.put(key, value);

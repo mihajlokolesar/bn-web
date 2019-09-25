@@ -15,7 +15,7 @@ import utils.ProjectUtils;
 import utils.SeleniumUtils;
 
 public class AdminEventComponent extends BaseComponent {
-	
+
 	private static final long serialVersionUID = 3498843919257980311L;
 
 	// NOTE: all relative paths are relative to event field
@@ -37,7 +37,7 @@ public class AdminEventComponent extends BaseComponent {
 	private String relativeDateTimeParagraphPath = ".//a[contains(@href,'/dashboard')]/following-sibling::p[2]";
 	
 	private String relativeImageXPath = ".//a[contains(@href,'/admin/events/')]/div";
-
+	
 	private String relativeSoldToDivXPath = "./div/div[2]/div[2]/div[2]/div/div[p[text()='Sold']]/p[2]";
 
 	private By dropDownCancelEvent = By

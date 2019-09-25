@@ -286,7 +286,7 @@ class ChildDialog extends React.Component {
 						value={child.redemption_code}
 						name="redemption_code"
 						label="Redemption code *"
-						placeholder="Please enter a code (min 6 chars)"
+						placeholder="Please enter a code"
 						type="text"
 						onChange={e => {
 							child.redemption_code = e.target.value.toUpperCase();

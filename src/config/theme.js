@@ -20,6 +20,7 @@ const toolBarHeight = {
 const fontFamily = "TTCommons-Regular";
 const fontFamilyBold = "TTCommons-Bold";
 const fontFamilyDemiBold = "TTCommons-DemiBold";
+const fontFamilyBebas = "BebasNeue-Regular";
 
 const textFieldLabelStyle = {
 	fontFamily,
@@ -151,5 +152,6 @@ export {
 	fontFamily,
 	fontFamilyBold,
 	fontFamilyDemiBold,
+	fontFamilyBebas,
 	textFieldLabelStyle
 };

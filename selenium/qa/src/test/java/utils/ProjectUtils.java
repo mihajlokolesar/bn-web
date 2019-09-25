@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-import org.apache.commons.lang3.SerializationUtils;
 import org.openqa.selenium.WebElement;
 
 public class ProjectUtils {
@@ -69,10 +68,19 @@ public class ProjectUtils {
 		sb.append(field != null ? field + "; " : "");
 	}
 
-	public static void appendFields(String[] fields , StringBuilder sb) {
-		for(String f : fields) {
+	public static void appendFields(String[] fields, StringBuilder sb) {
+		for (String f : fields) {
 			appendField(f, sb);
 		}
+	}
+
+	public static boolean isNumberGreaterThan(Integer number, Integer greaterThan) {
+		if (number != null && greaterThan != null) {
+			if (number.compareTo(greaterThan) > 0) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public static Object[] createAndFillArrayWithObject(int size, Object original) {

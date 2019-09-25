@@ -817,7 +817,7 @@ class CodeDialog extends React.Component {
 					value={code.redemption_codes[0]}
 					name="redemption_code"
 					label="Promo Code*"
-					placeholder="Please enter code (min 6 chars)"
+					placeholder="Please enter code"
 					type="text"
 					onChange={e => {
 						code.redemption_codes = [
