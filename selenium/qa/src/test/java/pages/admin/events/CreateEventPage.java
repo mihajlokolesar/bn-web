@@ -50,7 +50,7 @@ public class CreateEventPage extends BasePage {
 	@FindBy(xpath = "//input[@id='venues']/preceding-sibling::div")
 	private WebElement venueDropDownSelect;
 
-	@FindBy(xpath = "menu-venues")
+	@FindBy(id = "menu-venues")
 	private WebElement venueDropDownContainer;
 
 	@FindBy(id = "eventDate")
@@ -70,7 +70,7 @@ public class CreateEventPage extends BasePage {
 	private WebElement timeMenu;
 
 //	@FindBy(xpath = "//main//div//div[div[input[@id='doorTimeHours' and @type='hidden']]]")
-	@FindBy(xpath = "//input[@id='doorTimeHours' and type='hidden']/preciding-sibling::div")
+	@FindBy(xpath = "//input[@id='doorTimeHours' and @type='hidden']/preceding-sibling::div")
 	private WebElement doorTimeDropDownActivate;
 
 	@FindBy(id = "menu-doorTimeHours")
