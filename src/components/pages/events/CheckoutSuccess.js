@@ -30,6 +30,7 @@ import getUrlParam from "../../../helpers/getUrlParam";
 import getPhoneOS from "../../../helpers/getPhoneOS";
 import servedImage from "../../../helpers/imagePathHelper";
 import Settings from "../../../config/settings";
+import OrgAnalytics from "../../common/OrgAnalytics";
 
 const heroHeight = 800;
 
@@ -357,7 +358,8 @@ class CheckoutSuccess extends Component {
 			promo_image_url,
 			displayDoorTime,
 			displayShowTime,
-			eventStartDateMoment
+			eventStartDateMoment,
+			tracking_keys
 		} = event;
 
 		const {
@@ -369,6 +371,7 @@ class CheckoutSuccess extends Component {
 
 		return (
 			<div className={classes.root}>
+				<OrgAnalytics trackingKeys={tracking_keys}/>
 				<Meta {...event} venue={venue} artists={artists} type={"success"}/>
 
 				{/*DESKTOP*/}

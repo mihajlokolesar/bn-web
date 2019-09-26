@@ -150,7 +150,7 @@ class ViewEvent extends Component {
 	}
 
 	componentDidMount() {
-		layout.toggleBelowFooterPadding(true);
+		// layout.toggleBelowFooterPadding(true);
 
 		if (
 			this.props.match &&
@@ -184,7 +184,7 @@ class ViewEvent extends Component {
 	}
 
 	componentWillUnmount() {
-		layout.toggleBelowFooterPadding(false);
+		// layout.toggleBelowFooterPadding(false);
 	}
 
 	// toggleUserInterest() {

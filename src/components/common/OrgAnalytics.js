@@ -5,7 +5,11 @@ import analytics from "../../helpers/analytics";
 
 class OrgAnalytics extends React.Component {
 	// true if ANY of the tracking keys have been initialized, otherwise false (including if deinitialized)
-	initialized: false;
+	constructor(props) {
+		super(props);
+
+		this.initialized = false;
+	}
 
 	componentWillReceiveProps(nextProps) {
 		this.initializeAnalytics(nextProps.trackingKeys);
@@ -29,7 +33,8 @@ class OrgAnalytics extends React.Component {
 				analytics.addTrackingKey("facebook", keys.facebook_pixel_key);
 				this.initialized = true;
 			}
-			analytics.page();
+
+			//analytics.page();
 		}
 	}
 
@@ -47,7 +52,7 @@ class OrgAnalytics extends React.Component {
 	}
 
 	render() {
-		return <span/>;
+		return null;
 	}
 }
 

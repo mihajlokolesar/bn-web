@@ -6,10 +6,34 @@ const ga = {
 	enabled: false,
 	disabledWarning:
 		"No Google analytics key provided. Google Analytics is disabled.",
+	primaryKey: "",
+	secondaryKey: "",
 
 	addTrackingKey(key) {
-		// GA support multiple tracking keys
-		ReactGA.initialize(key);
+		if (!this.primaryKey) {
+			this.primaryKey = key;
+
+			//First GA key added
+			ReactGA.initialize(key);
+		} else if (!this.secondaryKey) {
+			this.secondaryKey = key;
+
+			ReactGA.initialize(key, {
+				gaOptions: {
+					name: "secondaryKey"
+				},
+				debug: false
+			});
+
+			//Needs a delay after initializing the secondary api key.
+			//Primary key would have already tracked a page hit at this point
+			setTimeout(() => {
+				const uri = window.location.pathname + window.location.search;
+
+				ReactGA.pageview(uri, ["secondaryKey"]);
+			}, 500);
+		}
+
 		this.enabled = true;
 
 		if (window[`ga-disable-${key}`]) {
@@ -19,21 +43,48 @@ const ga = {
 
 	pageView() {
 		const uri = window.location.pathname + window.location.search;
+
 		ReactGA.pageview(uri);
+
+		if (this.secondaryKey) {
+			ReactGA.pageview(uri, ["secondaryKey"]);
+		}
 	},
 
 	removeTrackingKey(key) {
 		window[`ga-disable-${key}`] = true;
+
+		if (key === this.primaryKey) {
+			this.primaryKey = "";
+		}
+
+		if (key === this.secondaryKey) {
+			this.secondaryKey = "";
+		}
 	},
 
 	track(category, action, data) {
+		//TODO track for all key names
 		ReactGA.ga("send", "event", category, action, data);
+
+		if (this.secondaryKey) {
+			ReactGA.ga("secondaryKey.send", "event", category, action, data);
+		}
 	},
 
 	identify(user) {
 		// https://developers.google.com/analytics/devguides/collection/analyticsjs/cookies-user-id#user_id
 		ReactGA.set("userId", user.id);
 		ReactGA.ga("send", "event", "authentication", "user-id available");
+
+		if (this.secondaryKey) {
+			ReactGA.ga(
+				"secondaryKey.send",
+				"event",
+				"authentication",
+				"user-id available"
+			);
+		}
 	},
 
 	trackLoadTime(milliseconds) {
@@ -299,6 +350,7 @@ const init = () => {
 
 	Object.keys(providerOptions).forEach(k => {
 		const opts = providerOptions[k];
+
 		addTrackingKey(k, opts);
 	});
 };
