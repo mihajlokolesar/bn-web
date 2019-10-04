@@ -284,7 +284,11 @@ class SingleOrder extends Component {
 						{orderHistory ? (
 							<OrderHistory
 								orderHistory={orderHistory}
-								userId={order.user_id}
+								userId={
+									order.on_behalf_of_user_id
+										? order.on_behalf_of_user_id
+										: order.user_id
+								}
 								eventDetails={eventDetails}
 							/>
 						) : (
@@ -299,7 +303,9 @@ class SingleOrder extends Component {
 							eventId={eventId}
 							organizationId={organizationId}
 							timezone={timezone}
-							user={order.user}
+							user={
+								order.on_behalf_of_user ? order.on_behalf_of_user : order.user
+							}
 							eventId={eventDetails.id}
 							orderId={order.id}
 						/>

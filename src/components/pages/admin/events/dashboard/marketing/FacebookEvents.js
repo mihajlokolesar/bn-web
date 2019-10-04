@@ -31,15 +31,7 @@ class FacebookEvents extends Component {
 	componentDidMount() {
 		const { eventId } = this.props;
 
-		Bigneon()
-			.external.facebook.pages()
-			.then(response =>
-				this.setState({ pages: response.data, isFacebookLinked: true })
-			)
-			.catch(error => {
-				console.error(error);
-				this.setState({ isFacebookLinked: false });
-			});
+		this.refreshPages();
 		//If you need event details, use the eventId prop
 		// Bigneon()
 		// 	.events.read({ id: eventId })
@@ -49,6 +41,23 @@ class FacebookEvents extends Component {
 		// 	.catch(error => {
 		// 		console.error(error);
 		// 	});
+	}
+
+	onFacebookLogin() {
+		this.refreshPages();
+	}
+
+	refreshPages() {
+		this.setState({ isSubmitting: true });
+		Bigneon()
+			.external.facebook.pages()
+			.then(response =>
+				this.setState({ pages: response.data, isFacebookLinked: true })
+			)
+			.catch(error => {
+				console.error(error);
+				this.setState({ isFacebookLinked: false });
+			});
 	}
 
 	onSubmit() {
@@ -109,7 +118,11 @@ class FacebookEvents extends Component {
 							</div>
 						) : (
 							<div>
-								<FacebookButton scopes={["manage_pages", "publish_pages"]}/>
+								<FacebookButton
+									scopes={["manage_pages", "publish_pages", "create_event"]}
+									linkToUser={true}
+									onSuccess={this.onFacebookLogin.bind(this)}
+								/>
 							</div>
 						)}
 					</Grid>

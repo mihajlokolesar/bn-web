@@ -1,13 +1,18 @@
-import React from "react";
+import React, { Component } from "react";
 import { observer } from "mobx-react";
 import { withStyles, Typography } from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
-import { fontFamilyBebas } from "../../../../config/theme";
+import { fontFamilyBebas, fontFamilyDemiBold } from "../../../../config/theme";
 import ResultsRegionFilter from "./ResultsRegionFilter";
 import eventResults from "../../../../stores/eventResults";
 import EventResultCard from "../../../elements/event/EventResultCard";
 import Button from "../../../elements/Button";
 import servedImage from "../../../../helpers/imagePathHelper";
+import HoldRow from "../../admin/events/dashboard/holds/children/ChildRow";
+import getUrlParam from "../../../../helpers/getUrlParam";
+import { urlPageParam } from "../../../elements/pagination";
+import Hidden from "@material-ui/core/Hidden";
+import { Link } from "react-router-dom";
 
 const styles = theme => ({
 	root: {
@@ -32,11 +37,18 @@ const styles = theme => ({
 	noResultText: {
 		marginBottom: theme.spacing.unit * 2
 	},
+	btnContainer: {
+		display: "flex",
+		alignItems: "center",
+		justifyContent: "center",
+		marginTop: theme.spacing.unit * 8
+	},
 	eventHeading: {
 		textAlign: "center",
-		fontSize: theme.typography.fontSize * 1.8,
-		letterSpacing: "4px",
-		fontFamily: fontFamilyBebas,
+		fontSize: 22,
+		letterSpacing: "-0.9px",
+		fontFamily: fontFamilyDemiBold,
+		textTransform: "uppercase",
 		paddingTop: theme.spacing.unit * 4,
 		paddingBottom: theme.spacing.unit * 4,
 
@@ -88,40 +100,94 @@ const EventsList = ({ events }) => {
 	);
 };
 
-const Results = observer(props => {
-	const { classes } = props;
-	const events = eventResults.filteredEvents;
-
-	let hasResults = null;
-	if (events === null) {
-		hasResults = null;
-	} else if (events instanceof Array) {
-		if (events.length > 0) {
-			hasResults = true;
-		} else {
-			hasResults = false;
-		}
+@observer
+class Results extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			shownEvents: 30
+		};
+		this.loadMore = this.loadMore.bind(this);
 	}
 
-	return (
-		<div className={classes.root}>
-			{/*<ResultsRegionFilter/>*/}
-			<Typography className={classes.eventHeading}>Upcoming events</Typography>
+	loadMore() {
+		this.setState(prev => {
+			return { shownEvents: prev.shownEvents + 30 };
+		});
+	}
 
-			{hasResults === true ? <EventsList events={events}/> : null}
+	renderEventList = events => {
+		return (
+			<Grid container spacing={24}>
+				{events.slice(0, this.state.shownEvents).map(({ venue, ...event }) => {
+					if (!event) {
+						console.error("Not found: ");
+						return null;
+					}
+					event.door_time = event.door_time || event.event_start;
+					const { timezone, address } = venue;
 
-			{hasResults === false ? (
-				<NoResults
-					classes={classes}
-					onClear={() => eventResults.clearFilter()}
-				/>
-			) : null}
+					return (
+						<Grid item xs={12} sm={6} lg={4} key={event.id}>
+							<EventResultCard
+								venueTimezone={timezone}
+								address={address}
+								{...event}
+							/>
+						</Grid>
+					);
+				})}
+			</Grid>
+		);
+	};
 
-			{hasResults === null ? (
-				<Typography className={classes.subHeading}>Searching...</Typography>
-			) : null}
-		</div>
-	);
-});
+	render() {
+		const { classes } = this.props;
+		const events = eventResults.filteredEvents;
+		const { shownEvents } = this.state;
+
+		let hasResults = null;
+		if (events === null) {
+			hasResults = null;
+		} else if (events instanceof Array) {
+			if (events.length > 0) {
+				hasResults = true;
+			} else {
+				hasResults = false;
+			}
+		}
+
+		return (
+			<div className={classes.root}>
+				<Typography className={classes.eventHeading}>
+					Upcoming events
+				</Typography>
+
+				{hasResults === true ? this.renderEventList(events) : null}
+
+				{hasResults === false ? (
+					<NoResults
+						classes={classes}
+						onClear={() => eventResults.clearFilter()}
+					/>
+				) : null}
+
+				{hasResults === null ? (
+					<Typography className={classes.subHeading}>Searching...</Typography>
+				) : null}
+
+				{events.length > shownEvents || events.length === shownEvents ? (
+					<div className={classes.btnContainer}>
+						<Button onClick={this.loadMore} variant="pinkBorder" size="large">
+							Load More
+						</Button>
+					</div>
+				) : (
+					<div/>
+				)}
+			</div>
+		);
+	}
+}
 
 export default withStyles(styles)(Results);

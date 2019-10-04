@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { observer } from "mobx-react";
 import moment from "moment";
 import { withStyles, Typography } from "@material-ui/core";
+import FlipMove from "react-flip-move";
 import Dialog from "../../../../elements/Dialog";
 
 import LeftAlignedSubCard from "../../../../elements/LeftAlignedSubCard";
@@ -32,7 +33,8 @@ const formatForSaving = (ticketTypes, event) => {
 			visibility,
 			description,
 			parentId,
-			additionalFeeInDollars
+			additionalFeeInDollars,
+			rank
 		} = ticketType;
 
 		let { startDate: ticketTypeStartDate, endDate } = ticketType;
@@ -161,7 +163,8 @@ const formatForSaving = (ticketTypes, event) => {
 			parent_id: parentId,
 			additional_fee_in_cents: additionalFeeInDollars
 				? Number(additionalFeeInDollars) * 100
-				: null
+				: null,
+			rank
 		});
 	});
 
@@ -673,45 +676,70 @@ class EventTickets extends Component {
 		return (
 			<div>
 				{this.renderAreYouSureDeleteDialog()}
-				{ticketTypes.map((ticketType, index) => {
-					let active = index === ticketTypeActiveIndex;
-					const isCancelled = ticketType.status === "Cancelled";
 
-					const ticketTypeErrors = errors && errors[index] ? errors[index] : {};
+				<FlipMove staggerDurationBy="50">
+					{ticketTypes.map((ticketType, index) => {
+						let active = index === ticketTypeActiveIndex;
+						const isCancelled = ticketType.status === "Cancelled";
 
-					//If we have errors, force their eyes to see them
-					if (Object.keys(ticketTypeErrors).length > 0) {
-						active = true;
-					}
-					return (
-						<LeftAlignedSubCard key={index} active={active}>
-							<div ref={this.addTicketScrollRef}>
-								<TicketType
-									isCancelled={isCancelled}
-									onEditClick={() => {
-										const newIndex =
-											eventUpdateStore.ticketTypeActiveIndex === index
-												? null
-												: index;
-										eventUpdateStore.ticketTypeActivate(newIndex);
-									}}
-									updateTicketType={this.updateTicketType}
-									deleteTicketType={() => this.openDeleteDialog(index)}
-									active={active}
-									index={index}
-									autoFocus={shouldFocus}
-									validateFields={validateFields}
-									errors={ticketTypeErrors}
-									ticketTimesDirty={ticketTimesDirty}
-									onChangeDate={onChangeDate}
-									eventStartDate={eventStartDate}
-									ticketTypes={ticketTypes}
-									{...ticketType}
-								/>
-							</div>
-						</LeftAlignedSubCard>
-					);
-				})}
+						const ticketTypeErrors =
+							errors && errors[index] ? errors[index] : {};
+
+						//If we have errors, force their eyes to see them
+						if (Object.keys(ticketTypeErrors).length > 0) {
+							active = true;
+						}
+
+						const onMoveUp =
+							index < 1
+								? null
+								: () => {
+									active ? eventUpdateStore.ticketTypeActivate(null) : null;
+									eventUpdateStore.moveOrderTicketType(index, "up");
+								  };
+
+						const onMoveDown =
+							index + 1 >= ticketTypes.length
+								? null
+								: () => {
+									active ? eventUpdateStore.ticketTypeActivate(null) : null;
+									eventUpdateStore.moveOrderTicketType(index, "down");
+								  };
+
+						const uniqueFlipKey = ticketType.id || index;
+
+						return (
+							<LeftAlignedSubCard key={uniqueFlipKey} active={active}>
+								<div ref={this.addTicketScrollRef}>
+									<TicketType
+										isCancelled={isCancelled}
+										onEditClick={() => {
+											const newIndex =
+												eventUpdateStore.ticketTypeActiveIndex === index
+													? null
+													: index;
+											eventUpdateStore.ticketTypeActivate(newIndex);
+										}}
+										updateTicketType={this.updateTicketType}
+										deleteTicketType={() => this.openDeleteDialog(index)}
+										active={active}
+										index={index}
+										autoFocus={shouldFocus}
+										validateFields={validateFields}
+										errors={ticketTypeErrors}
+										ticketTimesDirty={ticketTimesDirty}
+										onChangeDate={onChangeDate}
+										eventStartDate={eventStartDate}
+										ticketTypes={ticketTypes}
+										onMoveUp={onMoveUp}
+										onMoveDown={onMoveDown}
+										{...ticketType}
+									/>
+								</div>
+							</LeftAlignedSubCard>
+						);
+					})}
+				</FlipMove>
 
 				<div
 					className={classes.addTicketType}

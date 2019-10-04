@@ -106,6 +106,7 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 	public void whenUserUpdatesDataOfEvent(Event event) {
 		createEventPage.enterEventName(event.getEventName());
 		createEventPage.enterDatesAndTimes(event.getStartDate(), event.getEndDate(), null, null, null);
+		createEventPage.waitForTime(1000);
 	}
 
 	public void whenUserClicksOnUpdateEvent() {

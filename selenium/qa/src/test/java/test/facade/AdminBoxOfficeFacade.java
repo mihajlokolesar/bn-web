@@ -131,6 +131,10 @@ public class AdminBoxOfficeFacade extends BaseFacadeSteps {
 	public void whenUserPicksCashOption() {
 		checkoutDialog.clickOnPayWithCash();
 	}
+	
+	public void whenUserPicksCardOption() {
+		checkoutDialog.clickOnPayWithCreditCard();
+	}
 
 	public boolean whenUserEntersTenderedAndChecksChangeDueIsCorrect(TicketTypeRowComponent row, int tenderedAmount) {
 		checkoutDialog.enterAmountToTenderedField(tenderedAmount);

@@ -88,6 +88,32 @@ class EventUpdate {
 	}
 
 	@action
+	moveOrderTicketType(fromIndex, direction) {
+		//TODO this will be redone
+		const ticketTypes = this.ticketTypes;
+
+		if (direction === "up") {
+			if (fromIndex < 1) {
+				return;
+			}
+
+			ticketTypes.splice(fromIndex - 1, 0, ticketTypes.splice(fromIndex, 1)[0]);
+		} else if (direction === "down") {
+			if (fromIndex + 1 >= this.ticketTypes.length) {
+				return;
+			}
+
+			ticketTypes.splice(fromIndex + 1, 0, ticketTypes.splice(fromIndex, 1)[0]);
+		}
+
+		ticketTypes.forEach((tt, i) => {
+			ticketTypes[i].rank = i;
+		});
+
+		this.ticketTypes = ticketTypes;
+	}
+
+	@action
 	loadTicketTypes(event, updateTimezones) {
 		if (!this.id) {
 			//No event yet, add one ticket by default
@@ -394,6 +420,7 @@ class EventUpdate {
 			);
 			for (let index = 0; index < formattedTicketTypes.length; index++) {
 				const ticketType = formattedTicketTypes[index];
+
 				const saveTicketResponse = await this.saveTicketType(
 					ticketType,
 					formattedTicketTypes

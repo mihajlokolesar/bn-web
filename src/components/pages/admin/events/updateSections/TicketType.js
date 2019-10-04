@@ -82,7 +82,9 @@ const TicketHeading = ({
 	onEditClick,
 	deleteTicketType,
 	active,
-	isCancelled
+	isCancelled,
+	onMoveUp,
+	onMoveDown
 }) => (
 	<div className={classes.ticketHeader}>
 		<FormHeading
@@ -106,6 +108,20 @@ const TicketHeading = ({
 			</div>
 		) : (
 			<div>
+				<IconButton
+					onClick={onMoveUp}
+					iconUrl={`/icons/up-gray.svg`}
+					disabled={!onMoveUp}
+				>
+					Move up
+				</IconButton>
+				<IconButton
+					onClick={onMoveDown}
+					iconUrl={`/icons/down-gray.svg`}
+					disabled={!onMoveDown}
+				>
+					Move down
+				</IconButton>
 				<IconButton
 					onClick={onEditClick}
 					iconUrl={`/icons/edit-${active ? "active" : "gray"}.svg`}
@@ -795,7 +811,9 @@ TicketType.propTypes = {
 	isCancelled: PropTypes.bool,
 	parentId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 	ticketTypes: PropTypes.array,
-	onChangeDate: PropTypes.func.isRequired
+	onChangeDate: PropTypes.func.isRequired,
+	onMoveUp: PropTypes.func,
+	onMoveDown: PropTypes.func
 	//id: PropTypes.string,
 	//capacity
 	//endDate

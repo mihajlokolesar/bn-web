@@ -2,6 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
+import Hidden from "@material-ui/core/Hidden";
+import Grid from "@material-ui/core/Grid";
+
 import Settings from "../../../config/settings";
 import {
 	callToActionBackground,
@@ -9,9 +12,7 @@ import {
 } from "../../../config/theme";
 import AppButton from "../AppButton";
 import servedImage from "../../../helpers/imagePathHelper";
-import Grid from "@material-ui/core/Grid";
 import Results from "../../pages/landing/cards/Results";
-import Hidden from "@material-ui/core/es/Hidden/Hidden";
 
 //TODO change external links
 const rootUrl = "";
@@ -70,6 +71,7 @@ const styles = theme => ({
 	},
 	copyright: {
 		fontSize: theme.typography.fontSize * 0.9,
+		color: "#9DA3B4",
 		[theme.breakpoints.down("sm")]: {
 			width: "100%",
 			display: "flex",
@@ -102,7 +104,7 @@ const styles = theme => ({
 	linksContainer: {
 		display: "flex",
 		justifyContent: "center",
-		paddingBottom: theme.spacing.unit * 2,
+		paddingTop: theme.spacing.unit * 2,
 
 		[theme.breakpoints.down("sm")]: {
 			paddingBottom: theme.spacing.unit,
@@ -119,7 +121,7 @@ const styles = theme => ({
 	link: {
 		color: "#3C383F",
 		fontFamily: fontFamilyDemiBold,
-		marginRight: theme.spacing.unit
+		marginRight: theme.spacing.unit * 2
 	},
 	containerPadding: {
 		paddingTop: theme.spacing.unit * 3,
@@ -151,6 +153,12 @@ const styles = theme => ({
 		lineHeight: "27px",
 		fontFamily: fontFamilyDemiBold,
 		paddingBottom: theme.spacing.unit
+	},
+	downloadBtn: {
+		maxWidth: 128,
+		marginTop: theme.spacing.unit * 2,
+		marginRight: theme.spacing.unit,
+		maxHeight: 38
 	}
 });
 
@@ -191,21 +199,18 @@ const LandingFooter = props => {
 							&nbsp; Get the Bigneon app now:
 						</Typography>
 						<div className={classes.appLinksContainers}>
-							<AppButton
-								variant="ios"
-								color="black"
-								href={Settings().appStoreIos}
-							>
-								iOS
-							</AppButton>
-							<span className={classes.appLinkSpacer}/>
-							<AppButton
-								variant="android"
-								color="black"
-								href={Settings().appStoreAndroid}
-							>
-								Android
-							</AppButton>
+							<a href={Settings().appStoreIos} target="_blank">
+								<img
+									className={classes.downloadBtn}
+									src={servedImage("/images/appstore-apple.png")}
+								/>
+							</a>
+							<a href={Settings().appStoreAndroid} target="_blank">
+								<img
+									className={classes.downloadBtn}
+									src={servedImage("/images/appstore-google-play.png")}
+								/>
+							</a>
 						</div>
 					</div>
 					<Hidden smUp>

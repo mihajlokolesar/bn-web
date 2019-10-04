@@ -7,9 +7,25 @@ import Button from "../../../../elements/Button";
 import user from "../../../../../stores/user";
 import notifications from "../../../../../stores/notifications";
 import Bigneon from "../../../../../helpers/bigneon";
+import SelectGroup from "../../../../common/form/SelectGroup";
 
 const styles = theme => ({});
 
+const settlementTypes = [
+	{
+		value: "empty",
+		label: "Select a settlment type",
+		disabled: true
+	},
+	{
+		value: "PostEvent",
+		label: "Post event"
+	},
+	{
+		value: "Rolling",
+		label: "Rolling"
+	}
+];
 class OtherFees extends Component {
 	constructor(props) {
 		super(props);
@@ -20,7 +36,8 @@ class OtherFees extends Component {
 			eventFee: (0).toFixed(2),
 			errors: {},
 			isSubmitting: false,
-			showApiKeys: false
+			showApiKeys: false,
+			settlement_type: ""
 		};
 	}
 
@@ -35,7 +52,8 @@ class OtherFees extends Component {
 						owner_user_id,
 						client_event_fee_in_cents,
 						company_event_fee_in_cents,
-						cc_fee_percent
+						cc_fee_percent,
+						settlement_type
 					} = response.data;
 					const clientEventFee = client_event_fee_in_cents
 						? (client_event_fee_in_cents / 100).toFixed(2)
@@ -49,7 +67,8 @@ class OtherFees extends Component {
 						owner_user_id: owner_user_id || "",
 						clientEventFee,
 						companyEventFee,
-						creditCardFee
+						creditCardFee,
+						settlement_type
 					});
 				})
 				.catch(error => {
@@ -103,13 +122,19 @@ class OtherFees extends Component {
 			return false;
 		}
 
-		const { clientEventFee, companyEventFee, creditCardFee } = this.state;
+		const {
+			clientEventFee,
+			companyEventFee,
+			creditCardFee,
+			settlement_type
+		} = this.state;
 		const { organizationId } = this.props;
 
 		const orgDetails = {
 			client_event_fee_in_cents: Number(clientEventFee) * 100,
 			company_event_fee_in_cents: Number(companyEventFee) * 100,
-			cc_fee_percent: Number(creditCardFee)
+			cc_fee_percent: Number(creditCardFee),
+			settlement_type
 		};
 
 		Bigneon()
@@ -138,6 +163,7 @@ class OtherFees extends Component {
 			clientEventFee = 0,
 			companyEventFee = 0,
 			creditCardFee = 0,
+			settlement_type,
 			errors,
 			isSubmitting
 		} = this.state;
@@ -157,7 +183,7 @@ class OtherFees extends Component {
 			<div>
 				<form noValidate autoComplete="off" onSubmit={this.onSubmit.bind(this)}>
 					<Grid container spacing={24}>
-						<Grid item xs={12} sm={3} lg={3}>
+						<Grid item xs={12} sm={4} lg={4}>
 							<InputGroup
 								InputProps={{
 									startAdornment: (
@@ -175,7 +201,7 @@ class OtherFees extends Component {
 								onBlur={this.validateFields.bind(this)}
 							/>
 						</Grid>
-						<Grid item xs={12} sm={3} lg={3}>
+						<Grid item xs={12} sm={4} lg={4}>
 							<InputGroup
 								InputProps={{
 									startAdornment: (
@@ -193,7 +219,7 @@ class OtherFees extends Component {
 								onBlur={this.validateFields.bind(this)}
 							/>
 						</Grid>
-						<Grid item xs={12} sm={3} lg={3}>
+						<Grid item xs={12} sm={4} lg={4}>
 							<InputGroup
 								InputProps={{
 									endAdornment: (
@@ -209,7 +235,9 @@ class OtherFees extends Component {
 								onBlur={this.validateFields.bind(this)}
 							/>
 						</Grid>
-						<Grid item xs={12} sm={3} lg={3}>
+					</Grid>
+					<Grid container spacing={24}>
+						<Grid item xs={12} sm={4} lg={4}>
 							<InputGroup
 								InputProps={{
 									startAdornment: (
@@ -223,6 +251,18 @@ class OtherFees extends Component {
 								label="Total per order fee"
 								type="text"
 								onChange={e => {}}
+							/>
+						</Grid>
+
+						<Grid item xs={12} sm={4} lg={4}>
+							<SelectGroup
+								label={"Settlement types"}
+								name={"settlementType"}
+								value={settlement_type}
+								onChange={e =>
+									this.setState({ settlement_type: e.target.value })
+								}
+								items={settlementTypes}
 							/>
 						</Grid>
 					</Grid>

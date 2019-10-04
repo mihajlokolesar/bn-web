@@ -5,10 +5,13 @@ import { withStyles } from "@material-ui/core/styles";
 import layout from "../../../stores/layout";
 import servedImage from "../../../helpers/imagePathHelper";
 
-const styles = () => {
+const styles = theme => {
 	return {
 		headerImage: {
-			maxWidth: 140
+			maxWidth: 140,
+			[theme.breakpoints.down("sm")]: {
+				maxWidth: 80
+			}
 		}
 	};
 };

@@ -193,7 +193,6 @@ class PaginationBlock extends Component {
 
 	render() {
 		const { classes, paging } = this.props;
-
 		const { page, limit, total } = paging;
 		const totalPages = Math.ceil(total / limit);
 

@@ -102,12 +102,14 @@ const OrderRow = props => {
 		ticketCount,
 		total_in_cents,
 		user,
+		on_behalf_of_user,
 		platform,
 		ticketTypeList,
 		...rest
 	} = props;
-
-	const { first_name, last_name, email, id: userId } = user;
+	const { first_name, last_name, email, id: userId } = on_behalf_of_user
+		? on_behalf_of_user
+		: user;
 
 	const orderPath = `/admin/events/${eventId}/dashboard/orders/manage/${id}`;
 	const userPath = `/admin/fans/${userId}`;

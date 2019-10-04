@@ -12,10 +12,17 @@ class EventResults {
 	states = [];
 
 	@observable
+	isLoading = false;
+
+	@observable
+	paging = null;
+
+	@observable
 	filters = {};
 
 	@action
 	refreshResults(params, onSuccess, onError) {
+		this.isLoading = true;
 		Bigneon()
 			.events.index({ ...params, status: "Published" }) //Always force published
 			.then(response => {
@@ -44,11 +51,14 @@ class EventResults {
 				});
 
 				this.events = events;
+				this.paging = paging;
+				this.isLoading = false;
 
 				onSuccess();
 			})
 			.catch(error => {
 				console.error(error);
+				this.isLoading = false;
 
 				let message = "Loading events failed.";
 				if (

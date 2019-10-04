@@ -24,9 +24,8 @@ const styles = theme => ({
 	tableHeading: {
 		fontFamily: fontFamilyDemiBold
 	},
-	subHeading: {
-		marginTop: theme.spacing.unit * 6,
-		paddingLeft: theme.spacing.unit * 2
+	subHeadingText: {
+		fontSize: 18
 	},
 	actionButtonContainer: {
 		display: "flex",
@@ -37,6 +36,13 @@ const styles = theme => ({
 	},
 	creditCardFee: {
 		textAlign: "left"
+	},
+	subHeadings: {
+		display: "flex",
+		justifyContent: "space-between",
+		paddingLeft: theme.spacing.unit * 2,
+		paddingRight: theme.spacing.unit * 6,
+		marginTop: theme.spacing.unit * 6
 	}
 });
 
@@ -149,14 +155,16 @@ class FeeSchedule extends Component {
 					client_event_fee_in_cents,
 					company_event_fee_in_cents,
 					event_fee_in_cents,
-					cc_fee_percent
+					cc_fee_percent,
+					settlement_type
 				} = response.data;
 
 				this.setState({
 					company_event_fee_in_cents,
 					client_event_fee_in_cents,
 					event_fee_in_cents,
-					cc_fee_percent
+					cc_fee_percent,
+					settlement_type
 				});
 			})
 			.catch(error => {
@@ -545,7 +553,8 @@ class FeeSchedule extends Component {
 			company_event_fee_in_cents,
 			client_event_fee_in_cents,
 			event_fee_in_cents,
-			cc_fee_percent
+			cc_fee_percent,
+			settlement_type
 		} = this.state;
 
 		return (
@@ -554,7 +563,14 @@ class FeeSchedule extends Component {
 					Fee schedules can only be modified by your account executive
 				</Typography>
 
-				<Typography className={classes.subHeading}>Per ticket fees</Typography>
+				<div className={classes.subHeadings}>
+					<Typography className={classes.subHeadingText}>
+						Per ticket fees
+					</Typography>
+					<Typography className={classes.subHeadingText}>
+						Settlement type: {settlement_type}
+					</Typography>
+				</div>
 				<FeeRow>
 					<Typography className={classes.tableHeading}>Price (From)</Typography>
 					<Typography className={classes.tableHeading}>Price (To)</Typography>
@@ -599,7 +615,11 @@ class FeeSchedule extends Component {
 					);
 				})}
 
-				<Typography className={classes.subHeading}>Per order fees</Typography>
+				<div className={classes.subHeadings}>
+					<Typography className={classes.subHeadingText}>
+						Per order fees
+					</Typography>
+				</div>
 				<FeeRow>
 					<Typography className={classes.tableHeading}>Company</Typography>
 					<Typography className={classes.tableHeading}>Client</Typography>

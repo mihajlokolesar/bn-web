@@ -47,6 +47,7 @@ const Header = ({
 	classes,
 	order_number,
 	user,
+	on_behalf_of_user,
 	displayDate,
 	payment_method,
 	payment_provider,
@@ -55,7 +56,9 @@ const Header = ({
 	fees_in_cents,
 	total_refunded_in_cents
 }) => {
-	const { first_name, last_name, id: userId } = user;
+	const { first_name, last_name, id: userId } = on_behalf_of_user
+		? on_behalf_of_user
+		: user;
 
 	const orderTotalInCents = total_in_cents - fees_in_cents;
 
@@ -79,6 +82,7 @@ const Header = ({
 				Paid {payment_method ? `by ${payment_method}` : ""}{" "}
 				{payment_provider ? `(${payment_provider})` : ""}{" "}
 				{platform ? `via ${platform}` : ""}
+				{on_behalf_of_user ? ` - ${user.first_name} ${user.last_name}` : ""}
 			</Typography>
 
 			<Typography className={classes.orderTotalText}>

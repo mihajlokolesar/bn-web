@@ -26,11 +26,16 @@ class InviteUserCard extends Component {
 			orgMembers: [],
 			errors: {},
 			isSubmitting: false,
-			styleString: "#bn-event-list {padding-top: 80px;max-width: 1200px;margin: auto;} #bn-event-list h1 {margin: 0px auto 80px auto;text-shadow: 0 0 3px #ededed;} .bn-event-container {display: grid;grid-template-columns: 300px 1fr 100px;grid-column-gap: 20px;height: 200px;width: 100%;padding: 0px 80px;margin: 40px 0px;} .bn-event-image {position: relative;bottom: 40px;} .bn-event-image img {width: 300px;height: 150px;} .bn-event-button {text-align: right;} .bn-event-button button {display: block;clear: both;padding: 0px 20px;margin-bottom: 10px;} .bn-event-text {margin: 0px;color: #ededed;} .bn-event-date {color: #ededed;font-size: 20px;text-transform: uppercase;margin-bottom: 10px;} .bn-event-time {color: #ededed;font-size: 14px;} .bn-event-price {color: #ededed;font-size: 14px;display: block;clear: both;text-transform: uppercase;} .bn-event-date-mobile {display: none;} .bn-event-promoter {font-size: 14px;text-transform: uppercase;} .bn-event-artists {font-size: 24px;text-transform: uppercase;margin-bottom: 10px;} .bn-event-link {text-decoration: none;} @media (max-width: 900px) {.bn-event-container {grid-template-columns: 100px 2fr 100px;padding: 0px 20px;} .bn-event-image {grid-column: 1 / 3;} .bn-event-text {grid-column: 1 / 3;} .bn-event-image img {display: none;} .bn-event-date {display: none;} .bn-event-artists {font-size: 20px;} .bn-event-date-mobile {display: block;color: #ededed;font-size: 20px;text-transform: uppercase;margin-bottom: 10px;}} .bn-buy-button {height: 30px;background: #e75e26;border: none;margin: 0;font-size: 18px;font-weight: 600;text-transform: uppercase;-webkit-transition: background-color .3s, color .7s;-o-transition: background-color .3s, color .7s;transition: background-color .3s, color .7s;} .bn-buy-button:hover {background: #111111;color: #e75e26;}"
+			styleString: ""
 		};
 	}
 
 	componentDidMount() {
+		fetch("/site/css/widget.css")
+			.then(r => r.text())
+			.then(styleString => {
+				this.setState({ styleString });
+			});
 	}
 
 	validateFields() {
@@ -62,37 +67,34 @@ class InviteUserCard extends Component {
 		if (apiUrl[0] === "/") {
 			apiUrl = `${baseUrl}${apiUrl}`;
 		}
-		const outputStyleString = styleString.replace(/[\t|\n]*/g, "").replace(/\s{2,}/g, " ");
+		const outputStyleString = styleString
+			.replace(/[\t|\n]*/g, "")
+			.replace(/\s{2,}/g, " ");
 		const output = `<div id="bn-event-list"></div><style>${outputStyleString}</style>\n<script src="${widgetSrcUrl}" data-target="#bn-event-list" data-organization-id="${organizationId}" data-base-url="${baseUrl}/" data-api-url="${apiUrl}/"></script>`;
-		const displayCss = styleString.replace(/\{/g, " {\n\t")        // Line-break and tab after opening {
-			.replace(/;([^}])/g, ";\n\t$1")  // Line-break and tab after every ; except
-			// for the last one
-			.replace(/;\}/g, ";\n}\n\n")     // Line-break only after the last ; then two
-			// line-breaks after the }
-			.replace(/([^\n])\}/g, "$1;\n}") // Line-break before and two after } that
-			// have not been affected yet
-			.replace(/,/g, ",\n")            // line break after comma
-			.trim();
+
 		return (
 			<Card className={classes.paper}>
 				<CardContent>
-					<p>Copy and paste the following code where you would like the widget to appear:</p>
+					<p>
+						Copy and paste the following code where you would like the widget to
+						appear:
+					</p>
 					<InputGroup
+						label={"Customize Styling"}
 						value={output}
 						name={"output"}
-						onFocus={(e) => {
+						onFocus={e => {
 							e.target.select();
 						}}
-						onChange={(e) => {}}
+						onChange={e => {}}
 					/>
-
-					<textarea defaultValue={displayCss}
+					<textarea
+						value={styleString}
 						style={{ width: "100%", height: "300px" }}
-						onChange={(e) => {
+						onChange={e => {
 							this.setState({ styleString: e.target.value });
 						}}
-					>
-					</textarea>
+					/>
 				</CardContent>
 			</Card>
 		);

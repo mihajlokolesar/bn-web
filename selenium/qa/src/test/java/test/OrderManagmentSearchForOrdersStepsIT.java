@@ -57,11 +57,11 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 	@DataProvider(name = "guest_page_search_data")
 	public static Object[][] guestSearchData() {
 		User superUser = User.generateUserFromJson(DataConstants.SUPERUSER_DATA_KEY);
+		User userOne = User.generateUserFromJson(DataConstants.DISTINCT_USER_ONE_KEY);
+		User userTwo = User.generateUserFromJson(DataConstants.USER_STANDARD_KEY);
 		Event event = Event.generateEventFromJson(DataConstants.EVENT_DATA_STANARD_KEY, EVENT_NAME,
 				false, START_DAY_OFFSET, DAYS_RANGE);
-		User userOne = User.generateUser(DataConstants.DISTINCT_USER_ONE_FIRST_NAME,
-				DataConstants.DISTINCT_USER_ONE_LAST_NAME);
-		User userTwo = User.generateUser();
+		
 		return new Object[][] { { superUser, event, userOne, userTwo } };
 
 	}
@@ -160,9 +160,7 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 		Event event = preparePurchase().getEvent();
 		User orgAdminUser = User.generateUserFromJson(DataConstants.ORGANIZATION_ADMIN_USER_KEY);
 		User customer = User.generateUserFromJson(DataConstants.USER_STANDARD_KEY);
-		
-		User one = User.generateUser(DataConstants.DISTINCT_USER_ONE_FIRST_NAME,
-				DataConstants.DISTINCT_USER_ONE_LAST_NAME);
+		User one = User.generateUserFromJson(DataConstants.DISTINCT_USER_ONE_KEY);
 		
 		return new Object[][] { { orgAdminUser, customer, one, event } };
 	}
@@ -197,10 +195,8 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 	public static Object[][] data() {
 		Purchase purchaseOne = preparePurchase();
 
-		User one = User.generateUser(DataConstants.DISTINCT_USER_ONE_FIRST_NAME,
-				DataConstants.DISTINCT_USER_ONE_LAST_NAME);
-		User two = User.generateUser(DataConstants.DISTINCT_USER_TWO_FIRST_NAME,
-				DataConstants.DISTINCT_USER_TWO_LAST_NAME);
+		User one = User.generateUserFromJson(DataConstants.DISTINCT_USER_ONE_KEY);
+		User two = User.generateUserFromJson(DataConstants.DISTINCT_USER_TWO_KEY);
 		User three = User.generateUserFromJson(DataConstants.USER_STANDARD_KEY);
 		return new Object[][] { { one, purchaseOne }, { two, purchaseOne }, { three, purchaseOne } };
 	}

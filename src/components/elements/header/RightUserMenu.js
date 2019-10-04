@@ -232,12 +232,12 @@ class RightHeaderMenu extends React.Component {
 			<span className={classes.menuButton}>
 				<Link to="/login" className={classes.menuLink}>
 					<Hidden mdUp>
-						<Button variant="secondary" size={"small"}>
+						<Button variant="plainWhite" size={"small"}>
 							Sign In
 						</Button>
 					</Hidden>
 					<Hidden smDown>
-						<Button variant="secondary">Sign In</Button>
+						<Button variant="plainWhite">Sign In</Button>
 					</Hidden>
 				</Link>
 			</span>

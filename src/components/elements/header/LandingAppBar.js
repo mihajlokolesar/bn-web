@@ -23,6 +23,7 @@ import BoxOfficeLink from "./BoxOfficeLink";
 import CurrentOrganizationMenu from "./CurrentOrganizationMenu";
 import CartHeaderLink from "../../common/cart/CartHeaderLink";
 import RightUserMenu from "./RightUserMenu";
+import servedImage from "../../../helpers/imagePathHelper";
 
 const eventImageHeight = 45;
 
@@ -41,7 +42,8 @@ const styles = theme => {
 			justifyContent: "space-between",
 			alignItems: "center",
 
-			width: "100%"
+			width: "100%",
+			maxWidth: 1200
 		},
 		rightMenuOptions: {
 			alignItems: "center",
@@ -97,28 +99,28 @@ class LandingAppBar extends Component {
 		super(props);
 
 		this.state = {
-			show: false,
+			show: true,
 			displayTime: ""
 		};
 
-		this.onWindowScroll = this.onWindowScroll.bind(this);
+		// this.onWindowScroll = this.onWindowScroll.bind(this);
 	}
 
-	componentDidMount() {
-		window.addEventListener("scroll", this.onWindowScroll);
-	}
-
-	componentWillUnmount() {
-		window.removeEventListener("scroll", this.onWindowScroll);
-	}
-
-	onWindowScroll() {
-		if (window.pageYOffset > showOnScrollHeight && !this.state.show) {
-			this.setState({ show: true });
-		} else if (window.pageYOffset < showOnScrollHeight && this.state.show) {
-			this.setState({ show: false });
-		}
-	}
+	// componentDidMount() {
+	// 	window.addEventListener("scroll", this.onWindowScroll);
+	// }
+	//
+	// componentWillUnmount() {
+	// 	window.removeEventListener("scroll", this.onWindowScroll);
+	// }
+	//
+	// onWindowScroll() {
+	// 	if (window.pageYOffset > showOnScrollHeight && !this.state.show) {
+	// 		this.setState({ show: true });
+	// 	} else if (window.pageYOffset < showOnScrollHeight && this.state.show) {
+	// 		this.setState({ show: false });
+	// 	}
+	// }
 
 	onAuth(type) {
 		user.showAuthRequiredDialog(() => {}, type);
@@ -137,12 +139,6 @@ class LandingAppBar extends Component {
 							<Link to={"/"}>
 								<AppBarLogo/>
 							</Link>
-
-							{!layout.showStudioLogo ? (
-								<Hidden smDown>
-									<SearchToolBarInput history={history}/>
-								</Hidden>
-							) : null}
 
 							<span className={classes.rightMenuOptions}>
 								<Hidden smDown>

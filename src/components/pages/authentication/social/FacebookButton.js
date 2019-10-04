@@ -97,6 +97,8 @@ class FacebookButtonDisplay extends Component {
 		}
 
 		if (authenticated) {
+			const { linkToUser } = this.props;
+			authResponse.linkToUserId = linkToUser;
 			Bigneon()
 				.external.facebookLogin(authResponse)
 				.then(response => {
@@ -195,11 +197,13 @@ FacebookButtonDisplay.propTypes = {
 	classes: PropTypes.object.isRequired,
 	children: PropTypes.string,
 	onSuccess: PropTypes.func.isRequired,
-	scopes: PropTypes.arrayOf(PropTypes.string)
+	scopes: PropTypes.arrayOf(PropTypes.string),
+	linkToUser: PropTypes.bool
 };
 
 FacebookButtonDisplay.defaultProps = {
-	scopes: ["email"]
+	scopes: ["email"],
+	linkToUser: false
 };
 
 export const FacebookButton = withStyles(styles)(FacebookButtonDisplay);

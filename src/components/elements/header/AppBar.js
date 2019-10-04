@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { observer } from "mobx-react";
@@ -18,6 +18,7 @@ import CurrentOrganizationMenu from "./CurrentOrganizationMenu";
 import BoxOfficeLink from "./BoxOfficeLink";
 import AppBarLogo from "./AppBarLogo";
 import layout from "../../../stores/layout";
+import servedImage from "../../../helpers/imagePathHelper";
 
 const styles = theme => {
 	return {
@@ -41,57 +42,109 @@ const styles = theme => {
 		},
 		menuIcon: {
 			color: secondaryHex
+		},
+		mobiSearchContainer: {
+			width: "100%",
+			position: "fixed",
+			background: "#fff",
+			top: 0,
+			paddingRight: theme.spacing.unit * 2,
+			paddingLeft: theme.spacing.unit * 2,
+			display: "flex",
+			justifyContent: "space-between",
+			...toolBarHeight
 		}
 	};
 };
 
-const CustomAppBar = observer(props => {
-	const { classes, handleDrawerToggle, history, homeLink } = props;
+@observer
+class CustomAppBar extends Component {
+	constructor(props) {
+		super(props);
 
-	return (
-		<AppBar position={"static"}>
-			<Toolbar className={classes.toolBar}>
-				{handleDrawerToggle ? (
-					<Hidden mdUp>
-						{layout.showSideMenu ? (
-							<IconButton
-								color="inherit"
-								aria-label="open drawer"
-								onClick={handleDrawerToggle}
-								className={classes.navIconHide}
-							>
-								<MenuIcon className={classes.menuIcon}/>
-							</IconButton>
-						) : (
-							<span/>
-						)}
-					</Hidden>
-				) : null}
+		this.state = {
+			showSearch: false
+		};
+		this.showMobileSearch = this.showMobileSearch.bind(this);
+	}
 
-				<div className={classes.headerLinkContainer}>
-					<Link to={homeLink}>
-						<AppBarLogo/>
-					</Link>
-				</div>
+	showMobileSearch() {
+		this.setState({ showSearch: true });
+	}
 
-				{!layout.showStudioLogo ? (
-					<Hidden smDown>
-						<SearchToolBarInput history={history}/>
-					</Hidden>
-				) : null}
+	closeSearch() {
+		this.setState({ showSearch: false });
+	}
 
-				<span className={classes.rightMenuOptions}>
-					<Hidden smDown>
-						<BoxOfficeLink/>
-						<CurrentOrganizationMenu/>
-						<CartHeaderLink/>
-					</Hidden>
-					<RightUserMenu history={history}/>
-				</span>
-			</Toolbar>
-		</AppBar>
-	);
-});
+	render() {
+		const { classes, handleDrawerToggle, history, homeLink } = this.props;
+
+		return (
+			<AppBar position={"static"}>
+				<Toolbar className={classes.toolBar}>
+					{handleDrawerToggle ? (
+						<Hidden mdUp>
+							{layout.showSideMenu ? (
+								<IconButton
+									color="inherit"
+									aria-label="open drawer"
+									onClick={handleDrawerToggle}
+									className={classes.navIconHide}
+								>
+									<MenuIcon className={classes.menuIcon}/>
+								</IconButton>
+							) : (
+								<span/>
+							)}
+						</Hidden>
+					) : null}
+
+					<div className={classes.headerLinkContainer}>
+						<Link to={homeLink}>
+							<AppBarLogo/>
+						</Link>
+					</div>
+
+					{/*{!layout.showStudioLogo ? (*/}
+					{/*	<Hidden smDown>*/}
+					{/*		<SearchToolBarInput history={history}/>*/}
+					{/*	</Hidden>*/}
+					{/*) : null}*/}
+
+					{!layout.showStudioLogo ? (
+						<Hidden smUp>
+							<img
+								alt="Search icon"
+								className={classes.icon}
+								src={servedImage("/icons/search-gray.svg")}
+								onClick={this.showMobileSearch}
+							/>
+						</Hidden>
+					) : null}
+
+					<span className={classes.rightMenuOptions}>
+						<Hidden smDown>
+							<BoxOfficeLink/>
+							<CurrentOrganizationMenu/>
+							<CartHeaderLink/>
+						</Hidden>
+						<RightUserMenu history={history}/>
+					</span>
+				</Toolbar>
+				{!layout.showStudioLogo && this.state.showSearch ? (
+					<div className={classes.mobiSearchContainer}>
+						<SearchToolBarInput
+							onCloseClick={this.closeSearch.bind(this)}
+							history={history}
+						/>
+					</div>
+				) : (
+					<div/>
+				)}
+			</AppBar>
+		);
+	}
+}
 
 CustomAppBar.defaultProps = {
 	homeLink: "/"

@@ -115,18 +115,9 @@ public class User extends Model implements Serializable {
 	}
 
 	public static User generateRandomUser() {
-		User retVal = new User();
-		String firstName = "seleniumtest";
-		String lastName = "qaselenium";
-		String emailAddress = firstName + ProjectUtils.generateRandomInt(1000000) + "@mailinator.com";
-		String password = "seleniumpassword";
-		String confirmPas = password;
-		retVal.setEmailAddress(emailAddress);
-		retVal.setFirstName(firstName);
-		retVal.setLastName(lastName);
-		retVal.setPass(password);
-		retVal.setPassConfirm(confirmPas);
-		return retVal;
+		User user = generateUserFromJson(DataConstants.GENERATE_NEW_USER_KEY);
+		user.setEmailAddress(user.getFirstName() + ProjectUtils.generateRandomInt(DataConstants.RANDOM_NUMBER_SIZE_10M) + "@" + DataConstants.MAILINATOR_MAIL_DOMAIN);
+		return user;
 	}
 
 	public static User generateUser(String firstName, String lastName) {
