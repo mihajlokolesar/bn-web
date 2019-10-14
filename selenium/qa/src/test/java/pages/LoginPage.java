@@ -59,6 +59,7 @@ public class LoginPage extends BasePage {
 	}
 
 	public void navigate() {
+		super.navigate();
 		driver.get(getUrl());
 	}
 	

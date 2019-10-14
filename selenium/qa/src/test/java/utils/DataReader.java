@@ -10,6 +10,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import config.DriverFactory;
+import enums.EnvironmentEnum;
+
 public class DataReader {
 
 	private String dataProviderFile = "test_data.json";
@@ -24,16 +27,8 @@ public class DataReader {
 		try {
 			JSONParser parser = new JSONParser();
 			String fileName = "";
-			String baseUrl = System.getProperty("baseurl");
-			if (baseUrl.contains("develop")) {
-				fileName = "develop_" + dataProviderFile;
-			} else if (baseUrl.contains("beta")) {
-				fileName = "beta_" + dataProviderFile;
-			} else if (baseUrl.contains("local")) {
-				fileName = "local_" + dataProviderFile;
-			} else {
-				fileName = "develop_" + dataProviderFile;
-			}
+			EnvironmentEnum environment = DriverFactory.getEnvironmentEnum();
+			fileName = environment.getDataFilePrefix() + dataProviderFile;
 			jsonObject = (JSONObject) parser.parse(new FileReader("src/test/resources/conf/" + fileName));
 		} catch (Exception e) {
 			e.printStackTrace();

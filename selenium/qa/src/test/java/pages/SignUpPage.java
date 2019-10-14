@@ -70,6 +70,7 @@ public class SignUpPage extends BasePage {
 	}
 
 	public void navigate() {
+		navigate();
 		driver.get(getUrl());
 	}
 }
