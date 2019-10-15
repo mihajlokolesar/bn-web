@@ -73,7 +73,7 @@ public class Header extends BaseComponent {
 		if (event == null) {
 			return;
 		}
-		if (isVisible(4)) {
+		if (isExplicitlyWaitVisible(4, searchEvents)) {
 			waitVisibilityAndSendKeys(searchEvents, event);
 			searchEvents.submit();
 		} else {

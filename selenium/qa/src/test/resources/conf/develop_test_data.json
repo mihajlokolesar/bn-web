@@ -68,7 +68,7 @@
 		"email_address": "orgadmneouser@mailinator.com",
 		"password": "test1111",
 		"confirm_password": "test1111",
-		"first_name": "orgadmin",
+		"first_name": "orgadmn",
 		"last_name": "neouser"
 	},
 	
@@ -132,6 +132,13 @@
 		"artist_name": "TheTestArtistAuto",
 		"event_name": "TestNameEvent",
 		"venue_name": "MSG",
+		"venue":{
+			"name":"MSG",
+			"timezone":"Africa/Johannesburg",
+			"region":"Other",
+			"phone_number":"27728146598",
+			"location":"Madison Square Garden, Pennsylvania Plaza, New York, NY, USA"
+		},
 		"start_time": "08:30 PM",
 		"end_time": "10:00 PM",
 		"door_time": "1",

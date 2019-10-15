@@ -1,4 +1,4 @@
-package pages.admin.orders;
+package pages.admin.orders.manage;
 
 import java.util.function.Function;
 
@@ -65,7 +65,7 @@ public class OrdersManageAdminPage extends BasePage {
 		waitForTime(3000);
 		Integer allAfterSearch = getNumberOfAllVisibleOrders();
 		Integer allWithParam = fn.apply(param);
-		return allAfterSearch.equals(allWithParam);
+		return !allAfterSearch.equals(0) && allAfterSearch.equals(allWithParam);
 	}
 
 	public ManageOrderRow getFirstRow() {

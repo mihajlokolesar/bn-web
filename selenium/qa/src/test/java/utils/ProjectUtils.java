@@ -20,8 +20,10 @@ import pages.interfaces.Visible;
 public class ProjectUtils {
 
 	public static final String DATE_FORMAT = "MM/dd/yyyy";
+	public static final String TIME_FORMAT = "h:mm a";
 	public static final String CONCATINATED_DATE_FORMAT = "MMddyyyy";
 	public static final String ADMIN_EVENT_DATE_TIME_FORMAT = "EEEE, MMMM d yyyy h:mm a";
+	public static final String MANAGE_ORDER_HISTORY_ITEM_DATE_FORMAT = "EEE, MMM d, yyyy h:mm a";
 	public static final String RESOURCE_IMAGE_PATH = "src/test/resources/images/";
 
 	public static Integer generateRandomInt(int size) {
@@ -60,6 +62,13 @@ public class ProjectUtils {
 		LocalDateTime localDateTime = LocalDateTime.parse(removedOrdinalsDate, formater);
 		return localDateTime;
 	}
+	
+	public static LocalDateTime getLocalDateTime(String datePattern, String date, String timePattern, String time) {
+		LocalDate localDate = ProjectUtils.parseDate(datePattern, date);
+		LocalTime localTime = ProjectUtils.parseTime(timePattern, time);
+		LocalDateTime ldt = LocalDateTime.of(localDate, localTime);
+		return ldt;
+	}
 
 	public static LocalDate parseDate(String pattern, String date) {
 		String removedOrdinalsDate = date.replaceAll("(?<=\\d)(st|nd|rd|th)", "");
@@ -67,7 +76,13 @@ public class ProjectUtils {
 		LocalDate localDate = LocalDate.parse(removedOrdinalsDate, formater);
 		return localDate;
 	}
-
+		
+	public static LocalTime parseTime(String pattern, String time) {
+		DateTimeFormatter formater = DateTimeFormatter.ofPattern(pattern);
+		LocalTime localTime = LocalTime.parse(time, formater);
+		return localTime;
+	}
+	
 	public static LocalDateTime getDateTime(LocalDate date) {
 		LocalDateTime dt = date.atTime(LocalTime.MIDNIGHT);
 		return dt;

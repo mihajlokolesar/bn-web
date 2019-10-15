@@ -22,6 +22,8 @@ public class Event implements Serializable {
 	private String eventName;
 	@JsonProperty("venue_name")
 	private String venueName;
+	@JsonProperty("venue")
+	private Venue venue;
 	@JsonProperty("start_date")
 	private String startDate;
 	@JsonProperty("end_date")
@@ -65,6 +67,14 @@ public class Event implements Serializable {
 
 	public void setVenueName(String venueName) {
 		this.venueName = venueName;
+	}
+	
+	public Venue getVenue() {
+		return this.venue;
+	}
+	
+	public void setVenue(Venue venue) {
+		this.venue = venue;
 	}
 
 	public String getStartDate() {

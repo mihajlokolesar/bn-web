@@ -10,7 +10,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import model.TicketType;
 import utils.MsgConstants;
+import utils.ProjectUtils;
 import utils.SeleniumUtils;
 
 public class TicketsPage extends BasePage {
@@ -26,15 +28,31 @@ public class TicketsPage extends BasePage {
 
 	@FindBy(xpath = "//body//div[@role='dialog' and @aria-labelledby='dialog-title']//div/h1[contains(text(),'Login to your Big Neon account')]")
 	private WebElement loginDialogTitle;
+	
+	private String ticketTypeContainerXpath = "//div/p[contains(text(),'Select tickets')]/following-sibling::div";
 
-	private List<WebElement> addTicketTypes() {
+	private List<WebElement> getIncrementersForAllTicketTypes() {
 		return explicitWait(15, ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(
 				"//div/p[contains(text(),'Select tickets')]/following-sibling::div//div[./p[contains(text(),'+')]]")));
 	}
 
-	private List<WebElement> removeTicketTypes() {
+	private List<WebElement> getDecrementersForAllTicketTypes() {
 		return explicitWait(15, ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(
 				"//div/p[contains(text(),'Select tickets')]/following-sibling::div//div[./p[contains(text(),'-')]]")));
+	}
+	
+	private WebElement getIncreaseSpecificTicketTypeElement(String ticketTypeName) {
+		return explicitWait(15,  ExpectedConditions.visibilityOfElementLocated(
+				By.xpath(getXpathForOperatorForSpecificTicketType(ticketTypeName, "+"))));
+	}
+	
+	private WebElement getDecreaseSpecificTicketTypeElement(String ticketTypeName) {
+		return explicitWait(15,  ExpectedConditions.visibilityOfElementLocated(
+				By.xpath(getXpathForOperatorForSpecificTicketType(ticketTypeName, "-"))));
+	}
+	
+	private String getXpathForOperatorForSpecificTicketType(String ticketTypeName, String operator) {
+		return ticketTypeContainerXpath + "//div[p[contains(text(),'" + ticketTypeName + "')]]/following-sibling::div//div[./p[contains(text(),'" + operator + "')]]";
 	}
 
 	public TicketsPage(WebDriver driver) {
@@ -50,6 +68,11 @@ public class TicketsPage extends BasePage {
 	public boolean isAtPage() {
 		return explicitWait(15, ExpectedConditions.urlMatches("tickets$"));
 	}
+	
+	public void selectTicketNumberAndClickOnContinue(int numberOfTickets, TicketType ticketType) {
+		addNumberOfTickets(numberOfTickets, ticketType);
+		clickOnContinue();
+	}
 
 	public void selectTicketNumberAndClickOnContinue(int numberOfTickets) {
 		addNumberOfTickets(numberOfTickets);
@@ -59,15 +82,30 @@ public class TicketsPage extends BasePage {
 	public String getUrlPath() throws URISyntaxException {
 		return SeleniumUtils.getUrlPath(driver);
 	}
+	
+	private void addNumberOfTickets(int number, TicketType ticketType) {
+		for (int k = 0; k< number; k++) {
+			addTicketForTicketType(ticketType.getTicketTypeName());
+		}
+	}
 
 	private void addNumberOfTickets(int number) {
 		for (int k = 0; k < number; k++) {
 			addTicketForLastType();
 		}
 	}
+	
+	public void removeNumberOfTickets(int number, TicketType ticketType) {
+		WebElement decrementer = getDecreaseSpecificTicketTypeElement(ticketType.getTicketTypeName());
+		Integer qty = SeleniumUtils.getIntegerAmount(decrementer, By.xpath(".//following-sibling::p"), driver);
+		number = calculateRemoveNumber(qty, number);
+		for (int k = 0; k < number; k++) {
+			removeTicketForTicketType(ticketType.getTicketTypeName());
+		}
+	}
 
 	public void removeNumberOfTickets(int number) {
-		List<WebElement> list = removeTicketTypes();
+		List<WebElement> list = getDecrementersForAllTicketTypes();
 		WebElement lastTicketType = list.get(list.size() - 1);
 		WebElement currentQuantityEl = lastTicketType.findElement(By.xpath(".//following-sibling::p"));
 		String text = currentQuantityEl.getText();
@@ -81,10 +119,20 @@ public class TicketsPage extends BasePage {
 			removeTicketForLastType();
 		}
 	}
+	
+	private int calculateRemoveNumber (Integer currentQuantity, int intendedRemoveNumber) {
+		if (currentQuantity <= intendedRemoveNumber && (currentQuantity - 1) > 0) {
+			intendedRemoveNumber = currentQuantity - 1;
+		} else if (currentQuantity.equals(1)) {
+			intendedRemoveNumber = 0;
+		}
+		return intendedRemoveNumber;
+	}
+	
 
 	private void removeTicketForLastType() {
 		if (verifyDifferentTicketTypesAreDisplayed()) {
-			List<WebElement> list = removeTicketTypes();
+			List<WebElement> list = getDecrementersForAllTicketTypes();
 			waitVisibilityAndClick(list.get(list.size() - 1));
 		} else {
 			throw new NotFoundException("No ticket types found");
@@ -93,15 +141,29 @@ public class TicketsPage extends BasePage {
 
 	private void addTicketForLastType() {
 		if (verifyDifferentTicketTypesAreDisplayed()) {
-			List<WebElement> list = addTicketTypes();
+			List<WebElement> list = getIncrementersForAllTicketTypes();
 			incrementTicketNumber(list.get(list.size() - 1));
 		} else {
 			throw new NotFoundException("No ticket types found");
 		}
 	}
-
+	
+	private void removeTicketForTicketType(String ticketTypeName) {
+		if (verifyDifferentTicketTypesAreDisplayed()) {
+			WebElement decrementer = getDecreaseSpecificTicketTypeElement(ticketTypeName);
+			waitVisibilityAndBrowserCheckClick(decrementer);
+		}
+	}
+	
+	private void addTicketForTicketType(String ticketTypeName) {
+		if (verifyDifferentTicketTypesAreDisplayed()) {
+			WebElement incrementer = getIncreaseSpecificTicketTypeElement(ticketTypeName);
+			waitVisibilityAndBrowserCheckClick(incrementer);
+		}
+	}
+	
 	private boolean verifyDifferentTicketTypesAreDisplayed() {
-		List<WebElement> list = addTicketTypes();
+		List<WebElement> list = getIncrementersForAllTicketTypes();
 		if (list.size() == 0) {
 			return false;
 		} else {

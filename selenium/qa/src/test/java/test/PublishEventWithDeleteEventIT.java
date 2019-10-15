@@ -14,7 +14,7 @@ import utils.DataConstants;
 
 public class PublishEventWithDeleteEventIT extends BaseSteps {
 
-	@Test(dataProvider = "create_delete_event_data", priority = 15, retryAnalyzer = utils.RetryAnalizer.class)
+	@Test(dataProvider = "create_delete_event_data", priority = 19, retryAnalyzer = utils.RetryAnalizer.class)
 	public void publishEventWithDeleteAfterPublish(User superuser, Event event) throws Exception {
 
 		LoginStepsFacade loginFacade = new LoginStepsFacade(driver);
