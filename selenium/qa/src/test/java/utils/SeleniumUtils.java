@@ -153,6 +153,10 @@ public class SeleniumUtils {
 		WebElement el = SeleniumUtils.getChildElementFromParentLocatedBy(parent, By.xpath(relativeElPath), driver);
 		return getDoubleAmount(el, "$", "");
 	}
+	
+	public static Double getDoubleAmount(WebElement element) {
+		return getDoubleAmount(element, "$", "");
+	}
 
 	public static Double getDoubleAmount(WebElement element, String oldChar, String newChar) {
 		String text = ProjectUtils.getTextForElementAndReplace(element, oldChar, newChar);

@@ -22,6 +22,7 @@ import pages.components.admin.orders.manage.ActivityItem.ExpandedContent;
 import pages.components.admin.orders.manage.ActivityItem.NoteExpandedContent;
 import pages.components.admin.orders.manage.ActivityItem.RefundedExpandedContent;
 import pages.components.admin.orders.manage.tickets.TicketRow;
+import pages.components.admin.orders.manage.tickets.OrderDetails.PerOrderFeeComponent;
 import pages.components.dialogs.IssueRefundDialog;
 import pages.components.dialogs.IssueRefundDialog.RefundReason;
 import utils.MsgConstants;
@@ -34,6 +35,7 @@ public class AdminEventDashboardFacade extends BaseFacadeSteps {
 
 	private final String SELECTED_ORDER_PAGE_KEY = "selected_order_page";
 	private final String ISSUE_REFUND_DIALOG_KEY = "issue_refund_dialog";
+	private final String TOTAL_REFUND_AMOUNT_KEY = "total_refund_amount";
 
 	private Map<String, Object> dataMap;
 
@@ -91,9 +93,18 @@ public class AdminEventDashboardFacade extends BaseFacadeSteps {
 		Integer orderQty = order.getQuantity();
 		return orderQty.compareTo(purchaseQuantity) == 0;
 	}
+	
+	public void whenUserClickOnOrderLinkOfFirstOrder() {
+		ManageOrderRow orderRow = ordersManagePage.getFirstRow();
+		navigateToSelectedOrderPage(orderRow);
+	}
 
 	public void whenUserClicksOnOrderLinkOfGivenUser(User owner) {
 		ManageOrderRow orderRow = ordersManagePage.findOrderRowWithUserName(owner.getFirstName() + " ");
+		navigateToSelectedOrderPage(orderRow);
+	}
+	
+	private void navigateToSelectedOrderPage(ManageOrderRow orderRow) {
 		String orderId = orderRow.getOrderId();
 		orderRow.clickOnOrderNumberLink();
 		SelectedOrderPage selectedOrderPage = new SelectedOrderPage(driver, orderId);
@@ -106,18 +117,64 @@ public class AdminEventDashboardFacade extends BaseFacadeSteps {
 		selectedOrderPage.expandOrderDetails();
 		return selectedOrderPage.getOrderDetails().isExpanded();
 	}
+	
+	public void whenUserClicksOnOrderFeeCheckBox() {
+		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
+		PerOrderFeeComponent perOrderFee = selectedOrderPage.getOrderDetails().getPerOrderFee();
+		perOrderFee.clickOnCheckBox();
+		addAmountToTotalRefundAmount(perOrderFee.getMoneyAmount());
+	}
+		
+	public void whenUserSelectsAllTicketsForRefund() {
+		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
+		BigDecimal ticketsTotal = selectedOrderPage.selectAllTicketRowsForRefundGetFeeSum();
+		addAmountToTotalRefundAmount(ticketsTotal);
+	}
 
-	public void whenUserSelectsTicketForRefundAndClicksOnRefundButton() {
+	public void whenUserSelectsTicketForRefund() {
 		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
 		TicketRow row = selectedOrderPage.findTicketRow(r -> r.isTicketPurchased());
 		row.clickOnCheckoutBoxInTicket();
+	}
+	
+	public void whenUserClicksOnRefundButton() {
+		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
 		selectedOrderPage.clickOnRefundButton();
+	}
+	
+	public boolean thenRefundButtonShouldBeVisible() {
+		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
+		return selectedOrderPage.isRefundButtonVisible();
+	}
+	
+	private void addAmountToTotalRefundAmount(BigDecimal amount) {
+		BigDecimal totalAmount = (BigDecimal) getData(TOTAL_REFUND_AMOUNT_KEY);
+		if (totalAmount == null) {
+			totalAmount = new BigDecimal(0);
+		}
+		totalAmount.add(amount);
+		setData(TOTAL_REFUND_AMOUNT_KEY, totalAmount);
 	}
 	
 	public boolean thenRefundDialogShouldBeVisible() {
 		IssueRefundDialog refundDialog = new IssueRefundDialog(driver);
 		setData(ISSUE_REFUND_DIALOG_KEY, refundDialog);
 		return refundDialog.isVisible();
+	}
+	
+	public boolean thenRefundButtonAmountShouldBeCorrect() {
+		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
+		BigDecimal totalAmount = (BigDecimal) getData(TOTAL_REFUND_AMOUNT_KEY);
+		BigDecimal refundButtonAmount = selectedOrderPage.getRefundButtonMoneyAmount();
+		return totalAmount.compareTo(refundButtonAmount) == 0;
+	}
+	
+	public boolean thenRefundTotalOnRefundDialogShouldBeCorrect() {
+		IssueRefundDialog refundDialog = (IssueRefundDialog) getData(ISSUE_REFUND_DIALOG_KEY);
+		BigDecimal totalAmount = (BigDecimal) getData(TOTAL_REFUND_AMOUNT_KEY);
+		BigDecimal refundDialogTotal = refundDialog.getRefundTotalAmount();
+		return totalAmount.compareTo(refundDialogTotal) == 0;
+		
 	}
 	
 	public void whenUserSelectRefundReasonAndClicksOnConfirmButton(RefundReason refundReason) {
@@ -260,6 +317,15 @@ public class AdminEventDashboardFacade extends BaseFacadeSteps {
 
 	public void thenUserIsOnOrderManagePage() {
 		ordersManagePage.isAtPage();
+	}
+	
+	public boolean thenUserIsOnSelecteOrderPage() {
+		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
+		if (selectedOrderPage == null) {
+			return false;
+		} else {
+			return selectedOrderPage.isAtPage();
+		}
 	}
 
 	protected void setData(String key, Object value) {

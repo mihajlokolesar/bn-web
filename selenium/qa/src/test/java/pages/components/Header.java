@@ -24,6 +24,9 @@ public class Header extends BaseComponent {
 
 	@FindBy(css = "header form input")
 	private WebElement searchEvents;
+	
+	@FindBy(xpath = "//header//a/img[@alt='Header logo' and @src='/images/bn-logo-text-web.svg']")
+	private WebElement headerLogo;
 
 	@FindBy(css = "header form img[alt='Search icon']")
 	private WebElement searchImage;
@@ -68,6 +71,10 @@ public class Header extends BaseComponent {
 	public boolean isVisible(int waitTime) {
 		return isExplicitlyWaitVisible(waitTime, header);
 	}
+	
+	public void clickOnHeaderLogo() {
+		waitVisibilityAndBrowserCheckClick(headerLogo);
+	}
 
 	public void searchEvents(String event) {
 		if (event == null) {
@@ -95,12 +102,12 @@ public class Header extends BaseComponent {
 		explicitWaitForVisiblity(boxOffice);
 		explicitWaitForClickable(boxOffice);
 		waitForTime(1000);
-		boxOffice.click();
+		waitVisibilityAndBrowserCheckClick(boxOffice);
 	}
 
 	public void clickOnToStudioLink() {
 		explicitWaitForVisiblity(toStudioButton);
-		toStudioButton.click();
+		waitVisibilityAndBrowserCheckClick(toStudioButton);
 	}
 
 	public void openProfileOptions() {
@@ -162,7 +169,7 @@ public class Header extends BaseComponent {
 		WebElement element = explicitWait(15,
 				ExpectedConditions.visibilityOfElementLocated(By.xpath("//body//div[@id='menu-appbar']")));
 		element.click();
-
+		
 		return retVal;
 	}
 

@@ -106,6 +106,10 @@ public class EventStepsFacade extends BaseFacadeSteps {
 		whenUserClicksOnPurchaseTicketLink();
 	}
 	
+	public void whenUserClicksOnPurchaseTicketLink() throws Exception {
+		eventsPage.purchaseTicketLinkClick();
+	}
+	
 	public boolean whenShoppingBasketIsPresentAndClickOnBasket() {
 		return eventsPage.getHeader().clickOnShoppingBasketIfPresent();
 	}
@@ -113,13 +117,20 @@ public class EventStepsFacade extends BaseFacadeSteps {
 	public void whenSearchingForEvent(Purchase purchase) {
 		eventsPage.getHeader().searchEvents(purchase.getEvent().getArtistName());
 	}
+	
+	public void whenUserSelectsNumberOfTicketsForEachTicketTypeAndClicksOnContinue(Purchase purchase) {
+		ticketPage.addNumberOfTicketsForEachType(purchase.getNumberOfTickets());
+		ticketPage.clickOnContinue();
+	}
 
 	public void whenUserSelectsNumberOfTicketsAndClicksOnContinue(Purchase purchase) {
-		ticketPage.selectTicketNumberAndClickOnContinue(purchase.getNumberOfTickets());
+		ticketPage.addNumberOfTickets(purchase.getNumberOfTickets());
+		ticketPage.clickOnContinue();
 	}
 	
 	public void whenUserSelectsNumberOfTicketsAndClicksOnContinue(Purchase purchase, TicketType ticketType) {
-		ticketPage.selectTicketNumberAndClickOnContinue(purchase.getNumberOfTickets(), ticketType);
+		ticketPage.addNumberOfTickets(purchase.getNumberOfTickets(), ticketType);
+		ticketPage.clickOnContinue();
 	}
 
 	public void whenUserEntersCreditCardDetailsAndClicksOnPurchase(CreditCard card) {
@@ -133,11 +144,6 @@ public class EventStepsFacade extends BaseFacadeSteps {
 	private void whenUserClickOnViewMap() {
 		eventsPage.clickOnViewMap();
 	}
-
-	private void whenUserClicksOnPurchaseTicketLink() throws Exception {
-		eventsPage.purchaseTicketLinkClick();
-	}
-
 	
 	public int thenTicketQuantityIs() {
 		return ticketsConfirmationPage.getTicketQuantity();

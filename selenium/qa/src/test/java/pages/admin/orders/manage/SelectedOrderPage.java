@@ -1,5 +1,6 @@
 package pages.admin.orders.manage;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -15,6 +16,8 @@ import pages.components.admin.orders.manage.ActivityItem;
 import pages.components.admin.orders.manage.tickets.OrderDetails;
 import pages.components.admin.orders.manage.tickets.TicketRow;
 import utils.Constants;
+import utils.ProjectUtils;
+import utils.SeleniumUtils;
 
 public class SelectedOrderPage extends BasePage {
 
@@ -69,17 +72,40 @@ public class SelectedOrderPage extends BasePage {
 		return retVal;
 	}
 	
+	public BigDecimal getRefundButtonMoneyAmount() {
+		String text = refundButton.getText();
+		String[] tokens = text.split(" ");
+		Double amount = ProjectUtils.getMoneyAmount(tokens[1]);
+		return new BigDecimal(amount);
+	}
+	
 	public void clickOnRefundButton() {
 		explicitWaitForVisibilityAndClickableWithClick(refundButton);
+	}
+	
+	public boolean isRefundButtonVisible() {
+		return isExplicitlyWaitVisible(5, refundButton);
+	}
+	
+	public OrderDetails getOrderDetails() {
+		return this.orderDetails;
 	}
 	
 	public TicketRow findTicketRow(Predicate<TicketRow> predicate) {
 		return this.orderDetails.findTicketRow(predicate);
 	}
 	
-	public OrderDetails getOrderDetails() {
-		return this.orderDetails;
+	public BigDecimal selectAllTicketRowsForRefundGetFeeSum() {
+		List<TicketRow> rows = orderDetails.findAllTicketRows();
+		BigDecimal total = new BigDecimal(0);
+		for(TicketRow row : rows) {
+			row.clickOnCheckoutBoxInTicket();
+			total.add(row.getTicketTotalAmount());
+			total.add(row.getPerTicketFeeAmount());
+		}
+		return total;
 	}
+	
 	
 	public ActivityItem getHistoryActivityItem(Predicate<ActivityItem> predicate) {
 		List<WebElement> historyItems = findOrderHistoryRows();

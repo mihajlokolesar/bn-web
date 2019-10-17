@@ -184,7 +184,8 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 		dashboardFacade.whenUserClicksOnOrderLinkOfGivenUser(customerOne);
 		boolean isExpanded = dashboardFacade.whenUserExpandOrderDetailsAndCheckIfExpanded();
 		Assert.assertTrue(isExpanded);
-		dashboardFacade.whenUserSelectsTicketForRefundAndClicksOnRefundButton();
+		dashboardFacade.whenUserSelectsTicketForRefund();
+		dashboardFacade.whenUserClicksOnRefundButton();
 		dashboardFacade.thenRefundDialogShouldBeVisible();
 		dashboardFacade.whenUserSelectRefundReasonAndClicksOnConfirmButton(RefundReason.UNABLE_TO_ATTEND);
 		dashboardFacade.thenRefundDialogShouldBeVisible();

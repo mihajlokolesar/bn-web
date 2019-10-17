@@ -39,15 +39,14 @@ public class AdminEventComponent extends BaseComponent {
 	private String relativeImageXPath = ".//a[contains(@href,'/admin/events/')]/div";
 	
 	private String relativeSoldToDivXPath = "./div/div[2]/div[2]/div[2]/div/div[p[text()='Sold']]/p[2]";
-
-	private By dropDownCancelEvent = By
-			.xpath("//body//div[@id='long-menu']//ul/li[div[span[contains(text(),'Cancel event')]]]");
-
-	private By dropDownEditEvent = By
-			.xpath("//body//div[@id='long-menu']//ul/li[div[span[contains(text(),'Edit event')]]]");
-
-	private By dropDownDeleteEvent = By
-			.xpath("//body//div[@id='long-menu']//ul/li[div[span[contains(text(),'Delete event')]]]");
+	
+	private String viewEventDDAction = "View event";
+	
+	private String deleteEventDDAction = "Delete event";
+	
+	private String editEventDDAction = "Edit event";
+	
+	private String cancelEventDDAction = "Cancel event";
 
 	public AdminEventComponent(WebDriver driver, WebElement event) {
 		super(driver);
@@ -91,14 +90,14 @@ public class AdminEventComponent extends BaseComponent {
 
 	public void cancelEvent() {
 		openDropDown();
-		findActionAndClickInDropDown(dropDownCancelEvent);
+		findActionAndClickInDropDown(dropDownXpathElement(cancelEventDDAction));
 		waitForTime(2000);
 		new CancelEventDialog(driver).clickOnCancelEventButton();
 	}
 
 	public DeleteEventDialog deleteEvent(Event event) {
 		openDropDown();
-		findActionAndClickInDropDown(dropDownDeleteEvent);
+		findActionAndClickInDropDown(dropDownXpathElement(deleteEventDDAction));
 		waitForTime(2000);
 		DeleteEventDialog deleteDialog = new DeleteEventDialog(driver);
 		deleteDialog.clickOnDeleteButton(event.getEventName());
@@ -108,7 +107,12 @@ public class AdminEventComponent extends BaseComponent {
 
 	public void editEvent(Event event) {
 		openDropDown();
-		findActionAndClickInDropDown(dropDownEditEvent);
+		findActionAndClickInDropDown(dropDownXpathElement(editEventDDAction));
+	}
+	
+	public void viewEvent() {
+		openDropDown();
+		findActionAndClickInDropDown(dropDownXpathElement(viewEventDDAction));
 	}
 	
 	public void clickOnEvent() {
@@ -130,6 +134,10 @@ public class AdminEventComponent extends BaseComponent {
 				driver);
 		waitVisibilityAndBrowserCheckClick(dropDown);
 		return dropDown;
+	}
+	
+	private By dropDownXpathElement(String actionName) {
+		return By.xpath("//body//div[@id='long-menu']//ul/li[div[span[contains(text(),'" + actionName + "')]]]");
 	}
 
 	private void findActionAndClickInDropDown(By by) {

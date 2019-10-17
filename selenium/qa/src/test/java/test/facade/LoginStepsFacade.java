@@ -34,6 +34,10 @@ public class LoginStepsFacade extends BaseFacadeSteps {
 		loginPage.navigate();
 	}
 	
+	public void whenUserClickOnHeaderLogo() {
+		loginPage.getHeader().clickOnHeaderLogo();
+	}
+	
 	public boolean whenUserTiesToLogin(User user) {
 		loginPage.login(user);
 		boolean isLoggedIn = homePage.isExplicitAtPage(5);

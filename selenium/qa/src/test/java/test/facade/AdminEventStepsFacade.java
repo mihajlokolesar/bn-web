@@ -122,6 +122,11 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		return retVal;
 
 	}
+	
+	public void whenUserClicksOnViewEventOfSelecteEvent(Event event) {
+		AdminEventComponent eventComp = findEventWithName(event);
+		eventComp.viewEvent();
+	}
 
 	public boolean thenEventShouldBeCanceled(Event event) {
 		AdminEventComponent componentEvent = adminEvents.findEventByName(event.getEventName());
@@ -139,6 +144,10 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		} else {
 			return false;
 		}
+	}
+	
+	public boolean thenUserIsAtEventsPage() {
+		return adminEvents.isAtPage();
 	}
 
 	public boolean thenMessageNotificationShouldAppear(String msg) {

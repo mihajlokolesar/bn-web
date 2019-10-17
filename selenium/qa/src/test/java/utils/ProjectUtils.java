@@ -1,9 +1,6 @@
 package utils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -119,7 +116,12 @@ public class ProjectUtils {
 		}
 		return dest;
 	}
-
+	
+	public static Double getMoneyAmount(String textSeq) {
+		String replaced = textSeq.replace("$", "");
+		return Double.parseDouble(replaced.trim());
+	}
+	
 	public static String getTextForElementAndReplace(WebElement element, String oldChar, String newChar) {
 		String text = element.getText();
 		return text.replace(oldChar, newChar);
@@ -169,5 +171,4 @@ public class ProjectUtils {
 			throw new NoSuchElementException("Element for component:" + visible.getClass() + "not found");
 		}
 	}
-
 }

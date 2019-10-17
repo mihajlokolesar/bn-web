@@ -1,5 +1,7 @@
 package pages.components.admin.orders.manage.tickets;
 
+import java.math.BigDecimal;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -21,6 +23,8 @@ public class TicketRow extends BaseComponent {
 	private String relativeQuantityXpath = "./div/div[1]/p[1]";
 
 	private String relativeTotalXpath = "./div/div/p[2]";
+	
+	private String relativeTotalPerTicketFee = "./div/div[2]/p";
 
 	private String relativeStatusXpath = "./div/div/p[3]";
 
@@ -52,7 +56,17 @@ public class TicketRow extends BaseComponent {
 		TicketStatus status = TicketStatus.getTicketStatus(text);
 		return status.equals(TicketStatus.PURCHASED);
 	}
-
+	
+	public BigDecimal getTicketTotalAmount() {
+		Double dAmount = SeleniumUtils.getDoubleAmount(row, relativeTotalXpath, driver);
+		return new BigDecimal(dAmount);
+	}
+	
+	public BigDecimal getPerTicketFeeAmount() {
+		Double dAmount = SeleniumUtils.getDoubleAmount(row, relativeTotalPerTicketFee, driver);
+		return new BigDecimal(dAmount);
+	}
+	
 	private WebElement getCheckboxElement() {
 		return SeleniumUtils.getChildElementFromParentLocatedBy(row, By.xpath(relativeCheckBoxXpath), driver);
 	}
