@@ -11,14 +11,14 @@ import model.User;
 import pages.components.dialogs.IssueRefundDialog.RefundReason;
 import utils.DataConstants;
 
-public class RefundEntireOrderAndOrderFee extends AbstractRefundFeeSteps {
+public class RefundEntireOrderAndOrderFee extends TemplateRefundFeeSteps {
 		
 	private static final Integer PURCHASE_QUANTITY = 3;
 	private static final String EVENT_NAME = "TestRefundOrderFeeEventName";
 	private static final Integer START_DAY_OFFSET = 2;
 	private static final Integer DAYS_RANGE = 0;
 
-	@Test(dataProvider = "refund_entire_order_and_order_fee"/*, retryAnalyzer = utils.RetryAnalizer.class*/)
+	@Test(dataProvider = "refund_entire_order_and_order_fee", retryAnalyzer = utils.RetryAnalizer.class)
 	public void refundEntireOrderAndOrderFee(Purchase purchase, User user) throws Exception {
 		templateSteps(purchase, user);
 	}
@@ -43,11 +43,13 @@ public class RefundEntireOrderAndOrderFee extends AbstractRefundFeeSteps {
 
 		boolean isStatusOfTicketRefunded = getEventDashboardFacade().thenStatusOnAllTicketShouldBeRefunded();
 		Assert.assertTrue(isStatusOfTicketRefunded, "Not all tickets status is refunded");
-		getEventDashboardFacade().whenUserSelectsRedundedStatusTicketForRefund();
+		getEventDashboardFacade().whenUserSelectsRefundedStatusTicketForRefund();
 		
 		boolean isRefundButtonVisible = getEventDashboardFacade().thenRefundButtonShouldBeVisible();
 		Assert.assertFalse(isRefundButtonVisible,
 				"Refund button on per order fee after already refunded should not be visible");
+		
+		getEventDashboardFacade().thenTotalOrderRefundShouldBeCorrect();
 	}
 	
 	@DataProvider(name = "refund_entire_order_and_order_fee")

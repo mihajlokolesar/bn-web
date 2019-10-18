@@ -34,6 +34,9 @@ public class SelectedOrderPage extends BasePage {
 	@FindBy(xpath = "//button[@type='button' and span[contains(text(),'Refund')]]")
 	private WebElement refundButton;
 	
+	@FindBy(xpath = "//p[contains(text(),'Order total')]/span[contains(text(),'Refunded')]")
+	private WebElement totalRefundAmount;
+	
 	@FindBy(xpath = "//main//textarea[@name='note']")
 	private WebElement textArea;
 
@@ -135,6 +138,15 @@ public class SelectedOrderPage extends BasePage {
 		return rows != null ? rows.size() : 0;
 	}
 	
+	public BigDecimal getOrderRefundTotalAmount() {
+		explicitWaitForVisiblity(totalRefundAmount);
+		String text = totalRefundAmount.getText();
+		String amount = text.replaceAll(".*.[\\($]|[\\)]", "");
+		Double parse = Double.parseDouble(amount);
+		return new BigDecimal(parse);
+	}
+	
+	
 	private List<WebElement> findOrderHistoryRows() {
 		List<WebElement> rows = explicitWaitForVisiblityForAllElements(
 				By.xpath("//main//p[contains(text(),'Order history')]/following-sibling::div[not(@class)]"));
@@ -146,5 +158,4 @@ public class SelectedOrderPage extends BasePage {
 				By.xpath("//main//p[contains(text(),'Order history')]/following-sibling::div[not(@class)]//p[span[contains(text(),'Show Details')]]"));
 		return rows;
 	}
-
 }

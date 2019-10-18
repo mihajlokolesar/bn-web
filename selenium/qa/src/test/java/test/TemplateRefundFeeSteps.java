@@ -1,7 +1,5 @@
 package test;
 
-import java.net.URISyntaxException;
-
 import model.Event;
 import model.Organization;
 import model.Purchase;
@@ -13,7 +11,7 @@ import test.facade.EventStepsFacade;
 import test.facade.LoginStepsFacade;
 import test.facade.OrganizationStepsFacade;
 
-public abstract class AbstractRefundFeeSteps extends BaseSteps {
+public abstract class TemplateRefundFeeSteps extends BaseSteps {
 	
 	private LoginStepsFacade loginFacade;
 	private OrganizationStepsFacade organizationFacade;
@@ -100,6 +98,4 @@ public abstract class AbstractRefundFeeSteps extends BaseSteps {
 	public AdminEventDashboardFacade getEventDashboardFacade() {
 		return eventDashboardFacade != null ? this.eventDashboardFacade : (this.eventDashboardFacade = new AdminEventDashboardFacade(driver));
 	}
-	
-
 }

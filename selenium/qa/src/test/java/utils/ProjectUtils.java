@@ -42,7 +42,7 @@ public class ProjectUtils {
 		String[] retVal = { firstDate, secondDate };
 		return retVal;
 	}
-
+	
 	public static String[] getAllDatesWithinGivenRangeAndOffset(int daysOffset, int spanInDays) {
 		LocalDate now = LocalDate.now();
 		LocalDate startDate = now.plusDays(daysOffset);

@@ -130,7 +130,7 @@ public class AdminEventDashboardFacade extends BaseFacadeSteps {
 		addAmountToTotalRefundAmount(ticketsTotal);
 	}
 	
-	public void whenUserSelectsRedundedStatusTicketForRefund() {
+	public void whenUserSelectsRefundedStatusTicketForRefund() {
 		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
 		TicketRow row = selectedOrderPage.findTicketRow(ticket->ticket.isTicketRefunded());
 		row.clickOnCheckoutBoxInTicket();
@@ -159,6 +159,17 @@ public class AdminEventDashboardFacade extends BaseFacadeSteps {
 		}
 		totalAmount = totalAmount.add(amount);
 		setData(TOTAL_REFUND_AMOUNT_KEY, totalAmount);
+	}
+	
+	public boolean thenTotalOrderRefundShouldBeCorrect() {
+		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
+		BigDecimal totalOrderRefund = selectedOrderPage.getOrderRefundTotalAmount();
+		/***
+		 * Add logic to calculate order refund once you receive it 
+		 */
+		/******/
+		return false;
+		/*******/
 	}
 
 	public boolean thenStatusOnAllTicketShouldBeRefunded() {

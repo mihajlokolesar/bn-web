@@ -11,7 +11,7 @@ import model.User;
 import pages.components.dialogs.IssueRefundDialog.RefundReason;
 import utils.DataConstants;
 
-public class RefundEntireOrderExcludingOrderFee extends AbstractRefundFeeSteps {
+public class RefundEntireOrderExcludingOrderFee extends TemplateRefundFeeSteps {
 	
 	private static final Integer PURCHASE_QUANTITY = 3;
 	private static final String EVENT_NAME = "TestRefundOrderFeeEventName";
@@ -39,7 +39,11 @@ public class RefundEntireOrderExcludingOrderFee extends AbstractRefundFeeSteps {
 
 		boolean isAtSelectedOrderPage = getEventDashboardFacade().thenUserIsOnSelecteOrderPage();
 		Assert.assertTrue(isAtSelectedOrderPage, "After refund user is not on correct page");
-		getEventDashboardFacade().whenUserClicksOnOrderFeeCheckBox();
+		
+		boolean isStatusOfTicketRefunded = getEventDashboardFacade().thenStatusOnAllTicketShouldBeRefunded();
+		Assert.assertTrue(isStatusOfTicketRefunded, "Not all tickets status is refunded");
+		getEventDashboardFacade().whenUserSelectsRefundedStatusTicketForRefund();
+		
 		boolean isRefundButtonVisible = getEventDashboardFacade().thenRefundButtonShouldBeVisible();
 		Assert.assertFalse(isRefundButtonVisible,
 				"Refund button on per order fee after already refunded should not be visible");
