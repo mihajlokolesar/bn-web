@@ -25,7 +25,7 @@ public class Header extends BaseComponent {
 	@FindBy(css = "header form input")
 	private WebElement searchEvents;
 	
-	@FindBy(xpath = "//header//a/img[@alt='Header logo' and @src='/images/bn-logo-text-web.svg']")
+	@FindBy(xpath = "//header//a/img[@alt='Header logo']")
 	private WebElement headerLogo;
 
 	@FindBy(css = "header form img[alt='Search icon']")

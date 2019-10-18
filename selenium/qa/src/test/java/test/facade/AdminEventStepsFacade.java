@@ -51,7 +51,7 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		return adminEvents.findEventByName(event.getEventName());
 	}
 
-	public AdminEventComponent findEventIsOpenedAndHasSoldItem(Event event) throws URISyntaxException {
+	public AdminEventComponent findEventIsOpenedAndHasSoldItem(Event event) {
 		AdminEventComponent selectedEvent =  adminEvents.findEvent(event.getEventName(),
 				comp -> comp.isEventPublished() && comp.isEventOnSale() && comp.isSoldToAmountGreaterThan(0));
 		return selectedEvent;

@@ -23,6 +23,10 @@
 		<maven-failsafe-plugin.version>2.21.0</maven-failsafe-plugin.version>
 		<browser>rm</browser>
 		<baseurl>https://develop.bigneon.com/</baseurl>
+		<webdriver.chrome.driver/>
+        <webdriver.gecko.driver/>
+        <webdriver.edge.driver/>
+		<huburl/>
 
 	</properties>
 

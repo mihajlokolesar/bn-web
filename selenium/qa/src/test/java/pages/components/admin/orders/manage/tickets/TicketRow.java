@@ -35,7 +35,9 @@ public class TicketRow extends BaseComponent {
 
 	public void clickOnCheckoutBoxInTicket() {
 		WebElement el = getCheckboxElement();
-		explicitWaitForVisibilityAndClickableWithClick(el);
+		SeleniumUtils.jsScrollIntoView(el, driver);
+		waitVisibilityAndBrowserCheckClick(el);
+		waitForTime(1000);
 	}
 
 	/**
@@ -51,10 +53,19 @@ public class TicketRow extends BaseComponent {
 	}
 
 	public boolean isTicketPurchased() {
+		TicketStatus status = getTicketStatus();
+		return status.equals(TicketStatus.PURCHASED);
+	}
+	
+	public boolean isTicketRefunded() {
+		TicketStatus status = getTicketStatus();
+		return status.equals(TicketStatus.REFUNDED);
+	}
+	
+	private TicketStatus getTicketStatus() {
 		WebElement purchasedEl = getStatusElement();
 		String text = purchasedEl.getText();
-		TicketStatus status = TicketStatus.getTicketStatus(text);
-		return status.equals(TicketStatus.PURCHASED);
+		return TicketStatus.getTicketStatus(text);
 	}
 	
 	public BigDecimal getTicketTotalAmount() {

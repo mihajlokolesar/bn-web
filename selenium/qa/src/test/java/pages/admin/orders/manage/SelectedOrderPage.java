@@ -100,8 +100,8 @@ public class SelectedOrderPage extends BasePage {
 		BigDecimal total = new BigDecimal(0);
 		for(TicketRow row : rows) {
 			row.clickOnCheckoutBoxInTicket();
-			total.add(row.getTicketTotalAmount());
-			total.add(row.getPerTicketFeeAmount());
+			total = total.add(row.getTicketTotalAmount());
+			total = total.add(row.getPerTicketFeeAmount());
 		}
 		return total;
 	}
