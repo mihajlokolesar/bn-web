@@ -22,7 +22,7 @@ public class RecaptchaFrame extends BaseComponent{
 	
 	public void clickOnRecaptcha() {
 		WebElement recaptcha = driver.findElement(By.className("g-recaptcha"));
-		waitVisibilityAndClick(recaptcha);
+		waitVisibilityAndBrowserCheckClick(recaptcha);
 		explicitWait(10, ExpectedConditions.frameToBeAvailableAndSwitchToIt(recaptchaIframe));
 		explicitWait(10, ExpectedConditions.attributeContains(recaptchaAnchorInFrame, "aria-checked", "true"));
 		driver.switchTo().parentFrame();

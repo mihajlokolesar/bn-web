@@ -14,14 +14,14 @@ const styles = theme => {
 };
 
 const OperatorTable = props => {
-	const { classes, payments, events } = props;
+	const { classes, payments, events, printVersion } = props;
 	const columnStyles = [
-		{ flex: 1 },
+		{ flex: 4 },
+		{ flex: 3 },
 		{ flex: 2 },
-		{ flex: 1 },
-		{ flex: 1 },
-		{ flex: 1 },
-		{ flex: 1 }
+		{ flex: 2 },
+		{ flex: 2 },
+		{ flex: 2 }
 	];
 
 	let totalInCents = 0;
@@ -55,7 +55,11 @@ const OperatorTable = props => {
 
 				return (
 					<div key={index}>
-						<TableRow columnStyles={columnStyles} gray={!!(index % 2)}>
+						<TableRow
+							columnStyles={columnStyles}
+							gray={!!(index % 2)}
+							printVersion={printVersion}
+						>
 							{[
 								event_name,
 								event_date,
@@ -79,6 +83,7 @@ const OperatorTable = props => {
 							subTotal1={payment_type === "Cash"}
 							subTotal2={payment_type === "CreditCard"}
 							gray={payment_type !== "Cash" && payment_type !== "CreditCard"}
+							printVersion={printVersion}
 						>
 							{[
 								payment_type,
@@ -93,7 +98,7 @@ const OperatorTable = props => {
 				);
 			})}
 
-			<TableRow columnStyles={columnStyles} total>
+			<TableRow columnStyles={columnStyles} total printVersion={printVersion}>
 				{[
 					"Operator total",
 					"",
@@ -111,7 +116,8 @@ OperatorTable.propTypes = {
 	classes: PropTypes.object.isRequired,
 	operator_name: PropTypes.string.isRequired,
 	payments: PropTypes.array.isRequired,
-	events: PropTypes.array.isRequired
+	events: PropTypes.array.isRequired,
+	printVersion: PropTypes.bool
 };
 
 export default withStyles(styles)(OperatorTable);

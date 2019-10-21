@@ -32,7 +32,8 @@ public class DriverFactory {
                 case HUB:
                     System.out.println("Remote hub");
                     String huburl = System.getProperty("huburl");
-                    manager = new RemoteDriverManager(huburl, config, environment);
+                    String configFileName = System.getProperty("config");
+                    manager = new HubRemoteDriverManager(huburl, configFileName, environment);
                     break;
                 default:
                     System.out.println("Local default");

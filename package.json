@@ -1,6 +1,6 @@
 {
 	"name": "bn-web",
-	"version": "1.0.578",
+	"version": "1.0.592",
 	"private": true,
 	"dependencies": {
 		"@date-io/moment": "1.0.1",
@@ -20,6 +20,8 @@
 		"css-loader": "0.28.7",
 		"dotenv": "4.0.0",
 		"dotenv-expand": "4.2.0",
+		"draft-convert": "^2.1.8",
+		"draft-js": "^0.11.1",
 		"eslint-loader": "1.9.0",
 		"eslint-plugin-flowtype": "2.39.1",
 		"extract-text-webpack-plugin": "3.0.2",

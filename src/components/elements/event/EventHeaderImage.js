@@ -38,7 +38,7 @@ const styles = theme => {
 			bottom: -25
 		},
 		noCoverImage: {
-			backgroundImage: "linear-gradient(255deg, #e53d96, #5491cc)"
+			backgroundImage: "linear-gradient(255deg, #972863, #335a7e)"
 		},
 		contentContainer: {
 			position: "absolute",
@@ -71,10 +71,9 @@ const styles = theme => {
 			marginBottom: theme.spacing.unit
 		},
 		withArtistsText: {
-			color: "#9DA3B4",
-			fontFamily: fontFamilyDemiBold,
-			fontSize: 25,
-			lineHeight: 0.9
+			color: "#BFC4D2",
+			fontSize: 19,
+			lineHeight: "31px"
 		}
 	};
 };
@@ -134,8 +133,7 @@ const EventHeaderImage = props => {
 									[classes.eventNameTextLong]: eventNameIsLong
 								})}
 							>
-								{headliner} Tickets to {organization.name} in {venue.city} - Big
-								Neon
+								{name}
 							</Typography>
 						) : (
 							<Typography
@@ -145,7 +143,7 @@ const EventHeaderImage = props => {
 									[classes.eventNameTextLong]: eventNameIsLong
 								})}
 							>
-								{organization.name} in {venue.city} - Big Neon
+								{name}
 							</Typography>
 						)}
 

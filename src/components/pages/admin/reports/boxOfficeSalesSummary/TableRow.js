@@ -45,6 +45,9 @@ const styles = theme => {
 		text: {
 			fontSize: theme.typography.fontSize
 		},
+		printText: {
+			fontSize: theme.typography.fontSize * 0.8
+		},
 		subTotal1: {
 			backgroundColor: "#a6becd"
 		},
@@ -65,6 +68,7 @@ const TableRow = props => {
 		children,
 		classes,
 		total,
+		printVersion,
 		...rest
 	} = props;
 
@@ -75,8 +79,9 @@ const TableRow = props => {
 				className={classNames({
 					[classes.headingText]: heading || subTotal1 || subTotal2,
 					[classes.subHeading]: subHeading,
-					[classes.text]: !heading,
-					[classes.totalText]: total
+					[classes.text]: !printVersion && !heading,
+					[classes.totalText]: total,
+					[classes.printText]: printVersion
 				})}
 				key={index}
 				style={columnStyles[index]}
@@ -113,7 +118,8 @@ TableRow.propTypes = {
 	subTotal1: PropTypes.bool,
 	subTotal2: PropTypes.bool,
 	heading: PropTypes.bool,
-	subHeading: PropTypes.bool
+	subHeading: PropTypes.bool,
+	printVersion: PropTypes.bool
 };
 
 export default withStyles(styles)(TableRow);

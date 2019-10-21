@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { observer } from "mobx-react";
 import { withStyles, Grid, Collapse } from "@material-ui/core";
 import moment from "moment-timezone";
+import Bn from "bn-api-node";
 
 import Button from "../../../../elements/Button";
 import notifications from "../../../../../stores/notifications";
@@ -11,7 +12,8 @@ import DateTimePickerGroup from "../../../../common/form/DateTimePickerGroup";
 import SelectGroup from "../../../../common/form/SelectGroup";
 import Bigneon from "../../../../../helpers/bigneon";
 import eventUpdateStore from "../../../../../stores/eventUpdate";
-import Bn from "bn-api-node";
+import RichTextInputField from "../../../../elements/form/rich-editor/RichTextInputField";
+import FormatInputLabel from "../../../../elements/form/FormatInputLabel";
 
 const styles = theme => ({
 	selectedAgeLimitContainer: {
@@ -748,19 +750,27 @@ class Details extends Component {
 
 				<Grid container spacing={32}>
 					<Grid item xs={12} sm={12} md={12} lg={12}>
-						<InputGroup
-							error={errors.additionalInfo}
+						<FormatInputLabel>Additional event info</FormatInputLabel>
+						<RichTextInputField
 							value={additionalInfo}
-							name="additionalInfo"
-							label="Additional event info"
-							type="text"
-							onChange={e =>
-								this.changeDetails({ additionalInfo: e.target.value })
+							onChange={htmlString =>
+								this.changeDetails({ additionalInfo: htmlString })
 							}
-							onBlur={validateFields}
-							placeholder="Enter any additional event info you require."
-							multiline
 						/>
+
+						{/*<InputGroup*/}
+						{/*	error={errors.additionalInfo}*/}
+						{/*	value={additionalInfo}*/}
+						{/*	name="additionalInfo"*/}
+						{/*	label="Additional event info"*/}
+						{/*	type="text"*/}
+						{/*	onChange={e =>*/}
+						{/*		this.changeDetails({ additionalInfo: e.target.value })*/}
+						{/*	}*/}
+						{/*	onBlur={validateFields}*/}
+						{/*	placeholder="Enter any additional event info you require."*/}
+						{/*	multiline*/}
+						{/*/>*/}
 					</Grid>
 
 					<Grid item xs={12} sm={12} md={5} lg={5}>

@@ -40,7 +40,7 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 	 */
 	@Test(dataProvider = "guest_page_search_data", priority = 13, 
 			 dependsOnMethods = {"userPurchasedTickets"},  retryAnalyzer = utils.RetryAnalizer.class)
-	public void guestPageSearchTest(User superuser, Event event, User one, User two) throws Exception {
+	public void guestPageSearchTest(User superuser, User one, User two) throws Exception {
 		LoginStepsFacade loginFacade = new LoginStepsFacade(driver);
 		AdminBoxOfficeFacade boxOfficeFacade = new AdminBoxOfficeFacade(driver);
 		AdminEventStepsFacade adminEventFacade = new AdminEventStepsFacade(driver);
@@ -69,10 +69,8 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 		User superUser = User.generateUserFromJson(DataConstants.SUPERUSER_DATA_KEY);
 		User userOne = User.generateUserFromJson(DataConstants.DISTINCT_USER_ONE_KEY);
 		User userTwo = User.generateUserFromJson(DataConstants.USER_STANDARD_KEY);
-		Event event = Event.generateEventFromJson(DataConstants.EVENT_DATA_STANARD_KEY, EVENT_NAME,
-				false, START_DAY_OFFSET, DAYS_RANGE);
 		
-		return new Object[][] { { superUser, event, userOne, userTwo } };
+		return new Object[][] { { superUser, userOne, userTwo } };
 
 	}
 	

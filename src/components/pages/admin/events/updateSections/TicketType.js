@@ -21,6 +21,7 @@ import eventUpdateStore from "../../../../../stores/eventUpdate";
 import SelectGroup from "../../../../common/form/SelectGroup";
 import { dollars } from "../../../../../helpers/money";
 import CheckBox from "../../../../elements/form/CheckBox";
+import RadioButton from "../../../../elements/form/RadioButton";
 
 const styles = theme => {
 	return {
@@ -66,6 +67,9 @@ const styles = theme => {
 		},
 		inactive: {
 			opacity: 0.5
+		},
+		boxOfficeAvailabilityCheckboxContainer: {
+			display: "flex"
 		}
 	};
 };
@@ -262,6 +266,9 @@ const TicketDetails = observer(props => {
 			label: "When sales end for..."
 		});
 	}
+
+	const allAvailability =
+		appSalesEnabled && webSalesEnabled && boxOfficeSalesEnabled;
 
 	return (
 		<div className={classes.activeContent}>
@@ -666,38 +673,74 @@ const TicketDetails = observer(props => {
 									});
 								}}
 							/>
-							<CheckBox
-								name={"appSalesEnabled"}
-								active={appSalesEnabled}
-								onClick={e =>
-									updateTicketType(index, { appSalesEnabled: !appSalesEnabled })
-								}
-							>
-								Available in App
-							</CheckBox>
-							<CheckBox
-								name={"webSalesEnabled"}
-								active={webSalesEnabled}
-								onClick={e =>
-									updateTicketType(index, { webSalesEnabled: !webSalesEnabled })
-								}
-							>
-								Available on web
-							</CheckBox>
-							<CheckBox
-								name={"boxOfficeSalesEnabled"}
-								active={boxOfficeSalesEnabled}
-								onClick={e =>
-									updateTicketType(index, {
-										boxOfficeSalesEnabled: !boxOfficeSalesEnabled
-									})
-								}
-							>
-								Available in box office
-							</CheckBox>
 						</Collapse>
 					</Grid>
 				</Grid>
+
+				<Collapse in={showVisibility}>
+					<Grid container spacing={32}>
+						<Grid
+							className={classes.additionalInputContainer}
+							item
+							xs={12}
+							sm={12}
+						>
+							<FormHeading>Point of sale availability</FormHeading>
+							<br/>
+							<div className={classes.boxOfficeAvailabilityCheckboxContainer}>
+								<RadioButton
+									name={"allSalesEnabled"}
+									active={allAvailability}
+									onClick={e =>
+										updateTicketType(index, {
+											appSalesEnabled: !allAvailability,
+											webSalesEnabled: !allAvailability,
+											boxOfficeSalesEnabled: !allAvailability
+										})
+									}
+								>
+									All
+								</RadioButton>
+
+								{/*<RadioButton*/}
+								{/*	name={"appSalesEnabled"}*/}
+								{/*	active={!!appSalesEnabled}*/}
+								{/*	onClick={e =>*/}
+								{/*		updateTicketType(index, {*/}
+								{/*			appSalesEnabled: !appSalesEnabled*/}
+								{/*		})*/}
+								{/*	}*/}
+								{/*>*/}
+								{/*	Available in App*/}
+								{/*</RadioButton>*/}
+								<RadioButton
+									name={"webSalesEnabled"}
+									active={!!webSalesEnabled}
+									onClick={e =>
+										updateTicketType(index, {
+											webSalesEnabled: !webSalesEnabled
+										})
+									}
+								>
+									Online only
+								</RadioButton>
+								<RadioButton
+									name={"boxOfficeSalesEnabled"}
+									active={!!boxOfficeSalesEnabled}
+									onClick={e =>
+										updateTicketType(index, {
+											boxOfficeSalesEnabled: !boxOfficeSalesEnabled
+										})
+									}
+								>
+									Box office only
+								</RadioButton>
+							</div>
+						</Grid>
+					</Grid>
+				</Collapse>
+
+				<div style={{ marginTop: 20 }}/>
 
 				<Grid container spacing={32}>
 					<Grid

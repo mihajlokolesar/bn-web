@@ -192,7 +192,6 @@ const Meta = props => {
 
 	let googleStructuredData;
 	let googleBreadcrumbData;
-	let title = name;
 
 	let cutDesc = "";
 	if (additional_info) {
@@ -208,6 +207,10 @@ const Meta = props => {
 	const headliner = headlineArtist ? headlineArtist.artist.name : null;
 
 	const { name: organizationName = "" } = organization || {};
+
+	let title = headliner
+		? `${headliner} Tickets to ${organizationName} in ${venue.city} - Big Neon`
+		: `${name} in ${venue.city} - Big Neon`;
 
 	const sameText = `in ${
 		venue.city

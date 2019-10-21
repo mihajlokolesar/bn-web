@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -54,6 +55,9 @@ public class ProjectUtils {
 	}
 
 	public static LocalDateTime parseDateTime(String pattern, String dateTime) {
+		if (dateTime == null || dateTime.isEmpty()) {
+			return null;
+		}
 		String removedOrdinalsDate = dateTime.replaceAll("(?<=\\d)(st|nd|rd|th)", "");
 		DateTimeFormatter formater = DateTimeFormatter.ofPattern(pattern);
 		LocalDateTime localDateTime = LocalDateTime.parse(removedOrdinalsDate, formater);
@@ -66,20 +70,19 @@ public class ProjectUtils {
 		LocalDateTime ldt = LocalDateTime.of(localDate, localTime);
 		return ldt;
 	}
-
+	
 	public static LocalDate parseDate(String pattern, String date) {
 		String removedOrdinalsDate = date.replaceAll("(?<=\\d)(st|nd|rd|th)", "");
 		DateTimeFormatter formater = DateTimeFormatter.ofPattern(pattern);
 		LocalDate localDate = LocalDate.parse(removedOrdinalsDate, formater);
 		return localDate;
 	}
-		
+	
 	public static LocalTime parseTime(String pattern, String time) {
 		DateTimeFormatter formater = DateTimeFormatter.ofPattern(pattern);
 		LocalTime localTime = LocalTime.parse(time, formater);
 		return localTime;
 	}
-	
 	public static LocalDateTime getDateTime(LocalDate date) {
 		LocalDateTime dt = date.atTime(LocalTime.MIDNIGHT);
 		return dt;

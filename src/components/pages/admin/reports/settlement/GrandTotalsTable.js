@@ -14,7 +14,8 @@ const styles = theme => ({
 	heading: {
 		fontFamily: fontFamilyDemiBold,
 		fontSize: theme.typography.fontSize * 1.3,
-		marginBottom: 10
+		marginBottom: 10,
+		textTransform: "capitalize"
 	},
 	boldText: {
 		fontFamily: fontFamilyDemiBold

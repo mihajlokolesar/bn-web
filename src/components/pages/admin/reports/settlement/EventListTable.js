@@ -14,7 +14,7 @@ const styles = theme => ({
 });
 
 const EventListTable = props => {
-	const { classes, eventList, onlyFinishedEvents, displayDateRange } = props;
+	const { classes, eventList, onlyFinishedEvents, displayDateRangeNoTimezone } = props;
 
 	const columnStyles = [
 		{ flex: 1, textAlign: "left" },
@@ -26,8 +26,8 @@ const EventListTable = props => {
 	return (
 		<div>
 			<Typography className={classes.heading}>
-				{onlyFinishedEvents ? "Events ended" : "Sales occurring"} from{" "}
-				{displayDateRange}
+				{onlyFinishedEvents ? "Events" : "Sales occurring"} from{" "}
+				{displayDateRangeNoTimezone}
 			</Typography>
 
 			<TotalsRow columnStyles={columnStyles} heading>
@@ -64,7 +64,7 @@ EventListTable.propTypes = {
 	classes: PropTypes.object.isRequired,
 	eventList: PropTypes.array.isRequired,
 	onlyFinishedEvents: PropTypes.bool.isRequired,
-	displayDateRange: PropTypes.string.isRequired
+	displayDateRangeNoTimezone: PropTypes.string.isRequired
 };
 
 export default withStyles(styles)(EventListTable);

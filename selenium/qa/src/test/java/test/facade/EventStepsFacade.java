@@ -33,8 +33,16 @@ public class EventStepsFacade extends BaseFacadeSteps {
 		this.loginPage = new LoginPage(driver);
 	}
 	
+	public LoginPage getLoginPage() {
+		return loginPage;
+	}
 	
 	public EventsPage givenThatEventExist(Event event,User user) throws Exception {
+		givenThatEventExist(event, user, true);
+		return eventsPage;
+	}
+	
+	public void givenThatEventExist(Event event, User user, boolean random) throws Exception {
 		if (!eventsPage.isEventPresent(event.getEventName())) {
 			boolean isLoggedIn = false;
 			if(!loginPage.getHeader().isLoggedOut()) {
@@ -42,7 +50,7 @@ public class EventStepsFacade extends BaseFacadeSteps {
 				loginPage.logOut();
 			}
 			
-			createEventWithSuperuserLoginAndLogout(event);
+			createEventWithSuperuserLoginAndLogout(event, random);
 			if (isLoggedIn) {
 				loginPage.login(user);
 			}
@@ -50,15 +58,13 @@ public class EventStepsFacade extends BaseFacadeSteps {
 			eventsPage.navigate();
 			driver.navigate().refresh();
 		}
-		return eventsPage;
 	}
 	
 	public void givenUserIsOnEventPage() {
 		eventsPage.navigate();
 	}
 	
-	private void createEventWithSuperuserLoginAndLogout(Event event) throws Exception {
-
+	private void createEventWithSuperuserLoginAndLogout(Event event, boolean randomizeName) throws Exception {
 		if (!loginPage.getHeader().isLoggedOut()) {
 			loginPage.logOut();
 		}
@@ -69,7 +75,9 @@ public class EventStepsFacade extends BaseFacadeSteps {
 		OrganizationStepsFacade organizationFacade = new OrganizationStepsFacade(driver);
 
 		organizationFacade.givenOrganizationExist(event.getOrganization());
-		event.setEventName(event.getEventName() + ProjectUtils.generateRandomInt(1000000));
+		if (randomizeName) {
+			event.setEventName(event.getEventName() + ProjectUtils.generateRandomInt(1000000));
+		}
 		boolean retVal = createEvent.createEvent(event);
 		
 		if (!retVal) {
@@ -77,7 +85,6 @@ public class EventStepsFacade extends BaseFacadeSteps {
 		} 
 		
 		loginPage.logOut();
-
 	}
 	
 	public void whenUserLogsInOnTicketsPage(User user) {
@@ -173,7 +180,4 @@ public class EventStepsFacade extends BaseFacadeSteps {
 	protected Object getData(String key) {
 		return null;
 	}
-	
-	
-
 }

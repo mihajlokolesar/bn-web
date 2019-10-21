@@ -38,7 +38,7 @@ const styles = theme => ({
 		color: secondaryHex
 	},
 	similarArtists: {
-		marginTop: theme.spacing.unit,
+		marginTop: theme.spacing.unit * 4,
 		marginBottom: theme.spacing.unit * 2
 	},
 	boldSpan: {
@@ -52,10 +52,6 @@ const styles = theme => ({
 
 const EventDescriptionBody = props => {
 	const { classes, children, artists, eventIsCancelled } = props;
-	const options = {
-		nl2br: true,
-		className: classes.eventDescriptionLink
-	};
 
 	const headlineArtist = artists.find(artist => artist.importance === 0);
 	const headliner = headlineArtist ? headlineArtist.artist.name : null;
@@ -68,11 +64,8 @@ const EventDescriptionBody = props => {
 					<Link to={"/"}>Browse other events</Link>
 				</div>
 			) : null}
-			{children ? (
-				<Typography className={classes.eventDetailText}>
-					<LinkifyReact options={options}>{children}</LinkifyReact>
-				</Typography>
-			) : null}
+
+			{children}
 
 			{headliner ? (
 				<Typography className={classes.similarArtists}>
@@ -110,7 +103,7 @@ EventDescriptionBody.defaultProps = {};
 
 EventDescriptionBody.propTypes = {
 	classes: PropTypes.object.isRequired,
-	children: PropTypes.string,
+	children: PropTypes.object,
 	artists: PropTypes.array,
 	eventIsCancelled: PropTypes.bool
 };

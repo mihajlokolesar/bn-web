@@ -625,7 +625,16 @@ class CheckoutSelection extends Component {
 		return (
 			<div>
 				<OrgAnalytics trackingKeys={tracking_keys}/>
-				<Meta {...event} venue={venue} artists={artists} type={"selection"}/>
+				<Meta
+					{...event}
+					venue={venue}
+					artists={artists}
+					additional_info={additional_info}
+					organization={organization}
+					doorTime={displayDoorTime}
+					showTime={displayShowTime}
+					type={"selection"}
+				/>
 				{/*DESKTOP*/}
 				<Hidden smDown>
 					<EventHeaderImage

@@ -85,10 +85,10 @@ public class LoginPage extends BasePage {
 		passwordField.sendKeys(password);
 		clickOnRecaptcha();
 		explicitWait(10, ExpectedConditions.elementToBeClickable(loginSubmitButton));
-		loginSubmitButton.click();
+		waitVisibilityAndBrowserCheckClick(loginSubmitButton);
 		if (checkForLoginFailedMessage()) {
 			waitForTime(1000);
-			loginSubmitButton.click();
+			waitVisibilityAndBrowserCheckClick(loginSubmitButton);
 		}
 	}
 	
@@ -146,7 +146,7 @@ public class LoginPage extends BasePage {
 
 	private boolean loginWithFacebook(String phoneOrMail, String password) {
 		String parentWindowHandle = driver.getWindowHandle();
-		loginFacebook.click();
+		waitVisibilityAndBrowserCheckClick(loginFacebook);
 		explicitWait(10, ExpectedConditions.numberOfWindowsToBe(2));
 		Set<String> allWindows = driver.getWindowHandles();
 		String currentWindowHandle = driver.getWindowHandle();
@@ -174,13 +174,13 @@ public class LoginPage extends BasePage {
 
 	public void clickOnRegisterLink() {
 		explicitWait(10, ExpectedConditions.elementToBeClickable(registerLink));
-		registerLink.click();
+		waitVisibilityAndBrowserCheckClick(registerLink);
 	}
 
 	public boolean enterMailAndClickOnResetPassword(String email) {
 		explicitWait(10, 500, ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@role='dialog']//form")));
 		waitVisibilityAndSendKeys(forgotPasswordEmailField, email);
-		explicitWaitForVisibilityAndClickableWithClick(forgotPasswordConfirmButton);
+		waitVisibilityAndBrowserCheckClick(forgotPasswordConfirmButton);
 		isNotificationDisplayedWithMessage(MsgConstants.resetPasswordMessage(email));
 		return true;
 	}

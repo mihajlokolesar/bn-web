@@ -12,8 +12,8 @@ import model.User;
 import pages.admin.boxoffice.GuestPage;
 import pages.admin.boxoffice.SellPage;
 import pages.components.admin.AdminBoxOfficeSideBar;
+import pages.components.admin.events.TicketTypeRowComponent;
 import utils.ProjectUtils;
-import pages.components.admin.TicketTypeRowComponent;
 import pages.components.dialogs.BoxOfficeSellCheckoutDialog;
 import pages.components.dialogs.BoxOfficeSellOrderCompleteDialog;
 

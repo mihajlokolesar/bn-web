@@ -81,6 +81,10 @@ public class User extends Model implements Serializable {
 		ProjectUtils.appendFields(fields, sb);
 		return sb.toString();
 	}
+	
+	public String getFullNameFL() {
+		return getFirstName() + " " + getLastName();
+	}
 
 	public static TypeReference<List<User>> getListTypeReference() {
 		return new TypeReference<List<User>>() {

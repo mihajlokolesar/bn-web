@@ -44,7 +44,7 @@ class SettlementReportList extends Component {
 
 	componentDidMount() {
 		const { organizationId, organizationTimezone } = this.props;
-		const dateFormat = "dddd, MMMM Do YYYY z";
+		const dateFormat = "ddd, MMMM Do YYYY, z";
 
 		Bigneon()
 			.organizations.settlements.index({ organization_id: organizationId })
@@ -115,11 +115,12 @@ class SettlementReportList extends Component {
 									<div className={classes.cardInnerContainer}>
 										<div>
 											<Typography className={classes.createdDateText}>
-												{displayCreatedAt} ({statusEnums[status]})
+												{displayCreatedAt}
 											</Typography>
 											<Typography>
-												{only_finished_events ? "Events ended" : "Tickets sold"}{" "}
+												{only_finished_events ? "Events" : "Tickets sold"}{" "}
 												{displayDateRange}
+												{/*({statusEnums[status]})*/}
 											</Typography>
 										</div>
 										<div>

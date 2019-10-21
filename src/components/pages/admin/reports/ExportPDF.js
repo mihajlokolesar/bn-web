@@ -19,6 +19,7 @@ import EventPromoCodesReport from "./eventPromoCode/EventPromoCode.js";
 import user from "../../../../stores/user";
 import servedImage from "../../../../helpers/imagePathHelper";
 import BoxOfficeSalesSummary from "./boxOfficeSalesSummary/BoxOfficeSalesSummary";
+import SettlementReport from "./settlement/SettlementReport";
 
 const styles = theme => ({
 	root: {
@@ -69,6 +70,10 @@ const reportTypes = {
 	box_office_sales_summary: {
 		label: "Box office sales summary",
 		ReportComponent: BoxOfficeSalesSummary
+	},
+	settlement: {
+		label: "Settlement report",
+		ReportComponent: SettlementReport
 	}
 };
 
@@ -134,6 +139,7 @@ class ExportPDF extends Component {
 		const { event, venue, displayLocalVenueTime, venueTimeZone } = this.state;
 
 		const event_id = getUrlParam("event_id");
+		const settlement_id = getUrlParam("settlement_id");
 		const type = getUrlParam("type");
 
 		const reportType = reportTypes[type];
@@ -190,6 +196,7 @@ class ExportPDF extends Component {
 					printVersion
 					onLoad={this.onReportLoad}
 					venueTimeZone={venueTimeZone}
+					settlementId={settlement_id}
 				/>
 			</div>
 		);

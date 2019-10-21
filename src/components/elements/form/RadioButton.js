@@ -34,8 +34,8 @@ const styles = theme => {
 			borderColor: secondaryHex,
 			width: 16,
 			height: 16,
-			borderRadius: 10,
-			backgroundColor: secondaryHex
+			borderRadius: 10
+			//backgroundColor: secondaryHex
 		},
 		disabled: {
 			borderColor: "#d1d1d1"

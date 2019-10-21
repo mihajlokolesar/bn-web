@@ -139,7 +139,7 @@ class SingleOrder extends Component {
 				items.forEach(({ item_type, unit_price_in_cents, quantity }) => {
 					//Only include fee type items
 					if (
-						["CreditCardFees", "PerUnitFees", "CreditCardFees"].indexOf(
+						["CreditCardFees", "PerUnitFees", "EventFees"].indexOf(
 							item_type
 						) > -1
 					) {

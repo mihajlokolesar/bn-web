@@ -373,6 +373,8 @@ class CheckoutConfirmation extends Component {
 			promo_image_url,
 			organization_id,
 			additional_info,
+			displayDoorTime,
+			displayShowTime,
 			tracking_keys
 		} = event;
 
@@ -435,7 +437,16 @@ class CheckoutConfirmation extends Component {
 		return (
 			<div className={classes.root}>
 				<OrgAnalytics trackingKeys={tracking_keys}/>
-				<Meta {...event} venue={venue} artists={artists} type={"checkout"}/>
+				<Meta
+					{...event}
+					venue={venue}
+					artists={artists}
+					additional_info={additional_info}
+					organization={organization}
+					doorTime={displayDoorTime}
+					showTime={displayShowTime}
+					type={"checkout"}
+				/>
 
 				{/*DESKTOP*/}
 				<Hidden smDown>

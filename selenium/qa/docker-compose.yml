@@ -1,4 +1,6 @@
-# To execute this docker-compose yml file use `docker-compose -f <file_name> up`
+# To execute this docker-compose yml file use `docker-compose -f <file_name> up --build test`
+#--build test option is so that each time docker compose is run test service is rebuild, so that new changes to code 
+# are copied to container, however if container already exists, mavan repository is not downloaded again (so that is chached)
 # Add the `-d` flag at the end for detached execution
 version: "3"
 services:
@@ -39,29 +41,38 @@ services:
     environment:
       - HUB_HOST=selenium-hub
       - HUB_PORT=4444
-
-  test-chrome:
+  test:
     build: ./
     depends_on:
       - chrome
-    environment:
-      - HUB_HOST=selenium-hub
-      - HUB_PORT=4444
-
-  test-firefox:
-    build: ./
-    depends_on:
-     - firefox
-    environment:
-     - HUB_HOST=selenium-hub
-     - HUB_PORT=4444
-     - BASE_URL=https://develop.bigneon.com
-
-  test-chrome-debug:
-    build: ./
-    depends_on:
-      - chrome-debug
+      - firefox
     environment:
       - HUB_HOST=selenium-hub
       - HUB_PORT=4444
       - BASE_URL=https://develop.bigneon.com
+      
+#  test-chrome:
+#    build: ./
+#    depends_on:
+#      - chrome
+#    environment:
+#      - HUB_HOST=selenium-hub
+#      - HUB_PORT=4444
+
+#  test-firefox:
+#    build: ./
+#    depends_on:
+#     - firefox
+#    environment:
+#     - HUB_HOST=selenium-hub
+#     - HUB_PORT=4444
+#     - BASE_URL=https://develop.bigneon.com
+
+#  test-chrome-debug:
+#    build: ./
+#    depends_on:
+#      - chrome-debug
+#    environment:
+#      - HUB_HOST=selenium-hub
+#      - HUB_PORT=4444
+#      - BASE_URL=https://develop.bigneon.com

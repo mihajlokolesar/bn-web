@@ -37,7 +37,15 @@ public class IssueRefundDialog extends DialogContainerComponent {
 		public String getValue() {
 			return value;
 		}
-
+		
+		public static RefundReason getRefundReason(String label) {
+			for(RefundReason rr : values()) {
+				if (rr.getLabel().equalsIgnoreCase(label)) {
+					return rr;
+				}
+			}
+			return null;
+		}
 	}
 
 	@FindBy(xpath = "//input[@id='reason']/preceding-sibling::div[@role='button' and @aria-haspopup='true']")
@@ -83,6 +91,7 @@ public class IssueRefundDialog extends DialogContainerComponent {
 
 	public void clickOnGotItButton() {
 		explicitWaitForVisibilityAndClickableWithClick(gotItButton);
+		waitForTime(1500);
 	}
 
 	public String getTicketOwnerInfo() {

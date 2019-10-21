@@ -8,7 +8,7 @@ import config.MailinatorEnum;
 import model.Event;
 import model.Purchase;
 import model.User;
-import pages.components.admin.TicketTypeRowComponent;
+import pages.components.admin.events.TicketTypeRowComponent;
 import pages.mailinator.MailinatorFactory;
 import pages.mailinator.inbox.BOSellPagePurchaseWithCashMailinatorPage;
 import test.facade.AdminBoxOfficeFacade;

@@ -1,4 +1,4 @@
-package pages.components.admin;
+package pages.components.admin.events;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -64,7 +64,7 @@ public class AddTicketTypeComponent extends BaseComponent {
 	@FindBy(id = "endDate")
 	private WebElement endDate;
 
-	@FindBy(id = "endTime")
+	@FindBy(xpath = "//div[div[div[span[span[contains(text(),'Sales end')]]]]]//input[@id='endTime']")
 	private WebElement endTime;
 
 	public AddTicketTypeComponent(WebDriver driver) {
@@ -147,7 +147,7 @@ public class AddTicketTypeComponent extends BaseComponent {
 
 	private void enterTime(WebElement element, String time) {
 		TimeMenuDropDown timeDropDown = new TimeMenuDropDown(driver);
-		timeDropDown.selectTime(startTime, time);
+		timeDropDown.selectTime(element, time);
 	}
 
 	private void clickOnAdditionalOptionsButton() {

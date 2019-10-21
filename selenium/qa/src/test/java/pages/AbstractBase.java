@@ -21,20 +21,27 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import config.BrowsersEnum;
 import config.DriverFactory;
+import utils.AccessabilityUtil;
 import utils.SeleniumUtils;
 
 public class AbstractBase implements Serializable {
 
 	public WebDriver driver;
+	
+	private AccessabilityUtil accessUtils;
 
 	public AbstractBase(WebDriver driver) {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
-
+		this.accessUtils = new AccessabilityUtil(driver);
 	}
-
+	
 	public WebDriver getDriver() {
 		return driver;
+	}
+	
+	public AccessabilityUtil getAccessUtils() {
+		return accessUtils;
 	}
 
 	public void setDriver(WebDriver driver) {
