@@ -30,13 +30,7 @@ public class RefundEntireOrderAndOrderFee extends TemplateRefundFeeSteps {
 		boolean isRefundButtonAmountCorrect = getEventDashboardFacade().thenRefundButtonAmountShouldBeCorrect();
 		Assert.assertTrue(isRefundButtonAmountCorrect, "Refund amount on refund button incorect");
 
-		getEventDashboardFacade().whenUserClicksOnRefundButton();
-		boolean isRefundDialogVisible = getEventDashboardFacade().thenRefundDialogShouldBeVisible();
-		Assert.assertTrue(isRefundDialogVisible, "Refund dialog not visible");
-		boolean isRefundDialogAmountCorrect = getEventDashboardFacade().thenRefundTotalOnRefundDialogShouldBeCorrect();
-		Assert.assertTrue(isRefundDialogAmountCorrect);
-		getEventDashboardFacade().whenUserSelectRefundReasonAndClicksOnConfirmButton(RefundReason.OTHER);
-		getEventDashboardFacade().whenUserClicksOnGotItButtonOnRefundSuccessDialog();
+		refundSteps(RefundReason.OTHER);
 
 		boolean isAtSelectedOrderPage = getEventDashboardFacade().thenUserIsOnSelecteOrderPage();
 		Assert.assertTrue(isAtSelectedOrderPage, "After refund user is not on correct page");
@@ -49,7 +43,8 @@ public class RefundEntireOrderAndOrderFee extends TemplateRefundFeeSteps {
 		Assert.assertFalse(isRefundButtonVisible,
 				"Refund button on per order fee after already refunded should not be visible");
 		
-		getEventDashboardFacade().thenTotalOrderRefundShouldBeCorrect();
+//		boolean isRefundTotalCorrect = getEventDashboardFacade().thenRefundTotalOnRefundDialogShouldBeCorrect();
+//		Assert.assertTrue(isRefundTotalCorrect);
 	}
 	
 	@DataProvider(name = "refund_entire_order_and_order_fee")

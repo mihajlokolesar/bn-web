@@ -15,6 +15,8 @@ public class TicketRow extends BaseComponent {
 	private WebElement row;
 
 	private String relativeCheckBoxXpath = "./div/div/div[1]/div/div";
+	
+	private String relativeCheckedBoxXpath = relativeCheckBoxXpath + "/img";
 
 	private String relativeAttendeLinkXpath = "./div/div/div[2]/a";
 
@@ -62,6 +64,10 @@ public class TicketRow extends BaseComponent {
 		return status.equals(TicketStatus.REFUNDED);
 	}
 	
+	public boolean isChecked() {
+		return getAccessUtils().isChildElementVisibleFromParentLocatedBy(row, By.xpath(relativeCheckedBoxXpath), 3);
+	}
+	
 	private TicketStatus getTicketStatus() {
 		WebElement purchasedEl = getStatusElement();
 		String text = purchasedEl.getText();
@@ -79,15 +85,14 @@ public class TicketRow extends BaseComponent {
 	}
 	
 	private WebElement getCheckboxElement() {
-		return SeleniumUtils.getChildElementFromParentLocatedBy(row, By.xpath(relativeCheckBoxXpath), driver);
+		return getAccessUtils().getChildElementFromParentLocatedBy(row, By.xpath(relativeCheckBoxXpath));
 	}
 
 	private WebElement getAttendeeElement() {
-		return SeleniumUtils.getChildElementFromParentLocatedBy(row, By.xpath(relativeAttendeLinkXpath), driver);
+		return getAccessUtils().getChildElementFromParentLocatedBy(row, By.xpath(relativeAttendeLinkXpath));
 	}
 
 	private WebElement getStatusElement() {
-		return SeleniumUtils.getChildElementFromParentLocatedBy(row, By.xpath(relativeStatusXpath), driver);
+		return getAccessUtils().getChildElementFromParentLocatedBy(row, By.xpath(relativeStatusXpath));
 	}
-
 }

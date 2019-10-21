@@ -1,10 +1,13 @@
 package test;
 
+import org.testng.Assert;
+
 import model.Event;
 import model.Organization;
 import model.Purchase;
 import model.User;
 import pages.components.admin.AdminEventComponent;
+import pages.components.dialogs.IssueRefundDialog.RefundReason;
 import test.facade.AdminEventDashboardFacade;
 import test.facade.AdminEventStepsFacade;
 import test.facade.EventStepsFacade;
@@ -68,6 +71,17 @@ public abstract class TemplateRefundFeeSteps extends BaseSteps {
 		getEventDashboardFacade().whenUserExpandOrderDetailsAndCheckIfExpanded();
 	}
 	
+	public void refundSteps(RefundReason refundReason) {
+		getEventDashboardFacade().whenUserClicksOnRefundButton();
+		boolean isRefundDialogVisible = getEventDashboardFacade().thenRefundDialogShouldBeVisible();
+		Assert.assertTrue(isRefundDialogVisible, "Refund dialog not visible");
+		boolean isRefundDialogAmountCorrect = getEventDashboardFacade().thenRefundTotalOnRefundDialogShouldBeCorrect();
+		Assert.assertTrue(isRefundDialogAmountCorrect);
+		getEventDashboardFacade().whenUserSelectRefundReasonAndClicksOnConfirmButton(refundReason);
+		getEventDashboardFacade().whenUserClicksOnGotItButtonOnRefundSuccessDialog();
+
+	}
+		
 	public void cancelEvent(Event event) {
 		getLoginFacade().whenUserClickOnHeaderLogo();
 		getAdminEventsFacade().thenUserIsAtEventsPage();

@@ -66,6 +66,8 @@ public class OrderDetails extends BaseComponent {
 		private WebElement container;
 
 		private String relativeCheckBoxXpath = "./div/div/div";
+		
+		private String relativeCheckedBoxXpath = relativeCheckBoxXpath + "/img";
 
 		private String relativeTotalMoneyAmountXpath = "./p[1]";
 
@@ -82,6 +84,10 @@ public class OrderDetails extends BaseComponent {
 		public void clickOnCheckBox() {
 			WebElement checkBox = getCheckBoxElement();
 			waitVisibilityAndBrowserCheckClick(checkBox);
+		}
+		
+		public boolean isChecked() {
+			return getAccessUtils().isChildElementVisibleFromParentLocatedBy(container, By.xpath(relativeCheckedBoxXpath), 3);
 		}
 		
 		public BigDecimal getMoneyAmount() {

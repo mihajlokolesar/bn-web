@@ -11,43 +11,55 @@ import model.User;
 import pages.components.dialogs.IssueRefundDialog.RefundReason;
 import utils.DataConstants;
 
-public class RefundEntireOrderExcludingOrderFee extends TemplateRefundFeeSteps {
+public class RefundPartialCheckOrderFeeRefundDisabled extends TemplateRefundFeeSteps {
 	
 	private static final Integer PURCHASE_QUANTITY = 3;
 	private static final String EVENT_NAME = "TestRefundOrderFeeEventName";
 	private static final Integer START_DAY_OFFSET = 2;
 	private static final Integer DAYS_RANGE = 0;
-
-	@Test(dataProvider = "refund_just_an_order_fee_from_order", retryAnalyzer = utils.RetryAnalizer.class)
-	public void refundJustAnOrderFeeFromOrder(Purchase purchase, User user) throws Exception {
+	
+	
+	@Test(dataProvider = "refund_already_partially_refunded_order", priority = 30, retryAnalyzer = utils.RetryAnalizer.class)
+	public void refundTicketsOnPartialyRefundedOrderAndRefundedOrderFee(Purchase purchase, User user) throws Exception {	
 		templateSteps(purchase, user);
 	}
-	
+
 	@Override
 	public void customSteps() {
-		getEventDashboardFacade().whenUserSelectsAllTicketsForRefund();
+		getEventDashboardFacade().whenUserSelectsPurchasedStatusTicketForRefund();
+		getEventDashboardFacade().whenUserClicksOnOrderFeeCheckBox();
 		boolean isRefundButtonAmountCorrect = getEventDashboardFacade().thenRefundButtonAmountShouldBeCorrect();
 		Assert.assertTrue(isRefundButtonAmountCorrect, "Refund amount on refund button incorect");
 
 		refundSteps(RefundReason.OTHER);
 
-		boolean isAtSelectedOrderPage = getEventDashboardFacade().thenUserIsOnSelecteOrderPage();
+		boolean isAtSelectedOrderPage = getEventDashboardFacade().thenUserIsOnSelecteOrderPage(true);
 		Assert.assertTrue(isAtSelectedOrderPage, "After refund user is not on correct page");
 		
-		boolean isStatusOfTicketRefunded = getEventDashboardFacade().thenStatusOnAllTicketShouldBeRefunded();
-		Assert.assertTrue(isStatusOfTicketRefunded, "Not all tickets status is refunded");
-		getEventDashboardFacade().whenUserSelectsRefundedStatusTicketForRefund();
+		getEventDashboardFacade().thenClearUpTotalAmountFromDataMap();
+
+		getEventDashboardFacade().whenUserSelectsPurchasedStatusTicketForRefund();
+		getEventDashboardFacade().thenRefundButtonShouldBeVisible();
+		isRefundButtonAmountCorrect = getEventDashboardFacade().thenRefundButtonAmountShouldBeCorrect();
+		Assert.assertTrue(isRefundButtonAmountCorrect, "Refund amount on refund button incorect");
 		
-		boolean isRefundButtonVisible = getEventDashboardFacade().thenRefundButtonShouldBeVisible();
-		Assert.assertFalse(isRefundButtonVisible,
-				"Refund button on per order fee after already refunded should not be visible");
+		getEventDashboardFacade().whenUserClicksOnOrderFeeCheckBox();
+		boolean isChecked = getEventDashboardFacade().thenOrderFeeCheckboxShouldBeChecked();
+		Assert.assertFalse(isChecked, "Per order fee refund button should not be checked");
 		
+		isRefundButtonAmountCorrect = getEventDashboardFacade().thenRefundButtonAmountShouldBeCorrect();
+		Assert.assertTrue(isRefundButtonAmountCorrect, "Refund amount on refund button incorect");
+		getEventDashboardFacade().whenUserRemembersRefundTotalOfOrder();
+		
+		refundSteps(RefundReason.UNABLE_TO_ATTEND);
+		
+		getEventDashboardFacade().thenUserIsOnSelecteOrderPage(true);
+
 //		boolean isRefundTotalCorrect = getEventDashboardFacade().thenRefundTotalOnRefundDialogShouldBeCorrect();
 //		Assert.assertTrue(isRefundTotalCorrect);
-		
 	}
 	
-	@DataProvider(name = "refund_just_an_order_fee_from_order")
+	@DataProvider(name = "refund_already_partially_refunded_order")
 	public static Object[][] dataProvider() {
 		Purchase purchase = preparePurchase();
 		User superuser = User.generateSuperUser();
@@ -62,5 +74,4 @@ public class RefundEntireOrderExcludingOrderFee extends TemplateRefundFeeSteps {
 				EVENT_NAME, true, START_DAY_OFFSET, DAYS_RANGE));
 		return purchase;
 	}
-
 }

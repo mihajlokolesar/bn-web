@@ -116,6 +116,11 @@ public class AdminEventDashboardFacade extends BaseFacadeSteps {
 		selectedOrderPage.expandOrderDetails();
 		return selectedOrderPage.getOrderDetails().isExpanded();
 	}
+	
+	public void whenUserSelectsTicketForRefundAndClicksOnRefundButton() {
+		whenUserSelectsPurchasedStatusTicketForRefund();
+		whenUserClicksOnRefundButton();
+	}
 
 	public void whenUserClicksOnOrderFeeCheckBox() {
 		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
@@ -129,17 +134,23 @@ public class AdminEventDashboardFacade extends BaseFacadeSteps {
 		BigDecimal ticketsTotal = selectedOrderPage.selectAllTicketRowsForRefundGetFeeSum();
 		addAmountToTotalRefundAmount(ticketsTotal);
 	}
-	
+
 	public void whenUserSelectsRefundedStatusTicketForRefund() {
 		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
-		TicketRow row = selectedOrderPage.findTicketRow(ticket->ticket.isTicketRefunded());
+		TicketRow row = selectedOrderPage.findTicketRow(ticket -> ticket.isTicketRefunded());
 		row.clickOnCheckoutBoxInTicket();
 	}
-	
+
 	public void whenUserSelectsPurchasedStatusTicketForRefund() {
 		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
 		TicketRow row = selectedOrderPage.findTicketRow(r -> r.isTicketPurchased());
 		row.clickOnCheckoutBoxInTicket();
+	}
+	
+	public void whenUserRemembersRefundTotalOfOrder() {
+		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
+		BigDecimal refundTotal = selectedOrderPage.getOrderRefundTotalAmount();
+		addAmountToTotalRefundAmount(refundTotal);
 	}
 
 	public void whenUserClicksOnRefundButton() {
@@ -160,16 +171,12 @@ public class AdminEventDashboardFacade extends BaseFacadeSteps {
 		totalAmount = totalAmount.add(amount);
 		setData(TOTAL_REFUND_AMOUNT_KEY, totalAmount);
 	}
-	
+
 	public boolean thenTotalOrderRefundShouldBeCorrect() {
 		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
 		BigDecimal totalOrderRefund = selectedOrderPage.getOrderRefundTotalAmount();
-		/***
-		 * Add logic to calculate order refund once you receive it 
-		 */
-		/******/
-		return false;
-		/*******/
+		BigDecimal sumOfRefunds = (BigDecimal) getData(TOTAL_REFUND_AMOUNT_KEY);
+		return totalOrderRefund.compareTo(sumOfRefunds) == 0;
 	}
 
 	public boolean thenStatusOnAllTicketShouldBeRefunded() {
@@ -290,11 +297,16 @@ public class AdminEventDashboardFacade extends BaseFacadeSteps {
 			return false;
 		}
 	}
+	
+	public boolean thenOrderFeeCheckboxShouldBeChecked() {
+		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
+		return selectedOrderPage.getOrderDetails().getPerOrderFee().isChecked();
+	}
 
 	public boolean thenThereShouldBeRefundedHistoryItemWithRefundee(User refunder, User refundee) {
 		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
-		String refunderName = refunder.getFirstName() + " " + refunder.getLastName();
-		String refundeeName = refundee.getFirstName() + " " + refundee.getLastName();
+		String refunderName = refunder.getFullNameFL();
+		String refundeeName = refundee.getFullNameFL();
 		ActivityItem activityItem = selectedOrderPage.getHistoryActivityItem(aitem -> aitem.isRefunded()
 				&& aitem.getUserName().contains(refunderName) && aitem.getRefundeeName().contains(refundeeName));
 		return activityItem != null ? true : false;
@@ -317,7 +329,7 @@ public class AdminEventDashboardFacade extends BaseFacadeSteps {
 			return false;
 		}
 	}
-
+	
 	public void whenUserAddsANote(String note) {
 		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
 		selectedOrderPage.enterNote(note);
@@ -344,7 +356,7 @@ public class AdminEventDashboardFacade extends BaseFacadeSteps {
 			String noteText = noteContent.getNoteText();
 			return note.equalsIgnoreCase(noteText);
 		}
-	}
+	}	
 
 	public void thenUserIsOnEventDashboardPage() {
 		dashboardEventPage.isAtPage();
@@ -353,14 +365,25 @@ public class AdminEventDashboardFacade extends BaseFacadeSteps {
 	public void thenUserIsOnOrderManagePage() {
 		ordersManagePage.isAtPage();
 	}
-
+	
 	public boolean thenUserIsOnSelecteOrderPage() {
+		return thenUserIsOnSelecteOrderPage(false);
+	}
+
+	public boolean thenUserIsOnSelecteOrderPage(boolean refresh) {
 		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
 		if (selectedOrderPage == null) {
 			return false;
 		} else {
+			if (refresh) {
+				selectedOrderPage.refreshPage();
+			}
 			return selectedOrderPage.isAtPage();
 		}
+	}
+	
+	public void thenClearUpTotalAmountFromDataMap() {
+		setData(SELECTED_ORDER_PAGE_KEY, null);
 	}
 
 	protected void setData(String key, Object value) {

@@ -17,7 +17,6 @@ import pages.components.admin.orders.manage.tickets.OrderDetails;
 import pages.components.admin.orders.manage.tickets.TicketRow;
 import utils.Constants;
 import utils.ProjectUtils;
-import utils.SeleniumUtils;
 
 public class SelectedOrderPage extends BasePage {
 
