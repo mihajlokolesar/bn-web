@@ -6,7 +6,15 @@ import errorReporting from "../../helpers/errorReporting";
 
 const showSideMenuRoutes = ["/admin", "/my-events", "/orders", "/account"];
 const showStudioLogoRoutes = ["/admin", "/box-office"];
-const showFooterRoutes = ["/events", "/tickets/transfers", "/public/ticket"];
+const showFooterRoutes = [
+	"/events",
+	"/tickets/transfers",
+	"/public/ticket",
+	"/cities",
+	"/venues",
+	"/organizations",
+	"/tickets"
+];
 const removePaddingRoutes = [
 	"/events",
 	"/tickets",

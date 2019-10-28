@@ -4,6 +4,9 @@ import { observer } from "mobx-react";
 import CheckoutForm from "../../common/cart/CheckoutFormWrapper";
 import user from "../../../stores/user";
 import { withStyles } from "@material-ui/core";
+import Bigneon from "../../../helpers/bigneon";
+import notifications from "../../../stores/notifications";
+import Loader from "../../elements/loaders/Loader";
 
 const styles = theme => ({
 	root: { padding: theme.spacing.unit }
@@ -11,27 +14,41 @@ const styles = theme => ({
 
 @observer
 class MobileStripeAuth extends Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			isReady: false
+		};
+	}
+
 	componentWillMount() {
-		const {
+		let {
 			match: {
 				params: { access_token, refresh_token }
 			}
 		} = this.props;
 
 		// Set the access and refresh tokens based on the URL parameters
-		localStorage.setItem("access_token", decodeURIComponent(access_token));
-		localStorage.setItem("refresh_token", decodeURIComponent(refresh_token));
+		access_token = decodeURIComponent(access_token);
+		refresh_token = decodeURIComponent(refresh_token);
 
 		// Refresh/authorize the user
-		user.refreshToken(
-			() => user.refreshUser(),
-			error => {
-				// return an error if the user could not be authorized
+		Bigneon()
+			.auth.refresh({ refresh_token })
+			.then(response => {
+				this.setState({ isReady: true });
+			})
+			.catch(error => {
+				console.error(error);
 				window.postMessage(
-					JSON.stringify({ error: "User could not be authenticated" })
+					JSON.stringify({
+						error:
+							"User could not be authenticated. " +
+							JSON.stringify(error.response)
+					})
 				);
-			}
-		);
+			});
 	}
 
 	onToken = (stripeToken, onError) => {
@@ -62,6 +79,11 @@ class MobileStripeAuth extends Component {
 
 	render() {
 		const { classes } = this.props;
+		const { isReady } = this.state;
+		if (!isReady) {
+			return <Loader/>;
+		}
+
 		return (
 			<div className={classes.root}>
 				<CheckoutForm

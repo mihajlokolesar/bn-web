@@ -56,6 +56,7 @@ public class OtherFeesComponent extends BaseComponent implements Visible {
 	public void enterSettlementTypes(SettlementType settlementType) {
 		GenericDropDown genericDropDown = new GenericDropDown(driver, settlementTypeDropDownActivate, settlementTypeDropDownContainer);
 		genericDropDown.selectElementFromDropDownHiddenInput(dropDownXpathValue(settlementType.getValue()), settlementType.getLabel());
+		waitForTime(1500);
 	}
 	
 	private By dropDownXpathValue(String dataValue) {

@@ -16,7 +16,7 @@ const styles = theme => {
 const OperatorTable = props => {
 	const { classes, payments, events, printVersion } = props;
 	const columnStyles = [
-		{ flex: 4 },
+		{ flex: printVersion ? 3 : 4 },
 		{ flex: 3 },
 		{ flex: 2 },
 		{ flex: 2 },

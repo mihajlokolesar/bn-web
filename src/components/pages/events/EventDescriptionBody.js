@@ -51,7 +51,7 @@ const styles = theme => ({
 });
 
 const EventDescriptionBody = props => {
-	const { classes, children, artists, eventIsCancelled } = props;
+	const { classes, children, artists, eventIsCancelled, organization } = props;
 
 	const headlineArtist = artists.find(artist => artist.importance === 0);
 	const headliner = headlineArtist ? headlineArtist.artist.name : null;
@@ -72,8 +72,8 @@ const EventDescriptionBody = props => {
 					<span className={classes.boldSpan}>
 						Looking for events similar to {headliner} tickets?
 					</span>{" "}
-					Browse all concerts & events on&nbsp;
-					<Link to="/" className={classes.bnLink}>
+					Browse all concerts & events at this venue on&nbsp;
+					<Link to={`/organizations/${organization.slug}`} className={classes.bnLink}>
 						Big Neon
 					</Link>
 				</Typography>

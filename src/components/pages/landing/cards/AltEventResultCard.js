@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Typography, withStyles } from "@material-ui/core";
+import { Hidden, Typography, withStyles } from "@material-ui/core";
 import PropTypes from "prop-types";
 import moment from "moment-timezone";
 import { Link } from "react-router-dom";
@@ -9,9 +9,9 @@ import { fontFamilyDemiBold, secondaryHex } from "../../../../config/theme";
 import MaintainAspectRatio from "../../../elements/MaintainAspectRatio";
 import optimizedImageUrl from "../../../../helpers/optimizedImageUrl";
 import Settings from "../../../../config/settings";
-import getPhoneOS from "../../../../helpers/getPhoneOS";
-import HoldRow from "../../admin/events/dashboard/holds/children/ChildRow";
 import CustomButton from "../../../elements/Button";
+import stateToAbbr from "../../../../helpers/stateToAbbr";
+import Grid from "@material-ui/core/Grid";
 
 const styles = theme => ({
 	card: {
@@ -36,6 +36,21 @@ const styles = theme => ({
 		alignItems: "flex-start",
 		flexDirection: "column"
 	},
+	mobiMedia: {
+		height: "100%",
+		width: "100%",
+		backgroundImage: "linear-gradient(255deg, #e53d96, #5491cc)",
+		backgroundRepeat: "no-repeat",
+		backgroundSize: "cover",
+		backgroundPosition: "center",
+
+		padding: theme.spacing.unit * 2,
+		paddingBottom: theme.spacing.unit,
+		display: "flex",
+		justifyContent: "flex-end",
+		alignItems: "flex-start",
+		flexDirection: "column"
+	},
 	name: {
 		marginTop: theme.spacing.unit,
 		color: "#000000",
@@ -48,7 +63,18 @@ const styles = theme => ({
 		WebkitLineClamp: 3,
 		WebkitBoxOrient: "vertical",
 		overflow: "hidden",
-		textOverflow: "ellipsis"
+		textOverflow: "ellipsis",
+
+		[theme.breakpoints.down("sm")]: {
+			fontSize: 26,
+			lineHeight: "30px",
+			textAlign: "left",
+			overflow: "hidden",
+			textOverflow: "ellipsis",
+			whiteSpace: "nowrap",
+			display: "block",
+			maxWidth: "300px"
+		}
 	},
 	abbr: {
 		textDecoration: "none",
@@ -90,7 +116,11 @@ const styles = theme => ({
 		marginTop: theme.spacing.unit,
 		display: "flex",
 		justifyContent: "space-between",
-		width: "50%"
+		width: "50%",
+		[theme.breakpoints.down("sm")]: {
+			marginTop: theme.spacing.unit * 2,
+			width: "100%"
+		}
 	},
 	date: {
 		color: "#545455",
@@ -126,7 +156,24 @@ const styles = theme => ({
 	},
 	noHover: {
 		transition: "box-shadow .3s ease-out"
-	}
+	},
+	// Mobi Styles below:
+
+	mobiCard: {
+		boxShadow: "0 2px 7.5px 1px rgba(112, 124, 237, 0.07)",
+		display: "flex",
+		maxWidth: "92vw",
+		borderRadius: "3px",
+		flexDirection: "column"
+	},
+	divider: {
+		width: "100%",
+		marginTop: theme.spacing.unit * 2,
+		marginBottom: theme.spacing.unit * 2,
+		height: 1,
+		backgroundColor: "#E7E8ED"
+	},
+	supportingArt: {}
 });
 
 const PriceTag = ({ classes, min, max }) => {
@@ -172,6 +219,7 @@ class AltEventResultCard extends Component {
 			min_ticket_price,
 			max_ticket_price,
 			venueTimezone,
+			supportingArtists,
 			imgAlt,
 			slug
 		} = this.props;
@@ -201,77 +249,169 @@ class AltEventResultCard extends Component {
 			.format("h:mm A");
 
 		return (
-			<Link
-				onMouseEnter={e => this.setState({ hoverId: id })}
-				onMouseLeave={e => this.setState({ hoverId: null })}
-				to={`/events/${slug || id}`}
-			>
-				<Card
-					className={classNames({
-						[classes.card]: true,
-						[classes.noHover]: true,
-						[classes.hoverCard]: hoverId === id
-					})}
-					borderLess
-					variant="default"
-				>
-					<MaintainAspectRatio aspectRatio={Settings().promoImageAspectRatio}>
-						<div title={imgAlt} className={classes.media} style={style}/>
-					</MaintainAspectRatio>
-					<div className={classes.detailsContent}>
-						<div className={classes.detailsContentSegment}>
-							<div>
-								<Typography
-									className={classNames({
-										[classes.name]: true
-									})}
-									variant={"subheading"}
-								>
-									<abbr className={classes.abbr} title={name}>
-										{name}
-									</abbr>
-								</Typography>
-								<Typography className={classes.value}>
-									@ {venueName}, {city}, {state}
-								</Typography>
-							</div>
-							<div>
-								<PriceTag
-									min={min_ticket_price}
-									max={max_ticket_price}
-									classes={classes}
-								/>
-							</div>
-						</div>
+			<div>
+				<Hidden smDown>
+					<Link
+						onMouseEnter={e => this.setState({ hoverId: id })}
+						onMouseLeave={e => this.setState({ hoverId: null })}
+						to={`/tickets/${slug}`}
+					>
+						<Card
+							className={classNames({
+								[classes.card]: true,
+								[classes.noHover]: true,
+								[classes.hoverCard]: hoverId === id
+							})}
+							borderLess
+							variant="default"
+						>
+							<MaintainAspectRatio
+								aspectRatio={Settings().promoImageAspectRatio}
+							>
+								<div title={imgAlt} className={classes.media} style={style}/>
+							</MaintainAspectRatio>
+							<div className={classes.detailsContent}>
+								<div className={classes.detailsContentSegment}>
+									<div>
+										<Typography
+											className={classNames({
+												[classes.name]: true
+											})}
+											variant={"subheading"}
+										>
+											<abbr className={classes.abbr} title={name}>
+												{name}
+											</abbr>
+										</Typography>
+										<Typography className={classes.value}>
+											{venueName}
+											{city ? `, ${city}` : null}
+											{state ? `, ${stateToAbbr(state, "abbr")}` : null}
+										</Typography>
+									</div>
+								</div>
 
-						<div className={classes.detailsContentSegment}>
-							<div className={classes.dateDetails}>
-								<div>
-									<Typography className={classes.valueTitle}>DATE:</Typography>
-									<Typography className={classes.date}>
-										{displayEventStartDate}
-									</Typography>
-								</div>
-								<div>
-									<Typography className={classes.valueTitle}>
-										Begins:
-									</Typography>
-									<Typography className={classes.date}>
-										{displayShowTime}
-									</Typography>
-								</div>
-								<div>
-									<Typography className={classes.valueTitle}>Ends:</Typography>
-									<Typography className={classes.date}>
-										{displayShowEndTime}
-									</Typography>
+								<div className={classes.detailsContentSegment}>
+									<div className={classes.dateDetails}>
+										<div>
+											<Typography className={classes.valueTitle}>
+												DATE
+											</Typography>
+											<Typography className={classes.date}>
+												{displayEventStartDate}
+											</Typography>
+										</div>
+										<div>
+											<Typography className={classes.valueTitle}>
+												Begins
+											</Typography>
+											<Typography className={classes.date}>
+												{displayShowTime}
+											</Typography>
+										</div>
+										{/*<div>*/}
+										{/*	<Typography className={classes.valueTitle}>*/}
+										{/*		Ends*/}
+										{/*	</Typography>*/}
+										{/*	<Typography className={classes.date}>*/}
+										{/*		{displayShowEndTime}*/}
+										{/*	</Typography>*/}
+										{/*</div>*/}
+									</div>
+									<CustomButton variant={"secondary"}>Get Tickets</CustomButton>
 								</div>
 							</div>
-							<CustomButton variant={"secondary"}>Get Tickets</CustomButton>
-						</div>
-					</div>
-				</Card>
-			</Link>
+						</Card>
+					</Link>
+				</Hidden>
+
+				<Hidden smUp>
+					<Link
+						onMouseEnter={e => this.setState({ hoverId: id })}
+						onMouseLeave={e => this.setState({ hoverId: null })}
+						to={`/tickets/${slug}`}
+					>
+						<Card
+							className={classNames({
+								[classes.mobiCard]: true
+							})}
+							borderLess
+							variant="default"
+						>
+							<MaintainAspectRatio
+								aspectRatio={Settings().promoImageAspectRatio}
+							>
+								<div
+									title={imgAlt}
+									className={classes.mobiMedia}
+									style={style}
+								/>
+							</MaintainAspectRatio>
+							<div className={classes.detailsContent}>
+								<div className={classes.detailsContentSegment}>
+									<div>
+										<Typography
+											className={classNames({
+												[classes.name]: true
+											})}
+											variant={"subheading"}
+										>
+											{name}
+										</Typography>
+
+										{supportingArtists.length > 0 ? (
+											<Typography>
+												With&nbsp;
+												{supportingArtists.map(({ artist }, index) =>
+													index + 1 === supportingArtists.length ? (
+														<span key={index}>{artist.name}</span>
+													) : (
+														<span key={index}>{artist.name}, </span>
+													)
+												)}
+											</Typography>
+										) : null}
+										<Typography className={classes.value}/>
+									</div>
+								</div>
+
+								<div className={classes.detailsContentSegment}>
+									<div className={classes.dateDetails}>
+										<div>
+											<Typography className={classes.valueTitle}>
+												DATE
+											</Typography>
+											<Typography className={classes.date}>
+												{displayEventStartDate}
+											</Typography>
+										</div>
+										<div>
+											<Typography className={classes.valueTitle}>
+												Begins
+											</Typography>
+											<Typography className={classes.date}>
+												{displayShowTime}
+											</Typography>
+										</div>
+										{/*<div>*/}
+										{/*	<Typography className={classes.valueTitle}>*/}
+										{/*		Ends*/}
+										{/*	</Typography>*/}
+										{/*	<Typography className={classes.date}>*/}
+										{/*		{displayShowEndTime}*/}
+										{/*	</Typography>*/}
+										{/*</div>*/}
+									</div>
+								</div>
+								<div className={classes.divider}/>
+								<CustomButton size={"large"} variant={"secondary"}>
+									Get Tickets
+								</CustomButton>
+							</div>
+						</Card>
+					</Link>
+				</Hidden>
+			</div>
 		);
 	}
 }

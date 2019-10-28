@@ -179,7 +179,10 @@ class EventUpdate {
 				{ startDate, startTime: startDate, endDate, endTime: endDate.clone() },
 				this.timezone,
 				false
-			)
+			),
+			appSalesEnabled: true,
+			webSalesEnabled: true,
+			boxOfficeSalesEnabled: true
 		};
 
 		ticketTypes.push(ticketType);

@@ -303,6 +303,7 @@ class BoxOfficeSalesSummary extends Component {
 					</Typography>
 				) : null}
 				<ReportsDate
+					defaultStartTimeBeforeNow={{ value: 0, unit: "d" }}
 					timezone={organizationTimezone}
 					onChange={this.refreshData.bind(this)}
 				/>

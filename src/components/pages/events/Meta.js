@@ -214,9 +214,7 @@ const Meta = props => {
 
 	const sameText = `in ${
 		venue.city
-	} - ${formattedDate} - Doors ${doorTime}, Show ${showTime} ${
-		venue.timezone
-	}, ${cutDesc}`;
+	} - ${formattedDate} - Doors ${doorTime}, Show ${showTime}`;
 
 	const description = headliner
 		? `${name} - ${headliner} Tickets and ${headliner} Concert Tickets to ${organizationName} ${sameText}`
@@ -234,7 +232,7 @@ const Meta = props => {
 			);
 			break;
 		case "selection":
-			title = `Buy tickets - ${name}`;
+			title = `Buy tickets - ${title}`;
 			googleStructuredData = structuredEventData(props, ticketSelectionUrl);
 			googleBreadcrumbData = structuredBreadcrumbData(
 				name,
@@ -245,13 +243,13 @@ const Meta = props => {
 
 			break;
 		case "checkout":
-			title = `Checkout - ${name}`;
+			title = `Checkout - ${title}`;
 			break;
 		case "success":
-			title = `Success - ${name}`;
+			title = `Success - ${title}`;
 			break;
 		default:
-			title = `${name} Tickets on Big Neon`;
+			title = `${title}`;
 	}
 
 	return (

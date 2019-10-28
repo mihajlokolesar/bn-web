@@ -296,9 +296,12 @@ const formatForInput = (ticket_types, event) => {
 			showCartQuantityIncrement: !!increment && increment !== 1,
 			showAdditionalFee,
 			additionalFeeInDollars,
-			appSalesEnabled: app_sales_enabled,
-			webSalesEnabled: web_sales_enabled,
-			boxOfficeSalesEnabled: box_office_sales_enabled
+			appSalesEnabled:
+				app_sales_enabled === undefined ? true : app_sales_enabled,
+			webSalesEnabled:
+				web_sales_enabled === undefined ? true : web_sales_enabled,
+			boxOfficeSalesEnabled:
+				box_office_sales_enabled === undefined ? true : box_office_sales_enabled
 		};
 
 		ticketTypes.push(ticketType);

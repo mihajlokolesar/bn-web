@@ -43,7 +43,11 @@ const styles = theme => ({
 		fontSize: 21,
 		lineSpace: 1,
 		[theme.breakpoints.down("sm")]: {
-			fontSize: theme.typography.fontSize * 1.4
+			fontSize: 15,
+			lineHeight: "18px",
+			paddingLeft: theme.spacing.unit * 3,
+			paddingRight: theme.spacing.unit * 3,
+			maxWidth: "85vw"
 		}
 	}
 });

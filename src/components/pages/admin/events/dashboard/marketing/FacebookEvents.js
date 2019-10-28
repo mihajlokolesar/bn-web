@@ -9,11 +9,18 @@ import SelectGroup from "../../../../../common/form/SelectGroup";
 import Button from "../../../../../elements/Button";
 import { FacebookButton } from "../../../../authentication/social/FacebookButton";
 import Grid from "@material-ui/core/Grid";
+import notification from "../../../../../../stores/notifications";
+import InputGroup from "../../../../../common/form/InputGroup";
 
 const styles = theme => ({
 	root: {}
 });
 
+function htmlToPlainText(s) {
+	const span = document.createElement("span");
+	span.innerHTML = s;
+	return span.textContent || span.innerText;
+}
 class FacebookEvents extends Component {
 	constructor(props) {
 		super(props);
@@ -24,7 +31,8 @@ class FacebookEvents extends Component {
 			pageId: null,
 			facebookCategory: null,
 			isSubmitting: false,
-			isFacebookLinked: false
+			isFacebookLinked: false,
+			description: ""
 		};
 	}
 
@@ -32,15 +40,16 @@ class FacebookEvents extends Component {
 		const { eventId } = this.props;
 
 		this.refreshPages();
-		//If you need event details, use the eventId prop
-		// Bigneon()
-		// 	.events.read({ id: eventId })
-		// 	.then(response => {
-		// 		this.setState({ event: response.data });
-		// 	})
-		// 	.catch(error => {
-		// 		console.error(error);
-		// 	});
+		Bigneon()
+			.events.read({ id: eventId })
+			.then(response => {
+				this.setState({
+					description: htmlToPlainText(response.data.additional_info || "")
+				});
+			})
+			.catch(error => {
+				console.error(error);
+			});
 	}
 
 	onFacebookLogin() {
@@ -59,19 +68,44 @@ class FacebookEvents extends Component {
 				})
 			)
 			.catch(error => {
-				console.error(error);
+				const { message, type } = error;
+				notification.show({
+					message,
+					variant: type === "validation_error" ? "warning" : "error"
+				});
 				this.setState({ isFacebookLinked: false, isSubmitting: false });
 			});
 	}
 
 	onSubmit() {
-		const { pageId, facebookCategory } = this.state;
+		const { pageId, facebookCategory, description } = this.state;
 		this.setState({ isSubmitting: true });
-		Bigneon().external.facebook.createEvent({
-			event_id: this.props.eventId,
-			page_id: pageId,
-			category: facebookCategory
-		});
+		Bigneon()
+			.external.facebook.createEvent({
+				event_id: this.props.eventId,
+				page_id: pageId,
+				category: facebookCategory,
+				description
+			})
+			.then(response => {
+				this.setState({ isSubmitting: false, isFacebookLinked: true });
+			})
+			.catch(error => {
+				let { message } = error;
+				const { type } = error;
+				if (
+					error.response &&
+					error.response.data &&
+					error.response.data.error
+				) {
+					message = error.response.data.error;
+				}
+				notification.show({
+					message,
+					variant: type === "validation_error" ? "warning" : "error"
+				});
+				this.setState({ isSubmitting: false });
+			});
 	}
 
 	render() {
@@ -80,7 +114,8 @@ class FacebookEvents extends Component {
 			pageId,
 			facebookCategory,
 			isSubmitting,
-			isFacebookLinked
+			isFacebookLinked,
+			description
 		} = this.state;
 
 		return (
@@ -94,6 +129,7 @@ class FacebookEvents extends Component {
 						</p>
 						{isFacebookLinked ? (
 							<div>
+								<p>Select Facebook Page</p>
 								<SelectGroup
 									items={pages.map(page => ({
 										value: page.id,
@@ -102,13 +138,21 @@ class FacebookEvents extends Component {
 									value={pageId}
 									onChange={e => this.setState({ pageId: e.target.value })}
 								/>
-
+								<p>Facebook Event Category</p>
 								<SelectGroup
 									items={[{ value: "MUSIC_EVENT", name: "Music Event" }]}
 									value={facebookCategory}
 									onChange={e =>
 										this.setState({ facebookCategory: e.target.value })
 									}
+								/>
+
+								<InputGroup
+									value={description}
+									name="description"
+									label="Description *"
+									type="text"
+									onChange={e => this.setState({ description: e.target.value })}
 								/>
 								<Button
 									size="large"
@@ -123,7 +167,7 @@ class FacebookEvents extends Component {
 						) : (
 							<div>
 								<FacebookButton
-									scopes={["manage_pages", "publish_pages", "create_event"]}
+									scopes={["manage_pages", "publish_pages"]}
 									linkToUser={true}
 									onSuccess={this.onFacebookLogin.bind(this)}
 								/>

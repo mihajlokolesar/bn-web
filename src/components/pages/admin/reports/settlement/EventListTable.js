@@ -33,7 +33,6 @@ const EventListTable = props => {
 			<TotalsRow columnStyles={columnStyles} heading>
 				{[
 					"Event start Date/Time",
-					"Event End Date/Time",
 					"Venue",
 					"Event Name"
 				]}
@@ -41,7 +40,7 @@ const EventListTable = props => {
 
 			{eventList
 				? eventList.map((event, index) => {
-					const { id, displayEndTime, displayStartTime, venue, name } = event;
+					const { id, displayStartTime, venue, name } = event;
 					const even = index % 2 === 0;
 
 					return (
@@ -51,7 +50,7 @@ const EventListTable = props => {
 							darkGray={!even}
 							columnStyles={columnStyles}
 						>
-							{[displayStartTime, displayEndTime, venue.name, name]}
+							{[displayStartTime, venue.name, name]}
 						</TotalsRow>
 					);
 				  })

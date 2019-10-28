@@ -58,7 +58,12 @@ public class Organization implements Serializable {
 	public void randomizeName() {
 		this.name = this.name + ProjectUtils.generateRandomInt(DataConstants.RANDOM_NUMBER_SIZE_10M);
 	}
-		
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		return sb.append(this.getName()).toString();
+	}
 	public static Organization generateOrganization() {
 		Organization organization = new Organization();
 		organization.setName("Auto test " + ProjectUtils.generateRandomInt(1000000));

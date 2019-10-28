@@ -267,8 +267,36 @@ const TicketDetails = observer(props => {
 		});
 	}
 
-	const allAvailability =
+	const allAvailabilitySelected =
 		appSalesEnabled && webSalesEnabled && boxOfficeSalesEnabled;
+	const onlineSalesEnabledSelected =
+		webSalesEnabled && appSalesEnabled && !allAvailabilitySelected;
+	const boxOfficeSalesEnabledSelected =
+		boxOfficeSalesEnabled && !allAvailabilitySelected;
+
+	const onSelectAllChannelsAvailable = () => {
+		updateTicketType(index, {
+			appSalesEnabled: true,
+			webSalesEnabled: true,
+			boxOfficeSalesEnabled: true
+		});
+	};
+
+	const onSelectOnlineOnlyAvailable = () => {
+		updateTicketType(index, {
+			appSalesEnabled: true,
+			webSalesEnabled: true,
+			boxOfficeSalesEnabled: false
+		});
+	};
+
+	const onSelectBoxOfficeOnly = () => {
+		updateTicketType(index, {
+			appSalesEnabled: false,
+			webSalesEnabled: false,
+			boxOfficeSalesEnabled: true
+		});
+	};
 
 	return (
 		<div className={classes.activeContent}>
@@ -690,48 +718,22 @@ const TicketDetails = observer(props => {
 							<div className={classes.boxOfficeAvailabilityCheckboxContainer}>
 								<RadioButton
 									name={"allSalesEnabled"}
-									active={allAvailability}
-									onClick={e =>
-										updateTicketType(index, {
-											appSalesEnabled: !allAvailability,
-											webSalesEnabled: !allAvailability,
-											boxOfficeSalesEnabled: !allAvailability
-										})
-									}
+									active={allAvailabilitySelected}
+									onClick={onSelectAllChannelsAvailable}
 								>
 									All
 								</RadioButton>
-
-								{/*<RadioButton*/}
-								{/*	name={"appSalesEnabled"}*/}
-								{/*	active={!!appSalesEnabled}*/}
-								{/*	onClick={e =>*/}
-								{/*		updateTicketType(index, {*/}
-								{/*			appSalesEnabled: !appSalesEnabled*/}
-								{/*		})*/}
-								{/*	}*/}
-								{/*>*/}
-								{/*	Available in App*/}
-								{/*</RadioButton>*/}
 								<RadioButton
-									name={"webSalesEnabled"}
-									active={!!webSalesEnabled}
-									onClick={e =>
-										updateTicketType(index, {
-											webSalesEnabled: !webSalesEnabled
-										})
-									}
+									name={"onlineSalesEnabled"}
+									active={onlineSalesEnabledSelected}
+									onClick={onSelectOnlineOnlyAvailable}
 								>
 									Online only
 								</RadioButton>
 								<RadioButton
 									name={"boxOfficeSalesEnabled"}
-									active={!!boxOfficeSalesEnabled}
-									onClick={e =>
-										updateTicketType(index, {
-											boxOfficeSalesEnabled: !boxOfficeSalesEnabled
-										})
-									}
+									active={!!boxOfficeSalesEnabledSelected}
+									onClick={onSelectBoxOfficeOnly}
 								>
 									Box office only
 								</RadioButton>

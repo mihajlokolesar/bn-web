@@ -498,6 +498,7 @@ class ViewEvent extends Component {
 						col1={(
 							<EventDescriptionBody
 								eventIsCancelled={eventIsCancelled}
+								organization={organization}
 								artists={artists}
 							>
 								<FormattedAdditionalInfo>

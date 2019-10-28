@@ -27,7 +27,6 @@
 		<webdriver.edge.driver />
 		<browser>rm</browser>
 		<baseurl>https://develop.bigneon.com/</baseurl>
-
 	</properties>
 
 	<dependencies>
@@ -167,9 +166,7 @@
 									<from></from>
 									Email subject
 									<subject>bn-web selenium test report</subject>
-									Fail the build if the mail doesn't reach
 									<failonerror>false</failonerror>
-									Email Body Content
 									<htmlMessage>
                                     <![CDATA[
                                     <p>New test build triggered!</p>
@@ -191,10 +188,8 @@
 									</receivers>
 									<fileSets>
 										<fileSet>
-											Report directory Path
 											<directory>${basedir}/target/failsafe-reports/</directory>
 											<includes>
-												Report file name
 												<include>emailable-report.html</include>
 											</includes>
 										</fileSet>

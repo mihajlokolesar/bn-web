@@ -47,7 +47,7 @@ public class CreateOrganizationStepsIT extends BaseSteps {
 		organizationFacade.whenUserPicksOrganizationAndClickOnEdit(organization);
 		organizationFacade.whenUserClickOnOtherFeesAndMakesChanges(organization.getOtherFees());
 		boolean isNotificationVisible = organizationFacade.thenUpdateNotificationShouldBeVisible();
-		Assert.assertTrue(isNotificationVisible);
+		Assert.assertTrue(isNotificationVisible, "Notification, organization updated not displayed");
 	}
 	
 	@DataProvider(name = "edit_organization_data")

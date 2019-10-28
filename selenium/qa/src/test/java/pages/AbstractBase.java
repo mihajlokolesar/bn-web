@@ -125,7 +125,7 @@ public class AbstractBase implements Serializable {
 			explicitWaitForVisibilityAndClickableWithClick(element);
 		}
 	}
-
+	
 	public void waitVisibilityAndSendKeysSlow(WebElement element, String value) {
 		if (value == null) {
 			return;
@@ -147,7 +147,8 @@ public class AbstractBase implements Serializable {
 				inputField.sendKeys(Keys.BACK_SPACE);
 			}
 	    }
-		waitVisibilityAndSendKeys(inputField, value);
+		waitVisibilityAndSendKeysSlow(inputField,value);
+//		inputField.sendKeys(Keys.TAB);
 	}
 
 	public void waitVisibilityAndSendKeys(WebElement element, String value) {

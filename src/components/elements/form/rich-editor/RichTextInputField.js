@@ -23,6 +23,11 @@ const convertHtmlPropToEditorState = html => {
 		return EditorState.createEmpty();
 	}
 
+	let newLineReplacedHtml = "";
+	html.split("\n").forEach((item) => {
+		newLineReplacedHtml = `${newLineReplacedHtml}${item}<br/>`;
+	});
+
 	const contentStateFromHtml = convertFromHTML({
 		htmlToStyle: (nodeName, node, currentStyle) => {
 			if (nodeName === "a") {
@@ -44,7 +49,7 @@ const convertHtmlPropToEditorState = html => {
 				};
 			}
 		}
-	})(html);
+	})(newLineReplacedHtml);
 
 	return EditorState.createWithContent(contentStateFromHtml);
 };
