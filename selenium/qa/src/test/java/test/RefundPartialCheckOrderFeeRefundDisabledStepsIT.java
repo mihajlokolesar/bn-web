@@ -11,7 +11,7 @@ import model.User;
 import pages.components.dialogs.IssueRefundDialog.RefundReason;
 import utils.DataConstants;
 
-public class RefundPartialCheckOrderFeeRefundDisabled extends TemplateRefundFeeSteps {
+public class RefundPartialCheckOrderFeeRefundDisabledStepsIT extends TemplateRefundFeeSteps {
 	
 	private static final Integer PURCHASE_QUANTITY = 3;
 	private static final String EVENT_NAME = "TestRefundOrderFeeEventName";
@@ -19,7 +19,7 @@ public class RefundPartialCheckOrderFeeRefundDisabled extends TemplateRefundFeeS
 	private static final Integer DAYS_RANGE = 0;
 	
 	
-	@Test(dataProvider = "refund_already_partially_refunded_order", priority = 30, retryAnalyzer = utils.RetryAnalizer.class)
+	@Test(dataProvider = "refund_already_partially_refunded_order", priority = 31, retryAnalyzer = utils.RetryAnalizer.class)
 	public void refundTicketsOnPartialyRefundedOrderAndRefundedOrderFee(Purchase purchase, User user) throws Exception {	
 		templateSteps(purchase, user);
 	}
@@ -37,7 +37,9 @@ public class RefundPartialCheckOrderFeeRefundDisabled extends TemplateRefundFeeS
 		Assert.assertTrue(isAtSelectedOrderPage, "After refund user is not on correct page");
 		
 		getEventDashboardFacade().thenClearUpTotalAmountFromDataMap();
-
+		
+		getEventDashboardFacade().whenUserExpandOrderDetailsAndCheckIfExpanded();
+		
 		getEventDashboardFacade().whenUserSelectsPurchasedStatusTicketForRefund();
 		getEventDashboardFacade().thenRefundButtonShouldBeVisible();
 		isRefundButtonAmountCorrect = getEventDashboardFacade().thenRefundButtonAmountShouldBeCorrect();
@@ -49,14 +51,15 @@ public class RefundPartialCheckOrderFeeRefundDisabled extends TemplateRefundFeeS
 		
 		isRefundButtonAmountCorrect = getEventDashboardFacade().thenRefundButtonAmountShouldBeCorrect();
 		Assert.assertTrue(isRefundButtonAmountCorrect, "Refund amount on refund button incorect");
+		
 		getEventDashboardFacade().whenUserRemembersRefundTotalOfOrder();
 		
 		refundSteps(RefundReason.UNABLE_TO_ATTEND);
 		
 		getEventDashboardFacade().thenUserIsOnSelecteOrderPage(true);
 
-//		boolean isRefundTotalCorrect = getEventDashboardFacade().thenRefundTotalOnRefundDialogShouldBeCorrect();
-//		Assert.assertTrue(isRefundTotalCorrect);
+		boolean isRefundTotalCorrect = getEventDashboardFacade().thenTotalOrderRefundShouldBeCorrect();
+		Assert.assertTrue(isRefundTotalCorrect);
 	}
 	
 	@DataProvider(name = "refund_already_partially_refunded_order")

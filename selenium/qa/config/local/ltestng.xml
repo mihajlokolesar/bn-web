@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Suite">
-  <test verbose="1" name="Test">
-     <classes>
-      <class name="test.LoginWithFacebookStepsIT"/>
-      <class name="test.LoginStepsIT"/>
-      <class name="test.SignUpStepsIT"/>
-      <class name="test.ForgotPasswordStepsIT"/>
-      <class name="test.CreateOrganizationStepsIT"/>
-      <class name="test.CreateEventStepsIT"/>
-      <class name="test.PurchaseStepsIT"/>
-      <class name="test.PurchaseWithTicketChangeStepsIT"/>
-      <class name="test.CancelEventStepsIT"/>
-      <class name="test.CreateEventWithAdditionalOptionsStepsIT"/>
-      <class name="test.CreateDraftEventStepsIT"/>
-      <class name="test.EditEventInformationStepsIT"/>
-      <class name="test.OrderManagmentSearchForOrdersStepsIT"/>
-      <class name="test.PublishEventWithDeleteEventIT"/>
-      <class name="test.BoxOfficeSellTicketStepsIT"/>
-      <class name="test.VenueStepsIT"/>
-      <class name="test.FanManagementStepsIT"/>
-    </classes>
-  </test>
+	<test verbose="1" name="Test">
+		<classes>
+			<class name="test.LoginWithFacebookStepsIT" />
+			<class name="test.LoginStepsIT" />
+			<class name="test.SignUpStepsIT" />
+			<class name="test.ForgotPasswordStepsIT" />
+			<class name="test.CreateOrganizationStepsIT" />
+			<class name="test.CreateEventStepsIT" />
+			<class name="test.PurchaseStepsIT" />
+			<class name="test.PurchaseWithTicketChangeStepsIT" />
+			<class name="test.CancelEventStepsIT" />
+			<class name="test.CreateEventWithAdditionalOptionsStepsIT" />
+			<class name="test.CreateDraftEventStepsIT" />
+			<class name="test.EditEventInformationStepsIT" />
+			<class name="test.OrderManagmentSearchForOrdersStepsIT" />
+			<class name="test.PublishEventWithDeleteEventIT" />
+			<class name="test.BoxOfficeSellTicketStepsIT" />
+			<class name="test.VenueStepsIT" />
+			<class name="test.FanManagementStepsIT" />
+			<class name="test.RefundEntireOrderAndOrderFeeStepsIT" />
+			<class name="test.RefundEntireOrderExcludingOrderFeeStepsIT" />
+			<class name="test.refundTicketsOnPartialyRefundedOrderAndRefundedOrderFee" />
+		</classes>
+	</test>
 </suite>

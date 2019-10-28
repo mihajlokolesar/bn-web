@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="Sequential">
-  <test name="Chrome">
-    <parameter name="config" value="suite.conf.json"/>
-    <parameter name="environment" value="chrome"/>
-    <classes>
-      <class name="test.ForgotPasswordStepsIT"/>
-      <class name="test.CreateEventStepsIT"/>
-      <class name="test.PurchaseStepsIT"/>
-      <class name="test.PurchaseWithTicketChangeStepsIT"/>
-      <class name="test.EditEventInformationStepsIT"/>
-      <class name="test.OrderManagmentSearchForOrdersStepsIT"/>
-      <class name="test.BoxOfficeSellTicketStepsIT"/>
-      <class name="test.VenueStepsIT"/>
-      <class name="test.FanManagementStepsIT"/>
-    </classes>
-  </test>
-  <test name="Firefox">
-	<parameter name="config" value="suite.conf.json"/>
-    <parameter name="environment" value="firefox"/>
-    <classes>
-      <class name="test.ForgotPasswordStepsIT"/>
-      <class name="test.CreateEventStepsIT"/> 
-      <class name="test.PurchaseStepsIT"/> 
-      <class name="test.PurchaseWithTicketChangeStepsIT"/>
-      <class name="test.EditEventInformationStepsIT"/>
-      <class name="test.OrderManagmentSearchForOrdersStepsIT"/>
-      <class name="test.BoxOfficeSellTicketStepsIT"/>
-      <class name="test.VenueStepsIT"/>
-      <class name="test.FanManagementStepsIT"/>
-     </classes>
-  </test>  
- </suite>
+	<test name="Chrome">
+		<parameter name="config" value="suite.conf.json" />
+		<parameter name="environment" value="chrome" />
+		<classes>
+			<class name="test.ForgotPasswordStepsIT" />
+			<class name="test.CreateEventStepsIT" />
+			<class name="test.PurchaseStepsIT" />
+			<class name="test.PurchaseWithTicketChangeStepsIT" />
+			<class name="test.EditEventInformationStepsIT" />
+			<class name="test.OrderManagmentSearchForOrdersStepsIT" />
+			<class name="test.BoxOfficeSellTicketStepsIT" />
+			<class name="test.VenueStepsIT" />
+			<class name="test.FanManagementStepsIT" />
+		</classes>
+	</test>
+	<test name="Firefox">
+		<parameter name="config" value="suite.conf.json" />
+		<parameter name="environment" value="firefox" />
+		<classes>
+			<class name="test.ForgotPasswordStepsIT" />
+			<class name="test.CreateEventStepsIT" />
+			<class name="test.PurchaseStepsIT" />
+			<class name="test.PurchaseWithTicketChangeStepsIT" />
+			<class name="test.EditEventInformationStepsIT" />
+			<class name="test.OrderManagmentSearchForOrdersStepsIT" />
+			<class name="test.BoxOfficeSellTicketStepsIT" />
+			<class name="test.VenueStepsIT" />
+			<class name="test.FanManagementStepsIT" />
+		</classes>
+	</test>
+</suite>

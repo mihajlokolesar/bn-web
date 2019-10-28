@@ -1,11 +1,12 @@
 package utils;
 
 import java.io.File;
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -167,6 +168,12 @@ public class ProjectUtils {
 		return id;
 	}
 
+	public static BigDecimal roundUp(BigDecimal initailValue, int precision) {
+		MathContext mathContext = new MathContext(precision);
+		BigDecimal returnValue = initailValue.round(mathContext);
+		return returnValue;
+	}
+	
 	public static Visible getVisibleComponent(Visible visible) {
 		if (visible.isVisible()) {
 			return visible;

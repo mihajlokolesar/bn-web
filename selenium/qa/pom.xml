@@ -21,10 +21,10 @@
 		<apache.commons.lang>3.8</apache.commons.lang>
 		<maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
 		<maven-failsafe-plugin.version>2.21.0</maven-failsafe-plugin.version>
-		<huburl/>
-		<webdriver.chrome.driver/>
-		<webdriver.gecko.driver/>
-		<webdriver.edge.driver/>
+		<huburl />
+		<webdriver.chrome.driver />
+		<webdriver.gecko.driver />
+		<webdriver.edge.driver />
 		<browser>rm</browser>
 		<baseurl>https://develop.bigneon.com/</baseurl>
 

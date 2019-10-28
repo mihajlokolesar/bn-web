@@ -83,6 +83,7 @@ public class OrderDetails extends BaseComponent {
 		
 		public void clickOnCheckBox() {
 			WebElement checkBox = getCheckBoxElement();
+			SeleniumUtils.jsScrollIntoView(checkBox, driver);
 			waitVisibilityAndBrowserCheckClick(checkBox);
 		}
 		

@@ -11,38 +11,39 @@ import model.User;
 import pages.components.dialogs.IssueRefundDialog.RefundReason;
 import utils.DataConstants;
 
-public class OrderFeeRefundStepsIT extends TemplateRefundFeeSteps {
+public class RefundEntireOrderExcludingOrderFeeStepsIT extends TemplateRefundFeeSteps {
 	
 	private static final Integer PURCHASE_QUANTITY = 3;
 	private static final String EVENT_NAME = "TestRefundOrderFeeEventName";
 	private static final Integer START_DAY_OFFSET = 2;
 	private static final Integer DAYS_RANGE = 0;
-//	Currently there is a bug when executing these steps, once the bug is resolved this can be uncommented
-//	@Test(dataProvider = "refund_just_an_order_fee_from_order", retryAnalyzer = utils.RetryAnalizer.class)
+
+	@Test(dataProvider = "refund_just_an_order_fee_from_order",priority = 30, retryAnalyzer = utils.RetryAnalizer.class)
 	public void refundJustAnOrderFeeFromOrder(Purchase purchase, User user) throws Exception {
 		templateSteps(purchase, user);
 	}
 	
 	@Override
 	public void customSteps() {
-		getEventDashboardFacade().whenUserClicksOnOrderFeeCheckBox();
+		getEventDashboardFacade().whenUserSelectsAllTicketsForRefund();
 		boolean isRefundButtonAmountCorrect = getEventDashboardFacade().thenRefundButtonAmountShouldBeCorrect();
 		Assert.assertTrue(isRefundButtonAmountCorrect, "Refund amount on refund button incorect");
 
-		getEventDashboardFacade().whenUserClicksOnRefundButton();
-		boolean isRefundDialogVisible = getEventDashboardFacade().thenRefundDialogShouldBeVisible();
-		Assert.assertTrue(isRefundDialogVisible, "Refund dialog not visible");
-		boolean isRefundDialogAmountCorrect = getEventDashboardFacade().thenRefundTotalOnRefundDialogShouldBeCorrect();
-		Assert.assertTrue(isRefundDialogAmountCorrect);
-		getEventDashboardFacade().whenUserSelectRefundReasonAndClicksOnConfirmButton(RefundReason.OTHER);
-		getEventDashboardFacade().whenUserClicksOnGotItButtonOnRefundSuccessDialog();
+		refundSteps(RefundReason.OTHER);
 
 		boolean isAtSelectedOrderPage = getEventDashboardFacade().thenUserIsOnSelecteOrderPage();
 		Assert.assertTrue(isAtSelectedOrderPage, "After refund user is not on correct page");
-		getEventDashboardFacade().whenUserClicksOnOrderFeeCheckBox();
+		
+		boolean isStatusOfTicketRefunded = getEventDashboardFacade().thenStatusOnAllTicketShouldBeRefunded();
+		Assert.assertTrue(isStatusOfTicketRefunded, "Not all tickets status is refunded");
+		getEventDashboardFacade().whenUserSelectsRefundedStatusTicketForRefund();
+		
 		boolean isRefundButtonVisible = getEventDashboardFacade().thenRefundButtonShouldBeVisible();
 		Assert.assertFalse(isRefundButtonVisible,
 				"Refund button on per order fee after already refunded should not be visible");
+		
+		boolean isRefundTotalCorrect = getEventDashboardFacade().thenTotalOrderRefundShouldBeCorrect();
+		Assert.assertTrue(isRefundTotalCorrect);
 		
 	}
 	
@@ -61,10 +62,4 @@ public class OrderFeeRefundStepsIT extends TemplateRefundFeeSteps {
 				EVENT_NAME, true, START_DAY_OFFSET, DAYS_RANGE));
 		return purchase;
 	}
-
-
-
-	
-	
-	
 }

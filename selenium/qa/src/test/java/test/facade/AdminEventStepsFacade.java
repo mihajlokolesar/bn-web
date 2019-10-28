@@ -149,6 +149,11 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 	public boolean thenUserIsAtEventsPage() {
 		return adminEvents.isAtPage();
 	}
+	
+	public void whenUserRefreshesThePage() {
+		driver.navigate().refresh();
+		adminEvents.waitForTime(3000);
+	}
 
 	public boolean thenMessageNotificationShouldAppear(String msg) {
 		return createEventPage.isNotificationDisplayedWithMessage(msg);

@@ -35,6 +35,8 @@ public class AdminEventDashboardFacade extends BaseFacadeSteps {
 	private final String SELECTED_ORDER_PAGE_KEY = "selected_order_page";
 	private final String ISSUE_REFUND_DIALOG_KEY = "issue_refund_dialog";
 	private final String TOTAL_REFUND_AMOUNT_KEY = "total_refund_amount";
+	
+	private final String TEMP_TOTAL_REFUND_AMOUNT_KEY = "temp_total_refund_amount";
 
 	private Map<String, Object> dataMap;
 
@@ -126,7 +128,9 @@ public class AdminEventDashboardFacade extends BaseFacadeSteps {
 		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
 		PerOrderFeeComponent perOrderFee = selectedOrderPage.getOrderDetails().getPerOrderFee();
 		perOrderFee.clickOnCheckBox();
-		addAmountToTotalRefundAmount(perOrderFee.getMoneyAmount());
+		if(perOrderFee.isChecked()) {
+			addAmountToTotalRefundAmount(perOrderFee.getMoneyAmount());
+		}
 	}
 
 	public void whenUserSelectsAllTicketsForRefund() {
@@ -145,12 +149,16 @@ public class AdminEventDashboardFacade extends BaseFacadeSteps {
 		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
 		TicketRow row = selectedOrderPage.findTicketRow(r -> r.isTicketPurchased());
 		row.clickOnCheckoutBoxInTicket();
+		BigDecimal totalAmount = row.getTicketTotalAmount();
+		BigDecimal perTicketFee = row.getPerTicketFeeAmount();
+		addAmountToTotalRefundAmount(totalAmount);
+		addAmountToTotalRefundAmount(perTicketFee);
 	}
 	
 	public void whenUserRemembersRefundTotalOfOrder() {
 		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
 		BigDecimal refundTotal = selectedOrderPage.getOrderRefundTotalAmount();
-		addAmountToTotalRefundAmount(refundTotal);
+		addAmountToTempTotalAmount(refundTotal);
 	}
 
 	public void whenUserClicksOnRefundButton() {
@@ -162,20 +170,32 @@ public class AdminEventDashboardFacade extends BaseFacadeSteps {
 		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
 		return selectedOrderPage.isRefundButtonVisible();
 	}
+	
+	private void addAmountToTempTotalAmount(BigDecimal amount) {
+		addAmountToTotalAmount(amount, TEMP_TOTAL_REFUND_AMOUNT_KEY);
+	}
 
 	private void addAmountToTotalRefundAmount(BigDecimal amount) {
-		BigDecimal totalAmount = (BigDecimal) getData(TOTAL_REFUND_AMOUNT_KEY);
+		addAmountToTotalAmount(amount, TOTAL_REFUND_AMOUNT_KEY);
+	}
+	
+	private void addAmountToTotalAmount(BigDecimal amount, String key) {
+		BigDecimal totalAmount =  (BigDecimal) getData(key);
 		if (totalAmount == null) {
 			totalAmount = new BigDecimal(0);
 		}
 		totalAmount = totalAmount.add(amount);
-		setData(TOTAL_REFUND_AMOUNT_KEY, totalAmount);
+		setData(key, totalAmount);
 	}
 
 	public boolean thenTotalOrderRefundShouldBeCorrect() {
 		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
 		BigDecimal totalOrderRefund = selectedOrderPage.getOrderRefundTotalAmount();
+		BigDecimal tempTotalRefund = (BigDecimal) getData(TEMP_TOTAL_REFUND_AMOUNT_KEY);
 		BigDecimal sumOfRefunds = (BigDecimal) getData(TOTAL_REFUND_AMOUNT_KEY);
+		if (tempTotalRefund != null) {
+			sumOfRefunds = sumOfRefunds.add(tempTotalRefund);
+		}
 		return totalOrderRefund.compareTo(sumOfRefunds) == 0;
 	}
 
@@ -197,7 +217,6 @@ public class AdminEventDashboardFacade extends BaseFacadeSteps {
 		BigDecimal refundButtonAmount = selectedOrderPage.getRefundButtonMoneyAmount();
 		return totalAmount.compareTo(refundButtonAmount) == 0;
 	}
-
 	public boolean thenRefundTotalOnRefundDialogShouldBeCorrect() {
 		IssueRefundDialog refundDialog = (IssueRefundDialog) getData(ISSUE_REFUND_DIALOG_KEY);
 		BigDecimal totalAmount = (BigDecimal) getData(TOTAL_REFUND_AMOUNT_KEY);
@@ -282,8 +301,10 @@ public class AdminEventDashboardFacade extends BaseFacadeSteps {
 			LocalDateTime eventStartDateTime = ProjectUtils.getLocalDateTime(ProjectUtils.DATE_FORMAT,
 					event.getStartDate(), ProjectUtils.TIME_FORMAT, event.getStartTime());
 
-			BigDecimal totalMoney = new BigDecimal(quantity.intValue() * Integer.parseInt(ticketType.getPrice()));
-
+			BigDecimal totalTicketMoney = new BigDecimal(quantity.intValue() * Integer.parseInt(ticketType.getPrice()));
+			BigDecimal totalWithFees = purchase.getEvent().getOrganization().getOtherFees().getTotalWithFees(totalTicketMoney);
+			totalWithFees = ProjectUtils.roundUp(totalWithFees, 3);
+			
 			ExpandedContent expandedContent = activityItem.getExpandedContent();
 			LocalDateTime itemDate = ProjectUtils.parseDateTime(ProjectUtils.MANAGE_ORDER_HISTORY_ITEM_DATE_FORMAT,
 					expandedContent.getEventDateAndTime());
@@ -291,7 +312,7 @@ public class AdminEventDashboardFacade extends BaseFacadeSteps {
 			retVal = retVal && eventStartDateTime.equals(itemDate);
 			retVal = retVal && location.equals(expandedContent.getVenueLocation());
 			retVal = retVal && quantity.equals(expandedContent.getQuantity());
-//			retVal = retVal && totalMoney.equals(expandedContent.getTotalMoneyAmount());
+			retVal = retVal && totalWithFees.equals(expandedContent.getTotalMoneyAmount());
 			return retVal;
 		} else {
 			return false;
@@ -383,7 +404,7 @@ public class AdminEventDashboardFacade extends BaseFacadeSteps {
 	}
 	
 	public void thenClearUpTotalAmountFromDataMap() {
-		setData(SELECTED_ORDER_PAGE_KEY, null);
+		setData(TOTAL_REFUND_AMOUNT_KEY, null);
 	}
 
 	protected void setData(String key, Object value) {

@@ -11,21 +11,22 @@ import model.User;
 import pages.components.dialogs.IssueRefundDialog.RefundReason;
 import utils.DataConstants;
 
-public class RefundEntireOrderExcludingOrderFee extends TemplateRefundFeeSteps {
-	
+public class RefundEntireOrderAndOrderFeeStepsIT extends TemplateRefundFeeSteps {
+		
 	private static final Integer PURCHASE_QUANTITY = 3;
 	private static final String EVENT_NAME = "TestRefundOrderFeeEventName";
 	private static final Integer START_DAY_OFFSET = 2;
 	private static final Integer DAYS_RANGE = 0;
 
-	@Test(dataProvider = "refund_just_an_order_fee_from_order", retryAnalyzer = utils.RetryAnalizer.class)
-	public void refundJustAnOrderFeeFromOrder(Purchase purchase, User user) throws Exception {
+	@Test(dataProvider = "refund_entire_order_and_order_fee", priority = 29, retryAnalyzer = utils.RetryAnalizer.class)
+	public void refundEntireOrderAndOrderFee(Purchase purchase, User user) throws Exception {
 		templateSteps(purchase, user);
 	}
 	
 	@Override
 	public void customSteps() {
 		getEventDashboardFacade().whenUserSelectsAllTicketsForRefund();
+		getEventDashboardFacade().whenUserClicksOnOrderFeeCheckBox();
 		boolean isRefundButtonAmountCorrect = getEventDashboardFacade().thenRefundButtonAmountShouldBeCorrect();
 		Assert.assertTrue(isRefundButtonAmountCorrect, "Refund amount on refund button incorect");
 
@@ -33,7 +34,7 @@ public class RefundEntireOrderExcludingOrderFee extends TemplateRefundFeeSteps {
 
 		boolean isAtSelectedOrderPage = getEventDashboardFacade().thenUserIsOnSelecteOrderPage();
 		Assert.assertTrue(isAtSelectedOrderPage, "After refund user is not on correct page");
-		
+
 		boolean isStatusOfTicketRefunded = getEventDashboardFacade().thenStatusOnAllTicketShouldBeRefunded();
 		Assert.assertTrue(isStatusOfTicketRefunded, "Not all tickets status is refunded");
 		getEventDashboardFacade().whenUserSelectsRefundedStatusTicketForRefund();
@@ -42,12 +43,11 @@ public class RefundEntireOrderExcludingOrderFee extends TemplateRefundFeeSteps {
 		Assert.assertFalse(isRefundButtonVisible,
 				"Refund button on per order fee after already refunded should not be visible");
 		
-//		boolean isRefundTotalCorrect = getEventDashboardFacade().thenRefundTotalOnRefundDialogShouldBeCorrect();
-//		Assert.assertTrue(isRefundTotalCorrect);
-		
+		boolean isRefundTotalCorrect = getEventDashboardFacade().thenTotalOrderRefundShouldBeCorrect();
+		Assert.assertTrue(isRefundTotalCorrect);
 	}
 	
-	@DataProvider(name = "refund_just_an_order_fee_from_order")
+	@DataProvider(name = "refund_entire_order_and_order_fee")
 	public static Object[][] dataProvider() {
 		Purchase purchase = preparePurchase();
 		User superuser = User.generateSuperUser();
@@ -62,5 +62,4 @@ public class RefundEntireOrderExcludingOrderFee extends TemplateRefundFeeSteps {
 				EVENT_NAME, true, START_DAY_OFFSET, DAYS_RANGE));
 		return purchase;
 	}
-
 }
