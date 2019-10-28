@@ -1,13 +1,16 @@
 package model.organization;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import enums.SettlementType;
 
-public class OtherFees {
-	
+public class OtherFees implements Serializable {
+
+	private static final long serialVersionUID = -8204980862351531684L;
+
 	@JsonProperty("settlement_type")
 	private SettlementType settlementType;
 	

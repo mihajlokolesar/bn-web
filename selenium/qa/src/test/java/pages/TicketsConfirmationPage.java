@@ -13,16 +13,16 @@ import utils.SeleniumUtils;
 public class TicketsConfirmationPage extends BasePage {
 
 	@FindBy(xpath = "//main//a[contains(@href,'tickets')]")
-	public WebElement changeTicketLink;
+	private WebElement changeTicketLink;
 
 	@FindBy(xpath = "//main//button[span[contains(text(),'Purchase tickets')]]")
-	public WebElement purchaseTicketButton;
+	private WebElement purchaseTicketButton;
 
 	@FindBy(xpath = "//header//span/a[contains(@href,'tickets/confirmation')]/button/span[1]")
-	public WebElement shoppingBasket;
+	private WebElement shoppingBasket;
 
 	@FindBy(xpath = "//header//span/a[contains(@href,'tickets/confirmation')]/button/span[1]//span")
-	public WebElement shoppingBasketTime;
+	private WebElement shoppingBasketTime;
 
 	@FindBy(xpath = "//main//form//iframe")
 	private WebElement iframe;

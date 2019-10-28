@@ -174,7 +174,7 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 	}
 
 	private void createEventFillData(Event event) {
-		createEventPage.clickOnImportSettingDialogNoThanks();
+//		createEventPage.clickOnImportSettingDialogNoThanks();
 		createEventPage.enterArtistName(event.getArtistName());
 		createEventPage.enterEventName(event.getEventName());
 		createEventPage.selectVenue(event.getVenueName());

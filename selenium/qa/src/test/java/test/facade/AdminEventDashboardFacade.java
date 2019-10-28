@@ -234,7 +234,6 @@ public class AdminEventDashboardFacade extends BaseFacadeSteps {
 	public void whenUserClicksOnGotItButtonOnRefundSuccessDialog() {
 		IssueRefundDialog refundDialog = (IssueRefundDialog) getData(ISSUE_REFUND_DIALOG_KEY);
 		refundDialog.isVisible();
-		String ticketOwnerInfo = refundDialog.getTicketOwnerInfo();
 		refundDialog.clickOnGotItButton();
 	}
 	

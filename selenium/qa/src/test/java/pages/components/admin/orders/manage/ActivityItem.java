@@ -14,7 +14,7 @@ import utils.SeleniumUtils;
 
 public class ActivityItem extends BaseComponent {
 
-	public WebElement container;
+	private WebElement container;
 
 	// relative to container
 	private String relativeShowDetailsButtonsXpath = ".//div[p[span[contains(text(),'Show Details')]]]";

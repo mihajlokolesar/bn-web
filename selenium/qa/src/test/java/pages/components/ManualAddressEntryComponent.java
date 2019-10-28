@@ -10,7 +10,7 @@ public class ManualAddressEntryComponent extends BaseComponent {
 	
 	public static final String containerXpath = "//form//div[@style='min-height: 0px; height: auto; transition-duration: 300ms;']";
 	
-	public WebElement container;
+	private WebElement container;
 	
 	@FindBy(id = "address")
 	private WebElement addressField;

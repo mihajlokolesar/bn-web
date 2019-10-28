@@ -32,12 +32,10 @@ public abstract class TemplateRefundFeeSteps extends BaseSteps {
 		purchaseTickets(purchase);
 		selectOrganization(purchase.getEvent().getOrganization());
 		navigateToOrderManage(purchase.getEvent());
-
+		//this method is abstract and must be implemented with custom logic in child classes
 		customSteps();
-		try {
-			cancelEvent(purchase.getEvent());
-		} catch (Exception e) {
-		}
+		
+		cancelEvent(purchase.getEvent());
 		logOut();
 	}
 
@@ -85,16 +83,24 @@ public abstract class TemplateRefundFeeSteps extends BaseSteps {
 	}
 
 	public void cancelEvent(Event event) {
-		getLoginFacade().whenUserClickOnHeaderLogo();
-		getAdminEventsFacade().thenUserIsAtEventsPage();
-		getAdminEventsFacade().whenUserRefreshesThePage();
-		getAdminEventsFacade().thenUserIsAtEventsPage();
-		AdminEventComponent eventComponent = getAdminEventsFacade().findEventIsOpenedAndHasSoldItem(event);
-		eventComponent.cancelEvent();
+		try {
+			getLoginFacade().whenUserClickOnHeaderLogo();
+			getAdminEventsFacade().thenUserIsAtEventsPage();
+			getAdminEventsFacade().whenUserRefreshesThePage();
+			getAdminEventsFacade().thenUserIsAtEventsPage();
+			AdminEventComponent eventComponent = getAdminEventsFacade().findEventWithName(event);
+			eventComponent.cancelEvent();
+		} catch (Exception e) {
+			// log it once logger is added
+		}
 	}
 
 	public void logOut() {
-		getLoginFacade().logOut();
+		try {
+			getLoginFacade().logOut();
+		}catch (Exception e) {
+			// log it once logger is added
+		}
 	}
 
 	public LoginStepsFacade getLoginFacade() {

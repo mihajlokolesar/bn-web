@@ -86,11 +86,13 @@ public class IssueRefundDialog extends DialogContainerComponent {
 	}
 
 	public void clickOnContinue() {
+		waitForTime(1500);
 		explicitWaitForVisibilityAndClickableWithClick(confirmButton);
+		waitForTime(1500);
 	}
 
 	public void clickOnGotItButton() {
-		explicitWaitForVisibilityAndClickableWithClick(gotItButton);
+		waitVisibilityAndBrowserCheckClick(gotItButton, 20);
 		waitForTime(1500);
 	}
 

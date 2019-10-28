@@ -14,7 +14,7 @@ import utils.SeleniumUtils;
 
 public class AdminFansListPage extends BasePage {
 	
-	public String containerXpath = "//main//div[div[div[div[div[input[contains(@name,'Search')]]]]]]";
+	private String containerXpath = "//main//div[div[div[div[div[input[contains(@name,'Search')]]]]]]";
 
 	public AdminFansListPage(WebDriver driver) {
 		super(driver);
