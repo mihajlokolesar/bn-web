@@ -26,7 +26,7 @@ const styles = theme => {
 		},
 		subHeading: {
 			backgroundColor: "#f5f7fa",
-			fontWeight: "bold"
+			fontFamily: fontFamilyDemiBold
 		},
 		headingText: {
 			fontSize: theme.typography.fontSize * 0.8,
@@ -48,7 +48,15 @@ const styles = theme => {
 };
 
 const TicketCountRow = props => {
-	const { heading, subHeading, gray, children, classes, total, ...rest } = props;
+	const {
+		heading,
+		subHeading,
+		gray,
+		children,
+		classes,
+		total,
+		...rest
+	} = props;
 
 	const columnStyles = [
 		{ flex: 3, textAlign: "left" },

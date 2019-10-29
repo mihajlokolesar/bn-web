@@ -23,7 +23,11 @@ class Report extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = { eventName: null, salesStartStringUtc: null };
+		this.state = {
+			eventName: null,
+			salesStartStringUtc: null,
+			venueTimeZone: null
+		};
 	}
 
 	componentDidMount() {
@@ -32,8 +36,12 @@ class Report extends Component {
 		Bigneon()
 			.events.read({ id: eventId })
 			.then(response => {
-				const { name, publish_date } = response.data;
-				this.setState({ eventName: name, salesStartStringUtc: publish_date });
+				const { name, publish_date, venue } = response.data;
+				this.setState({
+					eventName: name,
+					salesStartStringUtc: publish_date,
+					venueTimeZone: venue.timezone
+				});
 			})
 			.catch(error => {
 				console.error(error);
@@ -49,19 +57,22 @@ class Report extends Component {
 			return <Loader/>;
 		}
 
-		const { eventName, salesStartStringUtc } = this.state;
+		const { eventName, salesStartStringUtc, venueTimeZone } = this.state;
 
 		let content;
 
 		switch (type) {
 			case "transactions":
+				if (!venueTimeZone) {
+					return <Loader>Loading event details...</Loader>;
+				}
 				content = (
 					<TransactionsList
 						eventName={eventName}
 						eventId={eventId}
 						salesStartStringUtc={salesStartStringUtc}
 						organizationId={organizationId}
-						eventId={eventId}
+						venueTimeZone={venueTimeZone}
 					/>
 				);
 				break;

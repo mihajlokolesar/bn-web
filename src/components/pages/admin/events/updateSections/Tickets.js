@@ -34,6 +34,9 @@ const formatForSaving = (ticketTypes, event) => {
 			description,
 			parentId,
 			additionalFeeInDollars,
+			appSalesEnabled,
+			webSalesEnabled,
+			boxOfficeSalesEnabled,
 			rank
 		} = ticketType;
 
@@ -59,15 +62,17 @@ const formatForSaving = (ticketTypes, event) => {
 			}
 		}
 
+		let end_date_type = null;
 		switch (saleEndTimeOption) {
 			case "door":
-				endDate = moment(doorTime);
+				end_date_type = "DoorTime";
 				break;
 			case "start":
-				endDate = moment(eventDate);
+				end_date_type = "EventStart";
 				break;
 			//If no option or set to custom, assume they're updating it manually
 			case "custom":
+				end_date_type = "Manual";
 				endDate = moment(endDate);
 				if (endTime) {
 					endDate = endDate.set({
@@ -79,12 +84,7 @@ const formatForSaving = (ticketTypes, event) => {
 				break;
 			case "close":
 			default:
-				endDate = event.endTime
-					? moment(event.endTime)
-					: moment(eventDate).add(
-						DEFAULT_END_TIME_HOURS_AFTER_SHOW_TIME,
-						"hours"
-					  );
+				end_date_type = "EventEnd";
 				break;
 		}
 
@@ -153,7 +153,11 @@ const formatForSaving = (ticketTypes, event) => {
 			capacity: Number(capacity),
 			increment: Number(increment),
 			start_date,
-			end_date: endDate.utc().format(moment.HTML5_FMT.DATETIME_LOCAL_MS),
+			end_date_type, // `DoorTime`, `EventEnd`, `EventStart`,
+			end_date:
+				endDate && endDate.isValid()
+					? endDate.utc().format(moment.HTML5_FMT.DATETIME_LOCAL_MS)
+					: null,
 			limit_per_person:
 				!limitPerPerson || isNaN(limitPerPerson) ? 0 : Number(limitPerPerson),
 			price_in_cents: Number(priceForDisplay) * 100,
@@ -161,6 +165,9 @@ const formatForSaving = (ticketTypes, event) => {
 			visibility: visibility,
 			description,
 			parent_id: parentId,
+			app_sales_enabled: appSalesEnabled,
+			web_sales_enabled: webSalesEnabled,
+			box_office_sales_enabled: boxOfficeSalesEnabled,
 			additional_fee_in_cents: additionalFeeInDollars
 				? Number(additionalFeeInDollars) * 100
 				: null,
@@ -183,12 +190,16 @@ const formatForInput = (ticket_types, event) => {
 			limit_per_person,
 			ticket_pricing,
 			start_date,
+			end_date_type,
 			end_date,
 			price_in_cents,
 			status,
 			visibility,
 			parent_id,
-			additional_fee_in_cents
+			additional_fee_in_cents,
+			app_sales_enabled,
+			web_sales_enabled,
+			box_office_sales_enabled
 		} = ticket_type;
 
 		const pricing = [];
@@ -222,8 +233,8 @@ const formatForInput = (ticket_types, event) => {
 			// }
 		});
 
-		const ticketStartDate = start_date ? moment.utc(start_date).local() : null;
-		const ticketEndDate = end_date ? moment.utc(end_date).local() : null;
+		const ticketStartDate = start_date ? moment.utc(start_date) : null;
+		const ticketEndDate = end_date ? moment.utc(end_date) : moment.utc();
 
 		let saleEndTimeOption;
 		const { doorTime, eventDate, endTime } = event;
@@ -231,11 +242,11 @@ const formatForInput = (ticket_types, event) => {
 			? moment(endTime)
 			: moment(eventDate).add(DEFAULT_END_TIME_HOURS_AFTER_SHOW_TIME, "hours");
 
-		if (ticketEndDate.isSame(doorTime)) {
+		if (end_date_type === "DoorTime") {
 			saleEndTimeOption = "door";
-		} else if (ticketEndDate.isSame(eventDate)) {
+		} else if (end_date_type === "EventStart") {
 			saleEndTimeOption = "start";
-		} else if (ticketEndDate.isSame(closeTime)) {
+		} else if (end_date_type === "EventEnd") {
 			saleEndTimeOption = "close";
 		} else {
 			//If it's not the same as any of the above the user must have edited it
@@ -271,7 +282,7 @@ const formatForInput = (ticket_types, event) => {
 			startDate: ticketStartDate ? ticketStartDate.clone() : null,
 			startTime: ticketStartDate,
 			saleEndTimeOption,
-			endDate: ticketEndDate.clone(),
+			endDate: ticketEndDate ? ticketEndDate.clone() : null,
 			endTime: ticketEndDate,
 			priceAtDoor, //TODO get the actual value when API works
 			pricing,
@@ -284,7 +295,13 @@ const formatForInput = (ticket_types, event) => {
 			showVisibility: !visibility && visibility !== "Always",
 			showCartQuantityIncrement: !!increment && increment !== 1,
 			showAdditionalFee,
-			additionalFeeInDollars
+			additionalFeeInDollars,
+			appSalesEnabled:
+				app_sales_enabled === undefined ? true : app_sales_enabled,
+			webSalesEnabled:
+				web_sales_enabled === undefined ? true : web_sales_enabled,
+			boxOfficeSalesEnabled:
+				box_office_sales_enabled === undefined ? true : box_office_sales_enabled
 		};
 
 		ticketTypes.push(ticketType);

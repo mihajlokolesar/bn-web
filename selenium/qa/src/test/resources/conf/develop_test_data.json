@@ -68,7 +68,7 @@
 		"email_address": "orgadmneouser@mailinator.com",
 		"password": "test1111",
 		"confirm_password": "test1111",
-		"first_name": "orgadmin",
+		"first_name": "orgadmn",
 		"last_name": "neouser"
 	},
 	
@@ -90,7 +90,16 @@
 		"name": "Auto test ",
 		"phone_number": "1111111111",
 		"time_zone": "Africa/Johannesburg",
-		"location": "Johannesburg, South Africa"
+		"location": "Johannesburg, South Africa",
+		"other_fees": {
+			"settlement_type": {
+				"label":"Post event",
+				"value":"PostEvent"
+			},
+			"per_order_client_fee":1,
+			"per_order_big_neon_fee":0,
+			"credit_card_fee":2.75
+		}
 	},
 	"auto_test_organization_box_office_user": {
 		"name": "4000 Tix Org",
@@ -109,11 +118,27 @@
 			"name": "Auto Test12",
 			"phone_number": "1111111111",
 			"time_zone": "Africa/Johannesburg",
-			"location": "Johannesburg, South Africa"
+			"location": "Johannesburg, South Africa",
+			"other_fees": {
+				"settlement_type": {
+					"label":"Post event",
+					"value":"PostEvent"
+				},
+				"per_order_client_fee":1,
+				"per_order_big_neon_fee":0,
+				"credit_card_fee":2.75
+			}
 		},
 		"artist_name": "TheTestArtistAuto",
 		"event_name": "TestNameEvent",
 		"venue_name": "MSG",
+		"venue":{
+			"name":"MSG",
+			"timezone":"Africa/Johannesburg",
+			"region":"Other",
+			"phone_number":"27728146598",
+			"location":"Madison Square Garden, Pennsylvania Plaza, New York, NY, USA"
+		},
 		"start_time": "08:30 PM",
 		"end_time": "10:00 PM",
 		"door_time": "1",
@@ -135,7 +160,16 @@
 			"name": "Auto Test12",
 			"phone_number": "1111111111",
 			"time_zone": "Africa/Johannesburg",
-			"location": "Johannesburg, South Africa"
+			"location": "Johannesburg, South Africa",
+			"other_fees": {
+				"settlement_type": {
+					"label":"Post event",
+					"value":"PostEvent"
+				},
+				"per_order_client_fee":1,
+				"per_order_big_neon_fee":0,
+				"credit_card_fee":2.75
+			}
 		},
 		"artist_name": "TheTestArtistAuto",
 		"event_name": "TestNameEvent",
@@ -164,7 +198,12 @@
 						"label": "At a specific time",
 						"value": "custom"
 					},
-					"start_sale_time": "07:00 AM"
+					"start_sale_time": "09:00 AM",
+					"sale_end": {
+						"label": "At a specific time",
+						"value": "custom"
+					},
+					"end_sale_time": "10:30 AM"
 				}
 			},
 			{
@@ -176,7 +215,7 @@
 						"label": "When sales end for...",
 						"value": "parent"
 					},
-					"start_sale_ticket_type": "GA"
+					"start_sale_ticket_type": "VIP"
 				}
 			}
 		]

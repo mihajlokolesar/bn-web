@@ -2,7 +2,6 @@
 
 STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep ".jsx\{0,1\}$")
 AUTO_FIX_FILES=$(git config custom.autofix)
-AUTO_FIX_FILES=true
 if [[ "$STAGED_FILES" = "" ]]; then
   echo -e "\nNo staged files to validate.\n"
   exit 0

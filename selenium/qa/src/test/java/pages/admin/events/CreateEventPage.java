@@ -12,7 +12,7 @@ import model.TicketType;
 import pages.BasePage;
 import pages.components.GenericDropDown;
 import pages.components.TimeMenuDropDown;
-import pages.components.admin.AddTicketTypeComponent;
+import pages.components.admin.events.AddTicketTypeComponent;
 import utils.Constants;
 import utils.MsgConstants;
 import utils.SeleniumUtils;

@@ -8,17 +8,23 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
+
+import pages.interfaces.Visible;
 
 public class ProjectUtils {
 
 	public static final String DATE_FORMAT = "MM/dd/yyyy";
+	public static final String TIME_FORMAT = "h:mm a";
 	public static final String CONCATINATED_DATE_FORMAT = "MMddyyyy";
 	public static final String ADMIN_EVENT_DATE_TIME_FORMAT = "EEEE, MMMM d yyyy h:mm a";
+	public static final String MANAGE_ORDER_HISTORY_ITEM_DATE_FORMAT = "EEE, MMM d, yyyy h:mm a";
 	public static final String RESOURCE_IMAGE_PATH = "src/test/resources/images/";
 
 	public static Integer generateRandomInt(int size) {
@@ -52,19 +58,34 @@ public class ProjectUtils {
 	}
 
 	public static LocalDateTime parseDateTime(String pattern, String dateTime) {
+		if (dateTime == null || dateTime.isEmpty()) {
+			return null;
+		}
 		String removedOrdinalsDate = dateTime.replaceAll("(?<=\\d)(st|nd|rd|th)", "");
 		DateTimeFormatter formater = DateTimeFormatter.ofPattern(pattern);
 		LocalDateTime localDateTime = LocalDateTime.parse(removedOrdinalsDate, formater);
 		return localDateTime;
 	}
-
+	
+	public static LocalDateTime getLocalDateTime(String datePattern, String date, String timePattern, String time) {
+		LocalDate localDate = ProjectUtils.parseDate(datePattern, date);
+		LocalTime localTime = ProjectUtils.parseTime(timePattern, time);
+		LocalDateTime ldt = LocalDateTime.of(localDate, localTime);
+		return ldt;
+	}
+	
 	public static LocalDate parseDate(String pattern, String date) {
 		String removedOrdinalsDate = date.replaceAll("(?<=\\d)(st|nd|rd|th)", "");
 		DateTimeFormatter formater = DateTimeFormatter.ofPattern(pattern);
 		LocalDate localDate = LocalDate.parse(removedOrdinalsDate, formater);
 		return localDate;
 	}
-
+	
+	public static LocalTime parseTime(String pattern, String time) {
+		DateTimeFormatter formater = DateTimeFormatter.ofPattern(pattern);
+		LocalTime localTime = LocalTime.parse(time, formater);
+		return localTime;
+	}
 	public static LocalDateTime getDateTime(LocalDate date) {
 		LocalDateTime dt = date.atTime(LocalTime.MIDNIGHT);
 		return dt;
@@ -136,6 +157,20 @@ public class ProjectUtils {
 		String date = now.format(formater);
 		
 		return baseName + "_" + date;
+	}
+
+	public static String getId(String urlPath, String match) {
+		int index = urlPath.indexOf(match);
+		String id = urlPath.substring(index + match.length());
+		return id;
+	}
+
+	public static Visible getVisibleComponent(Visible visible) {
+		if (visible.isVisible()) {
+			return visible;
+		} else {
+			throw new NoSuchElementException("Element for component:" + visible.getClass() + "not found");
+		}
 	}
 
 }

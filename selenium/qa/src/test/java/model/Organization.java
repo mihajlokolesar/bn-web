@@ -5,6 +5,7 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
 
+import model.organization.OtherFees;
 import utils.DataConstants;
 import utils.DataReader;
 import utils.ProjectUtils;
@@ -20,6 +21,8 @@ public class Organization implements Serializable {
 	private String timeZone;
 	@JsonProperty("location")
 	private String location;
+	@JsonProperty("other_fees")
+	private OtherFees otherFees;
 		
 	public String getName() {
 		return name;
@@ -46,10 +49,21 @@ public class Organization implements Serializable {
 		this.location = location;
 	}
 	
+	public OtherFees getOtherFees() {
+		return otherFees;
+	}
+	public void setOtherFees(OtherFees otherFees) {
+		this.otherFees = otherFees;
+	}
 	public void randomizeName() {
 		this.name = this.name + ProjectUtils.generateRandomInt(DataConstants.RANDOM_NUMBER_SIZE_10M);
 	}
-		
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		return sb.append(this.getName()).toString();
+	}
 	public static Organization generateOrganization() {
 		Organization organization = new Organization();
 		organization.setName("Auto test " + ProjectUtils.generateRandomInt(1000000));

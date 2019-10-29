@@ -63,6 +63,7 @@ class EventsList extends Component {
 			isDelete: false,
 			deleteCancelEventId: null,
 			eventMenuSelected: null,
+			eventSlug: null,
 			optionsAnchorEl: null,
 			upcomingOrPast: this.props.match.params.upcomingOrPast || "upcoming"
 		};
@@ -156,7 +157,7 @@ class EventsList extends Component {
 			eventMenuSelected
 		} = this.state;
 		const eventEnded = upcomingOrPast === "past";
-
+		const { slug } = this.props;
 		const { optionsAnchorEl } = this.state;
 
 		if (events === null) {
@@ -189,7 +190,9 @@ class EventsList extends Component {
 					{
 						text: "View event",
 						onClick: () =>
-							this.props.history.push(`/events/${eventMenuSelected}`),
+							this.props.history.push(`/tickets/${eventMenuSelected}`),
+						// onClick: () =>
+						// 	this.props.history.push(`/events/${eventMenuSelected}`),
 						MenuOptionIcon: ViewIcon
 					},
 					{

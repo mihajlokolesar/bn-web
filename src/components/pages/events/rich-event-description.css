@@ -1,0 +1,39 @@
+.rich-edit-content {
+	color: #656D78;
+	/*border: solid;*/
+}
+
+.rich-edit-content h1 {
+	/*display: inline;*/
+	/*border: solid;*/
+	color: #2C3136;
+	size: 50px;
+	font-family: TTCommons-DemiBold;
+}
+
+.rich-edit-content h2 {
+	/*display: inline;*/
+	color: #2C3136;
+	size: 30px;
+}
+
+.rich-edit-content p {
+	font-size: 18px;
+	line-height: 30px;
+}
+
+.rich-edit-content a {
+	font-family: TTCommons-DemiBold;
+	cursor: pointer;
+	color: #ff20b1;
+}
+
+.rich-edit-content strong {
+	font-family: TTCommons-Bold;
+}
+
+.rich-edit-content li {
+}
+
+.rich-edit-content blockquote {
+}

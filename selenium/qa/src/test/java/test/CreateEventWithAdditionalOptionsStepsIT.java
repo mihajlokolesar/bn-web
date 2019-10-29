@@ -4,6 +4,7 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import model.AdditionalOptionsTicketType.SaleEnd;
 import model.AdditionalOptionsTicketType.SaleStart;
 import model.Event;
 import model.TicketType;
@@ -44,13 +45,15 @@ public class CreateEventWithAdditionalOptionsStepsIT extends BaseSteps {
 	public static Object[][] data() throws Exception {
 		User superuser = User.generateUserFromJson(DataConstants.SUPERUSER_DATA_KEY);
 		Event event = (Event) Event.generateEventFromJson("event_data_with_additional_steps_std", true, 1, 4);
-		String[] dates = ProjectUtils.getAllDatesWithinGivenRangeAndOffset(1, 4);
+		String[] dates = ProjectUtils.getAllDatesWithinGivenRangeAndOffset(2, 4);
 		event.setStartDate(dates[0]);
 		event.setEndDate(dates[3]);
 		TicketType atSpecificType = event.getTicketTypes().stream()
-				.filter(tt -> tt.getAdditionalOptions().getSaleStart().equals(SaleStart.AT_SPECIFIC_TIME)).findFirst()
+				.filter(tt -> tt.getAdditionalOptions().getSaleStart().equals(SaleStart.AT_SPECIFIC_TIME)
+						&& tt.getAdditionalOptions().getSaleEnd().equals(SaleEnd.AT_SPECIFIC_TIME)).findFirst()
 				.get();
 		atSpecificType.getAdditionalOptions().setStartSaleDate(dates[1]);
+		atSpecificType.getAdditionalOptions().setEndSaleDate(dates[1]);
 		return new Object[][] { { superuser, event } };
 
 	}

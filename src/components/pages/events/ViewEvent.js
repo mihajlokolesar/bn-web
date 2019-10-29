@@ -42,8 +42,7 @@ import replaceIdWithSlug from "../../../helpers/replaceIdWithSlug";
 import analytics from "../../../helpers/analytics";
 import getAllUrlParams from "../../../helpers/getAllUrlParams";
 import LinkifyReact from "linkifyjs/react";
-
-const ADDITIONAL_INFO_CHAR_LIMIT = 300;
+import FormattedAdditionalInfo from "./FormattedAdditionalInfo";
 
 const styles = theme => {
 	return {
@@ -131,7 +130,11 @@ const styles = theme => {
 const EventDetail = ({ classes, children, iconUrl }) => (
 	<div className={classes.eventDetailsRow}>
 		<div className={classes.iconContainer}>
-			<img className={classes.icon} src={servedImage(iconUrl)}/>
+			<img
+				alt="Event Details Icon"
+				className={classes.icon}
+				src={servedImage(iconUrl)}
+			/>
 		</div>
 
 		<div className={classes.eventDetailContainer}>{children}</div>
@@ -144,8 +147,7 @@ class ViewEvent extends Component {
 		super(props);
 
 		this.state = {
-			overlayCardHeight: 600,
-			showAllAdditionalInfo: false
+			overlayCardHeight: 600
 		};
 	}
 
@@ -168,7 +170,11 @@ class ViewEvent extends Component {
 					});
 				},
 				() => {
-					const { id: selectedEventId, slug } = selectedEvent.event;
+					const {
+						id: selectedEventId,
+						slug,
+						organization_id: organizationId
+					} = selectedEvent.event;
 
 					//Replace the id in the URL with the slug if we have it and it isn't currently set
 					if (id === selectedEventId && slug) {
@@ -176,6 +182,12 @@ class ViewEvent extends Component {
 					}
 
 					analytics.viewContent([selectedEventId], getAllUrlParams());
+					if (user.isAuthenticated) {
+						const { organizations } = user;
+						if (organizations.hasOwnProperty(organizationId)) {
+							user.setCurrentOrganizationRolesAndScopes(organizationId, false);
+						}
+					}
 				}
 			);
 		} else {
@@ -296,11 +308,12 @@ class ViewEvent extends Component {
 			);
 		} else {
 			return (
-				<Link to={`/events/${event.slug || id}/tickets`}>
+				<Link to={`/events/${id}/tickets`}>
 					<Button
 						size={"mediumLarge"}
 						className={classes.callToAction}
 						variant={variant}
+						title={ctaText}
 					>
 						{ctaText}
 					</Button>
@@ -311,12 +324,6 @@ class ViewEvent extends Component {
 
 	onOverlayCardHeightChange(overlayCardHeight) {
 		this.setState({ overlayCardHeight });
-	}
-
-	showHideMoreAdditionalInfo() {
-		this.setState(({ showAllAdditionalInfo }) => ({
-			showAllAdditionalInfo: !showAllAdditionalInfo
-		}));
 	}
 
 	priceTagText(min, max, separator = "to") {
@@ -388,8 +395,6 @@ class ViewEvent extends Component {
 			mobilePromoImageStyle.backgroundImage = `url(${promo_image_url})`;
 		}
 
-		const { showAllAdditionalInfo } = this.state;
-
 		const priceTagText = this.priceTagText(min_ticket_price, max_ticket_price);
 
 		const { enabled } = this.callToActionButtonDetails;
@@ -457,7 +462,16 @@ class ViewEvent extends Component {
 		return (
 			<div className={classes.root}>
 				<OrgAnalytics trackingKeys={tracking_keys}/>
-				<Meta {...event} venue={venue} artists={artists} type={"eventView"}/>
+				<Meta
+					{...event}
+					venue={venue}
+					artists={artists}
+					additional_info={additional_info}
+					organization={organization}
+					doorTime={displayDoorTime}
+					showTime={displayShowTime}
+					type={"eventView"}
+				/>
 
 				{/*DESKTOP*/}
 				<Hidden smDown>
@@ -471,7 +485,12 @@ class ViewEvent extends Component {
 						/>
 					) : null}
 
-					<EventHeaderImage {...event} artists={artists}/>
+					<EventHeaderImage
+						{...event}
+						artists={artists}
+						organization={organization}
+						venue={venue}
+					/>
 
 					<TwoColumnLayout
 						containerClass={classes.desktopContent}
@@ -479,9 +498,12 @@ class ViewEvent extends Component {
 						col1={(
 							<EventDescriptionBody
 								eventIsCancelled={eventIsCancelled}
+								organization={organization}
 								artists={artists}
 							>
-								{additional_info}
+								<FormattedAdditionalInfo>
+									{additional_info}
+								</FormattedAdditionalInfo>
 							</EventDescriptionBody>
 						)}
 						col2={(
@@ -492,6 +514,7 @@ class ViewEvent extends Component {
 									position: "relative"
 								}}
 								imageSrc={promo_image_url}
+								artists={artists}
 								onHeightChange={this.onOverlayCardHeightChange.bind(this)}
 							>
 								<div className={classes.desktopCardContent}>
@@ -540,28 +563,9 @@ class ViewEvent extends Component {
 									classes={classes}
 									iconUrl={"/icons/event-detail-black.svg"}
 								>
-									<Typography className={classes.eventDetailText}>
-										{showAllAdditionalInfo ||
-										additional_info.length <= ADDITIONAL_INFO_CHAR_LIMIT ? (
-												<LinkifyReact options={options}>
-													{additional_info}
-												</LinkifyReact>
-											) : (
-												nl2br(
-													ellipsis(additional_info, ADDITIONAL_INFO_CHAR_LIMIT)
-												)
-											)}
-
-										{additional_info &&
-										additional_info.length > ADDITIONAL_INFO_CHAR_LIMIT ? (
-												<span
-													className={classes.eventDetailLinkText}
-													onClick={this.showHideMoreAdditionalInfo.bind(this)}
-												>
-													{showAllAdditionalInfo ? "Read less" : "Read more"}
-												</span>
-											) : null}
-									</Typography>
+									<FormattedAdditionalInfo>
+										{additional_info}
+									</FormattedAdditionalInfo>
 								</EventDetail>
 
 								<Divider

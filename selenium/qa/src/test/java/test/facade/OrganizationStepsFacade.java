@@ -1,12 +1,21 @@
 package test.facade;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.openqa.selenium.WebDriver;
+
 import model.Organization;
+import model.organization.OtherFees;
 import pages.admin.events.AdminEventsPage;
 import pages.admin.organizations.AdminOrganizationsPage;
 import pages.admin.organizations.CreateOrganizationPage;
+import pages.admin.organizations.EditOrganizationPage;
 import pages.components.Header;
 import pages.components.admin.AdminSideBar;
+import pages.components.admin.organization.AdminOrganizationComponent;
+import pages.components.admin.organization.settings.OtherFeesComponent;
+import utils.MsgConstants;
 
 public class OrganizationStepsFacade extends BaseFacadeSteps {
 	
@@ -14,6 +23,10 @@ public class OrganizationStepsFacade extends BaseFacadeSteps {
 	private AdminOrganizationsPage organizationPage;
 	private CreateOrganizationPage createOrganizationPage;
 	private AdminSideBar adminSideBar;
+	
+	private String EDIT_ORGANIZATION_PAGE_KEY = "edit_organization_page"; 
+	
+	private Map<String, Object> data;
 
 	public OrganizationStepsFacade(WebDriver driver) {
 		super(driver);
@@ -21,6 +34,12 @@ public class OrganizationStepsFacade extends BaseFacadeSteps {
 		this.organizationPage = new AdminOrganizationsPage(driver);
 		this.createOrganizationPage = new CreateOrganizationPage(driver);
 		this.adminSideBar = new AdminSideBar(driver);
+		this.data = new HashMap<>();
+	}
+	
+	public boolean givenUserIsOnOrganizationsPage() {
+		adminSideBar.clickOnOrganizations();
+		return thenUserIsOnOrganizationsPage();
 	}
 
 	public boolean createOrganization(Organization org) {
@@ -46,14 +65,48 @@ public class OrganizationStepsFacade extends BaseFacadeSteps {
 			return true;
 		}
 	}
-
+	
+	public void whenUserPicksOrganizationAndClickOnEdit(Organization org) {
+		AdminOrganizationComponent orgComponent = organizationPage.findOrganizationWithName(org.getName());
+		String id = orgComponent.getOrgId();
+		orgComponent.clickOnEditDetailsButton();
+		EditOrganizationPage selectedOrganization = new EditOrganizationPage(driver, id);
+		setData(EDIT_ORGANIZATION_PAGE_KEY, selectedOrganization);
+	}
+	
+	public void whenUserClickOnOtherFeesAndMakesChanges(OtherFees otherFees) {
+		EditOrganizationPage editOrganizationPage = (EditOrganizationPage) getData(EDIT_ORGANIZATION_PAGE_KEY);
+		editOrganizationPage.getSettingNavHeader().clickOnOtherFees();
+		OtherFeesComponent otherFeesComp = editOrganizationPage.getOtherFeesComponent();
+		otherFeesComp.fillForm(otherFees);
+		otherFeesComp.clickOnUpdateButton();
+		
+	}
+	
+	public boolean thenUpdateNotificationShouldBeVisible() {
+		EditOrganizationPage editOrganizationPage = (EditOrganizationPage) getData(EDIT_ORGANIZATION_PAGE_KEY);
+		boolean isNotificationDisplayed = editOrganizationPage.
+				isNotificationDisplayedWithMessage(MsgConstants.ORGANIZATION_PER_ORDER_FEE_UPDATED);
+		return isNotificationDisplayed;
+	}
+	
+	public boolean thenUserIsOnOrganizationSettingsPage() {
+		EditOrganizationPage organizationPage = (EditOrganizationPage) getData(EDIT_ORGANIZATION_PAGE_KEY);
+		return organizationPage.isAtPage();
+	}
+		
+	public boolean thenUserIsOnOrganizationsPage() {
+		return organizationPage.isAtPage();
+	}
+	
 	@Override
 	protected void setData(String key, Object value) {
+		this.data.put(key, value);
 	}
 
 	@Override
 	protected Object getData(String key) {
-		return null;
+		return this.data.get(key);
 	}
 
 }

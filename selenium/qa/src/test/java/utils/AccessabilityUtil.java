@@ -1,0 +1,118 @@
+package utils;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+public class AccessabilityUtil {
+	
+	private WebDriver driver;
+	
+	public AccessabilityUtil(WebDriver driver) {
+		this.driver = driver;
+	}
+	
+	public String getUrlPath() throws URISyntaxException {
+		String url = driver.getCurrentUrl();
+		URI uri = new URI(url);
+		String path = uri.getPath();
+		return path;
+	}
+
+	
+	public String getTextOfElemenyLocatedBy(By by) {
+		WebElement element = new WebDriverWait(driver, 15).until(ExpectedConditions.visibilityOfElementLocated(by));
+		String text = element.getText();
+		return text;
+	}
+
+	public WebElement getChildElementFromParentLocatedBy(WebElement parent, By relativeChildBy) {
+		return getChildElementFromParentLocatedBy(parent, relativeChildBy, 15);
+	}
+
+	public WebElement getChildElementFromParentLocatedBy(WebElement parent, By relativeChildBy, int seconds) {
+		WebElement element = new WebDriverWait(driver, seconds)
+				.until(ExpectedConditions.visibilityOf(parent.findElement(relativeChildBy)));
+		return element;
+	}
+
+	public List<WebElement> getChildElementsFromParentLocatedBy(WebElement parent, By relativeChildBy) {
+		List<WebElement> elements = new WebDriverWait(driver, 15)
+				.until(ExpectedConditions.visibilityOfAllElements(parent.findElements(relativeChildBy)));
+		return elements;
+	}
+
+	public Integer getIntAmount(WebElement parent, String relativeElPath) {
+		if (!isChildElementVisibleFromParentLocatedBy(parent, By.xpath(relativeElPath), 3)) {
+			return null;
+		}
+		WebElement el = getChildElementFromParentLocatedBy(parent, By.xpath(relativeElPath));
+		return getIntegerAmount(el, "$", "");
+	}
+
+	public Integer getIntegerAmount(WebElement element, String oldChar, String newChar) {
+		String text = ProjectUtils.getTextForElementAndReplace(element, oldChar, newChar);
+		if (text.isEmpty()) {
+			return null;
+		}
+		return Integer.parseInt(text.trim());
+	}
+
+	public Double getDoubleAmount(WebElement parent, String relativeElPath) {
+		if (!isChildElementVisibleFromParentLocatedBy(parent, By.xpath(relativeElPath), 3)) {
+			return null;
+		}
+		WebElement el = getChildElementFromParentLocatedBy(parent, By.xpath(relativeElPath));
+		return getDoubleAmount(el, "$", "");
+	}
+
+	public Double getDoubleAmount(WebElement element, String oldChar, String newChar) {
+		String text = ProjectUtils.getTextForElementAndReplace(element, oldChar, newChar);
+		if (text.isEmpty()) {
+			return null;
+		}
+		return Double.parseDouble(text.trim());
+	}
+
+	public boolean refreshElement(WebElement toBeRefreshed) {
+		try {
+			new WebDriverWait(driver, 10)
+					.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(toBeRefreshed)));
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	public boolean isChildElementVisibleFromParentLocatedBy(WebElement parent, By relativeChildBy) {
+		return isChildElementVisibleFromParentLocatedBy(parent, relativeChildBy, 15);
+	}
+
+	public boolean isChildElementVisibleFromParentLocatedBy(WebElement parent, By relativeChildBy, int seconds) {
+		boolean retVal = false;
+		try {
+			getChildElementFromParentLocatedBy(parent, relativeChildBy, seconds);
+			retVal = true;
+		} catch (Exception e) {
+			retVal = false;
+		}
+		return retVal;
+	}
+
+	public void clearInputField(WebElement inputField) {
+		new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOf(inputField));
+		String text = inputField.getAttribute("value");
+		for (int i = 0; i < text.length() + 4; i++) {
+			inputField.sendKeys(Keys.BACK_SPACE);
+		}
+	}
+}

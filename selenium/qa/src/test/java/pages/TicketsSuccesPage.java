@@ -22,7 +22,7 @@ public class TicketsSuccesPage extends BasePage{
 	}
 	
 	public boolean isAtPage() {
-		return explicitWait(20, ExpectedConditions.urlContains("tickets/success?order_id")); 
+		return explicitWait(20, ExpectedConditions.urlContains("tickets/success")); 
 	}
 	
 	public void enterPhoneNumberAndClickSend(String phoneNumber) {

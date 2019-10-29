@@ -72,7 +72,7 @@ class BoxOffice {
 		}
 
 		Bigneon()
-			.events.read({ id: this.activeEventId })
+			.events.read({ id: this.activeEventId, box_office_pricing: true })
 			.then(response => {
 				const { ticket_types } = response.data;
 				const ticketTypes = {};

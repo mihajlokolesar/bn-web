@@ -1,22 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="Pool" parallel="tests">
-  <test thread-count="2" name="Chrome" parallel="classes">
+<suite name="Parallel" parallel="tests" thread-count="2">
+  <test name="Chrome" parallel="classes">
     <parameter name="config" value="suite.conf.json"/>
     <parameter name="environment" value="chrome"/>
     <classes>
       <class name="test.LoginWithFacebookStepsIT"/>
       <class name="test.LoginStepsIT"/>
       <class name="test.SignUpStepsIT"/>
+      <class name="test.CreateOrganizationStepsIT"/>
+      <class name="test.PublishEventWithDeleteEventIT"/>
+      <class name="test.CancelEventStepsIT"/>
+      <class name="test.CreateDraftEventStepsIT"/>
+      <class name="test.CreateEventWithAdditionalOptionsStepsIT"/>
     </classes>
   </test>
-  <test thread-count="2" name="Firefox" parallel="classes">
+  <test name="Firefox" parallel="classes">
 	<parameter name="config" value="suite.conf.json"/>
     <parameter name="environment" value="firefox"/>
     <classes>
       <class name="test.LoginWithFacebookStepsIT"/>
       <class name="test.LoginStepsIT"/>
       <class name="test.SignUpStepsIT"/>
+      <class name="test.CreateOrganizationStepsIT"/>
+      <class name="test.PublishEventWithDeleteEventIT"/>
+      <class name="test.CancelEventStepsIT"/>
+      <class name="test.CreateDraftEventStepsIT"/>
+      <class name="test.CreateEventWithAdditionalOptionsStepsIT"/>
     </classes>
   </test> 
 </suite>

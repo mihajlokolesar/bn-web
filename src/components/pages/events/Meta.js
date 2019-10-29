@@ -20,6 +20,7 @@ const structuredEventData = (
 		event_start,
 		event_end,
 		ticket_types,
+		publish_date,
 		...event
 	},
 	ticketSelectionUrl
@@ -60,10 +61,14 @@ const structuredEventData = (
 
 				if (availability) {
 					const { price_in_cents } = ticket_pricing;
-					const startDate = moment
-						.utc(start_date, URL_DATE_FORMAT)
-						.tz(timezone)
-						.format();
+					let startDate = moment
+						.utc(start_date || publish_date, URL_DATE_FORMAT)
+						.tz(timezone);
+					if (startDate < moment.utc("1900-01-02T00:00:00")) {
+						startDate = moment.utc(publish_date, URL_DATE_FORMAT).tz(timezone);
+					}
+
+					startDate = startDate.format();
 
 					offers.push({
 						"@type": "Offer",
@@ -166,6 +171,9 @@ const Meta = props => {
 		name,
 		additional_info,
 		promo_image_url,
+		doorTime,
+		showTime,
+		organization,
 		event_start,
 		event_end,
 		ticket_types,
@@ -184,8 +192,33 @@ const Meta = props => {
 
 	let googleStructuredData;
 	let googleBreadcrumbData;
-	let title = name;
-	const description = `${name} - Find tickets to live events and concerts on Big Neon.`;
+
+	let cutDesc = "";
+	if (additional_info) {
+		cutDesc = additional_info.slice(0, 100);
+	}
+
+	const formattedDate = moment
+		.utc(event_start)
+		.tz(venue.timezone)
+		.format("dddd, MMMM Do YYYY");
+
+	const headlineArtist = artists.find(artist => artist.importance === 0);
+	const headliner = headlineArtist ? headlineArtist.artist.name : null;
+
+	const { name: organizationName = "" } = organization || {};
+
+	let title = headliner
+		? `${headliner} Tickets to ${organizationName} in ${venue.city} - Big Neon`
+		: `${name} in ${venue.city} - Big Neon`;
+
+	const sameText = `in ${
+		venue.city
+	} - ${formattedDate} - Doors ${doorTime}, Show ${showTime}`;
+
+	const description = headliner
+		? `${name} - ${headliner} Tickets and ${headliner} Concert Tickets to ${organizationName} ${sameText}`
+		: `${name} - Tickets to ${organizationName} ${sameText}`;
 
 	//If they're at a later stage of the event checkout, adjust title accordingly
 	switch (type) {
@@ -199,7 +232,7 @@ const Meta = props => {
 			);
 			break;
 		case "selection":
-			title = `Buy tickets - ${name}`;
+			title = `Buy tickets - ${title}`;
 			googleStructuredData = structuredEventData(props, ticketSelectionUrl);
 			googleBreadcrumbData = structuredBreadcrumbData(
 				name,
@@ -210,13 +243,13 @@ const Meta = props => {
 
 			break;
 		case "checkout":
-			title = `Checkout - ${name}`;
+			title = `Checkout - ${title}`;
 			break;
 		case "success":
-			title = `Success - ${name}`;
+			title = `Success - ${title}`;
 			break;
 		default:
-			title = `${name} Tickets on Big Neon`;
+			title = `${title}`;
 	}
 
 	return (

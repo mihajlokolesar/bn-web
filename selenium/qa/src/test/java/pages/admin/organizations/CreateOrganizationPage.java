@@ -57,7 +57,7 @@ public class CreateOrganizationPage extends BasePage {
 		waitForTime(2000);
 		addressAutoSearchField.sendKeys(address);
 		WebElement firstInList = explicitWait(15, ExpectedConditions.visibilityOfElementLocated(By.xpath(
-				"///div[contains(@class,'autocomplete-dropdown-container')]/div[contains(@class,'suggestion-item')]")));
+				"//div[contains(@class,'autocomplete-dropdown-container')]/div[contains(@class,'suggestion-item')]")));
 		explicitWaitForVisibilityAndClickableWithClick(firstInList);
 	}
 

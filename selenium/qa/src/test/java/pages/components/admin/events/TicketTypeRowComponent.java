@@ -1,4 +1,4 @@
-package pages.components.admin;
+package pages.components.admin.events;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

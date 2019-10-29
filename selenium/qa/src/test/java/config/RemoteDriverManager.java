@@ -7,9 +7,11 @@ import java.util.Map.Entry;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 public class RemoteDriverManager extends DriverManager {
 
@@ -56,7 +58,14 @@ public class RemoteDriverManager extends DriverManager {
                 capabilities.setCapability(pair.getKey().toString(), pair.getValue().toString());
             }
         }
-        return new RemoteWebDriver(new java.net.URL(url), capabilities);
+        ChromeOptions chromeOptions = new ChromeOptions();
+//		chromeOptions.addArguments("--headless");
+		chromeOptions.addArguments("--whitelisted-ips");
+		chromeOptions.addArguments("--no-sandbox");
+		chromeOptions.addArguments("--disable-extensions");
+
+		MutableCapabilities capabilities1 = new MutableCapabilities(chromeOptions);
+        return new RemoteWebDriver(new java.net.URL(url), capabilities1);
         
 	}
 

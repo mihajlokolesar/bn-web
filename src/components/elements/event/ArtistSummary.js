@@ -93,7 +93,9 @@ const ArtistSummary = props => {
 					{headliner ? <CornerRibbon>Headliner</CornerRibbon> : null}
 				</div>
 				<div className={classes.mediaBottomRow}>
-					<Typography className={classes.name}>{name}</Typography>
+					<Typography variant={"subheading"} className={classes.name}>
+						{name}
+					</Typography>
 
 					<div className={classes.socialLinks}>
 						{facebook_username ? (

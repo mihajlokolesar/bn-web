@@ -15,7 +15,8 @@ const styles = theme => ({
 	},
 	title: {
 		fontFamily: fontFamilyDemiBold,
-		fontSize: 17
+		fontSize: 17,
+		textTransform: "capitalize"
 	},
 	itemContainer: {
 		marginTop: theme.spacing.unit

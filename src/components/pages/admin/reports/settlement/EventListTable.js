@@ -14,7 +14,7 @@ const styles = theme => ({
 });
 
 const EventListTable = props => {
-	const { classes, eventList, onlyFinishedEvents, displayDateRange } = props;
+	const { classes, eventList, onlyFinishedEvents, displayDateRangeNoTimezone } = props;
 
 	const columnStyles = [
 		{ flex: 1, textAlign: "left" },
@@ -26,14 +26,13 @@ const EventListTable = props => {
 	return (
 		<div>
 			<Typography className={classes.heading}>
-				{onlyFinishedEvents ? "Events ended" : "Sales occurring"} from{" "}
-				{displayDateRange}
+				{onlyFinishedEvents ? "Events" : "Sales occurring"} from{" "}
+				{displayDateRangeNoTimezone}
 			</Typography>
 
 			<TotalsRow columnStyles={columnStyles} heading>
 				{[
 					"Event start Date/Time",
-					"Event End Date/Time",
 					"Venue",
 					"Event Name"
 				]}
@@ -41,7 +40,7 @@ const EventListTable = props => {
 
 			{eventList
 				? eventList.map((event, index) => {
-					const { id, displayEndTime, displayStartTime, venue, name } = event;
+					const { id, displayStartTime, venue, name } = event;
 					const even = index % 2 === 0;
 
 					return (
@@ -51,7 +50,7 @@ const EventListTable = props => {
 							darkGray={!even}
 							columnStyles={columnStyles}
 						>
-							{[displayStartTime, displayEndTime, venue.name, name]}
+							{[displayStartTime, venue.name, name]}
 						</TotalsRow>
 					);
 				  })
@@ -64,7 +63,7 @@ EventListTable.propTypes = {
 	classes: PropTypes.object.isRequired,
 	eventList: PropTypes.array.isRequired,
 	onlyFinishedEvents: PropTypes.bool.isRequired,
-	displayDateRange: PropTypes.string.isRequired
+	displayDateRangeNoTimezone: PropTypes.string.isRequired
 };
 
 export default withStyles(styles)(EventListTable);

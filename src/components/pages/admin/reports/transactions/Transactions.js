@@ -17,9 +17,14 @@ import SearchBox from "../../../../elements/SearchBox";
 import { Pagination, urlPageParam } from "../../../../elements/pagination";
 import user from "../../../../../stores/user";
 import { observer } from "mobx-react";
+import { fontFamilyDemiBold } from "../../../../../config/theme";
 
 const styles = theme => ({
 	root: {},
+	pageTitle: {
+		fontSize: 22,
+		fontFamily: fontFamilyDemiBold
+	},
 	header: {
 		display: "flex",
 		minHeight: 60,
@@ -34,12 +39,12 @@ const styles = theme => ({
 const LINE_LIMIT_PER_PAGE = 20;
 const UNLIMITED_LINE_LIMIT = 999999999;
 
-const formatItems = data => {
+const formatItems = (data, timezone) => {
 	const items = [];
 	data.forEach(item => {
 		const formattedDate = moment
 			.utc(item.transaction_date)
-			.tz(user.currentOrgTimezone)
+			.tz(timezone)
 			.format("MM/DD/YYYY h:mm A");
 		items.push({ ...item, formattedDate });
 	});
@@ -79,9 +84,11 @@ class Transactions extends Component {
 	exportCSV() {
 		this.setState({ isExportingCSV: true });
 
-		const { eventName, eventId, organizationId } = this.props;
+		const { eventName, eventId, organizationId, venueTimeZone } = this.props;
 
 		const { start_utc, end_utc, query = "" } = this.state;
+
+		const timezone = venueTimeZone || user.currentOrgTimezone;
 
 		const queryParams = {
 			organization_id: organizationId,
@@ -97,7 +104,7 @@ class Transactions extends Component {
 			.reports.transactionDetails(queryParams)
 			.then(response => {
 				const { data } = response.data;
-				const items = formatItems(data);
+				const items = formatItems(data, timezone);
 
 				const { startDate, endDate } = this.state;
 
@@ -264,7 +271,13 @@ class Transactions extends Component {
 			page = 0
 		} = this.state;
 
-		const { eventId, organizationId, onLoad, printVersion } = this.props;
+		const {
+			eventId,
+			organizationId,
+			onLoad,
+			printVersion,
+			venueTimeZone
+		} = this.props;
 
 		const limit = printVersion ? UNLIMITED_LINE_LIMIT : LINE_LIMIT_PER_PAGE;
 
@@ -283,11 +296,13 @@ class Transactions extends Component {
 
 		this.setState({ startDate, endDate, items: null, isLoading: true });
 
+		const timezone = venueTimeZone || user.currentOrgTimezone;
+
 		Bigneon()
 			.reports.transactionDetails(queryParams)
 			.then(response => {
 				const { data, paging } = response.data;
-				const items = formatItems(data);
+				const items = formatItems(data, timezone);
 
 				this.setState({ items, paging, isLoading: false }, () => {
 					onLoad ? onLoad() : null;
@@ -426,7 +441,13 @@ class Transactions extends Component {
 	}
 
 	render() {
-		const { eventId, classes, printVersion, salesStartStringUtc } = this.props;
+		const {
+			eventId,
+			classes,
+			printVersion,
+			salesStartStringUtc,
+			venueTimeZone
+		} = this.props;
 
 		if (printVersion) {
 			return this.renderList();
@@ -434,13 +455,13 @@ class Transactions extends Component {
 
 		const { isLoading, paging, isExportingCSV } = this.state;
 
-		const { currentOrgTimezone } = user;
+		const timezone = venueTimeZone || user.currentOrgTimezone;
 
 		return (
 			<div className={classes.root}>
 				<Grid className={classes.header} container>
 					<Grid item xs={12} sm={12} md={4} lg={4}>
-						<Typography variant="title">
+						<Typography className={classes.pageTitle}>
 							{eventId ? "Event" : "Organization"} transaction report
 						</Typography>
 					</Grid>
@@ -488,9 +509,9 @@ class Transactions extends Component {
 					</Grid>
 				</Grid>
 
-				{currentOrgTimezone ? (
+				{timezone ? (
 					<ReportsDate
-						timezone={currentOrgTimezone}
+						timezone={timezone}
 						onChange={this.updateDateRange.bind(this)}
 						defaultStartTimeBeforeNow={{ value: 1, unit: "M" }}
 						salesStartStringUtc={salesStartStringUtc}
@@ -521,7 +542,8 @@ Transactions.propTypes = {
 	eventName: PropTypes.string,
 	printVersion: PropTypes.bool,
 	onLoad: PropTypes.func,
-	salesStartStringUtc: PropTypes.string
+	salesStartStringUtc: PropTypes.string,
+	venueTimeZone: PropTypes.string
 };
 
 export default withStyles(styles)(Transactions);

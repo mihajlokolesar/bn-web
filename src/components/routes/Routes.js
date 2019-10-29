@@ -31,6 +31,9 @@ const PublicTicketViewer = asyncComponent(() =>
 
 //Unauthenticated pages
 import Home from "../pages/landing/Index";
+import VenueLanding from "../pages/landing/venues/Index";
+import CityLanding from "../pages/landing/cities/Index";
+import OrganizationLanding from "../pages/landing/organizations/Index";
 import ViewEvent from "../pages/events/ViewEvent";
 import ViewVenue from "../pages/venues/ViewVenue";
 import CheckoutSelection from "../pages/events/CheckoutSelection";
@@ -210,6 +213,13 @@ class Routes extends Component {
 								/>
 								<Route exact path="/" component={Home}/>
 								<Route exact path="/events" component={Home}/>
+								<Route exact path="/venues/:id" component={VenueLanding}/>
+								<Route exact path="/cities/:id" component={CityLanding}/>
+								<Route
+									exact
+									path="/organizations/:id"
+									component={OrganizationLanding}
+								/>
 								<Route exact path="/sign-up" component={Signup}/>
 								<Route exact path="/login" component={Login}/>
 								<Route exact path="/password-reset" component={PasswordReset}/>
@@ -269,25 +279,67 @@ class Routes extends Component {
 									isAuthenticated={isAuthenticated}
 								/>
 								<Route exact path="/venues/:id" component={ViewVenue}/>
-								<Route exact path="/events/:id" component={ViewEvent}/>
+								{/*to be tickets only NOT events */}
+								<Route exact path="/tickets/:id" component={ViewEvent}/>
 								<Route
 									exact
-									path="/events/:id/tickets"
+									path="/tickets/:id/tickets"
 									component={CheckoutSelection}
 								/>
 								<Route
 									exact
-									path="/events/:id/tickets/confirmation"
+									path="/tickets/:id/tickets/confirmation"
 									component={CheckoutConfirmation}
 								/>
-
-								{/* <Route exact path="/cart" component={CheckoutConfirmation} /> */}
 								<PrivateRoute
 									exact
-									path="/events/:id/tickets/success"
+									path="/tickets/:id/tickets/success"
 									component={CheckoutSuccess}
 									isAuthenticated={isAuthenticated}
 								/>
+								{/*end tickets*/}
+								{/*events to be removed for ticket*/}
+								<Route
+									exact
+									path="/events/:id"
+									component={props => (
+										<Redirect to={`/tickets/${props.match.params.id}`}/>
+									)}
+								/>
+								<Route
+									exact
+									path="/events/:id/tickets"
+									component={props => (
+										<Redirect
+											to={`/tickets/${props.match.params.id}/tickets`}
+										/>
+									)}
+								/>
+								<Route
+									exact
+									path="/events/:id/tickets/confirmation"
+									component={props => (
+										<Redirect
+											to={`/tickets/${
+												props.match.params.id
+											}/tickets/confirmation`}
+										/>
+									)}
+								/>
+								<PrivateRoute
+									exact
+									path="/events/:id/tickets/success"
+									component={props => (
+										<Redirect
+											to={`/tickets/${props.match.params.id}/tickets/success`}
+										/>
+									)}
+									isAuthenticated={isAuthenticated}
+								/>
+								{/*events end*/}
+
+								{/* <Route exact path="/cart" component={CheckoutConfirmation} /> */}
+
 								<Route
 									exact
 									path="/mobile_stripe_token_auth/:access_token/:refresh_token"

@@ -185,7 +185,8 @@ class EventResultCard extends Component {
 			<Link
 				onMouseEnter={e => this.setState({ hoverId: id })}
 				onMouseLeave={e => this.setState({ hoverId: null })}
-				to={`/events/${slug || id}`}
+				to={`/tickets/${slug || id}`}
+				// to={`/events/${slug || id}`}
 			>
 				<Card
 					className={classNames({

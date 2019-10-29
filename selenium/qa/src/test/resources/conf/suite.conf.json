@@ -1,18 +1,18 @@
 {
-	"capabilities": {
-    "build": "testng-browserstack",
-    "browserstack.debug": true,
-    "resolution": "1600x1200"
+  "capabilities": {
+	"build": "testng-browserstack",
+	"browserstack.debug": true,
+	"resolution": "1600x1200"
   },
-
   "environments": {
-    "chrome": {
-      "browser": "chrome",
-      "browser_version": "74.0"
-    },
-    "firefox": {
-      "browser": "firefox",
-      "browser_version": "68.0"
-    }
+	"chrome": {
+	  "browserName": "chrome",
+	  "browser_version": "75.0",
+		"platform": "linux"
+	},
+	"firefox": {
+	  "browser": "firefox",
+	  "browser_version": "68.0"
+	}
   }
 }

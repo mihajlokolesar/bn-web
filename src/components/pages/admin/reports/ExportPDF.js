@@ -18,6 +18,8 @@ import SummaryAudit from "./eventSummaryAudit/SummaryAudit";
 import EventPromoCodesReport from "./eventPromoCode/EventPromoCode.js";
 import user from "../../../../stores/user";
 import servedImage from "../../../../helpers/imagePathHelper";
+import BoxOfficeSalesSummary from "./boxOfficeSalesSummary/BoxOfficeSalesSummary";
+import SettlementReport from "./settlement/SettlementReport";
 
 const styles = theme => ({
 	root: {
@@ -64,6 +66,14 @@ const reportTypes = {
 	promo_codes: {
 		label: "Event promo codes report",
 		ReportComponent: EventPromoCodesReport
+	},
+	box_office_sales_summary: {
+		label: "Box office sales summary",
+		ReportComponent: BoxOfficeSalesSummary
+	},
+	settlement: {
+		label: "Settlement report",
+		ReportComponent: SettlementReport
 	}
 };
 
@@ -89,12 +99,18 @@ class ExportPDF extends Component {
 					const { artists, venue, ...event } = response.data;
 					const { event_start } = event;
 
+					const venueTimeZone = venue.timezone;
 					const eventStartDateMoment = moment.utc(event_start);
 					const displayLocalVenueTime = eventStartDateMoment
-						.tz(venue.timezone)
+						.tz(venueTimeZone)
 						.format("dddd, MMMM Do YYYY hh:mm:A");
 
-					this.setState({ event, venue, displayLocalVenueTime });
+					this.setState({
+						event,
+						venue,
+						displayLocalVenueTime,
+						venueTimeZone
+					});
 				})
 				.catch(error => {
 					this.setState({ event: false });
@@ -113,15 +129,17 @@ class ExportPDF extends Component {
 
 	render() {
 		const organizationId = user.currentOrganizationId;
+		const organizationTimezone = user.currentOrgTimezone;
 
-		if (!organizationId) {
+		if (!organizationId || !organizationTimezone) {
 			return <Loader/>;
 		}
 
 		const { classes } = this.props;
-		const { event, venue, displayLocalVenueTime } = this.state;
+		const { event, venue, displayLocalVenueTime, venueTimeZone } = this.state;
 
 		const event_id = getUrlParam("event_id");
+		const settlement_id = getUrlParam("settlement_id");
 		const type = getUrlParam("type");
 
 		const reportType = reportTypes[type];
@@ -173,9 +191,12 @@ class ExportPDF extends Component {
 
 				<ReportComponent
 					organizationId={organizationId}
+					organizationTimezone={organizationTimezone}
 					eventId={event_id}
 					printVersion
 					onLoad={this.onReportLoad}
+					venueTimeZone={venueTimeZone}
+					settlementId={settlement_id}
 				/>
 			</div>
 		);

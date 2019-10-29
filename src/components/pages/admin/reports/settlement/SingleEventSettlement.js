@@ -6,6 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import { fontFamilyDemiBold } from "../../../../../config/theme";
 import EventSettlementRow from "./EventSettlementRow";
 import { dollars } from "../../../../../helpers/money";
+import splitByCamelCase from "../../../../../helpers/splitByCamelCase";
 
 const styles = theme => {
 	return {
@@ -36,7 +37,6 @@ const SingleEventSettlement = props => {
 		<div className={classes.root}>
 			<Typography className={classes.heading}>{name}</Typography>
 			<Typography>
-				Event start date/time:{" "}
 				<span className={classes.boldSpan}>{displayStartTime}</span>
 			</Typography>
 			<Typography>
@@ -74,6 +74,15 @@ const SingleEventSettlement = props => {
 					totalRevShareInCents +
 					revenue_share_value_in_cents * fee_sold_quantity;
 				totalSalesInCents = totalSalesInCents + total_sales_in_cents;
+				
+				let description = ticket_type_name;
+				if (
+					!description &&
+					settlement_entry_type &&
+					settlement_entry_type !== "TicketType"
+				) {
+					description = splitByCamelCase(settlement_entry_type);
+				}
 
 				return (
 					<EventSettlementRow
@@ -82,7 +91,7 @@ const SingleEventSettlement = props => {
 						key={index}
 					>
 						{[
-							ticket_type_name,
+							description,
 							dollars(face_value_in_cents),
 							dollars(revenue_share_value_in_cents),
 							online_sold_quantity,

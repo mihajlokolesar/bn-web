@@ -69,11 +69,15 @@ class EventDetailsOverlayCard extends Component {
 	}
 
 	render() {
-		const { classes, children, header, style } = this.props;
+		const { classes, children, header, style, artists = [] } = this.props;
 
 		const imageSrc = this.props.imageSrc
 			? optimizedImageUrl(this.props.imageSrc)
 			: null;
+
+		const headlineArtist = artists.find(artist => artist.importance === 0);
+		const headliner = headlineArtist ? headlineArtist.artist.name : null;
+
 		return (
 			<div ref={this.containerDiv} className={classes.root} style={style}>
 				<Card variant="subCard">
@@ -82,6 +86,7 @@ class EventDetailsOverlayCard extends Component {
 							<div
 								className={classes.media}
 								style={{ backgroundImage: `url(${imageSrc})` }}
+								title={headliner}
 							/>
 						</MaintainAspectRatio>
 					) : null}

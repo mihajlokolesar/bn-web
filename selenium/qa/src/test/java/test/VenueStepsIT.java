@@ -12,7 +12,7 @@ import utils.DataConstants;
 
 public class VenueStepsIT extends BaseSteps {
 
-	@Test(dataProvider = "create_venue_data", priority = 18, retryAnalyzer = utils.RetryAnalizer.class)
+	@Test(dataProvider = "create_venue_data", priority = 22, retryAnalyzer = utils.RetryAnalizer.class)
 	public void createVenue(Venue venue, User superuser) {
 		LoginStepsFacade loginFacade = new LoginStepsFacade(driver);
 		VenueStepsFacade venueStepsFacade = new VenueStepsFacade(driver);
@@ -39,7 +39,7 @@ public class VenueStepsIT extends BaseSteps {
 		return new Object[][] { { venue, superuser } };
 	}
 
-	@Test(dataProvider = "edit_venue_data", priority = 18, retryAnalyzer = utils.RetryAnalizer.class)
+	@Test(dataProvider = "edit_venue_data", priority = 23, retryAnalyzer = utils.RetryAnalizer.class)
 	public void updateVenue(Venue venue, User superuser) {
 		LoginStepsFacade loginStepsFacade = new LoginStepsFacade(driver);
 		VenueStepsFacade venueStepsFacade = new VenueStepsFacade(driver);

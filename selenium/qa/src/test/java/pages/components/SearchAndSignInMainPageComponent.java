@@ -11,7 +11,7 @@ public class SearchAndSignInMainPageComponent extends BaseComponent{
 	@FindBy(xpath = "//a[not(ancestor::header) and @href='/login']/button[last()]")
 	private WebElement signInButton;
 	
-	@FindBy(xpath = "//div/p[contains(text(),'Future of Ticketing')]/following-sibling::div/form/input")
+	@FindBy(xpath = "//form[not(ancestor::header)]/div[img[@alt='Search icon']]/input")
 	private WebElement searchField;
 	
 	@FindBy(xpath = "//div[not(ancestor::header)]/span[contains(text(),'Welcome back')]")

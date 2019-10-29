@@ -33,16 +33,12 @@ public class FacebookLoginPage extends BasePage {
 		explicitWait(10, 250, ExpectedConditions.visibilityOf(emailOrPhoneField));
 		emailOrPhoneField.sendKeys(phoneOrMail);
 		passwordField.sendKeys(password);
-		loginButton.click();
+		waitVisibilityAndBrowserCheckClick(loginButton);
 		try {
 			WebElement firstTimeLoginConfirmButton = explicitWait(10, ExpectedConditions
 					.visibilityOfElementLocated(By.xpath("//form//tbody//button[@name='__CONFIRM__']")));
-			firstTimeLoginConfirmButton.click();
+			waitVisibilityAndBrowserCheckClick(firstTimeLoginConfirmButton);
 		} catch (Exception e) {
-			if (!(e instanceof TimeoutException)) {
-				System.out.println(e.getMessage());
-			}
-
 		}
 		boolean retVal = explicitWait(5, ExpectedConditions.numberOfWindowsToBe(1));
 		return retVal;

@@ -120,6 +120,15 @@ public class SeleniumUtils {
 				.until(ExpectedConditions.visibilityOfAllElements(parent.findElements(relativeChildBy)));
 		return elements;
 	}
+	
+	public static Integer getIntegerAmount(WebElement parent, By relativeChildBy, WebDriver driver) {
+		WebElement el = getChildElementFromParentLocatedBy(parent, relativeChildBy, driver);
+		String text = el.getText();
+		if (text.isEmpty()) {
+			return null;
+		}
+		return Integer.parseInt(text.trim());
+	}
 
 	public static Integer getIntAmount(WebElement parent, String relativeElPath, WebDriver driver) {
 		if (!SeleniumUtils.isChildElementVisibleFromParentLocatedBy(parent, By.xpath(relativeElPath), 3, driver)) {

@@ -4,7 +4,8 @@ public enum BrowsersEnum {
 	FIREFOX("ff","firefox"),
 	CHROME("ch","chrome"),
 	REMOTE("rm","remote"),
-	SAFARI("sf","safari");
+	SAFARI("sf","safari"),
+	HUB("hub", "hub");
 	
 	private String browserCode;
 	private String name;

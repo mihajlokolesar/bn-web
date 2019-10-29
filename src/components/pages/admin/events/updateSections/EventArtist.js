@@ -31,6 +31,9 @@ const styles = theme => ({
 	},
 	leftColumn: {
 		flex: 1,
+		flexDirection: "column",
+		justifyContent: "space-between",
+		display: "flex",
 		[theme.breakpoints.down("sm")]: {
 			flex: 4
 		}
@@ -65,22 +68,24 @@ const EventArtist = props => {
 			<CardMedia className={classes.image} image={imgUrl} title={"Artist"}/>
 			<div className={classes.content}>
 				<div className={classes.leftColumn}>
-					<Typography variant="body1" style={{ marginTop: 10 }}>
-						<FormatInputLabel>{typeHeading}</FormatInputLabel>
-					</Typography>
-					<Typography variant="title">{title}</Typography>
+					<div>
+						<Typography variant="body1" style={{ marginTop: 10 }}>
+							<FormatInputLabel>{typeHeading}</FormatInputLabel>
+						</Typography>
+						<Typography variant="title">{title}</Typography>
+					</div>
 
-					<DateTimePickerGroup
-						margin="dense"
-						error={error ? error.setTime : null}
-						value={setTime}
-						name="setTime"
-						label="Set time"
-						onChange={onChangeSetTime}
-						format="HH:mm"
-						type="time"
-						onBlur={onBlur}
-					/>
+					{/*<DateTimePickerGroup*/}
+					{/*	margin="dense"*/}
+					{/*	error={error ? error.setTime : null}*/}
+					{/*	value={setTime}*/}
+					{/*	name="setTime"*/}
+					{/*	label="Set time"*/}
+					{/*	onChange={onChangeSetTime}*/}
+					{/*	format="HH:mm"*/}
+					{/*	type="time"*/}
+					{/*	onBlur={onBlur}*/}
+					{/*/>*/}
 					<CheckBox
 						active={importance === 0}
 						onClick={() => {

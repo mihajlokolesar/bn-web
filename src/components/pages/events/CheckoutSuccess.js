@@ -335,7 +335,7 @@ class CheckoutSuccess extends Component {
 	render() {
 		const { classes } = this.props;
 
-		const { event, venue, artists } = selectedEvent;
+		const { event, venue, artists, organization } = selectedEvent;
 
 		if (event === null) {
 			return (
@@ -372,7 +372,16 @@ class CheckoutSuccess extends Component {
 		return (
 			<div className={classes.root}>
 				<OrgAnalytics trackingKeys={tracking_keys}/>
-				<Meta {...event} venue={venue} artists={artists} type={"success"}/>
+				<Meta
+					{...event}
+					venue={venue}
+					artists={artists}
+					additional_info={additional_info}
+					organization={organization}
+					doorTime={displayDoorTime}
+					showTime={displayShowTime}
+					type={"success"}
+				/>
 
 				{/*DESKTOP*/}
 				<Hidden smDown>

@@ -19,6 +19,9 @@ public class EventsPage extends BasePage {
 
 	@FindBy(linkText = "View map")
 	private WebElement viewMapLink;
+	
+	@FindBy(xpath = "//a[parent::div]/button[span[contains(text(),'Purchase Tickets')]]")
+	private WebElement purchaseButton;
 
 	private By purchaseButton(String urlPath) {
 		return By.xpath("//body//main/div/div/div/div[2]/div//a[contains(@href,'" + urlPath + "')]/button");
@@ -75,14 +78,7 @@ public class EventsPage extends BasePage {
 	}
 
 	public void purchaseTicketLinkClick() throws Exception {
-		WebElement purchaseLink = null;
-		String urlPath = SeleniumUtils.getUrlPath(driver);
-		if (isPurchaseButtonVisible(urlPath)) {
-			purchaseLink = driver.findElement(purchaseButton(urlPath));
-		} else {
-			purchaseLink = driver.findElement(By.xpath("//a[contains(@href,'" + urlPath + "')]/button"));
-		}
-		purchaseLink.click();
+		waitVisibilityAndBrowserCheckClick(purchaseButton);
 	}
 	
 	private boolean isPurchaseButtonVisible(String urlPath) {

@@ -78,8 +78,9 @@ class SingleOrder extends Component {
 		}
 	}
 
-	loadAll() {
-		this.loadEventDetails();
+	async loadAll() {
+		await this.loadEventDetails();
+
 		this.loadOrder();
 		this.loadOrderItems();
 		this.loadOrderHistory();
@@ -87,29 +88,35 @@ class SingleOrder extends Component {
 
 	loadEventDetails() {
 		const { eventId } = this.state;
-		Bigneon()
-			.events.read({ id: eventId })
-			.then(response => {
-				const { data } = response;
+		return new Promise((resolve, reject) => {
+			Bigneon()
+				.events.read({ id: eventId })
+				.then(response => {
+					const { data } = response;
 
-				const { event_start, venue } = data;
+					const { event_start, venue } = data;
 
-				const displayDate = moment(event_start)
-					.tz(venue.timezone)
-					.format("ddd, MMM DD, YYYY");
+					const displayDate = moment(event_start)
+						.tz(venue.timezone)
+						.format("ddd, MMM DD, YYYY");
 
-				this.setState({
-					eventDetails: { ...data, displayDate }
+					this.setState({
+						eventDetails: { ...data, displayDate }
+					});
+					user.setCurrentOrganizationRolesAndScopes(data.organization_id);
+					resolve();
+				})
+				.catch(error => {
+					console.error(error);
+
+					notifications.showFromErrorResponse({
+						defaultMessage: "Loading event details failed.",
+						error
+					});
+					reject();
 				});
-			})
-			.catch(error => {
-				console.error(error);
+		});
 
-				notifications.showFromErrorResponse({
-					defaultMessage: "Loading event details failed.",
-					error
-				});
-			});
 	}
 
 	loadOrder() {
@@ -132,7 +139,7 @@ class SingleOrder extends Component {
 				items.forEach(({ item_type, unit_price_in_cents, quantity }) => {
 					//Only include fee type items
 					if (
-						["CreditCardFees", "PerUnitFees", "CreditCardFees"].indexOf(
+						["CreditCardFees", "PerUnitFees", "EventFees"].indexOf(
 							item_type
 						) > -1
 					) {
@@ -179,9 +186,14 @@ class SingleOrder extends Component {
 		const { orderId } = this.state;
 
 		Bigneon()
-			.orders.activity({
-				id: orderId
-			})
+			.orders.activity(
+				{
+					id: orderId
+				},
+				{},
+				false,
+				{ minTimeout: 120000 }
+			)
 			.then(response => {
 				const { data } = response.data;
 

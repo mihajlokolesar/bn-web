@@ -213,7 +213,8 @@ class EventTicketsCard extends Component {
 			onTicketSelect,
 			onShowTransferQR,
 			onCancelTransfer,
-			showActions
+			showActions,
+			slug
 		} = this.props;
 		const { checkedTicketsIds } = this.state;
 
@@ -373,7 +374,7 @@ class EventTicketsCard extends Component {
 	}
 
 	renderMenu() {
-		const { event } = this.props;
+		const { event, slug } = this.props;
 		const { optionsAnchorEl } = this.state;
 
 		const options = [
@@ -383,7 +384,8 @@ class EventTicketsCard extends Component {
 			},
 			{
 				text: "View event",
-				onClick: () => this.props.history.push(`/events/${event.id}`)
+				onClick: () => this.props.history.push(`/tickets/${slug || event.id}`)
+				// onClick: () => this.props.history.push(`/events/${event.id}`)
 			}
 		];
 		return (

@@ -15,6 +15,10 @@ import Card from "../../../../elements/Card";
 
 const styles = theme => ({
 	root: {},
+	pageTitle: {
+		fontSize: 30,
+		fontFamily: fontFamilyDemiBold
+	},
 	header: {
 		display: "flex",
 		minHeight: 60,
@@ -163,7 +167,7 @@ class TicketCounts extends Component {
 		return (
 			<div className={classes.root}>
 				<div className={classes.header}>
-					<Typography variant="title">
+					<Typography className={classes.pageTitle}>
 						{eventId ? "Event" : "Organization"} ticket counts report
 					</Typography>
 					<span style={{ flex: 1 }}/>

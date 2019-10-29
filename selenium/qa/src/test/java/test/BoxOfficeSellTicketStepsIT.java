@@ -8,7 +8,7 @@ import config.MailinatorEnum;
 import model.Event;
 import model.Purchase;
 import model.User;
-import pages.components.admin.TicketTypeRowComponent;
+import pages.components.admin.events.TicketTypeRowComponent;
 import pages.mailinator.MailinatorFactory;
 import pages.mailinator.inbox.BOSellPagePurchaseWithCashMailinatorPage;
 import test.facade.AdminBoxOfficeFacade;
@@ -20,8 +20,8 @@ import utils.DataConstants;
 public class BoxOfficeSellTicketStepsIT extends BaseSteps {
 	
 	@Test(dataProvider = "box_office_sell_ticket_cash_payment", dependsOnMethods = {"prepareEventDataForBoxOfficeOrg"},
-			priority = 16, retryAnalyzer = utils.RetryAnalizer.class)
-	public void a_boxOfficeSellTicketCashPayment(User boxOfficeUser, Purchase purchase, User receiverOfTickets) {
+			priority = 20, retryAnalyzer = utils.RetryAnalizer.class)
+	public void boxOfficeSellTicketCashPayment(User boxOfficeUser, Purchase purchase, User receiverOfTickets) {
 		int ticketNumAdd = purchase.getNumberOfTickets();
 		int ticketNumRemove = purchase.getRemoveNumberOfTickets();
 		int addToTendered = purchase.getAdditionalTenderedAmount();
@@ -56,7 +56,7 @@ public class BoxOfficeSellTicketStepsIT extends BaseSteps {
 		Assert.assertTrue(isCorrectAmountInMail);
 	}
 	
-	@Test(dataProvider = "box_office_sell_ticket_cash_payment", priority = 16, retryAnalyzer = utils.RetryAnalizer.class)
+	@Test(dataProvider = "box_office_sell_ticket_cash_payment", priority = 21, retryAnalyzer = utils.RetryAnalizer.class)
 	public void b_boxOfficeSellTicketCardPayment(User boxOfficeUser, Purchase purchase, User receiverOfTickets) {
 		int ticketNumAdd = purchase.getNumberOfTickets();
 		int ticketNumRemove = purchase.getRemoveNumberOfTickets();
@@ -98,7 +98,7 @@ public class BoxOfficeSellTicketStepsIT extends BaseSteps {
 		return new Object[][] {{boxOfficeUser,purchase,receiver}};
 	}
 
-	@Test(dataProvider = "prepare_event_for_box_office_cash_payment_data", priority = 16)
+	@Test(dataProvider = "prepare_event_for_box_office_cash_payment_data", priority = 20)
 	public void prepareEventDataForBoxOfficeOrg(Event event, User superuser) throws Exception {
 		maximizeWindow();
 		LoginStepsFacade loginStepsFacade = new LoginStepsFacade(driver);

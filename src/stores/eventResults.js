@@ -23,6 +23,7 @@ class EventResults {
 	@action
 	refreshResults(params, onSuccess, onError) {
 		this.isLoading = true;
+
 		Bigneon()
 			.events.index({ ...params, status: "Published" }) //Always force published
 			.then(response => {
@@ -106,8 +107,9 @@ class EventResults {
 
 		const filteredEvents = [];
 		this.events.forEach(eventData => {
-			const { venue } = eventData;
-			const { state } = venue;
+			const { venue, organization } = eventData;
+			const { state, name, city  } = venue;
+			// const { name: orgName } = organization;
 			let showEvent = true;
 
 			//If there is a filter and a field to filter in the event entry
@@ -117,6 +119,19 @@ class EventResults {
 					(!this.filters.state ||
 						state === this.filters.state ||
 						this.filters.state === "all")
+				) {
+					showEvent = true;
+				} else {
+					showEvent = false;
+				}
+			}
+
+			if (this.filters) {
+				if (
+					name &&
+					(!this.filters.name ||
+						name === this.filters.name ||
+						this.filters.name === "all")
 				) {
 					showEvent = true;
 				} else {

@@ -12,6 +12,7 @@ public class MsgConstants {
 	public static final String ORGANIZATION_CREATE_DUPLICATE_ERROR = "Duplicate record exists";
 	public static final String ORGANIZATION_CREATE_FAILED = "Create organization failed";
 	public static final String ORGANIZATION_CREATED_SUCCESS = "Organization created";
+	public static final String ORGANIZATION_PER_ORDER_FEE_UPDATED = "Per order fee updated";
 	
 	public static final String VENUE_CREATED_SUCCESS = "Venue created";
 	public static final String VENUE_UPDATED_SUCCESS = "Venue updated";
@@ -28,6 +29,9 @@ public class MsgConstants {
 	public static final String TICKET_TRANSFER_RECEIVING_TICKETS_FAILED = "Receiving tickets failed";
 	public static final String COULD_NOT_INSERT_RECORD = "Could not insert record";
 	public static final String QUERY_ERROR = "Query error";
+	
+	public static final String FAN_PROFILE_LOAD_ERROR = "Failed to load fan profile";	
+	public static final String ORDER_MANANGE_ACTIVITY_ITEM_NOTE_ADDED = "Note saved";
 	
 	
 	public static String resetPasswordMessage(String mail) {

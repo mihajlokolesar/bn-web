@@ -214,12 +214,14 @@ const LandingFooter = props => {
 								<img
 									className={classes.downloadBtn}
 									src={servedImage("/images/appstore-apple.png")}
+									alt="App Store download button"
 								/>
 							</a>
 							<a href={Settings().appStoreAndroid} target="_blank">
 								<img
 									className={classes.downloadBtn}
 									src={servedImage("/images/appstore-google-play.png")}
+									alt="Google Play download button"
 								/>
 							</a>
 						</div>

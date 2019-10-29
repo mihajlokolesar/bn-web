@@ -89,7 +89,8 @@ class Event extends Component {
 			this.setState({ ticketTimesDirty: true });
 		} else {
 			eventUpdateStore.clearDetails();
-			this.setState({ showImportPreviousEventDialog: true });
+			//TODO add this back when there's more spec
+			//this.setState({ showImportPreviousEventDialog: true });
 			this.setOrganizationId();
 		}
 	}

@@ -340,15 +340,36 @@ module.exports = {
 			path: `${paths.appBuild}/version.json`,
 			content: JSON.stringify({ version: require("../package.json").version })
 		}),
+		new WriteFilePlugin({
+			path: `${paths.appBuild}/_headers`,
+			content: process.env.NETLIFY_BASIC_AUTH
+				? `/*\n  Basic-Auth: ${process.env.NETLIFY_BASIC_AUTH}`
+				: ""
+		}),
 		new CopyWebpackPlugin([
 			{
-				from: `${paths.config}/netlify_redirects`,
+				from: `${paths.config}/templates/netlify_redirects`,
 				to: `${paths.appBuild}/_redirects`,
 				toType: "file",
 				transform(content, path) {
 					const strBuf = content.toString("utf8");
 					return Buffer.from(
 						strBuf.replace("[api_url]", process.env.NETLIFY_REDIRECT_API_URL)
+					);
+				}
+			},
+			{
+				from: `${paths.config}/templates/robots.txt`,
+				to: `${paths.appBuild}/robots.txt`,
+				toType: "file",
+				transform(content, path) {
+					const strBuf = content.toString("utf8");
+					const isProduction = process.env.TARGET_ENV === "production";
+					const sitemap = process.env.SITEMAP_URL
+						? `\nSitemap: ${process.env.SITEMAP_URL}`
+						: "";
+					return Buffer.from(
+						strBuf.replace("[disallow]", isProduction ? "" : "/") + sitemap
 					);
 				}
 			}

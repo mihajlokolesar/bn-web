@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.tari</groupId>
+	<groupId>com.bigneon</groupId>
 	<artifactId>qa</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
@@ -21,9 +21,12 @@
 		<apache.commons.lang>3.8</apache.commons.lang>
 		<maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
 		<maven-failsafe-plugin.version>2.21.0</maven-failsafe-plugin.version>
+		<huburl />
+		<webdriver.chrome.driver />
+		<webdriver.gecko.driver />
+		<webdriver.edge.driver />
 		<browser>rm</browser>
 		<baseurl>https://develop.bigneon.com/</baseurl>
-
 	</properties>
 
 	<dependencies>
@@ -92,6 +95,7 @@
 						<webdriver.chrome.driver>${webdriver.chrome.driver}</webdriver.chrome.driver>
 						<webdriver.gecko.driver>${webdriver.gecko.driver}</webdriver.gecko.driver>
 						<webdriver.edge.driver>${webdriver.edge.driver}</webdriver.edge.driver>
+						<huburl>${huburl}</huburl>
 					</systemPropertyVariables>
 					<suiteXmlFiles>
 						<suiteXmlFile>config/local/ltestng.xml</suiteXmlFile>
@@ -126,6 +130,74 @@
 							</systemPropertyVariables>
 						</configuration>
 					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>hub</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<configuration>
+							<suiteXmlFiles>
+								<suiteXmlFile>config/hub/testng.xml</suiteXmlFile>
+							</suiteXmlFiles>
+							<systemPropertyVariables>
+								<browser>hub</browser>
+							</systemPropertyVariables>
+						</configuration>
+					</plugin>
+					<!-- <plugin>
+						<groupId>ch.fortysix</groupId>
+						<artifactId>maven-postman-plugin</artifactId>
+						<version>0.1.6</version>
+						<executions>
+							<execution>
+								<id>Report Generation</id>
+								<phase>post-integration-test</phase>
+								<goals>
+									<goal>send-mail</goal>
+								</goals>
+								<inherited>true</inherited>
+								<configuration>
+									From Email address
+									<from></from>
+									Email subject
+									<subject>bn-web selenium test report</subject>
+									<failonerror>false</failonerror>
+									<htmlMessage>
+                                    <![CDATA[
+                                    <p>New test build triggered!</p>
+                                    <p>Attached html file contains the test result status</p> 
+                                    ]]>
+									</htmlMessage>
+									host
+									 <mailhost></mailhost> 
+									 port of the host 
+									 <mailport>465</mailport> 
+									 <mailssl>true</mailssl> 
+									 <mailAltConfig>true</mailAltConfig> 
+										Email Authentication(Username and Password)
+									 <mailuser></mailuser> 
+									<mailpassword></mailpassword>
+									<receivers>
+										To Email address
+										<receiver>mihajlo.kolesar@pbssolutions.net</receiver>
+									</receivers>
+									<fileSets>
+										<fileSet>
+											<directory>${basedir}/target/failsafe-reports/</directory>
+											<includes>
+												<include>emailable-report.html</include>
+											</includes>
+										</fileSet>
+									</fileSets>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin> -->
 				</plugins>
 			</build>
 		</profile>

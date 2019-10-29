@@ -29,6 +29,7 @@ import getUrlParam from "../../../helpers/getUrlParam";
 import analytics from "../../../helpers/analytics";
 import getAllUrlParams from "../../../helpers/getAllUrlParams";
 import ellipsis from "../../../helpers/ellipsis";
+import FormattedAdditionalInfo from "./FormattedAdditionalInfo";
 
 const AUTO_SELECT_TICKET_AMOUNT = 2;
 
@@ -170,7 +171,13 @@ class CheckoutSelection extends Component {
 			return 0;
 		}
 
-		const { increment, limit_per_person, available } = ticketTypes[index];
+		const { increment, limit_per_person, available, status } = ticketTypes[index];
+
+		//Check that the status of the ticket we
+		if (status !== "Published") {
+			return 0;
+		}
+
 		let quantity = AUTO_SELECT_TICKET_AMOUNT;
 
 		//If the default auto select amount is NOT divisible by the increment amount, rather auto select the first increment
@@ -625,19 +632,36 @@ class CheckoutSelection extends Component {
 		return (
 			<div>
 				<OrgAnalytics trackingKeys={tracking_keys}/>
-				<Meta {...event} venue={venue} artists={artists} type={"selection"}/>
+				<Meta
+					{...event}
+					venue={venue}
+					artists={artists}
+					additional_info={additional_info}
+					organization={organization}
+					doorTime={displayDoorTime}
+					showTime={displayShowTime}
+					type={"selection"}
+				/>
 				{/*DESKTOP*/}
 				<Hidden smDown>
-					<EventHeaderImage {...event} artists={artists}/>
+					<EventHeaderImage
+						{...event}
+						artists={artists}
+						organization={organization}
+						venue={venue}
+					/>
 					<TwoColumnLayout
 						containerClass={classes.desktopContent}
 						containerStyle={{ minHeight: overlayCardHeightAdjustment }}
 						col1={(
 							<EventDescriptionBody
+								organization={organization}
 								eventIsCancelled={eventIsCancelled}
 								artists={artists}
 							>
-								{additional_info}
+								<FormattedAdditionalInfo>
+									{additional_info}
+								</FormattedAdditionalInfo>
 							</EventDescriptionBody>
 						)}
 						col2={(
