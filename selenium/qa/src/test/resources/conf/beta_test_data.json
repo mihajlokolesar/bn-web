@@ -1,8 +1,8 @@
 {
 	"server_user_auth": {
 	    "username": "bigneon",
-	    "password": "bigneon!",
-	}
+	    "password": "bigneon!"
+	},
 	"user_credentials": {
 		"email_address": "testuser@mailinator.com",
 		"password": "test1111",
