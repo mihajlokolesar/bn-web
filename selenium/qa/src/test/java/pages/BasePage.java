@@ -10,7 +10,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import config.DriverFactory;
 import model.AuthUser;
 import pages.components.Header;
-import utils.DataConstants;
 
 public abstract class BasePage extends AbstractBase {
 
@@ -39,7 +38,7 @@ public abstract class BasePage extends AbstractBase {
 
 	public void navigate() {
 		if (DriverFactory.getEnvironmentEnum().getServerAuth()) {
-			AuthUser authUser = AuthUser.generateFromJson(DataConstants.SERVER_USER_AUTH);
+			AuthUser authUser = AuthUser.getAuthUser();
 			String url = addUserInfoToUrl(getUrl(), authUser);
 			driver.get(url);
 		}

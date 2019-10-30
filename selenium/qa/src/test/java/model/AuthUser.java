@@ -1,15 +1,8 @@
 package model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.core.type.TypeReference;
-
-import utils.DataReader;
-
 public class AuthUser {
 	
-	@JsonProperty("username")
 	private String username;
-	@JsonProperty("password")
 	private String password;
 	
 	public String getUsername() {
@@ -29,11 +22,13 @@ public class AuthUser {
 		return this.username+":"+this.password;
 	}
 	
-	public static AuthUser generateFromJson(String key) {
-		return (AuthUser) DataReader.getInstance().getObject(key, getTypeReference());
+	public static AuthUser getAuthUser() {
+		String username = System.getProperty("serverauthname");
+		String password = System.getProperty("serverauthpass");
+		AuthUser authUser = new AuthUser();
+		authUser.setUsername(username);
+		authUser.setPassword(password);
+		return authUser;
 	}
-	
-	public static TypeReference<AuthUser> getTypeReference(){
-		return new TypeReference<AuthUser>() {};
-	}
+
 }
