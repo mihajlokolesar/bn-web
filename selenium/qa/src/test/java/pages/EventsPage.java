@@ -54,6 +54,12 @@ public class EventsPage extends BasePage {
 	}
 
 	public WebElement findEvent(String eventName) {
+		getHeader().searchEvents(eventName);
+		WebElement event = findEventOnPage(eventName);
+		return event;
+	}
+	
+	private WebElement findEventOnPage(String eventName) {
 		String lowerCaseName = eventName.toLowerCase();
 		explicitWait(25, ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(eventListContainer)));
 		WebElement event = explicitWait(25, ExpectedConditions.elementToBeClickable(

@@ -65,7 +65,7 @@ public class RefundPartialCheckOrderFeeRefundDisabledStepsIT extends TemplateRef
 	@DataProvider(name = "refund_already_partially_refunded_order")
 	public static Object[][] dataProvider() {
 		Purchase purchase = preparePurchase();
-		User superuser = User.generateSuperUser();
+		User superuser = User.generateUserFromJson(DataConstants.ORGANIZATION_ADMIN_USER_KEY);
 		return new Object[][] {{purchase, superuser}};
 	}
 	

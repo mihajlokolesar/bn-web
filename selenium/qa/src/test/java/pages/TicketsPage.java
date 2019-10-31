@@ -65,7 +65,7 @@ public class TicketsPage extends BasePage {
 
 	@Override
 	public boolean isAtPage() {
-		return explicitWait(15, ExpectedConditions.urlMatches("tickets$"));
+		return explicitWait(15, ExpectedConditions.urlMatches("tickets/$"));
 	}
 	
 	public String getUrlPath() throws URISyntaxException {
@@ -101,7 +101,7 @@ public class TicketsPage extends BasePage {
 	}
 	
 	public void addNumberOfTicketsForEachType(int number) {
-		for(int k = 0;k < number; k++) {
+		for (int k = 0; k < number; k++) {
 			addTicketForEachTicketType();
 		}
 	}
@@ -109,12 +109,24 @@ public class TicketsPage extends BasePage {
 	private void addTicketForEachTicketType() {
 		if (verifyDifferentTicketTypesAreDisplayed()) {
 			List<WebElement> list = getIncrementersForAllTicketTypes();
-			for(WebElement incrementer : list) {
+			for (WebElement incrementer : list) {
 				incrementTicketNumber(incrementer);
 			}
 		}
 	}
 	
+	public void checkIfTicketAreSelectedAndRemoveAllTickets() {
+		List<WebElement> list = getDecrementersForAllTicketTypes();
+		for (WebElement minus : list) {
+			Integer qty = SeleniumUtils.getIntegerAmount(minus, By.xpath(".//following-sibling::p"), driver);
+			if (qty.compareTo(new Integer(0)) > 0) {
+				for (int i = qty; i > 0; i--) {
+					waitVisibilityAndBrowserCheckClick(minus);
+				}
+			}
+		}
+	}
+
 	public void removeNumberOfTickets(int number, TicketType ticketType) {
 		WebElement decrementer = getDecreaseSpecificTicketTypeElement(ticketType.getTicketTypeName());
 		Integer qty = SeleniumUtils.getIntegerAmount(decrementer, By.xpath(".//following-sibling::p"), driver);
@@ -136,7 +148,7 @@ public class TicketsPage extends BasePage {
 		}
 	}
 	
-	private int calculateRemoveNumber (Integer currentQuantity, int intendedRemoveNumber) {
+	private int calculateRemoveNumber(Integer currentQuantity, int intendedRemoveNumber) {
 		if (currentQuantity <= intendedRemoveNumber && (currentQuantity - 1) > 0) {
 			intendedRemoveNumber = currentQuantity - 1;
 		} else if (currentQuantity.equals(1)) {
@@ -145,7 +157,6 @@ public class TicketsPage extends BasePage {
 		return intendedRemoveNumber;
 	}
 	
-
 	private void removeTicketForLastType() {
 		if (verifyDifferentTicketTypesAreDisplayed()) {
 			List<WebElement> list = getDecrementersForAllTicketTypes();

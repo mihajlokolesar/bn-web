@@ -120,6 +120,15 @@ public class EventStepsFacade extends BaseFacadeSteps {
 	public boolean whenShoppingBasketIsPresentAndClickOnBasket() {
 		return eventsPage.getHeader().clickOnShoppingBasketIfPresent();
 	}
+	
+	public void whenShoppingBasketFullEmptyIt() {
+		if(eventsPage.getHeader().clickOnShoppingBasketIfPresent()) {
+			thenUserIsAtConfirmationPage();
+			ticketsConfirmationPage.clickOnChangeTicketLink();
+			ticketPage.checkIfTicketAreSelectedAndRemoveAllTickets();
+			ticketPage.clickOnContinue();
+		}
+	}
 
 	public void whenSearchingForEvent(Purchase purchase) {
 		eventsPage.getHeader().searchEvents(purchase.getEvent().getArtistName());
@@ -161,7 +170,7 @@ public class EventStepsFacade extends BaseFacadeSteps {
 	}
 
 	public boolean thenUserIsAtConfirmationPage() {
-		return ticketsConfirmationPage.isAtConfirmationPage();
+		return ticketsConfirmationPage.isAtPage();
 	}
 
 	public boolean thenUserIsAtTicketPurchaseSuccessPage() {

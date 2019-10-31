@@ -50,7 +50,7 @@ public class RefundEntireOrderAndOrderFeeStepsIT extends TemplateRefundFeeSteps 
 	@DataProvider(name = "refund_entire_order_and_order_fee")
 	public static Object[][] dataProvider() {
 		Purchase purchase = preparePurchase();
-		User superuser = User.generateSuperUser();
+		User superuser = User.generateUserFromJson(DataConstants.ORGANIZATION_ADMIN_USER_KEY);
 		return new Object[][] {{purchase, superuser}};
 	}
 	

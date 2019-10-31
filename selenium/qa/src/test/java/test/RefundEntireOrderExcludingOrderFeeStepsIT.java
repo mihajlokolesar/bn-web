@@ -19,7 +19,7 @@ public class RefundEntireOrderExcludingOrderFeeStepsIT extends TemplateRefundFee
 	private static final Integer DAYS_RANGE = 0;
 
 	@Test(dataProvider = "refund_just_an_order_fee_from_order",priority = 30, retryAnalyzer = utils.RetryAnalizer.class)
-	public void refundJustAnOrderFeeFromOrder(Purchase purchase, User user) throws Exception {
+	public void refundEntireOrderExcludingOrderFee(Purchase purchase, User user) throws Exception {
 		templateSteps(purchase, user);
 	}
 	
@@ -50,7 +50,7 @@ public class RefundEntireOrderExcludingOrderFeeStepsIT extends TemplateRefundFee
 	@DataProvider(name = "refund_just_an_order_fee_from_order")
 	public static Object[][] dataProvider() {
 		Purchase purchase = preparePurchase();
-		User superuser = User.generateSuperUser();
+		User superuser = User.generateUserFromJson(DataConstants.ORGANIZATION_ADMIN_USER_KEY);
 		return new Object[][] {{purchase, superuser}};
 	}
 	
