@@ -38,6 +38,7 @@ public class EventsPage extends BasePage {
 
 	@Override
 	public void navigate() {
+		super.navigate();
 		driver.get(getUrl());
 	}
 
