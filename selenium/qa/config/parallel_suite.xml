@@ -13,9 +13,6 @@
       <class name="test.CancelEventStepsIT"/>
       <class name="test.CreateDraftEventStepsIT"/>
       <class name="test.CreateEventWithAdditionalOptionsStepsIT"/>
-      <class name="test.RefundEntireOrderAndOrderFeeStepsIT"/>
-      <class name="test.RefundEntireOrderExcludingOrderFeeStepsIT"/>
-      <class name="test.refundTicketsOnPartialyRefundedOrderAndRefundedOrderFee"/>
     </classes>
   </test>
   <test name="Firefox" parallel="classes">
@@ -30,9 +27,6 @@
       <class name="test.CancelEventStepsIT"/>
       <class name="test.CreateDraftEventStepsIT"/>
       <class name="test.CreateEventWithAdditionalOptionsStepsIT"/>
-	  <class name="test.RefundEntireOrderAndOrderFeeStepsIT" />
-	  <class name="test.RefundEntireOrderExcludingOrderFeeStepsIT" />
-	  <class name="test.refundTicketsOnPartialyRefundedOrderAndRefundedOrderFee" />
     </classes>
   </test> 
 </suite>
