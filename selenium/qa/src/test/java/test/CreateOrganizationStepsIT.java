@@ -41,7 +41,6 @@ public class CreateOrganizationStepsIT extends BaseSteps {
 	public void editOrganization(User user) throws Exception {
 		LoginStepsFacade loginFacade = new LoginStepsFacade(driver);
 		OrganizationStepsFacade organizationFacade = new OrganizationStepsFacade(driver);
-		Organization organization = Organization.generateOrganizationFromJson(DataConstants.ORGANIZATION_STD_KEY, false);
 		maximizeWindow();
 		loginFacade.givenAdminUserIsLogedIn(user);
 		organizationFacade.givenUserIsOnOrganizationsPage();
