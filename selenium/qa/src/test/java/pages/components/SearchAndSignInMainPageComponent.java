@@ -22,7 +22,7 @@ public class SearchAndSignInMainPageComponent extends BaseComponent{
 	}
 	
 	public void searchForEvents(String value) {
-		waitVisibilityAndSendKeys(searchField, value);
+		waitVisibilityAndClearFieldSendKeysF(searchField, value);
 		searchField.submit();
 	}
 	
@@ -36,6 +36,10 @@ public class SearchAndSignInMainPageComponent extends BaseComponent{
 	
 	public boolean isSignInButtonVisible() {
 		return isExplicitlyWaitVisible(4, signInButton);
+	}
+	
+	public boolean isSearchFieldVisible() {
+		return isExplicitlyWaitVisible(4, searchField);
 	}
 
 }

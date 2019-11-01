@@ -1,10 +1,14 @@
 package pages;
 
+import java.net.URI;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import config.DriverFactory;
+import model.AuthUser;
 import pages.components.Header;
 
 public abstract class BasePage extends AbstractBase {
@@ -32,10 +36,32 @@ public abstract class BasePage extends AbstractBase {
 		this.url = url;
 	}
 
+	public void navigate() {
+		if (DriverFactory.getEnvironmentEnum().getServerAuth()) {
+			AuthUser authUser = AuthUser.getAuthUser();
+			String url = addUserInfoToUrl(getUrl(), authUser);
+			driver.get(url);
+		}
+	}
+
+	private String addUserInfoToUrl(String url, AuthUser user) {
+		String retVal = "";
+		try {
+			String userInfo = user.getUserInfo();
+			URI regularUrl = new URI(url);
+			URI authUrl = new URI(regularUrl.getScheme(), userInfo, regularUrl.getHost(), regularUrl.getPort(),
+					regularUrl.getPath(), regularUrl.getQuery(), regularUrl.getFragment());
+			retVal = authUrl.toString();
+		} catch (Exception e) {
+			retVal = url;
+		}
+		return retVal;
+	}
+
 	public boolean isAtPage() {
 		return explicitWait(10, ExpectedConditions.urlToBe(getUrl()));
 	}
-	
+
 	public boolean isExplicitAtPage(int waitForSeconds) {
 		return isExplicitConditionTrue(waitForSeconds, ExpectedConditions.urlToBe(getUrl()));
 	}

@@ -6,4 +6,4 @@ COPY pom.xml .
 RUN mvn dependency:go-offline
 COPY src ./src/
 COPY config ./config/
-CMD mvn clean verify -P hub -Dhuburl=http://"$HUB_HOST":"$HUB_PORT"/wd/hub -Dconfig=suite.conf.json -Dbaseurl=$BASE_URL
+CMD mvn clean verify -P hub -Dhuburl=http://"$HUB_HOST":"$HUB_PORT"/wd/hub -Dconfig=suite.conf.json -Dbaseurl=$BASE_URL -Dserverauthname=$USERNAME -Dserverauthpass=$PASS

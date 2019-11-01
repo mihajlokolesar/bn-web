@@ -28,6 +28,7 @@ public abstract class TemplateRefundFeeSteps extends BaseSteps {
 		maximizeWindow();
 
 		login(user);
+		emptyShoppingBasketIfFull();
 		createEvent(user, purchase.getEvent());
 		purchaseTickets(purchase);
 		selectOrganization(purchase.getEvent().getOrganization());
@@ -52,6 +53,11 @@ public abstract class TemplateRefundFeeSteps extends BaseSteps {
 	public void selectOrganization(Organization org) throws Exception {
 		getOrganizationFacade().givenOrganizationExist(org);
 	}
+	
+	public void emptyShoppingBasketIfFull() {
+		getEventFacade().whenShoppingBasketFullEmptyIt();
+		getLoginFacade().whenUserClickOnHeaderLogo();
+	}
 
 	public void purchaseTickets(Purchase purchase) throws Exception {
 		getAdminEventsFacade().whenUserClicksOnViewEventOfSelecteEvent(purchase.getEvent());
@@ -59,6 +65,7 @@ public abstract class TemplateRefundFeeSteps extends BaseSteps {
 		getEventFacade().whenUserSelectsNumberOfTicketsForEachTicketTypeAndClicksOnContinue(purchase);
 		getEventFacade().thenUserIsAtConfirmationPage();
 		getEventFacade().whenUserEntersCreditCardDetailsAndClicksOnPurchase(purchase.getCreditCard());
+		getEventFacade().thenUserIsAtTicketPurchaseSuccessPage();
 		getLoginFacade().whenUserClickOnHeaderLogo();
 	}
 

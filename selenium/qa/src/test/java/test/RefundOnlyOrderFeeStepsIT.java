@@ -49,7 +49,7 @@ public class RefundOnlyOrderFeeStepsIT extends TemplateRefundFeeSteps {
 	@DataProvider(name = "refund_just_an_order_fee_from_order")
 	public static Object[][] dataProvider() {
 		Purchase purchase = preparePurchase();
-		User superuser = User.generateSuperUser();
+		User superuser = User.generateUserFromJson(DataConstants.ORGANIZATION_ADMIN_USER_KEY);
 		return new Object[][] {{purchase, superuser}};
 	}
 	

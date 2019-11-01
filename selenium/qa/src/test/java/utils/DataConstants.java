@@ -2,6 +2,8 @@ package utils;
 
 public class DataConstants {
 	
+	public static final String SERVER_USER_AUTH= "server_user_auth";
+	
 	public static final String MAILINATOR_MAIL_DOMAIN = "mailinator.com";
 	public static final String USER_PASS = "test1111";
 	

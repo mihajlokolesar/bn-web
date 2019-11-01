@@ -22,7 +22,7 @@
 			<class name="test.FanManagementStepsIT" />
 			<class name="test.RefundEntireOrderAndOrderFeeStepsIT" />
 			<class name="test.RefundEntireOrderExcludingOrderFeeStepsIT" />
-			<class name="test.refundTicketsOnPartialyRefundedOrderAndRefundedOrderFee" />
+			<class name="test.RefundPartialCheckOrderFeeRefundDisabledStepsIT" />
 		</classes>
 	</test>
 </suite>

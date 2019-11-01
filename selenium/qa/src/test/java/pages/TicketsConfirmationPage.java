@@ -29,6 +29,9 @@ public class TicketsConfirmationPage extends BasePage {
 
 	@FindBy(xpath = "//form//div//img[contains(@src,'credit-card-gray.svg')]/..")
 	private WebElement paymentMethodCard;
+	
+	
+	public static final String partialPath = "tickets/confirmation";
 
 	public TicketsConfirmationPage(WebDriver driver) {
 		super(driver);
@@ -39,13 +42,13 @@ public class TicketsConfirmationPage extends BasePage {
 	}
 
 	public void ticketsConfirmationPageSteps(CreditCard card) {
-		isAtConfirmationPage();
+		isAtPage();
 		confirmPaymentMethod("card");
 		enterCreditCardDetails(card.getCardNumber(), card.getExpirationDate(), card.getCvc(), card.getZipCode());
 		clickOnPurchaseTicketButton();
 	}
-
-	public boolean isAtConfirmationPage() {
+	@Override
+	public boolean isAtPage() {
 		return explicitWait(15, ExpectedConditions.urlContains("tickets/confirmation"));
 	}
 

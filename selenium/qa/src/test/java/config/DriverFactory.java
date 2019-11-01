@@ -1,5 +1,7 @@
 package config;
 
+import enums.EnvironmentEnum;
+
 public class DriverFactory {
 
     public static DriverManager getDriverManager(String config, String environment) {
@@ -52,10 +54,15 @@ public class DriverFactory {
 
     public static String getAccessKey() {
         return System.getProperty("key");
-    }
-
-    public static BrowsersEnum getBrowser() {
-        String code = System.getProperty("browser");
-        return BrowsersEnum.getEnumForCode(code);
-    }
+    }			
+	
+	public static EnvironmentEnum getEnvironmentEnum() {
+		String environment = System.getProperty("baseurl");
+		return EnvironmentEnum.getEnvironmentEnum(environment);
+	}
+	
+	public static BrowsersEnum getBrowser() {
+		String code = System.getProperty("browser");
+		return BrowsersEnum.getEnumForCode(code);
+	}
 }

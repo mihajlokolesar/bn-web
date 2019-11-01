@@ -36,7 +36,9 @@ public class EventsPage extends BasePage {
 		setUrl(Constants.getEventsBigNeon());
 	}
 
+	@Override
 	public void navigate() {
+		super.navigate();
 		driver.get(getUrl());
 	}
 
@@ -50,10 +52,15 @@ public class EventsPage extends BasePage {
 			retVal = false;
 		}
 		return retVal;
-
 	}
 
 	public WebElement findEvent(String eventName) {
+		getHeader().searchEvents(eventName);
+		WebElement event = findEventOnPage(eventName);
+		return event;
+	}
+	
+	private WebElement findEventOnPage(String eventName) {
 		String lowerCaseName = eventName.toLowerCase();
 		explicitWait(25, ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(eventListContainer)));
 		WebElement event = explicitWait(25, ExpectedConditions.elementToBeClickable(
