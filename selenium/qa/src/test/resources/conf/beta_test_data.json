@@ -90,6 +90,11 @@
 		"phone_number": "1111111111",
 		"time_zone": "Africa/Johannesburg",
 		"location": "Johannesburg, South Africa",
+		"fees_schedule":{
+			"minimum_price":0.1,
+			"client_fee":0.5,
+			"big_neon_fee":0.5
+		},
 		"other_fees": {
 			"settlement_type": {
 				"label":"Post event",

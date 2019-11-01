@@ -6,6 +6,7 @@ import java.util.Map;
 import org.openqa.selenium.WebDriver;
 
 import model.Organization;
+import model.organization.FeesSchedule;
 import model.organization.OtherFees;
 import pages.admin.events.AdminEventsPage;
 import pages.admin.organizations.AdminOrganizationsPage;
@@ -14,6 +15,7 @@ import pages.admin.organizations.EditOrganizationPage;
 import pages.components.Header;
 import pages.components.admin.AdminSideBar;
 import pages.components.admin.organization.AdminOrganizationComponent;
+import pages.components.admin.organization.settings.FeeScheduleComponent;
 import pages.components.admin.organization.settings.OtherFeesComponent;
 import utils.MsgConstants;
 
@@ -74,20 +76,23 @@ public class OrganizationStepsFacade extends BaseFacadeSteps {
 		setData(EDIT_ORGANIZATION_PAGE_KEY, selectedOrganization);
 	}
 	
-	public void whenUserClickOnOtherFeesAndMakesChanges(OtherFees otherFees) {
+	public boolean whenUserClickOnFeesScheeduleAndMakesChanges(FeesSchedule feesSchedule) {
+		EditOrganizationPage editOrganizationPage = (EditOrganizationPage) getData(EDIT_ORGANIZATION_PAGE_KEY);
+		editOrganizationPage.getSettingNavHeader().clickOnFeesSchedule();
+		FeeScheduleComponent feeScheeduleComponent = editOrganizationPage.getFeeScheeduleComponent();
+		feeScheeduleComponent.addNewRowAndFillFees(feesSchedule);
+		feeScheeduleComponent.clickOnUpdateButton();
+		return editOrganizationPage.isNotificationDisplayedWithMessage(MsgConstants.ORGANIZAATION_FEE_SCHEDULE_SAVED);
+	}
+	
+	public boolean whenUserClickOnOtherFeesAndMakesChanges(OtherFees otherFees) {
 		EditOrganizationPage editOrganizationPage = (EditOrganizationPage) getData(EDIT_ORGANIZATION_PAGE_KEY);
 		editOrganizationPage.getSettingNavHeader().clickOnOtherFees();
 		OtherFeesComponent otherFeesComp = editOrganizationPage.getOtherFeesComponent();
 		otherFeesComp.fillForm(otherFees);
 		otherFeesComp.clickOnUpdateButton();
+		return editOrganizationPage.isNotificationDisplayedWithMessage(MsgConstants.ORGANIZATION_PER_ORDER_FEE_UPDATED);
 		
-	}
-	
-	public boolean thenUpdateNotificationShouldBeVisible() {
-		EditOrganizationPage editOrganizationPage = (EditOrganizationPage) getData(EDIT_ORGANIZATION_PAGE_KEY);
-		boolean isNotificationDisplayed = editOrganizationPage.
-				isNotificationDisplayedWithMessage(MsgConstants.ORGANIZATION_PER_ORDER_FEE_UPDATED);
-		return isNotificationDisplayed;
 	}
 	
 	public boolean thenUserIsOnOrganizationSettingsPage() {

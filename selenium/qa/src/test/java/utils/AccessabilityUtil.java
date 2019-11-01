@@ -92,6 +92,16 @@ public class AccessabilityUtil {
 			return false;
 		}
 	}
+	
+	public boolean refreshElement(List<WebElement> toBeRefreshed) {
+		try {
+			new WebDriverWait(driver, 10)
+					.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOfAllElements(toBeRefreshed)));
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
 
 	public boolean isChildElementVisibleFromParentLocatedBy(WebElement parent, By relativeChildBy) {
 		return isChildElementVisibleFromParentLocatedBy(parent, relativeChildBy, 15);

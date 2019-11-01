@@ -1,5 +1,6 @@
 package utils;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -166,6 +167,20 @@ public class SeleniumUtils {
 		return Double.parseDouble(text.trim());
 	}
 
+	public static BigDecimal getBigDecimalValue(WebElement element) {
+		String value = element.getAttribute("value");
+		BigDecimal retVal = null;
+		if (value != null && !value.isEmpty()) {
+			try {
+				retVal = new BigDecimal(value.trim());
+			}catch (Exception e) {
+				retVal = null;
+			}
+			return retVal;
+		} else {
+			return null;
+		}
+	}
 	public static boolean refreshElement(WebElement toBeRefreshed, WebDriver driver) {
 		try {
 			new WebDriverWait(driver, 10)

@@ -8,7 +8,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import pages.BaseComponent;
 import pages.BasePage;
-import pages.components.admin.organization.settings.FeeScheeduleComponent;
+import pages.components.admin.organization.settings.FeeScheduleComponent;
 import pages.components.admin.organization.settings.OtherFeesComponent;
 import pages.interfaces.Visible;
 import utils.Constants;
@@ -60,9 +60,9 @@ public class EditOrganizationPage extends BasePage {
 		return (OtherFeesComponent) ProjectUtils.getVisibleComponent(otherFees);
 	}
 	
-	public FeeScheeduleComponent getFeeScheeduleComponent() {
-		FeeScheeduleComponent feeScheedule = new FeeScheeduleComponent(driver);
-		return (FeeScheeduleComponent) ProjectUtils.getVisibleComponent(feeScheedule);
+	public FeeScheduleComponent getFeeScheeduleComponent() {
+		FeeScheduleComponent feeScheedule = new FeeScheduleComponent(driver);
+		return (FeeScheduleComponent) ProjectUtils.getVisibleComponent(feeScheedule);
 	}
 		
 	public class OrganizationSettingNavHeader extends BaseComponent {
@@ -96,7 +96,7 @@ public class EditOrganizationPage extends BasePage {
 		}
 		
 		private WebElement getNavElement(String name) {
-			WebElement el =SeleniumUtils.getChildElementFromParentLocatedBy(container, 
+			WebElement el = SeleniumUtils.getChildElementFromParentLocatedBy(container, 
 					By.xpath("./p/a[span[text()='" + name + "']]"), driver);
 			return el;
 		}
