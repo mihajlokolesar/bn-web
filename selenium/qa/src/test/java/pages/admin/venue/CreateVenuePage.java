@@ -94,6 +94,7 @@ public class CreateVenuePage extends BasePage {
 	public void enterRegion(String regionName) {
 		GenericDropDown dropDown = new GenericDropDown(driver, regionDropDownActivate, regionDropDownContainer);
 		dropDown.selectElementFromDropDownHiddenInput(dropDownListXpath(regionName), regionName);
+		waitForTime(1000);
 	}
 
 	private By dropDownListXpath(String value) {

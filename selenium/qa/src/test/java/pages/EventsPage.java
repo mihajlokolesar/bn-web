@@ -17,7 +17,7 @@ public class EventsPage extends BasePage {
 	@FindBy(xpath = "//body//main//header")
 	private WebElement dropHeader;
 
-	@FindBy(linkText = "View map")
+	@FindBy(linkText = "Get Directions")
 	private WebElement viewMapLink;
 	
 	@FindBy(xpath = "//a[parent::div]/button[span[contains(text(),'Purchase Tickets')]]")
