@@ -45,8 +45,9 @@ public class CreateOrganizationStepsIT extends BaseSteps {
 		loginFacade.givenAdminUserIsLogedIn(user);
 		organizationFacade.givenUserIsOnOrganizationsPage();
 		organizationFacade.whenUserPicksOrganizationAndClickOnEdit(organization);
-		organizationFacade.whenUserClickOnOtherFeesAndMakesChanges(organization.getOtherFees());
-		boolean isNotificationVisible = organizationFacade.thenUpdateNotificationShouldBeVisible();
+		boolean isFeeScheduledUpdate = organizationFacade.whenUserClickOnFeesScheeduleAndMakesChanges(organization.getFeesSchedule());
+		Assert.assertTrue(isFeeScheduledUpdate, "Notification, fee scheduled not displayed");
+		boolean isNotificationVisible = organizationFacade.whenUserClickOnOtherFeesAndMakesChanges(organization.getOtherFees());
 		Assert.assertTrue(isNotificationVisible, "Notification, organization updated not displayed");
 	}
 	

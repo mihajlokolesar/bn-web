@@ -36,7 +36,9 @@ public class EventsPage extends BasePage {
 		setUrl(Constants.getEventsBigNeon());
 	}
 
+	@Override
 	public void navigate() {
+		super.navigate();
 		driver.get(getUrl());
 	}
 
@@ -50,7 +52,6 @@ public class EventsPage extends BasePage {
 			retVal = false;
 		}
 		return retVal;
-
 	}
 
 	public WebElement findEvent(String eventName) {

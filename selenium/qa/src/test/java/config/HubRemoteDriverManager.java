@@ -1,8 +1,14 @@
 package config;
 
+import java.io.FileReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
@@ -30,7 +36,19 @@ public class HubRemoteDriverManager extends DriverManager {
 	
 	public RemoteWebDriver createRemoteWebDriver(String config_file, String environment) throws Exception {
 		DesiredCapabilities capabilities = new DesiredCapabilities();
-		capabilities.setBrowserName(environment);
+		if (config_file != null && !config_file.isEmpty()) {
+			JSONParser parser = new JSONParser();
+			JSONObject config = (JSONObject) parser.parse(new FileReader("src/test/resources/conf/hub/"+ config_file));
+			JSONObject envs = (JSONObject) config.get("environments");
+	        Iterator it = envs.entrySet().iterator();
+	        while (it.hasNext()) {
+	            Map.Entry<String, String> pair = (Entry<String, String>) it.next();
+	            System.out.println(pair.getKey()+ " " + pair.getValue());
+	            capabilities.setCapability(pair.getKey().toString(), pair.getValue().toString());
+	        }
+		} else {
+			capabilities.setBrowserName(environment);
+		}
 		return new RemoteWebDriver(new URL(this.url), capabilities);
 	}
 

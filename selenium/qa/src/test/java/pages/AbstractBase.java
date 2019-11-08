@@ -154,6 +154,9 @@ public class AbstractBase implements Serializable {
 	}
 	
 	public void waitVisibilityAndClearFieldSendKeys(WebElement inputField, String value) {
+		if (value == null) {
+			return;
+		}
 		String text = inputField.getAttribute("value");
 	    inputField.clear();
 	    String newtext = inputField.getAttribute("value");

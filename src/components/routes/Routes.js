@@ -169,11 +169,6 @@ const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => {
 @observer
 class Routes extends Component {
 	componentDidMount() {
-		//Check the user details every now and then so we know when a token has expired
-		this.interval = setInterval(() => {
-			user.refreshUser();
-		}, 5 * 60 * 1000); //every 5min
-
 		// Signal that js is ready for prerendering
 		window.prerenderReady = true;
 
@@ -183,12 +178,6 @@ class Routes extends Component {
 		}
 		// store url params data for campaign tracking
 		user.setCampaignTrackingData(getAllUrlParams());
-	}
-
-	componentWillUnmount() {
-		if (this.interval) {
-			clearInterval(this.interval);
-		}
 	}
 
 	componentDidCatch(error, errorInfo) {
@@ -333,7 +322,9 @@ class Routes extends Component {
 									path="/events/:id/tickets/success"
 									component={props => (
 										<Redirect
-											to={`/tickets/${props.match.params.id}/tickets/success`}
+											to={`/tickets/${props.match.params.id}/tickets/success${
+												window.location.search
+											}`}
 										/>
 									)}
 									isAuthenticated={isAuthenticated}

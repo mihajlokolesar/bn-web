@@ -19,9 +19,10 @@ public class HomePage extends BasePage {
 	}
 
 	public void navigate() {
+		super.navigate();
 		driver.get(getUrl());
 	}
-
+	
 	public List<WebElement> checkForResultOfSearch(String searchParam) {
 		List<WebElement> elements = driver.findElements(By.xpath("a[contains(@href,'" + searchParam + "']"));
 		return elements;

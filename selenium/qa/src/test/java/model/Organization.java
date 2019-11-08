@@ -1,10 +1,12 @@
 package model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
 
+import model.organization.FeesSchedule;
 import model.organization.OtherFees;
 import utils.DataConstants;
 import utils.DataReader;
@@ -21,6 +23,8 @@ public class Organization implements Serializable {
 	private String timeZone;
 	@JsonProperty("location")
 	private String location;
+	@JsonProperty("fees_schedule")
+	private FeesSchedule feesSchedule;
 	@JsonProperty("other_fees")
 	private OtherFees otherFees;
 		
@@ -48,29 +52,34 @@ public class Organization implements Serializable {
 	public void setLocation(String location) {
 		this.location = location;
 	}
-	
+	public FeesSchedule getFeesSchedule() {
+		return feesSchedule;
+	}
+	public void setFeesSchedule(FeesSchedule feesSchedule) {
+		this.feesSchedule = feesSchedule;
+	}
 	public OtherFees getOtherFees() {
 		return otherFees;
 	}
 	public void setOtherFees(OtherFees otherFees) {
 		this.otherFees = otherFees;
 	}
-	public void randomizeName() {
+	private void randomizeName() {
 		this.name = this.name + ProjectUtils.generateRandomInt(DataConstants.RANDOM_NUMBER_SIZE_10M);
+	}
+	
+	public BigDecimal getTotalWithFees(BigDecimal orderTotal, int numberOfTickets) {
+		BigDecimal total = getOtherFees().getTotalWithFees(orderTotal);
+		BigDecimal perTicketFeeForAllTickets = getFeesSchedule() != null ? 
+				getFeesSchedule().getTotalForNumberOfTickets(numberOfTickets) : new BigDecimal(0);
+		total = total.add(perTicketFeeForAllTickets);
+		return total;
 	}
 	
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		return sb.append(this.getName()).toString();
-	}
-	public static Organization generateOrganization() {
-		Organization organization = new Organization();
-		organization.setName("Auto test " + ProjectUtils.generateRandomInt(1000000));
-		organization.setPhoneNumber("1111111111");
-		organization.setTimeZone("Africa/Johannesburg");
-		organization.setLocation("Johannesburg, South Africa");
-		return organization;
 	}
 	
 	public static Organization generateOrganizationFromJson(String key, boolean randomizeName) {

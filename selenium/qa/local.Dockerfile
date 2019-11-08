@@ -5,9 +5,8 @@ RUN mkdir report
 WORKDIR /usr/src/test
 COPY pom.xml .
 RUN mvn dependency:resolve
-WORKDIR /usr/src/test
 COPY src ./src/
 COPY config ./config/
-COPY /extra/docker_scripts/start_hub_profile.sh .
-RUN chmod +x start_hub_profile.sh
-CMD ["./start_hub_profile.sh"]
+COPY /extra/docker_scripts/start_local.sh .
+RUN chmod +x start_local.sh
+CMD ["./start_local.sh"]

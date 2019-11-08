@@ -25,6 +25,8 @@
 		<webdriver.chrome.driver />
 		<webdriver.gecko.driver />
 		<webdriver.edge.driver />
+		<serverauthname />
+		<serverauthpass />
 		<browser>rm</browser>
 		<baseurl>https://develop.bigneon.com/</baseurl>
 	</properties>

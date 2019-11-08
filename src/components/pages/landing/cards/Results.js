@@ -13,6 +13,7 @@ import getUrlParam from "../../../../helpers/getUrlParam";
 import { urlPageParam } from "../../../elements/pagination";
 import Hidden from "@material-ui/core/Hidden";
 import { Link } from "react-router-dom";
+import analytics from "../../../../helpers/analytics";
 
 const styles = theme => ({
 	root: {
@@ -119,26 +120,30 @@ class Results extends Component {
 	renderEventList = events => {
 		return (
 			<Grid container spacing={24}>
-				{events.slice(0, this.state.shownEvents).map(({ venue, ...event }) => {
-					if (!event) {
-						console.error("Not found: ");
-						return null;
-					}
-					event.door_time = event.door_time || event.event_start;
-					const { timezone, name, city, state } = venue;
+				{events
+					.slice(0, this.state.shownEvents)
+					.map(({ venue, ...event }, index) => {
+						if (!event) {
+							console.error("Not found: ");
+							return null;
+						}
+						event.door_time = event.door_time || event.event_start;
+						const { timezone, name, city, state } = venue;
 
-					return (
-						<Grid item xs={12} sm={6} lg={4} key={event.id}>
-							<EventResultCard
-								venueTimezone={timezone}
-								venueName={name}
-								city={city}
-								state={state}
-								{...event}
-							/>
-						</Grid>
-					);
-				})}
+						return (
+							<Grid item xs={12} sm={6} lg={4} key={event.id}>
+								<EventResultCard
+									venueTimezone={timezone}
+									venueName={name}
+									city={city}
+									state={state}
+									list="Search Results"
+									position={index + 1}
+									{...event}
+								/>
+							</Grid>
+						);
+					})}
 			</Grid>
 		);
 	};
@@ -157,6 +162,8 @@ class Results extends Component {
 			} else {
 				hasResults = false;
 			}
+
+			analytics.addImpressions(events, "Search Results");
 		}
 
 		return (

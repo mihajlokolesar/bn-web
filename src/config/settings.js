@@ -17,6 +17,7 @@ export const settingsFactory = () => {
 			facebookLink: process.env.REACT_APP_FACEBOOK_URL,
 			instagramLink: process.env.REACT_APP_INSTAGRAM_URL,
 			appSupportLink: process.env.REACT_APP_SUPPORT_URL,
+			supportFAQLink: process.env.REACT_APP_SUPPORT_FAQ_LINK,
 			submitSupportLink: process.env.REACT_APP_NEW_SUPPORT_LINK,
 			appStoreIos: process.env.REACT_APP_STORE_IOS,
 			appStoreAndroid: process.env.REACT_APP_STORE_ANDROID

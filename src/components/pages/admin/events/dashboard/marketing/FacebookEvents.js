@@ -32,7 +32,9 @@ class FacebookEvents extends Component {
 			facebookCategory: null,
 			isSubmitting: false,
 			isFacebookLinked: false,
-			description: ""
+			description: "",
+			customAddress: null,
+			locationType: "UsePageLocation"
 		};
 	}
 
@@ -44,7 +46,8 @@ class FacebookEvents extends Component {
 			.events.read({ id: eventId })
 			.then(response => {
 				this.setState({
-					description: htmlToPlainText(response.data.additional_info || "")
+					description: htmlToPlainText(response.data.additional_info || ""),
+					customAddress: response.data.venue.address
 				});
 			})
 			.catch(error => {
@@ -78,14 +81,22 @@ class FacebookEvents extends Component {
 	}
 
 	onSubmit() {
-		const { pageId, facebookCategory, description } = this.state;
+		const {
+			pageId,
+			facebookCategory,
+			description,
+			locationType,
+			customAddress
+		} = this.state;
 		this.setState({ isSubmitting: true });
 		Bigneon()
 			.external.facebook.createEvent({
 				event_id: this.props.eventId,
 				page_id: pageId,
 				category: facebookCategory,
-				description
+				description,
+				location_type: locationType,
+				custom_address: locationType === "CustomAddress" ? customAddress : null
 			})
 			.then(response => {
 				this.setState({ isSubmitting: false, isFacebookLinked: true });
@@ -115,7 +126,9 @@ class FacebookEvents extends Component {
 			facebookCategory,
 			isSubmitting,
 			isFacebookLinked,
-			description
+			description,
+			locationType,
+			customAddress
 		} = this.state;
 
 		return (
@@ -154,6 +167,37 @@ class FacebookEvents extends Component {
 									type="text"
 									onChange={e => this.setState({ description: e.target.value })}
 								/>
+
+								<p>Address</p>
+								<p>
+									<em>
+										You must have set up a street address on your Facebook page
+										to use it as a location
+									</em>
+								</p>
+								<SelectGroup
+									items={[
+										{
+											name: "Use Facebook page's location",
+											value: "UsePageLocation"
+										},
+										{ name: "Custom address", value: "CustomAddress" }
+									]}
+									value={locationType}
+									onChange={e =>
+										this.setState({ locationType: e.target.value })
+									}
+								/>
+								<InputGroup
+									value={customAddress}
+									name="customAddress"
+									label="Address *"
+									type="text"
+									disabled={locationType === "UsePageLocation"}
+									onChange={e =>
+										this.setState({ customAddress: e.target.value })
+									}
+								/>
 								<Button
 									size="large"
 									type="submit"
@@ -167,7 +211,7 @@ class FacebookEvents extends Component {
 						) : (
 							<div>
 								<FacebookButton
-									scopes={["manage_pages", "publish_pages"]}
+									scopes={["manage_pages", "publish_pages", "create_event"]}
 									linkToUser={true}
 									onSuccess={this.onFacebookLogin.bind(this)}
 								/>

@@ -1,5 +1,5 @@
 const BigNeonWidget = {};
-(function(context) {
+(function (context) {
 	/** Helper Functions */
 	function getSyncScriptParams() {
 		const lastScript = [...document.getElementsByTagName("script")].filter(
@@ -10,13 +10,15 @@ const BigNeonWidget = {};
 			target: lastScript.getAttribute("data-target"),
 			apiUrl: lastScript.getAttribute("data-api-url"),
 			baseUrl: lastScript.getAttribute("data-base-url"),
-			style: lastScript.getAttribute("data-style")
+			style: lastScript.getAttribute("data-style"),
+			utmSource: lastScript.getAttribute("data-utm-source"),
+			utmMedium: lastScript.getAttribute("data-utm-medium")
 		};
 	}
 
 	function xhr(method, uri, body, handler) {
 		const req = new XMLHttpRequest();
-		req.onreadystatechange = function() {
+		req.onreadystatechange = function () {
 			if (req.readyState === 4 && handler) {
 				handler(req.responseText);
 			}
@@ -116,6 +118,18 @@ const BigNeonWidget = {};
 		"Dec"
 	];
 	const TEMPLATES = {
+		_utmParams(params) {
+			const { utmSource, utmMedium } = params;
+			const utms = [];
+			if (utmSource) {
+				utms.push(`utm_source=${utmSource}`);
+			}
+			if (utmMedium) {
+				utms.push(`utm_medium=${utmMedium}`);
+			}
+
+			return `${utms.length ? "?" : ""}${utms.join("&")}`;
+		},
 		_date: (tag, dateClass, eventDate) => {
 			const weekday = `<span class="${dateClass}-weekday">${
 				DAYS[eventDate.getDay()]
@@ -136,7 +150,7 @@ const BigNeonWidget = {};
 			return "";
 		},
 		//Left column
-		dateAndImageContainer: function(eventDate, imageUrl, eventName) {
+		dateAndImageContainer: function (eventDate, imageUrl, eventName) {
 			const date = TEMPLATES._date("h3", "bn-event-date", eventDate);
 			const image = TEMPLATES._image(imageUrl, eventName);
 			return `<div class="bn-event-image">${date}${image}</div>`;
@@ -186,12 +200,12 @@ const BigNeonWidget = {};
 	context.events = false;
 	context.params = getSyncScriptParams();
 
-	context.fetch = function(page) {
+	context.fetch = function (page) {
 		page = page || 0;
 		const uri = `${context.params.apiUrl}events?page=${page}&organization_id=${
 			context.params.organizationId
 		}`;
-		xhr("GET", uri, null, function(eventsString) {
+		xhr("GET", uri, null, function (eventsString) {
 			try {
 				context.events = JSON.parse(eventsString);
 				context.render(context.events, true);
@@ -201,7 +215,7 @@ const BigNeonWidget = {};
 		});
 	};
 
-	context.render = function(events, firstRender) {
+	context.render = function (events, firstRender) {
 		if (firstRender) {
 			const head = document.head || document.getElementsByTagName("head")[0],
 				style = document.createElement("style");
@@ -248,8 +262,9 @@ const BigNeonWidget = {};
 			);
 			eventHtml += TEMPLATES.purchaseContainer(id, priceText, event_type);
 			const eventContainer = TEMPLATES.eventContainer(eventHtml);
+			const utm = TEMPLATES._utmParams(context.params);
 			const row = TEMPLATES.eventRow(
-				`${context.params.baseUrl}events/${slug}`,
+				`${context.params.baseUrl}tickets/${slug}${utm}`,
 				eventContainer
 			);
 			parent.insertAdjacentHTML("beforeend", row);

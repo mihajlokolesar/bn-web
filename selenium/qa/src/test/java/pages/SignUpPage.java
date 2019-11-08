@@ -68,8 +68,4 @@ public class SignUpPage extends BasePage {
 		new RecaptchaFrame(driver).clickOnRecaptcha();
 		waitVisibilityAndBrowserCheckClick(createAccountButton);
 	}
-
-	public void navigate() {
-		driver.get(getUrl());
-	}
 }

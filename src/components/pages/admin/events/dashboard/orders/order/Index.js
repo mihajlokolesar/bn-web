@@ -79,9 +79,9 @@ class SingleOrder extends Component {
 	}
 
 	async loadAll() {
+		await this.loadOrder();
 		await this.loadEventDetails();
 
-		this.loadOrder();
 		this.loadOrderItems();
 		this.loadOrderHistory();
 	}
@@ -120,45 +120,58 @@ class SingleOrder extends Component {
 	}
 
 	loadOrder() {
-		const { orderId } = this.state;
+		const { orderId, eventId } = this.state;
 
-		Bigneon()
-			.orders.read({ id: orderId })
-			.then(response => {
-				const { data } = response;
-				const { date, is_box_office, items, user_id } = data;
+		return new Promise((resolve, reject) => {
+			Bigneon()
+				.orders.read({ id: orderId })
+				.then(response => {
+					const { data } = response;
+					const { date, is_box_office, items, user_id } = data;
 
-				const { timezone } = this.props;
-				const displayDate = moment(date)
-					.tz(timezone)
-					.format("MM/DD/YYYY h:mm A z");
-
-				const platform = is_box_office ? "Box office" : data.platform || "";
-
-				let fees_in_cents = 0;
-				items.forEach(({ item_type, unit_price_in_cents, quantity }) => {
-					//Only include fee type items
-					if (
-						["CreditCardFees", "PerUnitFees", "EventFees"].indexOf(
-							item_type
-						) > -1
-					) {
-						fees_in_cents += unit_price_in_cents * quantity;
+					//Orders can only be linked to a single event currently. This would need to change if we allow multiple events on a single order.
+					const orderEventId = [...new Set(items.map(i => i.event_id))].pop();
+					if (orderEventId && orderEventId !== eventId) {
+						//The event id in the url is from another event that is not related to this order, override it.
+						this.props.match.params.eventId = orderEventId;
+						this.setState({ eventId: orderEventId });
 					}
-				});
 
-				this.setState({
-					order: { ...data, displayDate, platform, fees_in_cents }
-				});
-			})
-			.catch(error => {
-				console.error(error);
+					const { timezone } = this.props;
+					const displayDate = moment(date)
+						.tz(timezone)
+						.format("MM/DD/YYYY h:mm A z");
 
-				notifications.showFromErrorResponse({
-					defaultMessage: "Loading order failed.",
-					error
+					const platform = is_box_office ? "Box office" : data.platform || "";
+
+					let fees_in_cents = 0;
+					items.forEach(({ item_type, unit_price_in_cents, quantity }) => {
+						//Only include fee type items
+						if (
+							["CreditCardFees", "PerUnitFees", "EventFees"].indexOf(
+								item_type
+							) > -1
+						) {
+							fees_in_cents += unit_price_in_cents * quantity;
+						}
+					});
+
+					this.setState({
+						order: { ...data, displayDate, platform, fees_in_cents }
+					});
+					resolve();
+				})
+				.catch(error => {
+					console.error(error);
+
+					notifications.showFromErrorResponse({
+						defaultMessage: "Loading order failed.",
+						error
+					});
+					reject(error);
 				});
-			});
+		});
+
 	}
 
 	loadOrderItems() {

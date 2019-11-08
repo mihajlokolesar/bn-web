@@ -221,7 +221,20 @@ class CheckoutConfirmation extends Component {
 			};
 		}
 
-		const cartItems = cart.ticketCount;
+		const cartItems = [];
+		for (let i = 0; i < cart.items.length; i++) {
+			if (cart.items[i].item_type === "Tickets") {
+				cartItems.push({
+					eventId: event.id,
+					name: event.name,
+					category: event.event_type,
+					organizationId: event.organization_id,
+					ticketTypeName: cart.items[i].description,
+					price: cart.items[i].unit_price_in_cents / 100,
+					quantity: cart.items[i].quantity
+				});
+			}
+		}
 		const total = cart.total_in_cents / 100;
 
 		Bigneon()
@@ -461,7 +474,10 @@ class CheckoutConfirmation extends Component {
 						containerClass={classes.desktopContent}
 						containerStyle={{ minHeight: overlayCardHeightAdjustment }}
 						col1={(
-							<EventDescriptionBody organization={organization} artists={artists}>
+							<EventDescriptionBody
+								organization={organization}
+								artists={artists}
+							>
 								<FormattedAdditionalInfo>
 									{additional_info}
 								</FormattedAdditionalInfo>

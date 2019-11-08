@@ -70,6 +70,7 @@ const TicketCard = ({
 	ticket_type_name,
 	shortened,
 	discount_price_in_cents,
+	description,
 	...rest
 }) => {
 	const checkboxStyle = { marginLeft: shortened ? 10 : 20 };
@@ -181,7 +182,7 @@ const TicketCard = ({
 		<div className={classes.detailsRow}>
 			<div style={colStyles[0]} className={classes.col1}>
 				{checkbox}
-				<Typography className={classes.boldText}>Per order fee</Typography>
+				<Typography className={classes.boldText}>{ description }</Typography>
 			</div>
 
 			<span style={colStyles[1]}/>

@@ -11,6 +11,7 @@ import optimizedImageUrl from "../../../helpers/optimizedImageUrl";
 import Settings from "../../../config/settings";
 import getPhoneOS from "../../../helpers/getPhoneOS";
 import HoldRow from "../../pages/admin/events/dashboard/holds/children/ChildRow";
+import analytics from "../../../helpers/analytics";
 
 const styles = theme => ({
 	card: {
@@ -144,6 +145,18 @@ class EventResultCard extends Component {
 		};
 	}
 
+	trackClick() {
+		const {
+			id,
+			name,
+			event_type,
+			organization_id,
+			position,
+			list
+		} = this.props;
+		analytics.eventClick(id, name, event_type, organization_id, position, list);
+	}
+
 	render() {
 		const {
 			classes,
@@ -186,6 +199,7 @@ class EventResultCard extends Component {
 				onMouseEnter={e => this.setState({ hoverId: id })}
 				onMouseLeave={e => this.setState({ hoverId: null })}
 				to={`/tickets/${slug || id}`}
+				onClick={this.trackClick.bind(this)}
 				// to={`/events/${slug || id}`}
 			>
 				<Card

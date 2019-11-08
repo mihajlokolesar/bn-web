@@ -403,10 +403,18 @@ class CheckoutSelection extends Component {
 			ticketSelection,
 			data => {
 				if (!emptySelection) {
-					let cartItems = 0;
+					const cartItems = [];
 					for (let i = 0; i < data.items.length; i++) {
 						if (data.items[i].item_type === "Tickets") {
-							cartItems += data.items[i].quantity;
+							cartItems.push({
+								eventId: event.id,
+								name: event.name,
+								category: event.event_type,
+								organizationId: event.organization_id,
+								ticketTypeName: data.items[i].description,
+								price: data.items[i].unit_price_in_cents / 100,
+								quantity: data.items[i].quantity
+							});
 						}
 					}
 					const total = data.total_in_cents / 100;

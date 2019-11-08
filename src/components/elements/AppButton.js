@@ -20,12 +20,18 @@ const styles = theme => {
 			borderRadius: 8,
 			[theme.breakpoints.down("xs")]: {
 				minWidth: 120
+			},
+			[theme.breakpoints.down("md")]: {
+				minWidth: 150
 			}
 			// WebkitBorderImage:
 			// 	"-webkit-gradient(linear, left top, left bottom, from(#00abeb), to(#fff), color-stop(0.5, #fff), color-stop(0.5, #66cc00)) 21 30 30 21 repeat repeat"
 		},
 		blackBackground: {
 			backgroundColor: "#000000"
+		},
+		pinkBackground: {
+			backgroundColor: "#FF22B2"
 		},
 		black: {
 			border: `solid 0.5px #000000`
@@ -40,7 +46,7 @@ const styles = theme => {
 			backgroundRepeat: "no-repeat"
 		},
 		leftIcon: {
-			marginRight: theme.spacing.unit,
+			marginRight: 5,
 			marginBottom: 2,
 			width: "auto",
 			height: "100%"
@@ -56,6 +62,11 @@ const styles = theme => {
 		blackBackgroundLabel: {
 			color: "#FFFFFF",
 			textTransform: "capitalize"
+		},
+		pinkBackgroundLabel: {
+			color: "#FFFFFF",
+			textTransform: "capitalize",
+			fontFamily: fontFamilyDemiBold
 		},
 		callToActionLabel: {
 			color: "#FFFFFF",
@@ -88,7 +99,11 @@ const AppButton = props => {
 	const { classes, children, variant, color, ...rest } = props;
 
 	const iconColor =
-		color === "blackBackground" || color === "callToAction" ? "white" : color;
+		color === "blackBackground" ||
+		color === "pinkBackground" ||
+		color === "callToAction"
+			? "white"
+			: color;
 
 	const iconUrl = variant ? `/icons/${variant}-${iconColor}.svg` : null;
 
@@ -128,7 +143,13 @@ AppButton.defaultProps = {
 };
 
 AppButton.propTypes = {
-	color: PropTypes.oneOf(["white", "black", "blackBackground", "callToAction"]),
+	color: PropTypes.oneOf([
+		"white",
+		"black",
+		"blackBackground",
+		"pinkBackground",
+		"callToAction"
+	]),
 	classes: PropTypes.object.isRequired,
 	variant: PropTypes.oneOf(["ios", "android", false]),
 	children: PropTypes.oneOfType([
