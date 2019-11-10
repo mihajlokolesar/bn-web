@@ -9,6 +9,7 @@ import model.Purchase;
 import model.TicketType;
 import model.User;
 import pages.EventsPage;
+import pages.HomePage;
 import pages.LoginPage;
 import pages.TicketsConfirmationPage;
 import pages.TicketsPage;
@@ -22,6 +23,7 @@ public class EventStepsFacade extends BaseFacadeSteps {
 	private TicketsConfirmationPage ticketsConfirmationPage;
 	private TicketsSuccesPage succesPage;
 	private LoginPage loginPage;
+	private HomePage homePage;
 
 	public EventStepsFacade(WebDriver driver) {
 		super(driver);
@@ -31,6 +33,7 @@ public class EventStepsFacade extends BaseFacadeSteps {
 		this.ticketPage = new TicketsPage(driver);
 		this.succesPage = new TicketsSuccesPage(driver);
 		this.loginPage = new LoginPage(driver);
+		this.homePage = new HomePage(driver);
 	}
 	
 	public LoginPage getLoginPage() {
@@ -62,6 +65,10 @@ public class EventStepsFacade extends BaseFacadeSteps {
 	
 	public void givenUserIsOnEventPage() {
 		eventsPage.navigate();
+	}
+	
+	public void givenUserIsOnHomePage() {
+		homePage.navigate();
 	}
 	
 	private void createEventWithSuperuserLoginAndLogout(Event event, boolean randomizeName) throws Exception {
@@ -103,12 +110,14 @@ public class EventStepsFacade extends BaseFacadeSteps {
 	}
 	
 	public void whenUserExecutesEventPagesSteps(Event event) throws Exception {
+		whenSearchingForEvent(event);
 		whenUserClicksOnEvent(event);
 		whenUserClickOnViewMap();
 		whenUserClicksOnPurchaseTicketLink();
 	}
 	
 	public void whenUserExecutesEventPagesStepsWithoutMapView(Event event) throws Exception {
+		whenSearchingForEvent(event);
 		whenUserClicksOnEvent(event);
 		whenUserClicksOnPurchaseTicketLink();
 	}
@@ -130,8 +139,12 @@ public class EventStepsFacade extends BaseFacadeSteps {
 		}
 	}
 
-	public void whenSearchingForEvent(Purchase purchase) {
+	public void whenSearchingForEventByEventArtistName(Purchase purchase) {
 		eventsPage.getHeader().searchEvents(purchase.getEvent().getArtistName());
+	}
+	
+	public void whenSearchingForEvent(Event event) {
+		eventsPage.getHeader().searchEvents(event.getEventName());
 	}
 	
 	public void whenUserSelectsNumberOfTicketsForEachTicketTypeAndClicksOnContinue(Purchase purchase) {

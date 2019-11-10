@@ -21,19 +21,21 @@ public class BoxOfficeSellTicketStepsIT extends BaseSteps {
 	
 	@Test(dataProvider = "box_office_sell_ticket_cash_payment", dependsOnMethods = {"prepareEventDataForBoxOfficeOrg"},
 			priority = 20, retryAnalyzer = utils.RetryAnalizer.class)
-	public void boxOfficeSellTicketCashPayment(User boxOfficeUser, Purchase purchase, User receiverOfTickets) {
+	public void boxOfficeSellTicketCashPayment(User boxOfficeUser, Purchase purchase, User receiverOfTickets) throws Exception {
 		int ticketNumAdd = purchase.getNumberOfTickets();
 		int ticketNumRemove = purchase.getRemoveNumberOfTickets();
 		int addToTendered = purchase.getAdditionalTenderedAmount();
 		maximizeWindow();
 		LoginStepsFacade loginStepsFacade = new LoginStepsFacade(driver);
 		AdminBoxOfficeFacade boxOfficeFacade = new AdminBoxOfficeFacade(driver);
+		OrganizationStepsFacade organizationFacade = new OrganizationStepsFacade(driver);
 
 		loginStepsFacade.givenUserIsLogedIn(boxOfficeUser);
 		
 		
 		loginStepsFacade.whenUserSelectsMyEventsFromProfileDropDown();
-		boxOfficeFacade.givenUserIsOnBoxOfficePage();
+		organizationFacade.givenOrganizationExist(purchase.getEvent().getOrganization());
+		boxOfficeFacade.thenUserIsAtSellPage();
 		boxOfficeFacade.givenBoxOfficeEventIsSelected(purchase.getEvent().getEventName());
 		boxOfficeFacade.thenUserIsAtSellPage();
 
@@ -57,17 +59,19 @@ public class BoxOfficeSellTicketStepsIT extends BaseSteps {
 	}
 	
 	@Test(dataProvider = "box_office_sell_ticket_cash_payment", priority = 21, retryAnalyzer = utils.RetryAnalizer.class)
-	public void b_boxOfficeSellTicketCardPayment(User boxOfficeUser, Purchase purchase, User receiverOfTickets) {
+	public void b_boxOfficeSellTicketCardPayment(User boxOfficeUser, Purchase purchase, User receiverOfTickets) throws Exception {
 		int ticketNumAdd = purchase.getNumberOfTickets();
 		int ticketNumRemove = purchase.getRemoveNumberOfTickets();
 		maximizeWindow();
 		LoginStepsFacade loginStepsFacade = new LoginStepsFacade(driver);
 		AdminBoxOfficeFacade boxOfficeFacade = new AdminBoxOfficeFacade(driver);
+		OrganizationStepsFacade organizationFacade = new OrganizationStepsFacade(driver);
 
 		loginStepsFacade.givenUserIsLogedIn(boxOfficeUser);
 		
 		loginStepsFacade.whenUserSelectsMyEventsFromProfileDropDown();
-		boxOfficeFacade.givenUserIsOnBoxOfficePage();
+		organizationFacade.givenOrganizationExist(purchase.getEvent().getOrganization());
+		boxOfficeFacade.thenUserIsAtSellPage();
 		boxOfficeFacade.givenBoxOfficeEventIsSelected(purchase.getEvent().getEventName());
 		boxOfficeFacade.thenUserIsAtSellPage();
 
