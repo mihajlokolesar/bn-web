@@ -39,7 +39,7 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 	 * Test for guest search on guest page task task #1769
 	 */
 	@Test(dataProvider = "guest_page_search_data", priority = 13, 
-			 dependsOnMethods = {"userPurchasedTickets"},  retryAnalyzer = utils.RetryAnalizer.class)
+			 dependsOnMethods = {"userPurchasedTickets"}, alwaysRun = true, retryAnalyzer = utils.RetryAnalizer.class)
 	public void guestPageSearchTest(User superuser, User one, User two) throws Exception {
 		LoginStepsFacade loginFacade = new LoginStepsFacade(driver);
 		AdminBoxOfficeFacade boxOfficeFacade = new AdminBoxOfficeFacade(driver);
@@ -246,9 +246,9 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 		Assert.assertTrue(isTherePurchasedHistoryItem);
 		TicketType ticketType = event.getTicketTypes().stream().filter(tt->tt.getTicketTypeName().equals(ticketTypeName)).findFirst().get();
 		boolean isDataValid = dashboardFacade.whenUserExpandsActivityItemAndChecksValidityOfData(purchase, MULTIPLE_PURCHASE_QTY_FOR_ONE_USER, ticketType);
-		
+		Assert.assertTrue(isDataValid, "Activity Item data invalid");
 		boolean isRefundDataValid = dashboardFacade.whenUserExpandsRefundedHistoryItemAndChecksData(purchase, 1, ticketType);
-		Assert.assertTrue(isDataValid && isRefundDataValid);
+		Assert.assertTrue(isRefundDataValid, "Refunded history item data invalid");
 		loginFacade.logOut();
 		
 	}

@@ -110,15 +110,13 @@ public class EventStepsFacade extends BaseFacadeSteps {
 	}
 	
 	public void whenUserExecutesEventPagesSteps(Event event) throws Exception {
-		whenSearchingForEvent(event);
-		whenUserClicksOnEvent(event);
+		whenUserSearchesAndClicksOnEvent(event);
 		whenUserClickOnViewMap();
 		whenUserClicksOnPurchaseTicketLink();
 	}
 	
 	public void whenUserExecutesEventPagesStepsWithoutMapView(Event event) throws Exception {
-		whenSearchingForEvent(event);
-		whenUserClicksOnEvent(event);
+		whenUserSearchesAndClicksOnEvent(event);
 		whenUserClicksOnPurchaseTicketLink();
 	}
 	
@@ -166,7 +164,7 @@ public class EventStepsFacade extends BaseFacadeSteps {
 		this.ticketsConfirmationPage.ticketsConfirmationPageSteps(card);
 	}
 	
-	private void whenUserClicksOnEvent(Event event) {
+	private void whenUserSearchesAndClicksOnEvent(Event event) {
 		eventsPage.clickOnEvent(event.getEventName());
 	}
 
