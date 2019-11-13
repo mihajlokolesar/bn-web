@@ -36,7 +36,11 @@ const styles = theme => {
 		secondary: {
 			background: secondaryHex,
 			color: "#FFF",
-			borderRadius: 3
+			borderRadius: 3,
+			"&:hover": {
+				background: secondaryHex,
+				color: "#FFF"
+			}
 		},
 		plainWhite: {
 			boxSizing: " border-box",

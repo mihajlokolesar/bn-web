@@ -9,6 +9,8 @@ import {
 import { convertToHTML, convertFromHTML } from "draft-convert";
 import { withStyles } from "@material-ui/core";
 import PropTypes from "prop-types";
+import classnames from "classnames";
+import FormHelperText from "@material-ui/core/FormHelperText";
 
 import "./editor.css";
 import Divider from "../../../common/Divider";
@@ -24,7 +26,7 @@ const convertHtmlPropToEditorState = html => {
 	}
 
 	let newLineReplacedHtml = "";
-	html.split("\n").forEach((item) => {
+	html.split("\n").forEach(item => {
 		newLineReplacedHtml = `${newLineReplacedHtml}${item}<br/>`;
 	});
 
@@ -71,6 +73,8 @@ const styles = theme => ({
 		minHeight: 100,
 		padding: 10
 	},
+	rootError: { borderColor: "#f44336", borderWidth: 1 },
+	errorHelperText: {},
 	styleContainer: {
 		display: "flex"
 		//padding: 10
@@ -149,6 +153,7 @@ class RichTextInputField extends Component {
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
 		const currentHtml = this.props.value;
+
 		if (
 			!this.htmlHasBeenSet &&
 			currentHtml &&
@@ -158,6 +163,9 @@ class RichTextInputField extends Component {
 			this.htmlHasBeenSet = true;
 			this.setState({ editorState });
 			this.applyLinkStyle();
+		} else if (prevProps.value && currentHtml === "") {
+			//Html was cleared from the input
+			this.setState({ editorState: EditorState.createEmpty() });
 		}
 	}
 
@@ -166,7 +174,7 @@ class RichTextInputField extends Component {
 			const currentContent = this.state.editorState.getCurrentContent();
 			//const html = convertToHTML(currentContent);
 
-			const html = convertToHTML({
+			let html = convertToHTML({
 				styleToHTML: style => {},
 				blockToHTML: block => {},
 				entityToHTML: (entity, originalText) => {
@@ -180,6 +188,10 @@ class RichTextInputField extends Component {
 					return originalText;
 				}
 			})(currentContent);
+			
+			if (html === "<p></p>") {
+				html = "";
+			}
 
 			this.props.onChange(html);
 		});
@@ -231,7 +243,7 @@ class RichTextInputField extends Component {
 
 	render() {
 		const { editorState, showLinkField, existingUrlForPrompt } = this.state;
-		const { classes, placeholder } = this.props;
+		const { classes, placeholder, error } = this.props;
 
 		return (
 			<React.Fragment>
@@ -241,7 +253,13 @@ class RichTextInputField extends Component {
 					onSetUrl={this.onSetUrl}
 					existingUrl={existingUrlForPrompt}
 				/>
-				<div className={classes.root} onClick={() => this.editor.focus()}>
+				<div
+					onClick={() => this.editor.focus()}
+					className={classnames({
+						[classes.root]: true,
+						[classes.rootError]: !!error
+					})}
+				>
 					<div className={classes.styleContainer}>
 						<BlockStyleControls
 							editorState={editorState}
@@ -271,6 +289,12 @@ class RichTextInputField extends Component {
 						/>
 					</div>
 				</div>
+
+				{error ? (
+					<FormHelperText error className={classes.errorHelperText}>
+						{error}
+					</FormHelperText>
+				) : null}
 			</React.Fragment>
 		);
 	}
@@ -279,7 +303,8 @@ class RichTextInputField extends Component {
 RichTextInputField.propTypes = {
 	placeholder: PropTypes.string,
 	value: PropTypes.string.isRequired,
-	onChange: PropTypes.func.isRequired
+	onChange: PropTypes.func.isRequired,
+	error: PropTypes.string
 };
 
 export default withStyles(styles)(RichTextInputField);

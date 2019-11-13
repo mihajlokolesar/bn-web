@@ -152,9 +152,14 @@ class SettlementReport extends Component {
 
 				//Format dates in event_entries
 				event_entries.forEach(({ event }) => {
+					let timezone = organizationTimezone;
+					if (event.venue && event.venue.timezone) {
+						timezone = event.venue.timezone;
+					}
+
 					event.displayStartTime = moment
 						.utc(event.event_start)
-						.tz(organizationTimezone)
+						.tz(timezone)
 						.format(dateTimeFormat);
 				});
 
@@ -213,10 +218,7 @@ class SettlementReport extends Component {
 			event_entries
 		} = this.state;
 
-		const {
-			displayDateRange,
-			isPostEventSettlement
-		} = settlement;
+		const { displayDateRange, isPostEventSettlement } = settlement;
 
 		const csvRows = [];
 
@@ -490,7 +492,7 @@ class SettlementReport extends Component {
 						style={{
 							display: "flex",
 							minHeight: 40,
-							alignItems: "flex-end"
+							alignItems: "center"
 						}}
 					>
 						{this.renderTitleSection()}

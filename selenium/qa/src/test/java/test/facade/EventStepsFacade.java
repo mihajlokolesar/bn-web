@@ -154,6 +154,10 @@ public class EventStepsFacade extends BaseFacadeSteps {
 		eventsPage.getHeader().searchEvents(event.getEventName());
 	}
 	
+	public void whenSearchingForEvent(Event event) {
+		eventsPage.getHeader().searchEvents(event.getEventName());
+	}
+	
 	public void whenUserSelectsNumberOfTicketsForEachTicketTypeAndClicksOnContinue(Purchase purchase) {
 		ticketPage.addNumberOfTicketsForEachType(purchase.getNumberOfTickets());
 		ticketPage.clickOnContinue();

@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 import PropTypes from "prop-types";
 import { observer } from "mobx-react";
+import classnames from "classnames";
 
 import notifications from "../../../../../stores/notifications";
 import Bigneon from "../../../../../helpers/bigneon";
@@ -22,78 +23,102 @@ import Divider from "../../../../common/Divider";
 import AffiliateLinkGeneratorDialog from "./links/AffiliateLinkGeneratorDialog";
 import FBPixelDialog from "./marketing/FBPixelDialog";
 
-const styles = theme => ({
-	container: {
-		paddingTop: theme.spacing.unit * 4,
-		paddingBottom: theme.spacing.unit * 4,
+const styles = theme => {
+	const defaultSidePadding = {
 		paddingLeft: theme.spacing.unit * 8,
-		paddingRight: theme.spacing.unit * 8,
+		paddingRight: theme.spacing.unit * 8
+	};
 
-		[theme.breakpoints.down("sm")]: {
-			padding: theme.spacing.unit * 2
-		}
-	},
-	headerContainer: {
-		marginBottom: theme.spacing.unit * 4,
-		[theme.breakpoints.down("sm")]: {
-			marginBottom: theme.spacing.unit
-		}
-	},
-	card: {
-		borderRadius: "6px 6px 0 0",
-		[theme.breakpoints.down("sm")]: {
-			borderRadius: 6
-		}
-	},
-	innerCardContainer: {
-		paddingBottom: theme.spacing.unit * 4
-	},
-	rightHeaderOptions: {
-		display: "flex",
-		justifyContent: "flex-end",
-		alignContent: "center",
-		alignItems: "center",
-		[theme.breakpoints.down("md")]: {
-			justifyContent: "space-between",
-			marginBottom: theme.spacing.unit * 2
-		}
-	},
-	innerCard: {
-		padding: theme.spacing.unit * 5,
-		[theme.breakpoints.down("md")]: {
-			padding: theme.spacing.unit * 2
-		}
-	},
-	menuContainer: {
-		display: "flex",
-		justifyContent: "flex-start",
-		alignItems: "center"
-	},
-	menuText: {
-		marginRight: theme.spacing.unit * 4,
+	return {
+		container: {
+			paddingTop: theme.spacing.unit * 4,
+			paddingBottom: theme.spacing.unit * 4,
+			...defaultSidePadding,
 
-		[theme.breakpoints.down("sm")]: {
-			marginRight: theme.spacing.unit * 2
+			[theme.breakpoints.down("sm")]: {
+				padding: theme.spacing.unit * 2
+			}
+		},
+		noSidePaddingContainer: {
+			paddingLeft: 0,
+			paddingRight: 0
+		},
+		headerContainer: {
+			marginBottom: theme.spacing.unit * 4,
+			[theme.breakpoints.down("sm")]: {
+				marginBottom: theme.spacing.unit
+			}
+		},
+		card: {
+			borderRadius: "6px 6px 0 0",
+			[theme.breakpoints.down("sm")]: {
+				borderRadius: 6
+			}
+		},
+		innerCardContainer: {
+			paddingBottom: theme.spacing.unit * 4
+		},
+		rightHeaderOptions: {
+			display: "flex",
+			justifyContent: "flex-end",
+			alignContent: "center",
+			alignItems: "center",
+			[theme.breakpoints.down("md")]: {
+				justifyContent: "space-between",
+				marginBottom: theme.spacing.unit * 2
+			}
+		},
+		innerCard: {
+			padding: theme.spacing.unit * 5,
+			[theme.breakpoints.down("md")]: {
+				padding: theme.spacing.unit * 2
+			}
+		},
+		menuContainer: {
+			display: "flex",
+			justifyContent: "flex-start",
+			alignItems: "center",
+
+			paddingTop: theme.spacing.unit * 4,
+			...defaultSidePadding,
+
+			[theme.breakpoints.down("sm")]: {
+				padding: theme.spacing.unit * 2
+			}
+		},
+		menuText: {
+			marginRight: theme.spacing.unit * 4,
+
+			[theme.breakpoints.down("sm")]: {
+				marginRight: theme.spacing.unit * 2
+			}
+		},
+		menuDividerContainer: {
+			marginBottom: theme.spacing.unit * 3,
+			marginTop: theme.spacing.unit * 3,
+
+			...defaultSidePadding,
+
+			[theme.breakpoints.down("sm")]: {
+				paddingLeft: theme.spacing.unit * 2,
+				paddingRight: theme.spacing.unit * 2
+			}
+		},
+		tagsContainer: {
+			display: "flex",
+			justifyContent: "flex-start"
+		},
+		menuDropdownContainer: {
+			//borderStyle: "solid",
+			boxShadow: "0 4px 15px 2px rgba(112, 124, 237, 0.17)"
+		},
+		additionalDesktopMenuContent: {
+			flex: 1,
+			display: "flex",
+			justifyContent: "flex-end"
 		}
-	},
-	menuDividerContainer: {
-		marginBottom: theme.spacing.unit * 3,
-		marginTop: theme.spacing.unit * 3
-	},
-	tagsContainer: {
-		display: "flex",
-		justifyContent: "flex-start"
-	},
-	menuDropdownContainer: {
-		//borderStyle: "solid",
-		boxShadow: "0 4px 15px 2px rgba(112, 124, 237, 0.17)"
-	},
-	additionalDesktopMenuContent: {
-		flex: 1,
-		display: "flex",
-		justifyContent: "flex-end"
-	}
-});
+	};
+};
 
 const isActiveReportMenu = type =>
 	(window.location.pathname || "").endsWith(`/${type}`);
@@ -256,17 +281,12 @@ class EventDashboardContainer extends Component {
 				) : (
 					<span/>
 				)}
-				{user.hasScope("event:write") ? (
-					<MenuItem onClick={this.openAffiliateLinkDialog.bind(this)}>
-						Affiliate Tracking Links
-					</MenuItem>
-				) : (
-					<span/>
-				)}
-				{user.hasScope("event:write") ? (
-					<MenuItem onClick={this.openFBPixelDialog.bind(this)}>
-						Facebook Pixel ID
-					</MenuItem>
+				{user.isAdmin ? (
+					<Link to={`/admin/events/${event.id}/announcements`}>
+						<MenuItem onClick={this.handleToolsMenuClose.bind(this)}>
+							Announcements
+						</MenuItem>
+					</Link>
 				) : (
 					<span/>
 				)}
@@ -440,6 +460,20 @@ class EventDashboardContainer extends Component {
 				</Link>
 			);
 		}
+		if (user.hasScope("event:write")) {
+			items.push(
+				<MenuItem key="affiliate-link" onClick={this.openAffiliateLinkDialog.bind(this)}>
+					Affiliate Tracking Links
+				</MenuItem>
+			);
+		}
+		if (user.hasScope("event:write")) {
+			items.push(
+				<MenuItem key="pixel-id" onClick={this.openFBPixelDialog.bind(this)}>
+					Facebook Pixel ID
+				</MenuItem>
+			);
+		}
 
 		if (items.length === 0) {
 			items.push(
@@ -538,7 +572,8 @@ class EventDashboardContainer extends Component {
 			children,
 			subheading,
 			layout,
-			additionalDesktopMenuContent
+			additionalDesktopMenuContent,
+			removeCardSidePadding
 		} = this.props;
 		const organizationId = user.currentOrganizationId;
 
@@ -618,84 +653,95 @@ class EventDashboardContainer extends Component {
 				</Grid>
 
 				<Card variant="block" className={classes.card}>
-					<div className={classes.container}>
-						<div className={classes.menuContainer}>
+					<div className={classes.menuContainer}>
+						<Typography className={classes.menuText}>
+							<StyledLink
+								underlined={subheading === "summary"}
+								to={`/admin/events/${event.id}/dashboard`}
+							>
+								Dashboard
+							</StyledLink>
+						</Typography>
+
+						{!event.is_external ? (
+							<React.Fragment>
+								<Typography className={classes.menuText}>
+									{this.renderToolsMenu()}
+									<StyledLink
+										underlined={subheading === "tools"}
+										onClick={this.handleToolsMenu.bind(this)}
+									>
+										Tools
+									</StyledLink>
+								</Typography>
+								<Typography className={classes.menuText}>
+									{this.renderOrdersMenu()}
+									<StyledLink
+										underlined={subheading === "orders"}
+										onClick={this.handleOrdersMenu.bind(this)}
+									>
+										Orders
+									</StyledLink>
+								</Typography>
+								<Typography className={classes.menuText}>
+									{this.renderReportsMenu()}
+									<StyledLink
+										underlined={subheading === "reports"}
+										onClick={this.handleReportsMenu.bind(this)}
+									>
+										Reports
+									</StyledLink>
+								</Typography>
+							</React.Fragment>
+						) : null}
+
+						{!event.is_external ? (
 							<Typography className={classes.menuText}>
+								{this.renderMarketingMenu()}
 								<StyledLink
-									underlined={subheading === "summary"}
-									to={`/admin/events/${event.id}/dashboard`}
+									underlined={subheading === "marketing"}
+									onClick={this.handleMarketingMenu.bind(this)}
 								>
-									Dashboard
+									Marketing
 								</StyledLink>
 							</Typography>
-
-							{!event.is_external ? (
-								<React.Fragment>
-									<Typography className={classes.menuText}>
-										{this.renderToolsMenu()}
-										<StyledLink
-											underlined={subheading === "tools"}
-											onClick={this.handleToolsMenu.bind(this)}
-										>
-											Tools
-										</StyledLink>
-									</Typography>
-									<Typography className={classes.menuText}>
-										{this.renderOrdersMenu()}
-										<StyledLink
-											underlined={subheading === "orders"}
-											onClick={this.handleOrdersMenu.bind(this)}
-										>
-											Orders
-										</StyledLink>
-									</Typography>
-									<Typography className={classes.menuText}>
-										{this.renderReportsMenu()}
-										<StyledLink
-											underlined={subheading === "reports"}
-											onClick={this.handleReportsMenu.bind(this)}
-										>
-											Reports
-										</StyledLink>
-									</Typography>
-								</React.Fragment>
-							) : null}
-
-							{!event.is_external &&
-							event.extra_admin_data &&
-							event.extra_admin_data.preview_facebook_enabled ? (
-									<Typography className={classes.menuText}>
-										{this.renderMarketingMenu()}
-										<StyledLink
-											underlined={subheading === "marketing"}
-											onClick={this.handleMarketingMenu.bind(this)}
-										>
-										Marketing
-										</StyledLink>
-									</Typography>
-								) : null}
-
-							<Hidden smDown>
-								<div className={classes.additionalDesktopMenuContent}>
-									{additionalDesktopMenuContent}
-								</div>
-							</Hidden>
-						</div>
-
-						{layout === "childrenInsideCard" ? (
-							<div>
-								<div className={classes.menuDividerContainer}>
-									<Divider/>
-								</div>
-								<div className={classes.innerCardContainer}>{children}</div>
-							</div>
 						) : null}
+
+						<Hidden smDown>
+							<div className={classes.additionalDesktopMenuContent}>
+								{additionalDesktopMenuContent}
+							</div>
+						</Hidden>
 					</div>
+
+					{layout === "childrenInsideCard" ? (
+						<div>
+							<div className={classes.menuDividerContainer}>
+								<Divider/>
+							</div>
+							<div
+								className={classnames({
+									[classes.container]: true,
+									[classes.innerCardContainer]: true,
+									[classes.noSidePaddingContainer]: removeCardSidePadding
+								})}
+							>
+								{children}
+							</div>
+						</div>
+					) : null}
 				</Card>
 
 				{layout === "childrenOutsideWithCard" ? (
 					<Card variant={"block"}>
-						<div className={classes.container}>{children}</div>
+						<div
+							className={classnames({
+								[classes.container]: true,
+								[classes.noSidePaddingContainer]: removeCardSidePadding
+							})}
+						>
+							{children}
+						</div>
 					</Card>
 				) : null}
 
@@ -713,7 +759,8 @@ class EventDashboardContainer extends Component {
 }
 
 EventDashboardContainer.defaultProps = {
-	layout: "childrenOutsideWithCard"
+	layout: "childrenOutsideWithCard",
+	removeCardSidePadding: false
 };
 
 EventDashboardContainer.propTypes = {
@@ -727,7 +774,8 @@ EventDashboardContainer.propTypes = {
 		"childrenOutsideWithCard",
 		"childrenOutsideNoCard"
 	]),
-	additionalDesktopMenuContent: PropTypes.element
+	additionalDesktopMenuContent: PropTypes.element,
+	removeCardSidePadding: PropTypes.bool
 };
 
 export default withStyles(styles)(EventDashboardContainer);

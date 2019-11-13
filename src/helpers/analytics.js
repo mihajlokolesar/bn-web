@@ -196,18 +196,21 @@ const bigneon = {
 		// client
 
 		const baseUrl = this.baseUrl;
-		ReactGA.ga()(function(tracker) {
-			const clientId = tracker.get("clientId") || "";
-			const source = tracker.get("source") || "";
-			const medium = tracker.get("medium") || "";
-			img.src =
-				baseUrl +
-				`/analytics/track?url=${uri}&client_id=${clientId}&source=${source}&medium=${medium}&${window.location.search.substr(
-					1
-				)}&` +
-				data;
-			document.body.insertBefore(img, document.body.firstChild);
-		});
+
+		if (ReactGA && ReactGA.ga()) {
+			ReactGA.ga()(function(tracker) {
+				const clientId = tracker.get("clientId") || "";
+				const source = tracker.get("source") || "";
+				const medium = tracker.get("medium") || "";
+				img.src =
+					baseUrl +
+					`/analytics/track?url=${uri}&client_id=${clientId}&source=${source}&medium=${medium}&${window.location.search.substr(
+						1
+					)}&` +
+					data;
+				document.body.insertBefore(img, document.body.firstChild);
+			});
+		}
 	},
 	eventClick(id, name, category, organizationId, listPosition, list) {
 		this.track("event_id=" + id);

@@ -50,9 +50,7 @@ class Marketing extends Component {
 
 		switch (type) {
 			case "fb-events":
-				content = (
-					<FacebookEvents eventId={eventId}>FB here</FacebookEvents>
-				);
+				content = <FacebookEvents eventId={eventId}>FB here</FacebookEvents>;
 				break;
 			default:
 				content = <Typography>Marketing unavailable.</Typography>;

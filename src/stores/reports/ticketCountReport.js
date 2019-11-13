@@ -272,6 +272,15 @@ export class TicketCountReport {
 
 	@computed
 	get dataByPrice() {
+		return this.fetchData(false);
+	}
+
+	@computed
+	get dataByPriceAndFee() {
+		return this.fetchData(true);
+	}
+
+	fetchData(groupFees) {
 		//Need to break the link from the dataByTicketPricing Observable
 		const allEventData = JSON.parse(JSON.stringify(this.dataByTicketPricing));
 		const groupByPriceTallyKeys = [
@@ -300,11 +309,10 @@ export class TicketCountReport {
 				const tmpGroupByPrice = {};
 
 				ticketSalesPricing.forEach(row => {
-					//Group by price, but if there's a hold_id, group by that as well
+					//Group by price and fees, but if there's a hold_id, group by that as well
 					const groupingKey = `pricekey-${row.ticket_pricing_price_in_cents +
-						row.promo_code_discounted_ticket_price}${
-						row.hold_id ? `-hold-${row.hold_id}` : ""
-					}`;
+						row.promo_code_discounted_ticket_price}
+					${groupFees ? `-fees-${row.client_online_fees_in_cents}` : ""}${row.hold_id ? `-hold-${row.hold_id}` : ""}`;
 
 					//const ticketPricingPriceInCents = row.ticket_pricing_price_in_cents;
 					if (!tmpGroupByPrice.hasOwnProperty(groupingKey)) {

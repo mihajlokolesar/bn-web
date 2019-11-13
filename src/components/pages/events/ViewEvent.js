@@ -43,6 +43,7 @@ import analytics from "../../../helpers/analytics";
 import getAllUrlParams from "../../../helpers/getAllUrlParams";
 import LinkifyReact from "linkifyjs/react";
 import FormattedAdditionalInfo from "./FormattedAdditionalInfo";
+import EventDetail from "./EventDetail";
 
 const styles = theme => {
 	return {
@@ -126,20 +127,6 @@ const styles = theme => {
 		}
 	};
 };
-
-const EventDetail = ({ classes, children, iconUrl }) => (
-	<div className={classes.eventDetailsRow}>
-		<div className={classes.iconContainer}>
-			<img
-				alt="Event Details Icon"
-				className={classes.icon}
-				src={servedImage(iconUrl)}
-			/>
-		</div>
-
-		<div className={classes.eventDetailContainer}>{children}</div>
-	</div>
-);
 
 @observer
 class ViewEvent extends Component {
