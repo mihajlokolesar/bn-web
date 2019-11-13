@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 import model.organization.FeesSchedule;
 import model.organization.OtherFees;
+import model.organization.Team;
 import utils.DataConstants;
 import utils.DataReader;
 import utils.ProjectUtils;
@@ -27,6 +28,8 @@ public class Organization implements Serializable {
 	private FeesSchedule feesSchedule;
 	@JsonProperty("other_fees")
 	private OtherFees otherFees;
+	@JsonProperty("team")
+	private Team team;
 		
 	public String getName() {
 		return name;
@@ -64,6 +67,12 @@ public class Organization implements Serializable {
 	public void setOtherFees(OtherFees otherFees) {
 		this.otherFees = otherFees;
 	}
+	public Team getTeam() {
+		return team;
+	}
+	public void setTeam(Team team) {
+		this.team = team;
+	}
 	private void randomizeName() {
 		this.name = this.name + ProjectUtils.generateRandomInt(DataConstants.RANDOM_NUMBER_SIZE_10M);
 	}
@@ -82,9 +91,13 @@ public class Organization implements Serializable {
 		return sb.append(this.getName()).toString();
 	}
 	
+	public static TypeReference<Organization> getTypeReference(){
+		return new TypeReference<Organization>() {
+		};
+	}
+	
 	public static Organization generateOrganizationFromJson(String key, boolean randomizeName) {
-		Organization organization = (Organization) DataReader.getInstance().getObject(key, new TypeReference<Organization>() {
-		});
+		Organization organization = (Organization) DataReader.getInstance().getObject(key, getTypeReference());
 		if (randomizeName) {
 			organization.randomizeName();
 		}

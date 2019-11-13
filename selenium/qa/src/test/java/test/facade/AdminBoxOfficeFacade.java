@@ -3,11 +3,15 @@ package test.facade;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.testng.Assert;
 
+import model.Event;
+import model.Purchase;
+import model.TicketType;
 import model.User;
 import pages.admin.boxoffice.GuestPage;
 import pages.admin.boxoffice.SellPage;
@@ -26,6 +30,7 @@ public class AdminBoxOfficeFacade extends BaseFacadeSteps {
 	private Map<String, Object> dataMap;
 
 	private final String SELL_ORDER_NUMBER_COMPLETE_KEY = "sell_order_number_complete_key";
+	private final String ORDER_COMPLETE_DIALOG_KEY = "order_complete_dialog";
 
 	public AdminBoxOfficeFacade(WebDriver driver) {
 		super(driver);
@@ -41,6 +46,11 @@ public class AdminBoxOfficeFacade extends BaseFacadeSteps {
 		thenUserIsAtSellPage();
 	}
 
+	public void givenUserIsOnSellPage() {
+		boxOfficeSideBar.clickOnSellLink();
+		sellPage.isAtPage();
+	}
+
 	public void givenUserIsOnGuestPage() {
 		boxOfficeSideBar.clickOnGuestLink();
 		guestPage.isAtPage();
@@ -52,6 +62,29 @@ public class AdminBoxOfficeFacade extends BaseFacadeSteps {
 
 	public void givenBoxOfficeEventIsSelected(String eventName) {
 		sellPage.getHeader().selectEventFromBoxOfficeDropDown(eventName);
+	}
+
+	public void whenUserSellsTicketToCustomer(Purchase purchase, String paymentOption, User customer) {
+		Event event = purchase.getEvent();
+		
+		givenEventIsSelected(purchase.getEvent().getEventName());
+		TicketType ticketType = event.getTicketTypes().get(0);
+		TicketTypeRowComponent ticketTypeRow = whenUserSelectsTicketType(
+				ticketType.getTicketTypeName());
+		
+		whenUserAddsQuantityAndClicksCheckout(ticketTypeRow, purchase.getNumberOfTickets());
+		if ("card".equalsIgnoreCase(paymentOption)) {
+			whenUserPicksCardOption();
+		} else {
+			BigDecimal ticketPrice = new BigDecimal(ticketType.getPrice());
+			BigDecimal numberOfTickets = new BigDecimal(purchase.getNumberOfTickets());
+			BigDecimal tenderedAmount = ticketPrice.multiply(numberOfTickets);
+			whenUserPicksCashOption();
+			whenUserEntersTenderedAndChecksChangeDueIsCorrect(tenderedAmount.intValue());
+		}
+		whenUserEntersGuestInformationAndClicksOnCompleteOrder(customer, "Box office reports");
+		thenUserShouldSeeOrderCompleteDialog();
+		whenUserClickOnReturnToBoxOffice();
 	}
 
 	public boolean whenUserSearchesByUserName(User user) {
@@ -82,7 +115,6 @@ public class AdminBoxOfficeFacade extends BaseFacadeSteps {
 		return searchResults.compareTo(allGuests) < 0;
 	}
 	
-	
 	private boolean whenUserSearchesByUserParams(String param) {
 		Integer allGuests = cleanSearchAndGetNumberOfResults();
 		guestPage.enterSearchParameters(param);
@@ -101,6 +133,10 @@ public class AdminBoxOfficeFacade extends BaseFacadeSteps {
 
 	public TicketTypeRowComponent whenUserSelectsTicketType() {
 		return sellPage.findTicketTypeRowComponentWithAvailableTickets();
+	}
+
+	public TicketTypeRowComponent whenUserSelectsTicketType(String ticketTypeName) {
+		return sellPage.findTicketTypeRowCompForTicketTypeName(ticketTypeName);
 	}
 
 	public void whenUserAddsQuantityAndClicksCheckout(TicketTypeRowComponent row, int addNumberOfTickets) {
@@ -136,7 +172,7 @@ public class AdminBoxOfficeFacade extends BaseFacadeSteps {
 		checkoutDialog.clickOnPayWithCreditCard();
 	}
 
-	public boolean whenUserEntersTenderedAndChecksChangeDueIsCorrect(TicketTypeRowComponent row, int tenderedAmount) {
+	public boolean whenUserEntersTenderedAndChecksChangeDueIsCorrect(int tenderedAmount) {
 		checkoutDialog.enterAmountToTenderedField(tenderedAmount);
 		
 		Double doubleCheckoutDue = checkoutDialog.getChangeDueAmount();
@@ -165,6 +201,21 @@ public class AdminBoxOfficeFacade extends BaseFacadeSteps {
 		checkoutDialog.enterOrderNote(orderNote);
 		checkoutDialog.waitForTime(1000);
 		checkoutDialog.clickOnCompleteOrderButton();
+	}
+
+	public boolean thenUserShouldSeeOrderCompleteDialog() {
+		BoxOfficeSellOrderCompleteDialog orderCompleteDialog = new BoxOfficeSellOrderCompleteDialog(driver);
+		if(orderCompleteDialog.isVisible()) {
+			setData(ORDER_COMPLETE_DIALOG_KEY, orderCompleteDialog);
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public void whenUserClickOnReturnToBoxOffice() {
+		BoxOfficeSellOrderCompleteDialog orderCompleteDialog = (BoxOfficeSellOrderCompleteDialog) getData(ORDER_COMPLETE_DIALOG_KEY);
+		orderCompleteDialog.clickOnReturnTOBoxOfficeButton();
 	}
 
 	public void thenUserShouldSeeOrderCompleteDialogAndGetOrderNumber() {

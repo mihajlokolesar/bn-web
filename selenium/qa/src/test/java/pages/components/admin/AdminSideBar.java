@@ -15,6 +15,9 @@ public class AdminSideBar extends BaseComponent{
 	@FindBy(xpath = "//body//nav//a[@href='/admin/fans']/div")
 	private WebElement adminFansLink;
 	
+	@FindBy(xpath = "//body//nav//a[@href='/admin/reports']/div")
+	private WebElement adminReportsLink;
+	
 	@FindBy(xpath = "//body//nav//a[@href='/admin/venues']/div")
 	private WebElement venuesLink;
 	
@@ -33,6 +36,11 @@ public class AdminSideBar extends BaseComponent{
 	public void clickOnOrganizations() {
 		waitForTime(500);
 		explicitWaitForVisibilityAndClickableWithClick(superAdminOrganizations);
+	}
+	
+	public void clickOnReports() {
+		waitForTime(500);
+		waitVisibilityAndBrowserCheckClick(adminReportsLink);
 	}
 	
 	public void clickOnVenues() {

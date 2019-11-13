@@ -138,13 +138,6 @@ public class AddTicketTypeComponent extends BaseComponent {
 		enterTime(time, timeValue);
 	}
 
-	private void enterDate(WebElement element, String value) {
-		waitForTime(500);
-		SeleniumUtils.clearInputField(element, driver);
-		waitForTime(500);
-		waitVisibilityAndSendKeys(element, value);
-	}
-
 	private void enterTime(WebElement element, String time) {
 		TimeMenuDropDown timeDropDown = new TimeMenuDropDown(driver);
 		timeDropDown.selectTime(element, time);

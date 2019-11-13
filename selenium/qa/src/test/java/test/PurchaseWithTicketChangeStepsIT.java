@@ -25,7 +25,7 @@ public class PurchaseWithTicketChangeStepsIT extends BaseSteps {
 
 		LoginPage loginPage =loginFacade.givenUserIsLogedIn(user);
 		if(!eventFacade.whenShoppingBasketIsPresentAndClickOnBasket()) {
-			eventFacade.whenSearchingForEvent(purchase);
+//			eventFacade.whenSearchingForEvent(purchase);
 			eventFacade.givenThatEventExist(purchase.getEvent(), user);
 			eventFacade.whenUserExecutesEventPagesSteps(purchase.getEvent());
 			eventFacade.whenUserSelectsNumberOfTicketsAndClicksOnContinue(purchase);

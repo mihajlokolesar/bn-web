@@ -80,8 +80,7 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 		EventStepsFacade eventsFacade = new EventStepsFacade(driver);
 
 		// given
-		eventsFacade.givenUserIsOnEventPage();
-
+		eventsFacade.givenUserIsOnHomePage();
 		EventsPage eventsPage = eventsFacade.givenThatEventExist(purchase.getEvent(), user);
 		if(this.purchase == null) {
 			this.purchase = purchase;
@@ -316,7 +315,6 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 
 	private static Purchase preparePurchase() {
 		Purchase purchase = Purchase.generatePurchaseFromJson(DataConstants.REGULAR_USER_PURCHASE_KEY);
-		purchase.setCreditCard(CreditCard.generateCreditCard());
 		purchase.setNumberOfTickets(PURCHASE_QUANTITY);
 		purchase.setEvent(Event.generateEventFromJson(DataConstants.EVENT_DATA_STANARD_KEY,
 				EVENT_NAME, false, START_DAY_OFFSET, DAYS_RANGE));

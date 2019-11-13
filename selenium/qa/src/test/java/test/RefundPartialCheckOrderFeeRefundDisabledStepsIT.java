@@ -71,7 +71,6 @@ public class RefundPartialCheckOrderFeeRefundDisabledStepsIT extends TemplateRef
 	
 	private static Purchase preparePurchase() {
 		Purchase purchase = Purchase.generatePurchaseFromJson(DataConstants.REGULAR_USER_PURCHASE_KEY);
-		purchase.setCreditCard(CreditCard.generateCreditCard());
 		purchase.setNumberOfTickets(PURCHASE_QUANTITY);
 		purchase.setEvent(Event.generateEventFromJson(DataConstants.EVENT_DATA_STANARD_KEY,
 				EVENT_NAME, true, START_DAY_OFFSET, DAYS_RANGE));

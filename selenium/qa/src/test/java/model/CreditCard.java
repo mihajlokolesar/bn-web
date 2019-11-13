@@ -1,8 +1,12 @@
 package model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.type.TypeReference;
+
+import utils.DataReader;
 
 public class CreditCard implements Serializable{
 	
@@ -42,14 +46,18 @@ public class CreditCard implements Serializable{
 		this.zipCode = zipCode;
 	}
 	
+	public static TypeReference<List<CreditCard>> getListTypeReference() {
+		return new TypeReference<List<CreditCard>>() {
+		};
+	}
 	
-	public static CreditCard generateCreditCard() {
-		CreditCard card = new CreditCard();
-		card.setCardNumber("4242424242424242");
-		card.setExpirationDate("0442");
-		card.setCvc("424");
-		card.setZipCode("24242");
-		return card;
+	public static TypeReference<CreditCard> getTypeReference() {
+		return new TypeReference<CreditCard>() {
+		};
+	}
+	
+	public static CreditCard generateCreditCardFromJson(String key) {
+		return (CreditCard) DataReader.getInstance().getObject(key, getTypeReference());
 	}
 	
 }

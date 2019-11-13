@@ -23,6 +23,7 @@ public class ProjectUtils {
 	public static final String CONCATINATED_DATE_FORMAT = "MMddyyyy";
 	public static final String ADMIN_EVENT_DATE_TIME_FORMAT = "EEEE, MMMM d yyyy h:mm a";
 	public static final String MANAGE_ORDER_HISTORY_ITEM_DATE_FORMAT = "EEE, MMM d, yyyy h:mm a";
+	public static final String REPORTS_BOX_OFFICE_TITLE_DATE_FORMAT = "MMM dd, yyyy";
 	public static final String RESOURCE_IMAGE_PATH = "src/test/resources/images/";
 
 	public static Integer generateRandomInt(int size) {
@@ -55,6 +56,11 @@ public class ProjectUtils {
 		return dates.toArray(new String[dates.size()]);
 	}
 
+	public static String formatDate(String pattern, LocalDate date) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
+		return formatter.format(date);
+	}
+
 	public static LocalDateTime parseDateTime(String pattern, String dateTime) {
 		if (dateTime == null || dateTime.isEmpty()) {
 			return null;
@@ -71,7 +77,12 @@ public class ProjectUtils {
 		LocalDateTime ldt = LocalDateTime.of(localDate, localTime);
 		return ldt;
 	}
-	
+	/**
+	 * Parses date using provided pattern, also it removes ordinals like in 1st, 2nd,.. 10th...
+	 * @param pattern
+	 * @param date
+	 * @return
+	 */
 	public static LocalDate parseDate(String pattern, String date) {
 		String removedOrdinalsDate = date.replaceAll("(?<=\\d)(st|nd|rd|th)", "");
 		DateTimeFormatter formater = DateTimeFormatter.ofPattern(pattern);
@@ -180,5 +191,15 @@ public class ProjectUtils {
 		} else {
 			throw new NoSuchElementException("Element for component:" + visible.getClass() + "not found");
 		}
+	}
+
+	/**
+	 * returns true if value is not null and not empty
+	 * 
+	 * @param value
+	 * @return
+	 */
+	public static boolean isStringValid(String value) {
+		return value != null && !value.isEmpty();
 	}
 }

@@ -10,8 +10,6 @@ public class ManualAddressEntryComponent extends BaseComponent {
 	
 	public static final String containerXpath = "//form//div[@style='min-height: 0px; height: auto; transition-duration: 300ms;']";
 	
-	private WebElement container;
-	
 	@FindBy(id = "address")
 	private WebElement addressField;
 
@@ -33,9 +31,8 @@ public class ManualAddressEntryComponent extends BaseComponent {
 	@FindBy(id = "longitude")
 	private WebElement longitude;
 
-	public ManualAddressEntryComponent(WebDriver driver, WebElement container) {
+	public ManualAddressEntryComponent(WebDriver driver) {
 		super(driver);
-		this.container = container;
 	}
 	
 	public boolean checkIfCoordinatesAreFilled() {

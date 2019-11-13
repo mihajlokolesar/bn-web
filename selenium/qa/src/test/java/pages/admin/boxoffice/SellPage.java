@@ -34,15 +34,15 @@ public class SellPage extends BasePage {
 		return optional.get();
 	}
 	
+	public TicketTypeRowComponent findTicketTypeRowCompForTicketTypeName(String ticketType) {
+		List<WebElement> rows = findTicketTypes("+");
+		Optional<TicketTypeRowComponent> optional = rows.stream().map(e-> new TicketTypeRowComponent(driver, e))
+				.filter(component -> component.getTicketTypeName().equals(ticketType)).findFirst();
+		return optional.isPresent() ? optional.get() : null;
+	}
+	
 	public void clickOnCheckoutButton() {
 		explicitWaitForVisibilityAndClickableWithClick(checkoutButton);
-	}
-
-	private TicketTypeRowComponent findTicketTypeRowComponentByName(String name) {
-		WebElement ticketTypeRow = explicitWait(15, ExpectedConditions.visibilityOfElementLocated(
-				By.xpath("//main//div[div[p[text()='" +name + "']]]")));
-		TicketTypeRowComponent row = new TicketTypeRowComponent(driver, ticketTypeRow);
-		return row;
 	}
 
 	/**

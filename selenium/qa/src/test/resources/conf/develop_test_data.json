@@ -131,6 +131,12 @@
 				"per_order_client_fee":1,
 				"per_order_big_neon_fee":0,
 				"credit_card_fee":2.75
+			},
+			"team": {
+				"org_admin_user": "organization_admin_user",
+				"box_office_users": [
+					"box_office_user_std"
+				]
 			}
 		},
 		"artist_name": "TheTestArtistAuto",
@@ -273,6 +279,136 @@
 		"remove_ticket_number": 3,
 		"order_note": "some pretty text note",
 		"additional_tendered_amount": 3
+	},
+	"event_JST" :{
+		"organization":{
+			"name":"Sast_Org",
+			"time_zone":"Africa/Johannesburg",
+			"phone_number":"123456789012",
+			"location":"Opera, Douglas Drive, Douglasdale, Johannesburg, South Africa",
+			"other_fees": {
+				"settlement_type": {
+					"label":"Post event",
+					"value":"PostEvent"
+				},
+				"per_order_client_fee":1,
+				"per_order_big_neon_fee":0,
+				"credit_card_fee":2.75
+			},
+			"team": {
+				"org_admin_user": "organization_admin_user",
+				"box_office_users": [
+					"box_office_user_std"
+				]
+			}
+		},
+		"artist_name": "TheTestArtistAuto",
+		"event_name": "TestJSTNameEvent",
+		"venue_name": "TokyoOpera",
+		"start_time": "08:30 PM",
+		"end_time": "10:00 PM",
+		"door_time": "1",
+		"ticket_types": [
+			{
+				"ticket_type_name": "GA",
+				"capacity": "100",
+				"price": "1"
+			},
+			{
+				"ticket_type_name": "VIP",
+				"capacity": "70",
+				"price": "2"
+			}
+		]
+	},
+	"event_EST" :{
+		"organization":{
+			"name":"Sast_Org",
+			"time_zone":"Africa/Johannesburg",
+			"phone_number":"123456789012",
+			"location":"Opera, Douglas Drive, Douglasdale, Johannesburg, South Africa",
+			"other_fees": {
+				"settlement_type": {
+					"label":"Post event",
+					"value":"PostEvent"
+				},
+				"per_order_client_fee":1,
+				"per_order_big_neon_fee":0,
+				"credit_card_fee":2.75
+			},
+			"team": {
+				"org_admin_user": "organization_admin_user",
+				"box_office_users": [
+					"box_office_user_std"
+				]
+			}
+		},
+		"artist_name": "TheTestArtistAuto",
+		"event_name": "TestESTNameEvent",
+		"venue_name": "NYOpera",
+		"start_time": "01:30 PM",
+		"end_time": "03:00 PM",
+		"door_time": "2",
+		"ticket_types": [
+			{
+				"ticket_type_name": "GA",
+				"capacity": "100",
+				"price": "1"
+			},
+			{
+				"ticket_type_name": "VIP",
+				"capacity": "70",
+				"price": "2"
+			}
+		]
+	},
+	"organization_SAST":{
+		"name":"Sast_Org",
+		"time_zone":"Africa/Johannesburg",
+		"phone_number":"123456789012",
+		"location":"Opera, Douglas Drive, Douglasdale, Johannesburg, South Africa",
+		"other_fees": {
+				"settlement_type": {
+					"label":"Post event",
+					"value":"PostEvent"
+				},
+				"per_order_client_fee":1,
+				"per_order_big_neon_fee":0,
+				"credit_card_fee":2.75
+			},
+		"team": {
+			"org_admin_user": "organization_admin_user",
+			"box_office_users": [
+				"box_office_user_std"
+			]
+		}
+	},
+    "venue_SAST":{
+		"name":"DuglasDriveOpera",
+		"timezone":"Africa/Johannesburg",
+		"region":"Other",
+		"organization_name":"Sast_Org",
+		"phone_number":"27728146598",
+		"location":"Opera, Douglas Drive, Douglasdale, Johannesburg, South Africa",
+		"image_name":"lorem_ipsum_img_101.jpg"
+	},
+	"venue_JST":{
+		"name":"TokyoOpera",
+		"timezone":"Asia/Tokyo",
+		"region":"No Region",
+		"organization_name":"Sast_Org",
+		"phone_number":"123456789012",
+		"location":"New National Theatre Tokyo, 1 Chome-1-1 Honmachi, Shibuya City, Tokyo, Japan",
+		"image_name":"lorem_ipsum_img_101.jpg"
+	},
+	"venue_EST":{
+		"name":"NYOpera",
+		"timezone":"America/New_York",
+		"organization_name":"Sast_Org",
+		"region":"No Region",
+		"phone_number":"123456789012",
+		"location":"Metropolitan Opera House, Lincoln Center Plaza, New York, NY, USA",
+		"image_name":"lorem_ipsum_img_101.jpg"
 	},
 	"venue_std":{
 		"name":"TAEVenue",

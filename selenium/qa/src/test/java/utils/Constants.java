@@ -49,7 +49,7 @@ public class Constants {
 	}
 
 	public static String getAdminOrganizations() {
-		return getBaseUrlBigNeon() + "admin/organizations/";
+		return getBaseUrlBigNeon() + "admin/organizations";
 	}
 	
 	public static String getAdminVenues() {
@@ -61,7 +61,7 @@ public class Constants {
 	}
 
 	public static String getAdminOrganizationsCreate() {
-		return getAdminOrganizations() + "create";
+		return getAdminOrganizations() + "/create";
 	}
 
 	public static String getAdminEventCreate() {
@@ -71,4 +71,12 @@ public class Constants {
 	public static String getAdminFans() {
 		return getBaseUrlBigNeon() + "admin/fans";
 	}	
+	
+	public static String getAdminReports() {
+		return getBaseUrlBigNeon() + "admin/reports";
+	}
+	
+	public static String getAdminReportsBoxOfficeSale() {
+		return getAdminReports() + "/box-office-sales-summary";
+	}
 }

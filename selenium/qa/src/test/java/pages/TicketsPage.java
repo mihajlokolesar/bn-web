@@ -65,7 +65,7 @@ public class TicketsPage extends BasePage {
 
 	@Override
 	public boolean isAtPage() {
-		return explicitWait(15, ExpectedConditions.urlMatches("tickets/$"));
+		return explicitWait(15, ExpectedConditions.urlMatches("tickets$|tickets/$"));
 	}
 	
 	public String getUrlPath() throws URISyntaxException {

@@ -161,14 +161,6 @@ public class CreateEventPage extends BasePage {
 				venueName);
 	}
 
-	private void enterDate(WebElement element, String date) {
-		if (date != null && !date.isEmpty()) {
-			explicitWaitForVisiblity(element);
-			SeleniumUtils.clearInputField(element, driver);
-			waitForTime(500);
-			waitVisibilityAndSendKeys(element, date);
-		}
-	}
 
 	public void addTicketTypes(List<TicketType> list) {
 		if (list == null) {

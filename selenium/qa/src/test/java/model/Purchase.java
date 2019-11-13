@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import utils.DataReader;
+import utils.ProjectUtils;
 
 public class Purchase implements Serializable {
 
@@ -91,6 +92,19 @@ public class Purchase implements Serializable {
 
 	public void setAdditionalTenderedAmount(int additionalTenderedAmount) {
 		this.additionalTenderedAmount = additionalTenderedAmount;
+	}
+
+	
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		String[] fields = { 
+				this.getEvent() != null? event.toString() : null, 
+				String.valueOf(this.numberOfTickets)
+		};
+		ProjectUtils.appendFields(fields, sb);
+		return sb.toString();
 	}
 
 	public static Object[] generatePurchasesFromJson(String key) {

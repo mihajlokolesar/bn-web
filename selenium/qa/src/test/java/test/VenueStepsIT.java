@@ -9,6 +9,7 @@ import model.Venue;
 import test.facade.LoginStepsFacade;
 import test.facade.VenueStepsFacade;
 import utils.DataConstants;
+import utils.NGUtils;
 
 public class VenueStepsIT extends BaseSteps {
 
@@ -23,11 +24,10 @@ public class VenueStepsIT extends BaseSteps {
 		venueStepsFacade.givenUserIsOnCreateVenuePage();
 
 		venueStepsFacade.whenUserFillsOutVenueInfo(venue);
-		boolean isCoordinatesFilled = venueStepsFacade.thenCoordinatesShouldBeFilled();
 		venueStepsFacade.whenUserClicksOnCreateVenue();
 
 		boolean isNotificationVisible = venueStepsFacade.thenNotificationVenueCreatedShouldBeVisible();
-		Assert.assertTrue(isNotificationVisible && isCoordinatesFilled);
+		Assert.assertTrue(isNotificationVisible);
 
 		loginFacade.logOut();
 	}
@@ -50,13 +50,12 @@ public class VenueStepsIT extends BaseSteps {
 		
 		venueStepsFacade.whenUserClicksOnEditButtonOfSelectedVenue(venue.getName());
 		venueStepsFacade.whenUserUpdatesVenue(venue);
-		boolean isCoordinatesFilled = venueStepsFacade.thenCoordinatesShouldBeFilled();
 		venueStepsFacade.whenUserClickOnUpdateButtonOnEditPage();
 
 		boolean isNotificationVisible = venueStepsFacade.thenNotificationVenueUpdatedShoudBeVisible();
 		boolean isAtVenuesPage = venueStepsFacade.thenUserIsOnVenuesPage();
 
-		Assert.assertTrue(isNotificationVisible && isAtVenuesPage && isCoordinatesFilled);
+		Assert.assertTrue(isNotificationVisible && isAtVenuesPage);
 
 		loginStepsFacade.logOut();
 

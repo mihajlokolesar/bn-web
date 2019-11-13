@@ -47,6 +47,16 @@ public class AbstractBase implements Serializable {
 	public void setDriver(WebDriver driver) {
 		this.driver = driver;
 	}
+	
+	public void enterDate(WebElement inputField, String value) {
+		if(value != null && !value.isEmpty() && inputField != null) {
+			explicitWaitForVisiblity(inputField);
+			waitForTime(500);
+			getAccessUtils().clearInputField(inputField);
+			waitForTime(500);
+			waitVisibilityAndSendKeys(inputField, value);
+		}
+	}
 
 	public <T, V> T explicitWaitForVisiblityForAllElements(By by) {
 		return explicitWait(15, ExpectedConditions.visibilityOfAllElementsLocatedBy(by));

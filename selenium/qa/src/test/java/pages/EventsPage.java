@@ -17,7 +17,7 @@ public class EventsPage extends BasePage {
 	@FindBy(xpath = "//body//main//header")
 	private WebElement dropHeader;
 
-	@FindBy(linkText = "View map")
+	@FindBy(linkText = "Get Directions")
 	private WebElement viewMapLink;
 	
 	@FindBy(xpath = "//a[parent::div]/button[span[contains(text(),'Purchase Tickets')]]")
@@ -45,7 +45,7 @@ public class EventsPage extends BasePage {
 	public boolean isEventPresent(String eventName) {
 		boolean retVal = false;
 		try {
-			if (findEvent(eventName) != null) {
+			if (findWithSearchEvent(eventName) != null) {
 				retVal = true;
 			}
 		} catch (Exception e) {
@@ -54,7 +54,7 @@ public class EventsPage extends BasePage {
 		return retVal;
 	}
 
-	public WebElement findEvent(String eventName) {
+	public WebElement findWithSearchEvent(String eventName) {
 		getHeader().searchEvents(eventName);
 		WebElement event = findEventOnPage(eventName);
 		return event;
@@ -69,7 +69,7 @@ public class EventsPage extends BasePage {
 	}
 
 	public void clickOnEvent(String eventName) {
-		WebElement event = findEvent(eventName);
+		WebElement event = findWithSearchEvent(eventName);
 		waitVisibilityAndBrowserCheckClick(event);
 	}
 

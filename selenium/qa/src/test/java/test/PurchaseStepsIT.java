@@ -20,7 +20,7 @@ public class PurchaseStepsIT extends BaseSteps {
 		EventStepsFacade eventsFacade = new EventStepsFacade(driver);
 
 		// given
-		eventsFacade.givenUserIsOnEventPage();
+		eventsFacade.givenUserIsOnHomePage();
 		EventsPage eventsPage = eventsFacade.givenThatEventExist(purchase.getEvent(), user);
 
 		// when
