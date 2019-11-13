@@ -335,8 +335,8 @@ public class ActivityItem extends BaseComponent {
 		}
 
 		public BigDecimal getTotalMoneyAmount() {
-			Double retVal = SeleniumUtils.getDoubleAmount(getTotalMoneyAmountElement(), "$", "");
-			return new BigDecimal(retVal);
+			BigDecimal retVal = getAccessUtils().getBigDecimalAmount(getTotalMoneyAmountElement(), "$", "");
+			return retVal;
 		}
 
 		private WebElement getTotalMoneyAmountElement() {

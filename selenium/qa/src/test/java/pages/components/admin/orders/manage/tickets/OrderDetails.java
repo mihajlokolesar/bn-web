@@ -17,8 +17,6 @@ import pages.BaseComponent;
 import utils.SeleniumUtils;
 
 public class OrderDetails extends BaseComponent {
-	
-	
 
 	@FindBy(xpath = "//main//div[div[div[div[div[p[text()='Ticket #']]]]]]")
 	private WebElement container;
@@ -29,7 +27,7 @@ public class OrderDetails extends BaseComponent {
 
 	@FindAll(value = { @FindBy(xpath = "//main//div[p[text()='Ticket #']]/following-sibling::div[not(@class)]") })
 	private List<WebElement> rows;
-	
+
 	private PerOrderFeeComponent perOrderFee;
 
 	public OrderDetails(WebDriver driver) {
@@ -51,9 +49,9 @@ public class OrderDetails extends BaseComponent {
 		Optional<TicketRow> row = rows.stream().map(e -> new TicketRow(driver, e)).filter(predicate).findFirst();
 		return row.isPresent() ? row.get() : null;
 	}
-	
+
 	public List<TicketRow> findAllTicketRows() {
-		return rows.stream().map(el-> new TicketRow(driver, el)).collect(Collectors.toList());
+		return rows.stream().map(el -> new TicketRow(driver, el)).collect(Collectors.toList());
 	}
 
 	public PerOrderFeeComponent getPerOrderFee() {
@@ -62,11 +60,14 @@ public class OrderDetails extends BaseComponent {
 
 	public class PerOrderFeeComponent extends BaseComponent {
 
-		@FindBy(xpath = "//div[div[p[contains(text(),'Per order fee')]]]")
-		private WebElement container;
+		@FindBy(xpath = "//div[div[p[contains(text(),'Event Fees')]]]")
+		private WebElement eventFeeContainer;
+
+		@FindBy(xpath = "//div[div[p[contains(text(),'Credit Card Fees')]]]")
+		private WebElement creditCardFeesContainer;
 
 		private String relativeCheckBoxXpath = "./div/div/div";
-		
+
 		private String relativeCheckedBoxXpath = relativeCheckBoxXpath + "/img";
 
 		private String relativeTotalMoneyAmountXpath = "./p[1]";
@@ -78,36 +79,56 @@ public class OrderDetails extends BaseComponent {
 		}
 
 		public boolean isVisible() {
-			return isExplicitlyWaitVisible(5, container);
+			return isExplicitlyWaitVisible(5, eventFeeContainer) && isExplicitlyWaitVisible(5, creditCardFeesContainer);
 		}
-		
-		public void clickOnCheckBox() {
-			WebElement checkBox = getCheckBoxElement();
+
+		public void clickOnCheckBoxes() {
+			clickOnCheckBox(eventFeeContainer);
+			clickOnCheckBox(creditCardFeesContainer);
+		}
+
+		private void clickOnCheckBox(WebElement element) {
+			WebElement checkBox = getCheckBoxElement(element);
 			SeleniumUtils.jsScrollIntoView(checkBox, driver);
 			waitVisibilityAndBrowserCheckClick(checkBox);
 		}
-		
-		public boolean isChecked() {
-			return getAccessUtils().isChildElementVisibleFromParentLocatedBy(container, By.xpath(relativeCheckedBoxXpath), 3);
+
+		public boolean isEntirePerOrderFeeChecked() {
+			boolean isEventFeeChecked = isFeesChecked(eventFeeContainer);
+			boolean isCreditCardFeeChecked = isFeesChecked(creditCardFeesContainer);
+			return isEventFeeChecked && isCreditCardFeeChecked;
+
 		}
-		
+
+		private boolean isFeesChecked(WebElement container) {
+			return getAccessUtils().isChildElementVisibleFromParentLocatedBy(container,
+					By.xpath(relativeCheckedBoxXpath), 3);
+		}
+
 		public BigDecimal getMoneyAmount() {
-			WebElement moneyEl = getMoneyAmountElement();
-			Double money = SeleniumUtils.getDoubleAmount(moneyEl, "$", "");
-			return new BigDecimal(money);
+			BigDecimal eventFeeMoney = getMoneyAmountElement(eventFeeContainer);
+			BigDecimal creditCardMoney = getMoneyAmountElement(creditCardFeesContainer);
+			if (creditCardMoney != null && eventFeeMoney != null) {
+				return creditCardMoney.add(eventFeeMoney);
+			} else if (creditCardMoney == null) {
+				return eventFeeMoney;
+			} else if (eventFeeMoney == null) {
+				return creditCardMoney;
+			} else {
+				return null;
+			}
 		}
 
-		private WebElement getCheckBoxElement() {
-			return SeleniumUtils.getChildElementFromParentLocatedBy(container, By.xpath(relativeCheckBoxXpath), driver);
+		private WebElement getCheckBoxElement(WebElement container) {
+			return getAccessUtils().getChildElementFromParentLocatedBy(container, By.xpath(relativeCheckBoxXpath));
 		}
 
-		private WebElement getMoneyAmountElement() {
-			return SeleniumUtils.getChildElementFromParentLocatedBy(container, By.xpath(relativeTotalMoneyAmountXpath),
-					driver);
+		private BigDecimal getMoneyAmountElement(WebElement container) {
+			return getAccessUtils().getBigDecimalAmount(container, relativeTotalMoneyAmountXpath);
 		}
 
-		private WebElement getStatusElement() {
-			return SeleniumUtils.getChildElementFromParentLocatedBy(container, By.xpath(relativaStatusXpath), driver);
+		private WebElement getStatusElement(WebElement container) {
+			return getAccessUtils().getChildElementFromParentLocatedBy(container, By.xpath(relativaStatusXpath));
 		}
 	}
 }

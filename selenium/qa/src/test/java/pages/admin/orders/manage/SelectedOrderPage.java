@@ -77,8 +77,8 @@ public class SelectedOrderPage extends BasePage {
 	public BigDecimal getRefundButtonMoneyAmount() {
 		String text = refundButton.getText();
 		String[] tokens = text.split(" ");
-		Double amount = ProjectUtils.getMoneyAmount(tokens[1]);
-		return new BigDecimal(amount);
+		BigDecimal amount = ProjectUtils.getBigDecimalMoneyAmount(tokens[1]);
+		return amount;
 	}
 	
 	public void clickOnRefundButton() {
@@ -141,8 +141,8 @@ public class SelectedOrderPage extends BasePage {
 		explicitWaitForVisiblity(totalRefundAmount);
 		String text = totalRefundAmount.getText();
 		String amount = text.replaceAll(".*.[\\($]|[\\)]", "");
-		Double parse = Double.parseDouble(amount);
-		return new BigDecimal(parse);
+		BigDecimal retVal = new BigDecimal(amount);
+		return retVal;
 	}
 	
 	

@@ -126,6 +126,11 @@ public class ProjectUtils {
 		return Double.parseDouble(replaced.trim());
 	}
 	
+	public static BigDecimal getBigDecimalMoneyAmount(String textSeq) {
+		String replaced = textSeq.replace("$", "");
+		return new BigDecimal(replaced.trim());
+	}
+	
 	public static String getTextForElementAndReplace(WebElement element, String oldChar, String newChar) {
 		String text = element.getText();
 		return text.replace(oldChar, newChar);

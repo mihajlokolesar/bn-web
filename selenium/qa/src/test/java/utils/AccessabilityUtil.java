@@ -1,5 +1,6 @@
 package utils;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -81,6 +82,22 @@ public class AccessabilityUtil {
 			return null;
 		}
 		return Double.parseDouble(text.trim());
+	}
+	
+	public BigDecimal getBigDecimalAmount(WebElement element, String oldChar, String newChar) {
+		String text = ProjectUtils.getTextForElementAndReplace(element, oldChar, newChar);
+		if (text.isEmpty()) {
+			return null;
+		}
+		return new BigDecimal(text);
+	}
+
+	public BigDecimal getBigDecimalAmount(WebElement parent, String relativeChildXpath) {
+		if (!isChildElementVisibleFromParentLocatedBy(parent, By.xpath(relativeChildXpath), 3)) {
+			return null;
+		}
+		WebElement el = getChildElementFromParentLocatedBy(parent, By.xpath(relativeChildXpath));
+		return getBigDecimalAmount(el, "$", "");
 	}
 
 	public boolean refreshElement(WebElement toBeRefreshed) {

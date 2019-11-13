@@ -103,8 +103,8 @@ public class IssueRefundDialog extends DialogContainerComponent {
 	}
 	
 	public BigDecimal getRefundTotalAmount() {
-		Double dAmount = SeleniumUtils.getDoubleAmount(refundTotal);
-		return new BigDecimal(dAmount);
+		BigDecimal retVal = getAccessUtils().getBigDecimalAmount(refundTotal, "$","");
+		return retVal;
 	}
 
 }
