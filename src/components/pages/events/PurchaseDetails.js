@@ -3,6 +3,8 @@ import { Typography } from "@material-ui/core";
 import user from "../../../stores/user";
 import { dollars } from "../../../helpers/money";
 import React from "react";
+import cart from "../../../stores/cart";
+import removeCountryFromAddress from "../../../helpers/removeCountryFromAddress";
 
 const PurchaseDetails = ({
 	classes,
@@ -12,10 +14,15 @@ const PurchaseDetails = ({
 	displayEventStartDate
 }) => {
 	const items = order.items;
-	let subTotal = 0;
 	let allFees = 0;
+	let subTotal = 0;
+	let discountForItem;
 	items.forEach(item => {
-		if (item.item_type === "PerUnitFees" || item.item_type === "EventFees") {
+		if (
+			item.item_type === "PerUnitFees" ||
+			item.item_type === "EventFees" ||
+			item.item_type === "CreditCardFees"
+		) {
 			allFees = allFees + item.unit_price_in_cents * item.quantity;
 		}
 	});
@@ -50,7 +57,9 @@ const PurchaseDetails = ({
 			</Hidden>
 			<br/>
 			<Typography className={classes.boldText}>{venue.name}</Typography>
-			<Typography className={classes.purchaseText}>{venue.address}</Typography>
+			<Typography className={classes.purchaseText}>
+				{removeCountryFromAddress(venue.address)}
+			</Typography>
 			<div className={classes.divider}/>
 			<Typography className={classes.greyTitleDemiBold}>Purchaser</Typography>
 			<Typography className={classes.boldText}>
@@ -78,28 +87,46 @@ const PurchaseDetails = ({
 			</Hidden>
 			{items
 				? items.map((item, index) => {
+					let ticketSubTotal = 0;
 					if (item.item_type !== "Tickets") {
 						return null;
 					}
-					subTotal = subTotal + item.unit_price_in_cents * item.quantity;
+					let ticketPrice = item.unit_price_in_cents;
+					if (item.item_type === "Tickets") {
+						discountForItem = items.find(
+							disc =>
+								disc.item_type === "Discount" && disc.parent_id === item.id
+						);
+					}
+					if (discountForItem) {
+						ticketPrice = ticketPrice + discountForItem.unit_price_in_cents;
+					}
+					ticketSubTotal = ticketSubTotal + ticketPrice * item.quantity;
+					subTotal = subTotal + ticketSubTotal;
+
+					let ticketName = item.description;
+					if (ticketName.includes(event.name)) {
+						ticketName = ticketName.replace(`${event.name} - `, "");
+					}
+
 					return (
 						<div key={index}>
 							<Hidden mdDown>
 								<div className={classes.purchaseInfo}>
 									<div className={classes.leftColumn}>
 										<Typography className={classes.purchaseTicketText}>
-											{item.description}
+											{ticketName}
 										</Typography>
 									</div>
 									<div className={classes.rightColumn}>
 										<Typography className={classes.purchaseTicketText}>
-											{dollars(item.unit_price_in_cents)}
+											{dollars(ticketPrice)}
 										</Typography>{" "}
 										<Typography className={classes.purchaseTicketText}>
 											{item.quantity}
 										</Typography>{" "}
 										<Typography className={classes.purchaseTicketText}>
-											{dollars(item.unit_price_in_cents * item.quantity)}
+											{dollars(ticketSubTotal)}
 										</Typography>
 									</div>
 								</div>
@@ -109,7 +136,7 @@ const PurchaseDetails = ({
 										Ticket type
 								</Typography>
 								<Typography className={classes.purchaseTicketText}>
-									{item.description}
+									{ticketName}
 								</Typography>
 								<br/>
 								<div className={classes.purchaseInfo}>
@@ -125,13 +152,13 @@ const PurchaseDetails = ({
 								</div>
 								<div className={classes.purchaseInfo}>
 									<Typography className={classes.purchaseTicketText}>
-										{dollars(item.unit_price_in_cents)}
+										{dollars(ticketPrice)}
 									</Typography>{" "}
 									<Typography className={classes.purchaseTicketText}>
 										{item.quantity}
 									</Typography>{" "}
 									<Typography className={classes.purchaseTicketText}>
-										{dollars(item.unit_price_in_cents * item.quantity)}
+										{dollars(ticketSubTotal)}
 									</Typography>
 								</div>
 								<br/>

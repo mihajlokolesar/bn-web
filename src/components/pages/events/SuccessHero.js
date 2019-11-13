@@ -1,6 +1,7 @@
 import TwoColumnLayout from "./TwoColumnLayout";
 import { Typography } from "@material-ui/core";
 import React from "react";
+import removeCountryFromAddress from "../../../helpers/removeCountryFromAddress";
 
 const Hero = ({
 	classes,
@@ -45,7 +46,7 @@ const Hero = ({
 						<Typography className={classes.desktopEventDetailText}>
 							<span className={classes.boldText}>{venue.name}</span>
 							<br/>
-							{venue.address}
+							{removeCountryFromAddress(venue.address)}
 						</Typography>
 					</div>
 				)}

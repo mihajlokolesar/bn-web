@@ -121,8 +121,7 @@ class Audit extends Component {
 
 	renderTicketCounts() {
 		const { eventId, classes } = this.props;
-
-		const eventData = ticketCountReport.dataByTicketPricing[eventId];
+		const eventData = ticketCountReport.dataByPrice[eventId];
 		if (!eventData) {
 			return <Typography>No counts...</Typography>;
 		}

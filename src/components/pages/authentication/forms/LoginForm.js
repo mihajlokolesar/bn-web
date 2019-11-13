@@ -105,6 +105,18 @@ class LoginForm extends Component {
 
 					//Pull user data with our new token
 					user.refreshUser(newUser => {
+						//Stop prism api users from logging in
+						if (user.globalRoles && user.globalRoles.indexOf("PrismIntegration") > -1) {
+							this.setState({ isSubmitting: false });
+							user.onLogout();
+
+							return notifications.show({
+								message:
+									"This accounts access is restricted for use with the Big Neon API.",
+								variant: "error"
+							});
+						}
+
 						analytics.identify({ ...newUser, method: "login" });
 
 						//If we have a security token, send them to the accept invite page first

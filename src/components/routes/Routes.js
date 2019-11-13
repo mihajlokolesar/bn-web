@@ -117,6 +117,9 @@ const AdminEventRefunds = asyncComponent(() =>
 const AdminLastCall = asyncComponent(() =>
 	import("../pages/admin/events/dashboard/hospitality/LastCall")
 );
+const AdminEventAnnouncements = asyncComponent(() =>
+	import("../pages/admin/events/dashboard/announcements/Index")
+);
 const AdminReportExportPDF = asyncComponent(() =>
 	import("../pages/admin/reports/ExportPDF")
 );
@@ -453,6 +456,12 @@ class Routes extends Component {
 									exact
 									path="/admin/events/:id/hospitality/last-call"
 									component={AdminLastCall}
+									isAuthenticated={isAuthenticated}
+								/>
+								<PrivateRoute
+									exact
+									path="/admin/events/:id/announcements"
+									component={AdminEventAnnouncements}
 									isAuthenticated={isAuthenticated}
 								/>
 								<PrivateRoute

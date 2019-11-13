@@ -58,7 +58,7 @@ class EventSummary extends Component {
 		const { eventId } = this.props;
 		downloadCSV(
 			summaryReport.csv(
-				summaryReport.dataByPrice[eventId],
+				eventId,
 				summaryReport.feesData[eventId]
 			),
 			"event-summary-report"
@@ -97,7 +97,7 @@ class EventSummary extends Component {
 
 	renderRevenueShare() {
 		const { eventId, classes } = this.props;
-		const eventSales = summaryReport.dataByPrice[eventId];
+		const eventSales = summaryReport.dataByPriceAndFee[eventId];
 		const eventFees = summaryReport.feesData[eventId];
 		if (eventSales === false) {
 			//Query failed
@@ -143,12 +143,14 @@ class EventSummary extends Component {
 								]}
 							</EventSummaryRow>
 
-							{sales.map((pricePoint, priceIndex) => {
+							{sales.filter(function(pricePoint) {
+    							return pricePoint.online_fee_count > 0;
+  						}).map((pricePoint, priceIndex) => {
 								const {
 									ticket_pricing_price_in_cents,
 									promo_code_discounted_ticket_price,
 									client_online_fees_in_cents,
-									online_sale_count,
+									online_fee_count,
 									ticket_pricing_name,
 									hold_name,
 									promo_redemption_code
@@ -164,9 +166,8 @@ class EventSummary extends Component {
 								const priceInCents =
 									ticket_pricing_price_in_cents +
 									promo_code_discounted_ticket_price;
-
 								const clientFeesPerSale =
-									client_online_fees_in_cents / online_sale_count;
+									client_online_fees_in_cents / online_fee_count;
 
 								return (
 									<EventSummaryRow key={priceIndex}>
@@ -174,7 +175,7 @@ class EventSummary extends Component {
 											rowName,
 											dollars(priceInCents),
 											dollars(clientFeesPerSale),
-											online_sale_count,
+											online_fee_count,
 											" ",
 											" ",
 											dollars(client_online_fees_in_cents)

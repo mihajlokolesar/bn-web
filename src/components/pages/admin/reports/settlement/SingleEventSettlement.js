@@ -84,6 +84,12 @@ const SingleEventSettlement = props => {
 					description = splitByCamelCase(settlement_entry_type);
 				}
 
+				let showFaceValue = true;
+				if (description === "Event Fees") {
+					description = "Order Fees";
+					showFaceValue = false;
+				}
+
 				return (
 					<EventSettlementRow
 						subHeading={!!ticket_type_name}
@@ -92,7 +98,7 @@ const SingleEventSettlement = props => {
 					>
 						{[
 							description,
-							dollars(face_value_in_cents),
+							showFaceValue ? dollars(face_value_in_cents) : "",
 							dollars(revenue_share_value_in_cents),
 							online_sold_quantity,
 							dollars(face_value_in_cents * online_sold_quantity),

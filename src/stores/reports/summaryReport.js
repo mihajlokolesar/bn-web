@@ -12,8 +12,9 @@ export class SummaryReport extends TicketCountReport {
 		super.fetchCountAndSalesData(queryParams, false, onSuccess);
 	}
 
-	csv(eventData, eventFees) {
+	csv(eventId, eventFees) {
 		let csvRows = [];
+		const eventData = super.dataByPrice[eventId];
 		const { eventName } = eventData;
 		let title = "Event summary report";
 		if (eventName) {
@@ -29,7 +30,7 @@ export class SummaryReport extends TicketCountReport {
 		csvRows.push([""]);
 
 		//Revenue share
-		csvRows = [...csvRows, ...this.revenueShareCsvData(eventData, eventFees)];
+		csvRows = [...csvRows, ...this.revenueShareCsvData(super.dataByPriceAndFee[eventId], eventFees)];
 		return csvRows;
 	}
 
@@ -43,7 +44,9 @@ export class SummaryReport extends TicketCountReport {
 			const ticketSale = eventData.tickets[ticketId];
 			const { totals, sales, name } = ticketSale;
 
-			sales.forEach((pricePoint, priceIndex) => {
+			sales.filter(function(pricePoint) {
+				return pricePoint.online_fee_count > 0;
+			}).forEach((pricePoint, priceIndex) => {
 				let priceName = pricePoint.ticket_pricing_name;
 				if (pricePoint.hold_name) {
 					priceName =
@@ -59,7 +62,7 @@ export class SummaryReport extends TicketCountReport {
 					`${name} - ${priceName}`,
 					dollars(priceInCents),
 					dollars(pricePoint.client_online_fees_in_cents),
-					pricePoint.online_sale_count,
+					pricePoint.online_fee_count,
 					" ",
 					" ",
 					dollars(pricePoint.client_online_fees_in_cents)

@@ -131,7 +131,7 @@ class Results extends Component {
 						const { timezone, name, city, state } = venue;
 
 						return (
-							<Grid item xs={12} sm={6} lg={4} key={event.id}>
+							<Grid item xs={12} sm={6} md={4} lg={4} key={event.id}>
 								<EventResultCard
 									venueTimezone={timezone}
 									venueName={name}

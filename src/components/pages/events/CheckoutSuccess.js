@@ -34,6 +34,7 @@ import Settings from "../../../config/settings";
 
 import PurchaseDetails from "./PurchaseDetails";
 import Hero from "./SuccessHero";
+import removeCountryFromAddress from "../../../helpers/removeCountryFromAddress";
 
 const heroHeight = 586;
 
@@ -731,7 +732,7 @@ class CheckoutSuccess extends Component {
 								<Typography className={classes.desktopEventDetailText}>
 									<span className={classes.boldText}>{venue.name}</span>
 									<br/>
-									{venue.address}
+									{removeCountryFromAddress(venue.address)}
 								</Typography>
 							</div>
 							<div>
@@ -742,12 +743,13 @@ class CheckoutSuccess extends Component {
 												Get your tickets now by downloading the Big Neon App
 											</Typography>
 											<div className={classes.btnContainer}>
-												<Link
-													to={
+												<a
+													href={
 														phoneOS === "ios"
 															? Settings().appStoreIos
 															: Settings().appStoreAndroid
 													}
+													target="_blank"
 												>
 													<CustomButton
 														variant="secondary"
@@ -755,7 +757,7 @@ class CheckoutSuccess extends Component {
 													>
 														Download the Big Neon App
 													</CustomButton>
-												</Link>
+												</a>
 											</div>
 											<Typography className={classes.cardMedText}>
 												(or just bring your photo ID to the door)
