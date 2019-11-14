@@ -108,5 +108,15 @@ public abstract class BasePage extends AbstractBase {
 		}
 		return false;
 	}
+	
+	public String getNotificationMessage(int waitTime) {
+		boolean isMessageVisible = isExplicitlyWaitVisible(waitTime, message);
+		if (isMessageVisible) {
+			String msg = message.getText();
+			return msg != null? msg : "notification displayed but message was null";
+		} else {
+			return null;
+		}
+	}
 
 }

@@ -21,6 +21,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import config.BrowsersEnum;
 import config.DriverFactory;
+import pages.components.datepicker.DatePickerComponent;
 import utils.AccessabilityUtil;
 import utils.SeleniumUtils;
 
@@ -50,11 +51,8 @@ public class AbstractBase implements Serializable {
 	
 	public void enterDate(WebElement inputField, String value) {
 		if(value != null && !value.isEmpty() && inputField != null) {
-			explicitWaitForVisiblity(inputField);
-			waitForTime(500);
-			getAccessUtils().clearInputField(inputField);
-			waitForTime(500);
-			waitVisibilityAndSendKeys(inputField, value);
+			DatePickerComponent datePicker = new DatePickerComponent(driver, inputField);
+			datePicker.selectDate(value);
 		}
 	}
 

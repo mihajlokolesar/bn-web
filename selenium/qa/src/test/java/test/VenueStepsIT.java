@@ -9,7 +9,6 @@ import model.Venue;
 import test.facade.LoginStepsFacade;
 import test.facade.VenueStepsFacade;
 import utils.DataConstants;
-import utils.NGUtils;
 
 public class VenueStepsIT extends BaseSteps {
 

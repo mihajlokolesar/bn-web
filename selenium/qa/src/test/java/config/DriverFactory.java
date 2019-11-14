@@ -8,13 +8,6 @@ public class DriverFactory {
 
         DriverManager manager = null;
         try {
-        	
-        	System.setProperty("webdriver.chrome.driver","/home/simpletask/programs/drivers/linux/chromedriver");
-        	System.setProperty("webdriver.gecko.driver", "/home/simpletask/programs/drivers/linux/geckodriver");
-
-//        	System.setProperty("serverauthname","bigneon");
-//        	System.setProperty("serverauthpass","bigneon!");
-        	System.setProperty("browser", "ff");
 
      		String browser = System.getProperty("browser");
             BrowsersEnum browserEnum = BrowsersEnum.getEnumForCode(browser);

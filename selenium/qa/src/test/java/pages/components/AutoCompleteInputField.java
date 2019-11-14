@@ -23,6 +23,7 @@ public class AutoCompleteInputField extends BaseComponent {
 	}
 
 	public void selectFromAutocomplete(String value, String separator) {
+		getAccessUtils().clearInputField(inputField);
 		explicitWaitForVisiblity(inputField);
 		waitForTime(2000);
 		search(value);

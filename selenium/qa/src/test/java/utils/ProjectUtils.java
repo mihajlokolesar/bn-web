@@ -7,6 +7,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
@@ -24,6 +27,7 @@ public class ProjectUtils {
 	public static final String ADMIN_EVENT_DATE_TIME_FORMAT = "EEEE, MMMM d yyyy h:mm a";
 	public static final String MANAGE_ORDER_HISTORY_ITEM_DATE_FORMAT = "EEE, MMM d, yyyy h:mm a";
 	public static final String REPORTS_BOX_OFFICE_TITLE_DATE_FORMAT = "MMM dd, yyyy";
+	public static final String DATE_PICKER_MONTH_YEAR_FORMAT = "MMMM yyyy";
 	public static final String RESOURCE_IMAGE_PATH = "src/test/resources/images/";
 
 	public static Integer generateRandomInt(int size) {
@@ -88,6 +92,18 @@ public class ProjectUtils {
 		DateTimeFormatter formater = DateTimeFormatter.ofPattern(pattern);
 		LocalDate localDate = LocalDate.parse(removedOrdinalsDate, formater);
 		return localDate;
+	}
+	
+	public static LocalDate parseDate(String pattern, String date, List<ChronoField> ignoredChronoField ) {
+		DateTimeFormatterBuilder builder = new DateTimeFormatterBuilder()
+				.appendPattern(pattern);
+		if (ignoredChronoField != null) {
+			for(ChronoField field : ignoredChronoField)
+				builder.parseDefaulting(field, 1);
+		}
+		DateTimeFormatter formater = builder.toFormatter();
+		return LocalDate.parse(date, formater);
+		
 	}
 	
 	public static LocalTime parseTime(String pattern, String time) {

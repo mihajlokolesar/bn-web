@@ -8,6 +8,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import junit.framework.Assert;
 import model.TicketType;
 import pages.BasePage;
 import pages.components.GenericDropDown;
@@ -190,7 +191,10 @@ public class CreateEventPage extends BasePage {
 	}
 
 	public boolean checkMessage() {
-		return isNotificationDisplayedWithMessage(MsgConstants.EVENT_PUBLISHED);
+		if (!isNotificationDisplayedWithMessage(MsgConstants.EVENT_PUBLISHED)) {
+			Assert.fail(getNotificationMessage(2));
+		} 
+		return true;
 	}
 
 	public boolean checkSaveDraftMessage() {

@@ -1,17 +1,14 @@
 package test.facade.reports;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.openqa.selenium.WebDriver;
+import org.testng.Assert;
 
 import model.Event;
-import model.Purchase;
 import pages.admin.reports.ReportsBoxOfficeSalesPage;
 import pages.admin.reports.ReportsMainPage;
 import test.facade.BaseFacadeSteps;
-import utils.NGUtils;
 import utils.ProjectUtils;
 
 public class ReportsBoxOfficeFacade extends BaseFacadeSteps {
@@ -36,9 +33,8 @@ public class ReportsBoxOfficeFacade extends BaseFacadeSteps {
 	public void enterDates() {
 		LocalDate now = LocalDate.now();
 		String[] dates = ProjectUtils.getDatesWithSpecifiedRangeInDaysWithStartOffset(-1, 1);
-		System.out.println(dates);
 		getReportsBoxOfficePage().enterDateRanges(dates[1], dates[1]);
-		NGUtils.getSoftAssert().assertTrue(getReportsBoxOfficePage().checkIfDatesAreCorrect(dates[0], dates[1]),"Dates do not match");
+		Assert.assertTrue(getReportsBoxOfficePage().checkIfDatesAreCorrect(dates[1], dates[1]),"Dates do not match");
 	}
 	
 	public boolean whenUserSearchesForEventInBoxOfficeReport(Event event) {

@@ -134,7 +134,9 @@ public class AddTicketTypeComponent extends BaseComponent {
 	}
 
 	private void fillOutAtSpecificTimeDetails(WebElement date, WebElement time, String dateValue, String timeValue) {
+		waitForTime(700);
 		enterDate(date, dateValue);
+		waitForTime(700);
 		enterTime(time, timeValue);
 	}
 

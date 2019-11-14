@@ -19,6 +19,8 @@ public class CreateFixtures extends BaseSteps {
 		fs.getLoginFacade().givenAdminUserIsLogedIn(user);
 		if (!fs.getOrganizationFacade().isOrganizationPresent(org)) {
 			fs.getOrganizationFacade().createOrganization(org);
+			fs.getOrganizationFacade().givenUserIsOnOrganizationsPage();
+			fs.getOrganizationFacade().whenUserPicksOrganizationAndClickOnEdit(org);
 			fs.getOrganizationFacade().updateSteps(org);
 		} else {
 			fs.getOrganizationFacade().givenUserIsOnOrganizationsPage();
