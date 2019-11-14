@@ -169,9 +169,13 @@ class FacebookEvents extends Component {
 	}
 
 	componentDidMount() {
+		this.refreshPages(true);
+		this.refreshEvent();
+	}
+
+	refreshEvent() {
 		const { eventId } = this.props;
 
-		this.refreshPages(true);
 		Bigneon()
 			.events.read({ id: eventId })
 			.then(response => {
@@ -235,13 +239,8 @@ class FacebookEvents extends Component {
 				location_type: locationType,
 				custom_address: customAddress ? customAddress : null
 			})
-			.then(response => {
-				this.setState({
-					isSubmitting: false,
-					isFacebookLinked: true,
-					facebookEventId: response.data.facebook_event_id,
-					facebookResponseSuccess: true
-				});
+			.then(() => {
+				this.refreshEvent();
 				notification.show({
 					message: "Event published to Facebook",
 					variant: "success"

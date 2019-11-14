@@ -46,16 +46,18 @@ const styles = theme => {
 			backgroundColor: "#FFFFFF"
 		},
 		mobileContent: {
-			flex: 1,
+			// flex: 1,
+			paddingTop: 40,
 			flexDirection: "column",
 			background: "linear-gradient(180deg, #9C2D82 0%, #3965A6 40%)",
 			display: "flex"
 		},
 		mobileTopContent: {
-			flex: 1,
+			// flex: 1,
 			display: "flex",
 			flexDirection: "column",
 			justifyContent: "center",
+			minHeight: "70vh",
 			paddingLeft: 22,
 			paddingRight: 22,
 			[iPhone5MediaQuery]: {
@@ -123,6 +125,9 @@ const styles = theme => {
 			backgroundImage: "linear-gradient(255deg, #e53d96, #5491cc)",
 			backgroundRepeat: "no-repeat",
 			backgroundSize: "cover",
+			OBackgroundSize: "cover",
+			MozBackgroundSize: "cover",
+			WebkitBackgroundSize: "cover",
 			boxShadow: "0 4px 15px 2px rgba(0,0,0,0.15)",
 			backgroundPosition: "center",
 			[theme.breakpoints.down("md")]: {
@@ -200,6 +205,7 @@ const styles = theme => {
 			color: "#3C383F",
 			fontSize: 17,
 			lineHeight: "20px",
+			marginTop: 20,
 			fontFamily: fontFamilyDemiBold
 		},
 		desktopCardFooterContainer: {
@@ -250,7 +256,10 @@ const styles = theme => {
 		},
 		iconHolder: {
 			width: 26,
-			marginRight: theme.spacing.unit * 2
+			marginRight: theme.spacing.unit * 2,
+			flexDirection: "column",
+			alignItems: "center",
+			display: "flex"
 		},
 		icon: {
 			maxWidth: 24
@@ -267,9 +276,9 @@ const styles = theme => {
 			fontFamily: fontFamilyBold,
 			lineHeight: "28px",
 			[theme.breakpoints.down("md")]: {
-				fontSize: 17,
+				fontSize: 22,
 				fontFamily: fontFamilyBold,
-				lineHeight: "19px"
+				lineHeight: "24px"
 			}
 		},
 		cardMedText: {
@@ -285,8 +294,8 @@ const styles = theme => {
 			flexDirection: "row",
 			alignItems: "center",
 			justifyContent: "space-between",
-			marginTop: theme.spacing.unit * 2,
-			marginBottom: theme.spacing.unit * 2
+			marginTop: 24,
+			marginBottom: 24
 		},
 		purchaseInfoBlock: {
 			padding: theme.spacing.unit * 4,
@@ -322,8 +331,8 @@ const styles = theme => {
 			width: "100%",
 			opacity: "0.2",
 			backgroundColor: "rgba(0,0,0,0.3)",
-			marginTop: theme.spacing.unit * 2,
-			marginBottom: theme.spacing.unit * 2
+			marginTop: 24,
+			marginBottom: 24
 		},
 		leftColumn: {
 			display: "flex",
@@ -339,7 +348,8 @@ const styles = theme => {
 			color: "#3C383F",
 			fontSize: 17,
 			fontFamily: fontFamilyBold,
-			lineHeight: "19px"
+			lineHeight: "19px",
+			textTransform: "uppercase"
 		},
 		orderTotalValue: {
 			color: "#3C383F",
@@ -629,7 +639,7 @@ class CheckoutSuccess extends Component {
 													/>
 												</div>
 												<Typography className={classes.desktopFooterText}>
-													Get pre-sale access to future events
+													Get presale access to future events
 												</Typography>
 											</div>
 											<div className={classes.iconText}>
@@ -641,7 +651,7 @@ class CheckoutSuccess extends Component {
 													/>
 												</div>
 												<Typography className={classes.desktopFooterText}>
-													Receive special perks at event
+													Receive special perks at the event
 												</Typography>
 											</div>
 										</div>
@@ -651,7 +661,9 @@ class CheckoutSuccess extends Component {
 						/>
 					</div>
 					<Typography className={classes.questionsText}>
-						Questions about your purchase? Please contact&nbsp;
+						Questions about your purchase?
+						<br/>
+						Please contact&nbsp;
 						<span>
 							<a
 								className={classes.pinkSpan}
@@ -660,7 +672,7 @@ class CheckoutSuccess extends Component {
 								Big Neon Customer Support
 							</a>
 						</span>
-						&nbsp; or&nbsp;
+						&nbsp;or&nbsp;
 						<span>
 							<a className={classes.pinkSpan} href={Settings().supportFAQLink}>
 								see our FAQ
@@ -755,7 +767,7 @@ class CheckoutSuccess extends Component {
 														variant="secondary"
 														style={{ width: "80vw" }}
 													>
-														Download the Big Neon App
+														DOWNLOAD THE BIG NEON APP
 													</CustomButton>
 												</a>
 											</div>
@@ -792,7 +804,7 @@ class CheckoutSuccess extends Component {
 													/>
 												</div>
 												<Typography className={classes.desktopFooterText}>
-													Get pre-sale access to future events
+													Get presale access to future events
 												</Typography>
 											</div>
 											<div className={classes.iconText}>

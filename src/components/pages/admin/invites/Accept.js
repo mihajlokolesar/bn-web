@@ -135,7 +135,11 @@ class InviteAccept extends Component {
 		const { classes } = this.props;
 
 		if (email) {
-			return <Typography className={classes.text}>Currently logged in as: <span className={classes.bold}>{email}</span>.</Typography>;
+			return (
+				<Typography className={classes.text}>
+					Currently logged in as: <span className={classes.bold}>{email}</span>.
+				</Typography>
+			);
 		}
 
 		return null;
@@ -248,13 +252,19 @@ class InviteAccept extends Component {
 									Visit box office
 								</Button>
 							</Link>
-						) : (
-							<Link to="/admin/events">
-								<Button style={{ width: "100%" }} variant="callToAction">
+						) : user.globalRoles &&
+						  user.globalRoles.indexOf("PrismIntegration") > -1 ? (
+								<Typography>
+								This account's access is restricted for use with the Big Neon
+								API.
+								</Typography>
+							) : (
+								<Link to="/admin/events">
+									<Button style={{ width: "100%" }} variant="callToAction">
 									Visit admin dashboard
-								</Button>
-							</Link>
-						)}
+									</Button>
+								</Link>
+							)}
 					</div>
 				</Dialog>
 			</div>

@@ -127,8 +127,8 @@ public class AdminEventDashboardFacade extends BaseFacadeSteps {
 	public void whenUserClicksOnOrderFeeCheckBox() {
 		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
 		PerOrderFeeComponent perOrderFee = selectedOrderPage.getOrderDetails().getPerOrderFee();
-		perOrderFee.clickOnCheckBox();
-		if(perOrderFee.isChecked()) {
+		perOrderFee.clickOnCheckBoxes();
+		if (perOrderFee.isEntirePerOrderFeeChecked()) {
 			addAmountToTotalRefundAmount(perOrderFee.getMoneyAmount());
 		}
 	}
@@ -320,7 +320,7 @@ public class AdminEventDashboardFacade extends BaseFacadeSteps {
 	
 	public boolean thenOrderFeeCheckboxShouldBeChecked() {
 		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
-		return selectedOrderPage.getOrderDetails().getPerOrderFee().isChecked();
+		return selectedOrderPage.getOrderDetails().getPerOrderFee().isEntirePerOrderFeeChecked();
 	}
 
 	public boolean thenThereShouldBeRefundedHistoryItemWithRefundee(User refunder, User refundee) {

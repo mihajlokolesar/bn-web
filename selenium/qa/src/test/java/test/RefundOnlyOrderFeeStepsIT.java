@@ -17,8 +17,8 @@ public class RefundOnlyOrderFeeStepsIT extends TemplateRefundFeeSteps {
 	private static final String EVENT_NAME = "TestRefundOrderFeeEventName";
 	private static final Integer START_DAY_OFFSET = 2;
 	private static final Integer DAYS_RANGE = 0;
-//	Currently there is a bug when executing these steps, once the bug is resolved this can be uncommented
-//	@Test(dataProvider = "refund_just_an_order_fee_from_order", priority = 28, retryAnalyzer = utils.RetryAnalizer.class)
+	
+	@Test(dataProvider = "refund_just_an_order_fee_from_order", priority = 28, retryAnalyzer = utils.RetryAnalizer.class)
 	public void refundJustAnOrderFeeFromOrder(Purchase purchase, User user) throws Exception {
 		templateSteps(purchase, user);
 	}

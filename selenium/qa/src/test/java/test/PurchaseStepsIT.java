@@ -48,7 +48,7 @@ public class PurchaseStepsIT extends BaseSteps {
 	@DataProvider(name = "purchase_data")
 	public static Object[][] data() {
 		Purchase purchase = Purchase.generatePurchaseFromJson(DataConstants.REGULAR_USER_PURCHASE_KEY);
-		Event event = Event.generateEventFromJson(DataConstants.EVENT_DATA_STANARD_KEY, false, 7, 30);
+		Event event = Event.generateEventFromJson(DataConstants.EVENT_DATA_STANARD_KEY,"TestPurchaseNameEvent" , false, 2, 15);
 		purchase.setEvent(event);
 		// TODO: replace with some other number
 		purchase.setPhoneNumber("14422460151");

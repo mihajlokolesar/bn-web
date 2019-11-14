@@ -174,7 +174,7 @@ public class EventStepsFacade extends BaseFacadeSteps {
 	}
 	
 	private void whenUserSearchesAndClicksOnEvent(Event event) {
-		eventsPage.clickOnEvent(event.getEventName());
+		eventsPage.searchAndClickOnEvent(event.getEventName());
 	}
 
 	private void whenUserClickOnViewMap() {

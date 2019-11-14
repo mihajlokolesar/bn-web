@@ -51,8 +51,7 @@ public class PurchaseWithTicketChangeStepsIT extends BaseSteps {
 	@DataProvider(name = "purchase_data")
 	public static Object[][] data() {
 		Purchase purchase = Purchase.generatePurchaseFromJson(DataConstants.REGULAR_USER_PURCHASE_KEY);
-		Event event = Event.generateEventFromJson(DataConstants.EVENT_DATA_STANARD_KEY, false, 7, 30);
-		event.setEventName("TestNameEvent");
+		Event event = Event.generateEventFromJson(DataConstants.EVENT_DATA_STANARD_KEY,"TestPurchaseNameEvent", false, 2, 15);
 		purchase.setEvent(event);
 		purchase.setNumberOfTickets(2);
 		purchase.setRemoveNumberOfTickets(1);
