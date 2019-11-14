@@ -335,7 +335,7 @@ public class ActivityItem extends BaseComponent {
 		}
 
 		public BigDecimal getTotalMoneyAmount() {
-			BigDecimal retVal = getAccessUtils().getBigDecimalAmount(getTotalMoneyAmountElement(), "$", "");
+			BigDecimal retVal = getAccessUtils().getBigDecimalMoneyAmount(getTotalMoneyAmountElement(), "$", "");
 			return retVal;
 		}
 

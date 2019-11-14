@@ -43,13 +43,10 @@ public class ReportsBoxOfficeFacade extends BaseFacadeSteps {
 
 	@Override
 	protected void setData(String key, Object value) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	protected Object getData(String key) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

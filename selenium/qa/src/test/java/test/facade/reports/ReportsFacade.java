@@ -18,18 +18,6 @@ public class ReportsFacade extends BaseFacadeSteps {
 		super(driver);
 	}
 
-	@Override
-	protected void setData(String key, Object value) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	protected Object getData(String key) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public AdminSideBar getAdminSideBar() {
 		return this.adminSideBar != null ? this.adminSideBar :
 			(this.adminSideBar = new AdminSideBar(driver));
@@ -53,5 +41,14 @@ public class ReportsFacade extends BaseFacadeSteps {
 	public void whenUserSelectBoxOfficeTab() {
 		getReportsMainPage().clickOnBoxOfficeSales();
 		getReportsBoxOfficePage().isAtPage();
+	}
+	
+	@Override
+	protected void setData(String key, Object value) {
+	}
+
+	@Override
+	protected Object getData(String key) {
+		return null;
 	}
 }

@@ -124,7 +124,7 @@ public class OrderDetails extends BaseComponent {
 		}
 
 		private BigDecimal getMoneyAmountElement(WebElement container) {
-			return getAccessUtils().getBigDecimalAmount(container, relativeTotalMoneyAmountXpath);
+			return getAccessUtils().getBigDecimalMoneyAmount(container, relativeTotalMoneyAmountXpath);
 		}
 
 		private WebElement getStatusElement(WebElement container) {
