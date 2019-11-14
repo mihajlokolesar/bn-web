@@ -55,7 +55,7 @@ public class CreateOrganizationPage extends BasePage {
 
 	private void enterOrganizationAddress(String address) {
 		AutoCompleteInputField autocomplete = new AutoCompleteInputField(driver, addressAutoSearchField);
-		autocomplete.selectFromAutocomplete(address, ",");
+		autocomplete.selectFromAutocomplete(address);
 	}
 
 	private void enterPhoneNumber(String phoneNumber) {

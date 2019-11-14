@@ -65,14 +65,4 @@ public class Team implements Serializable{
 	public void setBoxOfficeUsers(List<User> boxOfficeUsers) {
 		this.boxOfficeUsers = boxOfficeUsers;
 	}
-
-	
-	
-	
-
-	
-	
-
-	
-	
 }

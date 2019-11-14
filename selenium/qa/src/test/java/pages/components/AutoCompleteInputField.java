@@ -3,8 +3,6 @@ package pages.components;
 import java.util.List;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -22,20 +20,24 @@ public class AutoCompleteInputField extends BaseComponent {
 		this.inputField = inputField;
 	}
 
-	public void selectFromAutocomplete(String value, String separator) {
+	/**
+	 * Splis the full addres name, as provided by autocomplete on "comma" as
+	 * separator example fullName = "Metropolitan Opera House, Lincoln Center Plaza,
+	 * New York, NY, USA" will result in string array of 5 elements then it goes
+	 * through the list and enters first value in this case "Metropolitan Opera
+	 * House" and looks through the offered list of suggestions trying to find a
+	 * match with fullName value.
+	 * 
+	 * @param fullName
+	 */
+	public void selectFromAutocomplete(String fullName) {
 		getAccessUtils().clearInputField(inputField);
 		explicitWaitForVisiblity(inputField);
 		waitForTime(2000);
-		search(value);
+		search(fullName);
 	}
-	/**
-	 * Splis the full addres name, as provided by autocomplete on "comma" as separator
-	 * example fullName = "Metropolitan Opera House, Lincoln Center Plaza, New York, NY, USA" will result in string array of 5 elements
-	 * then it goes through the list and enters first value in this case "Metropolitan Opera House"
-	 * and looks through the offered list of suggestions trying to find a match with fullName value.  
-	 * @param fullName
-	 */
-	public void search(String fullName) {
+
+	private void search(String fullName) {
 		String[] ar = fullName.split(",");
 		for (String str : ar) {
 			String send = str.trim() + ",";

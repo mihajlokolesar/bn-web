@@ -3,7 +3,6 @@ package pages.admin.reports;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.FindBy;
 
 import pages.BasePage;
 import utils.Constants;
@@ -13,7 +12,7 @@ public class ReportsMainPage extends BasePage {
 	private final String TICKET_COUNTS_PARAM = "ticket-counts";
 	private final String TRANSACTION_DETAILS_PARAM = "transaction-details";
 	private final String BOX_OFFICE_SALES_PARAM = "box-office-sales-summary";
-	private final String Settlement_PARAM = "settlement-list";
+	private final String SETTLEMENT_PARAM = "settlement-list";
 	public ReportsMainPage(WebDriver driver) {
 		super(driver);
 	}

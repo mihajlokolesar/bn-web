@@ -11,8 +11,7 @@ import test.facade.FacadeProvider;
 import utils.DataConstants;
 
 public class CreateFixtures extends BaseSteps {
-	
-	
+		
 	@Test(dataProvider = "organization_data", groups = {"creational"} )
 	public void createOrganizations(Organization org, User user) throws Exception {
 		FacadeProvider fs = new FacadeProvider(driver);
@@ -63,12 +62,5 @@ public class CreateFixtures extends BaseSteps {
 			{venueSAST, superUser}
 		};
 	}
-	
-	public void createUsers() {
-		
-	}
-	
-	
-	public static Object[][] userData;
 
 }

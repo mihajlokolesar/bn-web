@@ -106,7 +106,7 @@ public class CreateVenuePage extends BasePage {
 		SeleniumUtils.jsScrollIntoView(locationAutoSearchField, driver);
 		waitForTime(1000);
 		AutoCompleteInputField inputField = new AutoCompleteInputField(driver, locationAutoSearchField);
-		inputField.selectFromAutocomplete(location, ",");
+		inputField.selectFromAutocomplete(location);
 		checkIfCoordinatesArePresent();
 	}
 	

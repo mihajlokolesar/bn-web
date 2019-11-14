@@ -94,11 +94,11 @@ public class ProjectUtils {
 		return localDate;
 	}
 	
-	public static LocalDate parseDate(String pattern, String date, List<ChronoField> ignoredChronoField ) {
+	public static LocalDate parseDate(String pattern, String date, List<ChronoField> chronoFieldsToIgnore ) {
 		DateTimeFormatterBuilder builder = new DateTimeFormatterBuilder()
 				.appendPattern(pattern);
-		if (ignoredChronoField != null) {
-			for(ChronoField field : ignoredChronoField)
+		if (chronoFieldsToIgnore != null) {
+			for(ChronoField field : chronoFieldsToIgnore)
 				builder.parseDefaulting(field, 1);
 		}
 		DateTimeFormatter formater = builder.toFormatter();
@@ -211,7 +211,6 @@ public class ProjectUtils {
 
 	/**
 	 * returns true if value is not null and not empty
-	 * 
 	 * @param value
 	 * @return
 	 */
