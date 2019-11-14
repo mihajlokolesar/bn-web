@@ -68,7 +68,7 @@ public class EventsPage extends BasePage {
 		return event;
 	}
 
-	public void clickOnEvent(String eventName) {
+	public void searchAndClickOnEvent(String eventName) {
 		WebElement event = findWithSearchEvent(eventName);
 		waitVisibilityAndBrowserCheckClick(event);
 	}

@@ -14,6 +14,7 @@
 			<class name="test.BoxOfficeSellTicketStepsIT" />
 			<class name="test.VenueStepsIT" />
 			<class name="test.FanManagementStepsIT" />
+			<class name="test.RefundOnlyOrderFeeStepsIT" />
 			<class name="test.RefundEntireOrderAndOrderFeeStepsIT"/>
      		<class name="test.RefundEntireOrderExcludingOrderFeeStepsIT"/>
             <class name="test.RefundPartialCheckOrderFeeRefundDisabledStepsIT"/>
@@ -32,6 +33,7 @@
 			<class name="test.BoxOfficeSellTicketStepsIT" />
 			<class name="test.VenueStepsIT" />
 			<class name="test.FanManagementStepsIT" />
+			<class name="test.RefundOnlyOrderFeeStepsIT" />
 			<class name="test.RefundEntireOrderAndOrderFeeStepsIT" />
 	  		<class name="test.RefundEntireOrderExcludingOrderFeeStepsIT" />
 	 		<class name="test.RefundPartialCheckOrderFeeRefundDisabledStepsIT" />
