@@ -33,8 +33,8 @@ public class ReportBoxOfficeStepsIT extends BaseSteps {
 	private Purchase secondBOPurchaseJST;
 	private Purchase notBoxOfficePurchaseSAST;
 	
-	@Test(priority = 32, retryAnalyzer = utils.RetryAnalizer.class, dependsOnMethods = {"boxOfficeReportPrepareDataFixture"})
-	public void reportShouldOnlyContainBoxOfficeTransactions() throws Exception {
+	@Test(priority = 32, retryAnalyzer = utils.RetryAnalizer.class, alwaysRun=true, dependsOnMethods = {"boxOfficeReportPrepareDataFixture"})
+	public void boxOfficeReportCanOnlyContainBoxOfficeTransactions() throws Exception {
 		
 		maximizeWindow();
 		Organization org = firstBOPurchaseEST.getEvent().getOrganization();
@@ -50,7 +50,7 @@ public class ReportBoxOfficeStepsIT extends BaseSteps {
 	}
 	
 	
-	@Test(dataProvider = "prepare_box_offce_report_data_fixture")
+	@Test(dataProvider = "prepare_box_offce_report_data_fixture", priority = 32)
 	public void boxOfficeReportPrepareDataFixture(Map<String, Object> data) throws Exception {
 		maximizeWindow();
 		this.firstBOPurchaseEST = (Purchase) data.get(PURCHASE_EST_ONE_KEY);

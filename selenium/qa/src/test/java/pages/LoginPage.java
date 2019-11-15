@@ -84,7 +84,7 @@ public class LoginPage extends BasePage {
 		usernameField.sendKeys(username);
 		explicitWaitForVisiblity(passwordField);
 		passwordField.sendKeys(password);
-		clickOnRecaptcha();
+//		clickOnRecaptcha();
 		explicitWait(10, ExpectedConditions.elementToBeClickable(loginSubmitButton));
 		waitVisibilityAndBrowserCheckClick(loginSubmitButton);
 		if (checkForLoginFailedMessage()) {

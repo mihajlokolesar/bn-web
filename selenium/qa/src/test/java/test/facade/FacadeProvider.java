@@ -68,13 +68,10 @@ public class FacadeProvider {
 			f = facades.get(clazz);
 			if (f == null) {
 				f = (BaseFacadeSteps) clazz.getConstructor(WebDriver.class).newInstance(driver);
-				System.out.println("new: " + clazz.toString());
 				facades.put(clazz, f);
-			} else {
-				System.out.println("existing: " + clazz.toString());
 			}
 		} catch (Exception e) {
-			System.out.println(e);
+			e.printStackTrace();
 		}
 		return f;
 	}
