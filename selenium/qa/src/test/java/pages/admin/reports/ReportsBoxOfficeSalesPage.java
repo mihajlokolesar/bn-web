@@ -11,12 +11,16 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import data.holders.DataHolder;
+import data.holders.DataHolderProvider;
+import data.holders.reports.boxoffice.OperatorTableData;
+import data.holders.reports.boxoffice.ReportsBoxOfficePageData;
 import pages.BasePage;
 import pages.components.admin.reports.boxoffice.OperatorTable;
 import utils.Constants;
 import utils.ProjectUtils;
 
-public class ReportsBoxOfficeSalesPage extends BasePage {
+public class ReportsBoxOfficeSalesPage extends BasePage implements DataHolderProvider{
 
 	@FindBy(xpath = "//p[contains(text(),'Grand total')]/following-sibling::div[1]/div/div[p[contains(text(),'Cash')]]/p[2]")
 	private WebElement grandTotalCashValue;
@@ -116,4 +120,14 @@ public class ReportsBoxOfficeSalesPage extends BasePage {
 		WebElement el = explicitWaitForVisibilityBy(By.xpath(xpath));
 		return ProjectUtils.parseDate(ProjectUtils.REPORTS_BOX_OFFICE_TITLE_DATE_FORMAT, el.getText());
 	}
+
+	@Override
+	public ReportsBoxOfficePageData getDataHolder() {
+		List<OperatorTable> operatorTables = getAllOperatorTables();
+		ReportsBoxOfficePageData pageData = new ReportsBoxOfficePageData();
+		operatorTables.stream().map(table->table.getDataHolder()).forEach(tableData->pageData.add(tableData));
+		return pageData;
+	}
+	
+	
 }
