@@ -52,19 +52,16 @@ public class ReportBoxOfficeStepsIT extends BaseSteps {
 	public void filterOnDateAndVerifyDataByCrossReferencingOnOrderManagePage() throws Exception {
 		maximizeWindow();
 		FacadeProvider fp = new FacadeProvider(driver);
-		Organization org= firstBOPurchaseEST.getEvent().getOrganization();
-		User orgAdmin = org.getTeam().getOrgAdminUser();
-		fp.getLoginFacade().givenAdminUserIsLogedIn(orgAdmin);
-		fp.getOrganizationFacade().givenOrganizationExist(org);
-		
-		fp.getReportsFacade().givenUserIsOnReportsBoxOfficePage();
+		navigateToReportsBoxOffice(fp, firstBOPurchaseEST);
 		DateRange range = ProjectUtils.getDateRangeWithSpecifiedRAngeInDaysWithStartOffset(0, 0);
 		fp.getReportsBoxOfficeFacade().enterDates(range);
+		
 		DataHolder dataHolder = fp.getReportsBoxOfficeFacade().getPageDataHolder();
 		boolean isDataInReport = fp.getReportsBoxOfficeFacade().whenUserChecksIfPurchaseEventsAreInReport(boxOfficePurchases(), dataHolder);
 		Assert.assertTrue(isDataInReport, "Data not found in report");
 		fp.getEventReportsFacade().givenUserIsOnAdminEventsPage();
 		fp.getEventReportsFacade().whenUserVerifiesOrdersForFoundEvents(dataHolder, boxOfficePurchases(), range);
+		fp.getLoginFacade().logOut();
 	}
 	
 	private List<Purchase> boxOfficePurchases(){
@@ -72,6 +69,30 @@ public class ReportBoxOfficeStepsIT extends BaseSteps {
 		purchases.add(this.firstBOPurchaseEST);
 		purchases.add(this.secondBOPurchaseJST);
 		return purchases;
+	}
+	
+	@Test(priority = 34, retryAnalyzer = utils.RetryAnalizer.class)
+	public void verifyTransactionsAreSortedViaOperatorPerEventStartDate() throws Exception {
+		maximizeWindow();
+
+		FacadeProvider fp = new FacadeProvider(driver);
+		navigateToReportsBoxOffice(fp, firstBOPurchaseEST);
+		
+		DateRange range = ProjectUtils.getDateRangeWithSpecifiedRAngeInDaysWithStartOffset(0, 0);
+		fp.getReportsBoxOfficeFacade().enterDates(range);
+		
+		DataHolder dataHolder = fp.getReportsBoxOfficeFacade().getPageDataHolder();
+		boolean isDataOrdered = fp.getReportsBoxOfficeFacade().thenThereShouldBeMultipeTablesWithCorrectOrder(dataHolder);
+		Assert.assertTrue(isDataOrdered);
+		fp.getLoginFacade().logOut();
+	}
+	
+	private void navigateToReportsBoxOffice(FacadeProvider fp, Purchase purchase) throws Exception {
+		Organization organization = purchase.getEvent().getOrganization();
+		User orgAdmin = organization.getTeam().getOrgAdminUser();
+		fp.getLoginFacade().givenAdminUserIsLogedIn(orgAdmin);
+		fp.getOrganizationFacade().givenOrganizationExist(organization);
+		fp.getReportsFacade().givenUserIsOnReportsBoxOfficePage();
 	}
 	
 	@Test(dataProvider = "prepare_box_offce_report_data_fixture", priority = 32)

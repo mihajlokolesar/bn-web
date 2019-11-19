@@ -1,13 +1,11 @@
 package test.facade.reports;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.openqa.selenium.WebDriver;
-import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
 import data.holders.DataHolder;
@@ -15,14 +13,12 @@ import data.holders.reports.boxoffice.OperatorTableRowData;
 import data.holders.reports.boxoffice.ReportsBoxOfficePageData;
 import enums.POSStatus;
 import model.Purchase;
-import model.Purchase.OrderLine;
 import pages.admin.events.AdminEventsPage;
 import pages.components.admin.AdminSideBar;
 import pages.components.admin.events.EventSummaryComponent;
 import pages.components.admin.orders.manage.ManageOrderRow;
 import test.facade.AdminEventDashboardFacade;
 import test.facade.BaseFacadeSteps;
-import test.facade.FacadeProvider;
 import utils.DateRange;
 
 public class AdminEventReportsFacade extends BaseFacadeSteps {
@@ -43,7 +39,6 @@ public class AdminEventReportsFacade extends BaseFacadeSteps {
 		SoftAssert sf = new SoftAssert();
 		Map<String, OperatorTableRowData> data = ((ReportsBoxOfficePageData) dataHolder).getRows();
 		for (Entry<String, OperatorTableRowData> e : data.entrySet()) {
-		
 			EventSummaryComponent event = getAdminEvents().findEventByName(e.getKey());
 			String eventName = event.getEventName();
 

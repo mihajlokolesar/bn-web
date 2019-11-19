@@ -46,6 +46,7 @@ public class ReportsBoxOfficePageData implements Serializable, DataHolder {
 			tables = new ArrayList<>();
 		}
 		tables.add(table);
+				
 		if (rows == null) {
 			rows = new HashMap<String, OperatorTableRowData>();
 		}

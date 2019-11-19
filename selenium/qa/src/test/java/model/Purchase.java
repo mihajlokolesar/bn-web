@@ -159,19 +159,6 @@ public class Purchase implements Serializable {
 		return sb.toString();
 	}
 
-	
-
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		String[] fields = { 
-				this.getEvent() != null? event.toString() : null, 
-				String.valueOf(this.numberOfTickets)
-		};
-		ProjectUtils.appendFields(fields, sb);
-		return sb.toString();
-	}
-
 	public static Object[] generatePurchasesFromJson(String key) {
 		return DataReader.getInstance().getObjects(key, new TypeReference<List<Purchase>>() {
 		});

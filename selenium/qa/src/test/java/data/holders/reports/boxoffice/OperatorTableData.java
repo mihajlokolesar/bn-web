@@ -7,8 +7,9 @@ import java.util.List;
 
 import data.holders.DataHolder;
 
-public class OperatorTableData implements Serializable, DataHolder {
+public class OperatorTableData implements Serializable, DataHolder, Comparable<OperatorTableData> {
 
+	private static final long serialVersionUID = -8329010739550537892L;
 	private String operatorName;
 	private List<OperatorTableRowData> rows;
 	private BigDecimal total;
@@ -37,6 +38,13 @@ public class OperatorTableData implements Serializable, DataHolder {
 			rows = new ArrayList<OperatorTableRowData>();
 		}
 		rows.add(row);
+	}
+	@Override
+	public int compareTo(OperatorTableData o) {
+		String thisNameLowerCase = this.getOperatorName().toLowerCase();
+		String otherNameLowerCase = o.getOperatorName().toLowerCase();
+		int cmp = thisNameLowerCase.compareTo(otherNameLowerCase);
+		return cmp;
 	}
 	
 }

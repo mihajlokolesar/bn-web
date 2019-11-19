@@ -15,6 +15,7 @@ import data.holders.DataHolder;
 import data.holders.DataHolderProvider;
 import data.holders.reports.boxoffice.OperatorTableData;
 import data.holders.reports.boxoffice.ReportsBoxOfficePageData;
+import model.User;
 import pages.BasePage;
 import pages.components.admin.reports.boxoffice.OperatorTable;
 import utils.Constants;
@@ -92,10 +93,14 @@ public class ReportsBoxOfficeSalesPage extends BasePage implements DataHolderPro
 				.collect(Collectors.toList());
 		return retList;
 	}
-
+	
+	public List<User> getAllOperators(){
+		return listOfOperators.stream().map(el -> new User(el.getText().trim())).collect(Collectors.toList());
+	}
+	
 	public void enterDateRanges(String from, String to) {
 		enterDate(startDate, from);
-		waitForTime(1500);
+		waitForTime(700);
 		enterDate(endDate, to);
 		waitForTime(1500);
 	}
@@ -123,10 +128,20 @@ public class ReportsBoxOfficeSalesPage extends BasePage implements DataHolderPro
 
 	@Override
 	public ReportsBoxOfficePageData getDataHolder() {
+		List<User> operators = getAllOperators();
 		List<OperatorTable> operatorTables = getAllOperatorTables();
-		ReportsBoxOfficePageData pageData = new ReportsBoxOfficePageData();
-		operatorTables.stream().map(table->table.getDataHolder()).forEach(tableData->pageData.add(tableData));
-		return pageData;
+		if (operators.size() == operatorTables.size()) {
+			ReportsBoxOfficePageData pageData = new ReportsBoxOfficePageData();
+			
+			for(int i=0;i<operatorTables.size();i++) {
+				OperatorTableData tableDataHolder= operatorTables.get(0).getDataHolder();
+				tableDataHolder.setOperatorName(operators.get(i).getFullNameFL());
+				pageData.add(tableDataHolder);
+			}
+			return pageData;
+		} else {
+			return null;
+		}
 	}
 	
 	

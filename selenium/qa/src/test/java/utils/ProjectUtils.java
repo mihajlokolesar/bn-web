@@ -6,6 +6,7 @@ import java.math.MathContext;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
@@ -27,6 +28,7 @@ public class ProjectUtils {
 	public static final String ADMIN_EVENT_MANAGE_ORDERS_ORDER_ROW = "MM/dd/yyyy h:mm a";
 	public static final String MANAGE_ORDER_HISTORY_ITEM_DATE_FORMAT = "EEE, MMM d, yyyy h:mm a";
 	public static final String REPORTS_BOX_OFFICE_TITLE_DATE_FORMAT = "MMM dd, yyyy";
+	public static final String REPORTS_BOX_OFFICE_OPERATOR_TABLE_DATE = "MM/dd/yyyy h:mm a, z";
 	public static final String DATE_PICKER_MONTH_YEAR_FORMAT = "MMMM yyyy";
 	public static final String RESOURCE_IMAGE_PATH = "src/test/resources/images/";
 
@@ -75,6 +77,28 @@ public class ProjectUtils {
 		DateTimeFormatter formater = DateTimeFormatter.ofPattern(pattern);
 		LocalDateTime localDateTime = LocalDateTime.parse(removedOrdinalsDate, formater);
 		return localDateTime;
+	}
+	
+	public static ZonedDateTime parseZonedDateTime(String pattern, String dateTime) {
+		if (dateTime == null || dateTime.isEmpty()) {
+			return null;
+		}
+		String removedOrdinalsDate = dateTime.replaceAll("(?<=\\d)(st|nd|rd|th)", "");
+		DateTimeFormatter formater = DateTimeFormatter.ofPattern(pattern);
+		ZonedDateTime localDateTime = ZonedDateTime.parse(removedOrdinalsDate, formater);
+		return localDateTime;
+		
+	}
+	
+	public static <T extends Comparable<? super T>> boolean isListOrdered(List<T> list) {
+		T previous = list.get(0);
+		for(T current : list) {
+			if(current.compareTo(previous) < 0) {
+				return false;
+			}
+			previous = current;
+		}
+		return true;
 	}
 
 	public static LocalDateTime getLocalDateTime(String datePattern, String date, String timePattern, String time) {

@@ -2,11 +2,14 @@ package data.holders.reports.boxoffice;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.ZonedDateTime;
 
 import data.holders.DataHolder;
+import utils.ProjectUtils;
 
-public class OperatorTableRowData implements Serializable, DataHolder{
+public class OperatorTableRowData implements Serializable, DataHolder, Comparable<OperatorTableRowData>{
 
+	private static final long serialVersionUID = 3239908963716333681L;
 	private String eventName;
 	private String startDate;
 	private BigDecimal faceValue;
@@ -19,6 +22,9 @@ public class OperatorTableRowData implements Serializable, DataHolder{
 	}
 	public void setEventName(String eventName) {
 		this.eventName = eventName;
+	}
+	public ZonedDateTime getZonedStartDate() {
+		return ProjectUtils.parseZonedDateTime(ProjectUtils.REPORTS_BOX_OFFICE_OPERATOR_TABLE_DATE, this.startDate);
 	}
 	public String getStartDate() {
 		return startDate;
@@ -80,5 +86,13 @@ public class OperatorTableRowData implements Serializable, DataHolder{
 		return true;
 	}
 	
+	@Override
+	public int compareTo(OperatorTableRowData o) {
+		int cmp = this.getZonedStartDate().compareTo(o.getZonedStartDate()); 
+		if (cmp == 0) {
+			cmp =this.getEventName().compareTo(o.getEventName());
+		}
+		return cmp;
+	}
 	
 }
