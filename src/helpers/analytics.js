@@ -120,34 +120,38 @@ const ga = {
 	},
 
 	initiateCheckout(ids, urlParams, currency, items, value) {
-		items.forEach(item => {
-			ReactGA.plugin.execute("ec", "addProduct", {
-				id: item.id,
-				name: item.name,
-				category: item.category,
-				brand: item.organizationId,
-				variant: item.ticketTypeName,
-				price: item.price,
-				quantity: item.quantity
+		if (items && Array.isArray(items)) {
+			items.forEach(item => {
+				ReactGA.plugin.execute("ec", "addProduct", {
+					id: item.id,
+					name: item.name,
+					category: item.category,
+					brand: item.organizationId,
+					variant: item.ticketTypeName,
+					price: item.price,
+					quantity: item.quantity
+				});
 			});
-		});
+		}
 
 		ReactGA.plugin.execute("ec", "setAction", "checkout", { step: 1 });
 		ReactGA.ga("send", "pageview");
 	},
 
 	purchaseCompleted(ids, urlParams, currency, items, value) {
-		items.forEach(item => {
-			ReactGA.plugin.execute("ec", "addProduct", {
-				id: item.id,
-				name: item.name,
-				category: item.category,
-				brand: item.organizationId,
-				variant: item.ticketTypeName,
-				price: item.price,
-				quantity: item.quantity
+		if (items && Array.isArray(items)) {
+			items.forEach(item => {
+				ReactGA.plugin.execute("ec", "addProduct", {
+					id: item.id,
+					name: item.name,
+					category: item.category,
+					brand: item.organizationId,
+					variant: item.ticketTypeName,
+					price: item.price,
+					quantity: item.quantity
+				});
 			});
-		});
+		}
 
 		ReactGA.plugin.execute("ec", "setAction", "purchase", {});
 	},

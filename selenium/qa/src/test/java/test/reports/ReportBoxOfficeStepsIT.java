@@ -119,9 +119,7 @@ public class ReportBoxOfficeStepsIT extends BaseSteps {
 		fp.getEventFacade().givenUserIsOnHomePage();
 		fp.getEventFacade().whenUserDoesThePurchses(notBoxOfficePurchaseSAST, standardCustomer);
 		fp.getLoginFacade().logOut();
-		fp.getEventFacade().givenUserIsOnHomePage();
-		fp.getEventFacade().whenUserDoesThePurchses(firstBOPurchaseEST, standardCustomer);
-		fp.getLoginFacade().logOut();
+		
 	}
 	
 	@DataProvider(name = "prepare_box_offce_report_data_fixture")

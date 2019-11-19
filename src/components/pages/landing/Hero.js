@@ -18,10 +18,10 @@ const styles = theme => ({
 		backgroundImage: "url(/images/homepage-bg.png)",
 		display: "flex",
 		flexDirection: "column",
-		minHeight: 590,
+		minHeight: 500,
 		[theme.breakpoints.down("sm")]: {
 			flexDirection: "column",
-			minHeight: 350
+			minHeight: 310
 		}
 	},
 	headingContainer: {
@@ -183,7 +183,7 @@ class Hero extends Component {
 							[classes.heading]: true
 						})}
 					>
-						Live Music Lives Here
+						Beyond Ticketing
 					</Typography>
 					<Typography
 						className={classnames({

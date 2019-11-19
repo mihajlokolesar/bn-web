@@ -434,20 +434,20 @@ class ViewEvent extends Component {
 						<br/>
 						{addressLineSplit(venue.address)}
 					</Typography>
+					{venue.googleMapsLink ? (
+						<a target="_blank" href={venue.googleMapsLink}>
+							<span className={classes.eventDetailLinkText}>
+								Get Directions
+							</span>
+						</a>
+					) : null}
+					<br/>
 					<br/>
 					<Typography className={classes.eventDetailText}>
 						More Events at{" "}
 						<Link to={`/venues/${venue.slug}`}>
 							<span className={classes.eventDetailLinkText}>{venue.name}</span>{" "}
 						</Link>
-						|{" "}
-						{venue.googleMapsLink ? (
-							<a target="_blank" href={venue.googleMapsLink}>
-								<span className={classes.eventDetailLinkText}>
-									Get Directions
-								</span>
-							</a>
-						) : null}
 					</Typography>
 					<Typography className={classes.eventDetailText}>
 						More Events in{" "}

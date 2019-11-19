@@ -26,6 +26,7 @@ import optimizedImageUrl from "../../../../../../helpers/optimizedImageUrl";
 import MaintainAspectRatio from "../../../../../elements/MaintainAspectRatio";
 import Settings from "../../../../../../config/settings";
 import Hidden from "@material-ui/core/Hidden";
+import lineBreakHtmlToPlainText from "../../../../../../helpers/lineBreakHtmlToPlainText";
 
 const styles = theme => ({
 	root: {},
@@ -182,7 +183,9 @@ class FacebookEvents extends Component {
 				this.setState({
 					event: response.data,
 					title: htmlToPlainText(response.data.name || ""),
-					description: htmlToPlainText(response.data.additional_info || ""),
+					description: lineBreakHtmlToPlainText(
+						response.data.additional_info || ""
+					),
 					customAddress: response.data.venue.address,
 					facebookEventId: response.data.facebook_event_id
 				});
@@ -337,7 +340,7 @@ class FacebookEvents extends Component {
 
 		let bullet3 = {
 			label:
-				"Don't worry, we won't create the event on Facebook until you review the settings and publish the event."
+				"Facebook requires that your page has a physical street address set in order to publish your event."
 		};
 
 		if (facebookEventId || facebookResponseSuccess) {

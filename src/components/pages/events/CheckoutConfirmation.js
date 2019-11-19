@@ -176,13 +176,15 @@ class CheckoutConfirmation extends Component {
 					type: "Free"
 				}
 			})
-			.then(() => {
+			.then((response) => {
 				cart.refreshCart();
 				orders.refreshOrders();
 				tickets.refreshTickets();
 
+				const { data } = response;
 				const { history } = this.props;
 				const { id, event } = selectedEvent;
+				const { slug } = event;
 				analytics.purchaseCompleted(
 					event.id,
 					getAllUrlParams(),
@@ -192,7 +194,7 @@ class CheckoutConfirmation extends Component {
 				);
 				if (id) {
 					//If they're checking out for a specific event then we have a custom success page for them
-					history.push(`/events/${id}/tickets/success`);
+					history.push(`/tickets/${slug}/tickets/success?order_id=${data.id}`);
 				} else {
 					history.push(`/`); //TODO go straight to tickets when route is available
 				}
@@ -256,6 +258,7 @@ class CheckoutConfirmation extends Component {
 
 				const { history } = this.props;
 				const { id, event } = selectedEvent;
+				const { slug } = event;
 				analytics.purchaseCompleted(
 					event.id,
 					getAllUrlParams(),
@@ -265,7 +268,7 @@ class CheckoutConfirmation extends Component {
 				);
 				if (id) {
 					//If they're checking out for a specific event then we have a custom success page for them
-					history.push(`/events/${id}/tickets/success?order_id=${data.id}`);
+					history.push(`/tickets/${slug}/tickets/success?order_id=${data.id}`);
 				} else {
 					history.push(`/`); //TODO go straight to tickets when route is available
 				}

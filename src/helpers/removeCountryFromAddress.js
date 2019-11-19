@@ -7,6 +7,8 @@ export default address => {
 	let noCountry = "";
 	let output = "";
 	removeThese.forEach(subStr => {
+		if (output) return;
+
 		if (address.includes(subStr)) {
 			noCountry = address.substring(0, address.indexOf(subStr));
 			output = noCountry.replace(/,\s*$/, "");
