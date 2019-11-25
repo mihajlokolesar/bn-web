@@ -31,9 +31,9 @@ public class AdminEventReportsFacade extends BaseFacadeSteps {
 		super(driver);
 		this.dataMap = new HashMap<String, Object>();
 	}
-	
+
 	public boolean whenUserVerifiesOrdersForFoundEvents(DataHolder dataHolder, List<Purchase> purchases,
-			DateRange range) throws Exception {
+			DateRange range) {
 		AdminEventDashboardFacade dashboard = new AdminEventDashboardFacade(driver);
 		Map<String, Purchase> mapPurchases = getMapOfPurhcasesForGivenList(purchases);
 		SoftAssert sf = new SoftAssert();
@@ -63,7 +63,21 @@ public class AdminEventReportsFacade extends BaseFacadeSteps {
 		sf.assertAll();
 		return true;
 	}
+	
+	public void whenUserVerifiesMethodPaymentTotals(DataHolder holder, int ratio, DateRange range) {
+		AdminEventDashboardFacade dashboard = new AdminEventDashboardFacade(driver);
+		ReportsBoxOfficePageData dataHolder = (ReportsBoxOfficePageData) holder; 
+		for (Map.Entry<String, OperatorTableRowData> entry : dataHolder.getRows().entrySet()) {
+			EventSummaryComponent eventCard = getAdminEvents().findEventByName(entry.getKey());
+			String eventName = entry.getKey();
+			eventCard.clickOnEvent();
+			dashboard.givenUserIsOnManageOrdersPage();
+			dashboard.whenUserComparesEventTotalWithManageOrdersData(dataHolder, range, eventName, ratio);
+			givenUserIsOnAdminEventsPage();
 
+		}
+	}
+	
 	private Map<String, Purchase> getMapOfPurhcasesForGivenList(List<Purchase> purchases) {
 		if (purchases != null) {
 			Map<String, Purchase> map = new HashMap<>();

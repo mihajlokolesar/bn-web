@@ -9,6 +9,7 @@ import java.util.Map;
 
 import org.testng.Assert;
 
+import enums.PaymentType;
 import model.Event;
 import model.Purchase;
 import model.TicketType;
@@ -64,7 +65,7 @@ public class AdminBoxOfficeFacade extends BaseFacadeSteps {
 		sellPage.getHeader().selectEventFromBoxOfficeDropDown(eventName);
 	}
 
-	public void whenUserSellsTicketToCustomer(Purchase purchase, String paymentOption, User customer) {
+	public void whenUserSellsTicketToCustomer(Purchase purchase, PaymentType paymentOption, User customer) {
 		Event event = purchase.getEvent();
 		
 		givenEventIsSelected(purchase.getEvent().getEventName());
@@ -73,7 +74,7 @@ public class AdminBoxOfficeFacade extends BaseFacadeSteps {
 				ticketType.getTicketTypeName());
 		
 		whenUserAddsQuantityAndClicksCheckout(ticketTypeRow, purchase.getNumberOfTickets());
-		if ("card".equalsIgnoreCase(paymentOption)) {
+		if (PaymentType.CREDIT_CARD.equals(paymentOption)) {
 			whenUserPicksCardOption();
 		} else {
 			BigDecimal ticketPrice = new BigDecimal(ticketType.getPrice());
@@ -87,7 +88,7 @@ public class AdminBoxOfficeFacade extends BaseFacadeSteps {
 		String orderNumber = getOrderNumberFromCompleteDialog();
 		whenUserClickOnReturnToBoxOffice();
 		//add customer and order number to purchase
-		purchase.addBoxOfficeOrderLine(customer, orderNumber);
+		purchase.addBoxOfficeOrderLine(customer, orderNumber, paymentOption);
 	}
 
 	public boolean whenUserSearchesByUserName(User user) {

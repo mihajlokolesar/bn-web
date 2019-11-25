@@ -14,6 +14,12 @@ public class DateRange implements Iterable<LocalDate> {
 	private final LocalDate endDate;
 
 	public DateRange(LocalDate startDate, LocalDate endDate) {
+		if (startDate == null || endDate == null) {
+			throw new IllegalArgumentException("One or more arguments are null");
+		}
+		if (startDate.isAfter(endDate)) {
+			throw new IllegalArgumentException("end date is before start date");
+		}
 		this.startDate = startDate;
 		this.endDate = endDate;
 	}
@@ -44,10 +50,7 @@ public class DateRange implements Iterable<LocalDate> {
 		return dates;
 	}
 	
-	public boolean isDateInRange(LocalDate current) throws Exception {
-		if(startDate.isAfter(endDate)) {
-			throw new Exception("end date is before start date");
-		}
+	public boolean isDateInRange(LocalDate current) {
 		boolean q = current.equals(startDate) || current.equals(endDate);
 		boolean b = current.isAfter(startDate);
 		boolean d = current.isBefore(endDate);

@@ -2,6 +2,7 @@ package data.holders.reports.boxoffice;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 import data.holders.DataHolder;
@@ -24,8 +25,18 @@ public class OperatorTableRowData implements Serializable, DataHolder, Comparabl
 		this.eventName = eventName;
 	}
 	public ZonedDateTime getZonedStartDate() {
-		return ProjectUtils.parseZonedDateTime(ProjectUtils.REPORTS_BOX_OFFICE_OPERATOR_TABLE_DATE, this.startDate);
+		if(this.startDate != null) {
+			return ProjectUtils.parseZonedDateTime(ProjectUtils.REPORTS_BOX_OFFICE_OPERATOR_TABLE_DATE, this.startDate);
+		} else {
+			return null;
+		}
 	}
+	
+	public boolean isDateZoneEqual(ZoneId zone) {
+		ZonedDateTime zdt = getZonedStartDate();
+		return zone.equals(zdt.getZone()); 
+	}
+	
 	public String getStartDate() {
 		return startDate;
 	}

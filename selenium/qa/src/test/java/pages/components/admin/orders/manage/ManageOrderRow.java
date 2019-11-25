@@ -1,5 +1,6 @@
 package pages.components.admin.orders.manage;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -48,7 +49,7 @@ public class ManageOrderRow extends BaseComponent{
 		return getOrderNumberLinkElement().getText();
 	}
 	
-	public boolean isDateBetweenDateRange(DateRange range) throws Exception {
+	public boolean isDateBetweenDateRange(DateRange range) {
 		LocalDate current = getDate();
 		return range.isDateInRange(current);
 	}
@@ -79,6 +80,10 @@ public class ManageOrderRow extends BaseComponent{
 		user.setFirstName(nameTokens[0]);
 		user.setLastName(nameTokens[1]);
 		return user;
+	}
+	
+	public BigDecimal getOrderValue() {
+		return getAccessUtils().getBigDecimalMoneyAmount(row, "./div/p[3]");
 	}
 	
 	public POSStatus getStatus() {

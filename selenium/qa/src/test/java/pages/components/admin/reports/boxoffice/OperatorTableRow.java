@@ -62,6 +62,7 @@ public class OperatorTableRow extends BaseComponent implements DataHolderProvide
 		data.setEventName(getEventName());
 		data.setStartDate(getDate());
 		data.setBoxOfficeSold(getBoxOfficeQuantity());
+		data.setTotalValue(getTotalValueMoneyAmount());
 		return data;
 	}
 

@@ -21,7 +21,7 @@ import pages.components.admin.reports.boxoffice.OperatorTable;
 import utils.Constants;
 import utils.ProjectUtils;
 
-public class ReportsBoxOfficeSalesPage extends BasePage implements DataHolderProvider{
+public class ReportsBoxOfficeSalesPage extends BasePage implements DataHolderProvider {
 
 	@FindBy(xpath = "//p[contains(text(),'Grand total')]/following-sibling::div[1]/div/div[p[contains(text(),'Cash')]]/p[2]")
 	private WebElement grandTotalCashValue;
@@ -93,11 +93,11 @@ public class ReportsBoxOfficeSalesPage extends BasePage implements DataHolderPro
 				.collect(Collectors.toList());
 		return retList;
 	}
-	
-	public List<User> getAllOperators(){
+
+	public List<User> getAllOperators() {
 		return listOfOperators.stream().map(el -> new User(el.getText().trim())).collect(Collectors.toList());
 	}
-	
+
 	public void enterDateRanges(String from, String to) {
 		enterDate(startDate, from);
 		waitForTime(700);
@@ -132,9 +132,9 @@ public class ReportsBoxOfficeSalesPage extends BasePage implements DataHolderPro
 		List<OperatorTable> operatorTables = getAllOperatorTables();
 		if (operators.size() == operatorTables.size()) {
 			ReportsBoxOfficePageData pageData = new ReportsBoxOfficePageData();
-			
-			for(int i=0;i<operatorTables.size();i++) {
-				OperatorTableData tableDataHolder= operatorTables.get(0).getDataHolder();
+
+			for (int i = 0; i < operatorTables.size(); i++) {
+				OperatorTableData tableDataHolder = operatorTables.get(i).getDataHolder();
 				tableDataHolder.setOperatorName(operators.get(i).getFullNameFL());
 				pageData.add(tableDataHolder);
 			}
@@ -143,6 +143,5 @@ public class ReportsBoxOfficeSalesPage extends BasePage implements DataHolderPro
 			return null;
 		}
 	}
-	
-	
+
 }

@@ -1,15 +1,20 @@
 package test.facade;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.openqa.selenium.WebDriver;
+import org.testng.asserts.SoftAssert;
 
+import data.holders.reports.boxoffice.ReportsBoxOfficePageData;
 import model.User;
 import pages.admin.events.DashboardEventPage;
 import pages.admin.orders.manage.OrdersManageAdminPage;
 import pages.components.admin.orders.manage.ManageOrderRow;
 import test.facade.orders.order.OrderManageFacade;
+import utils.DateRange;
 
 public class AdminEventDashboardFacade extends BaseFacadeSteps {
 
@@ -48,6 +53,35 @@ public class AdminEventDashboardFacade extends BaseFacadeSteps {
 	
 	public ManageOrderRow getOrderRowByOrderId(String orderId) {
 		return ordersManagePage.findRowWithOrderId(orderId);
+	}
+	
+	public List<ManageOrderRow> getOrderRowsForDateRange(DateRange range) {
+		List<ManageOrderRow> rows = ordersManagePage.findOrderRows(el-> el.isDateBetweenDateRange(range));
+		return rows;
+	}
+	
+	public void whenUserComparesEventTotalWithManageOrdersData(ReportsBoxOfficePageData holder, DateRange range, String eventName, int ratio) {
+		List<ManageOrderRow> rows = getOrderRowsForDateRange(range);
+		BigDecimal totalSum = new BigDecimal(0);
+		SoftAssert sa = new SoftAssert();
+		for(ManageOrderRow row : rows) {
+			totalSum = totalSum.add(row.getOrderValue());
+		}
+		if (totalSum.compareTo(holder.getEventTotal(eventName)) != 0) {
+			sa.fail("Total sum for event on Orders Manage page and total sum for event: "+ eventName +" from reports not the same ");
+		}
+		BigDecimal numberOfEvents = new BigDecimal(holder.getRows().size());
+		BigDecimal cardTotalPerEvent = holder.getCreditCardTotal().divide(numberOfEvents);
+		BigDecimal cashTotalPerEvent = holder.getCashTotal().divide(numberOfEvents);
+		BigDecimal rationedTotal = totalSum.divide(new BigDecimal(ratio));
+		if (cardTotalPerEvent.compareTo(rationedTotal) != 0) {
+			sa.fail("card total on reports page (" + cardTotalPerEvent + ") and manage orders (" + rationedTotal
+					+ ") not the same");
+		}
+		if (cashTotalPerEvent.compareTo(rationedTotal) != 0) {
+			sa.fail("cash total on reports page (" + cashTotalPerEvent + ") and manage orders (" + rationedTotal + ") not the same");
+		}
+		sa.assertAll();
 	}
 	
 	public boolean whenUserDoesSearchCheckByFirstname(User user) {

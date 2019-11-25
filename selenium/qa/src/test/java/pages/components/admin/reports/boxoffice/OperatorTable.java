@@ -13,6 +13,7 @@ import org.openqa.selenium.WebElement;
 import data.holders.DataHolder;
 import data.holders.DataHolderProvider;
 import data.holders.reports.boxoffice.OperatorTableData;
+import data.holders.reports.boxoffice.OperatorTableRowData;
 import pages.BaseComponent;
 
 public class OperatorTable extends BaseComponent implements DataHolderProvider {
@@ -107,9 +108,19 @@ public class OperatorTable extends BaseComponent implements DataHolderProvider {
 	private List<WebElement> findAllEventRows() {
 		return getAccessUtils().getChildElementsFromParentLocatedBy(container, By.xpath(relativeEventRowsXpath));
 	}
+	
+	private OperatorTableRowData getCreditCardRowData() {
+		OperatorTableRow row = getCreditCardRow();
+		return row.getDataHolder();
+	}
 
 	private OperatorTableRow getCreditCardRow() {
 		return getOperatorTableRow(By.xpath(relativeCreditCardPayRowXpath));
+	}
+	
+	private OperatorTableRowData getCashRowData() {
+		OperatorTableRow row = getCashRow();
+		return row.getDataHolder();
 	}
 
 	private OperatorTableRow getCashRow() {
@@ -133,6 +144,8 @@ public class OperatorTable extends BaseComponent implements DataHolderProvider {
 		List<OperatorTableRow> rows = getAllEventRows();
 		OperatorTableData tableData = new OperatorTableData();
 		rows.stream().map(row->row.getDataHolder()).forEach(dataRow->tableData.addRow(dataRow));
+		tableData.setCashRow(getCashRowData());
+		tableData.setCreditCardRow(getCreditCardRowData());
 		return tableData;
 	}	
 

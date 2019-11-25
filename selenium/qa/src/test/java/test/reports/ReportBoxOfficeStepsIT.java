@@ -1,5 +1,6 @@
 package test.reports;
 
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +11,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import data.holders.DataHolder;
+import enums.PaymentType;
 import model.Event;
 import model.Organization;
 import model.Purchase;
@@ -46,6 +48,7 @@ public class ReportBoxOfficeStepsIT extends BaseSteps {
 		fp.getReportsBoxOfficeFacade().enterDates();
 		boolean isEventPresent = fp.getReportsBoxOfficeFacade().whenUserSearchesForEventInBoxOfficeReport(notBoxOfficePurchaseSAST.getEvent());
 		Assert.assertFalse(isEventPresent,"There should be not tickets sold for this event in box office report" + notBoxOfficePurchaseSAST.getEvent().getEventName());
+		fp.getLoginFacade().logOut();
 	}
 	
 	@Test(priority = 33, retryAnalyzer = utils.RetryAnalizer.class)
@@ -64,7 +67,7 @@ public class ReportBoxOfficeStepsIT extends BaseSteps {
 		fp.getLoginFacade().logOut();
 	}
 	
-	private List<Purchase> boxOfficePurchases(){
+	private List<Purchase> boxOfficePurchases() {
 		List<Purchase> purchases = new ArrayList<Purchase>();
 		purchases.add(this.firstBOPurchaseEST);
 		purchases.add(this.secondBOPurchaseJST);
@@ -85,6 +88,35 @@ public class ReportBoxOfficeStepsIT extends BaseSteps {
 		boolean isDataOrdered = fp.getReportsBoxOfficeFacade().thenThereShouldBeMultipeTablesWithCorrectOrder(dataHolder);
 		Assert.assertTrue(isDataOrdered);
 		fp.getLoginFacade().logOut();
+	}
+	
+	@Test(priority = 35, retryAnalyzer = utils.RetryAnalizer.class)
+	public void verifyTransactionsAreSubTotaledByPaymentType() throws Exception {
+		maximizeWindow();
+		FacadeProvider fp = new FacadeProvider(driver);
+		navigateToReportsBoxOffice(fp, firstBOPurchaseEST);
+		
+		DateRange range = ProjectUtils.getDateRangeWithSpecifiedRAngeInDaysWithStartOffset(0, 0);
+		fp.getReportsBoxOfficeFacade().enterDates(range);
+		DataHolder dataHolder = fp.getReportsBoxOfficeFacade().getPageDataHolder();
+		fp.getEventReportsFacade().givenUserIsOnAdminEventsPage();
+		
+		fp.getEventReportsFacade().whenUserVerifiesMethodPaymentTotals(dataHolder, 2, range);
+		fp.getLoginFacade().logOut();
+		
+	}
+	
+	@Test(priority = 36, retryAnalyzer = utils.RetryAnalizer.class)
+	public void verifyReportUtilizesTimeZoneOfOrganization() throws Exception {
+		maximizeWindow();
+		FacadeProvider fp = new FacadeProvider(driver);
+		navigateToReportsBoxOffice(fp, firstBOPurchaseEST);
+		DateRange range = ProjectUtils.getDateRangeWithSpecifiedRAngeInDaysWithStartOffset(0, 0);
+		fp.getReportsBoxOfficeFacade().enterDates(range);
+		ZoneId orgTimeZone = ZoneId.of(firstBOPurchaseEST.getEvent().getOrganization().getTimeZone());
+		fp.getReportsBoxOfficeFacade().isZoneInRowsEqual(orgTimeZone);
+		fp.getLoginFacade().logOut();
+		
 	}
 	
 	private void navigateToReportsBoxOffice(FacadeProvider fp, Purchase purchase) throws Exception {
@@ -120,8 +152,8 @@ public class ReportBoxOfficeStepsIT extends BaseSteps {
 		//do box office sell (eventWithEST) with organization admin user to standard user -cash
 		//do box office sell (eventWithJST) with organization admin user to userOne user -credit card
 		fp.getBoxOfficeFacade().givenUserIsOnBoxOfficePage();
-		fp.getBoxOfficeFacade().whenUserSellsTicketToCustomer(firstBOPurchaseEST, "cash", standardCustomer);
-		fp.getBoxOfficeFacade().whenUserSellsTicketToCustomer(secondBOPurchaseJST, "card", userOneCustomer);
+		fp.getBoxOfficeFacade().whenUserSellsTicketToCustomer(firstBOPurchaseEST, PaymentType.CASH, standardCustomer);
+		fp.getBoxOfficeFacade().whenUserSellsTicketToCustomer(secondBOPurchaseJST, PaymentType.CREDIT_CARD, userOneCustomer);
 		fp.getLoginFacade().logOut();
 		
 		//login with boxoffice user 
@@ -131,10 +163,10 @@ public class ReportBoxOfficeStepsIT extends BaseSteps {
 		fp.getOrganizationFacade().givenOrganizationExist(firstBOPurchaseEST.getEvent().getOrganization());
 		fp.getLoginFacade().whenUserSelectsMyEventsFromProfileDropDown();
 		fp.getBoxOfficeFacade().givenUserIsOnSellPage();
-		fp.getBoxOfficeFacade().whenUserSellsTicketToCustomer(secondBOPurchaseJST, "card", standardCustomer);
-		fp.getBoxOfficeFacade().whenUserSellsTicketToCustomer(firstBOPurchaseEST, "cash", userOneCustomer);
+		fp.getBoxOfficeFacade().whenUserSellsTicketToCustomer(secondBOPurchaseJST, PaymentType.CREDIT_CARD, standardCustomer);
+		fp.getBoxOfficeFacade().whenUserSellsTicketToCustomer(firstBOPurchaseEST, PaymentType.CASH, userOneCustomer);
 		fp.getLoginFacade().logOut();
-		
+
 		//login with standardUser
 		//find event (eventWithSAST) and do the purchase
 		fp.getEventFacade().givenUserIsOnHomePage();

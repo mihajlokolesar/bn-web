@@ -2,6 +2,7 @@ package data.holders.reports.boxoffice;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,8 @@ public class OperatorTableData implements Serializable, DataHolder, Comparable<O
 	private String operatorName;
 	private List<OperatorTableRowData> rows;
 	private BigDecimal total;
+	private OperatorTableRowData cashRow;
+	private OperatorTableRowData creditCardRow;
 	
 	public String getOperatorName() {
 		return operatorName;
@@ -32,6 +35,18 @@ public class OperatorTableData implements Serializable, DataHolder, Comparable<O
 	public void setTotal(BigDecimal total) {
 		this.total = total;
 	}
+	public OperatorTableRowData getCashRow() {
+		return cashRow;
+	}
+	public void setCashRow(OperatorTableRowData cashRow) {
+		this.cashRow = cashRow;
+	}
+	public OperatorTableRowData getCreditCardRow() {
+		return creditCardRow;
+	}
+	public void setCreditCardRow(OperatorTableRowData creditCardRow) {
+		this.creditCardRow = creditCardRow;
+	}
 	
 	public void addRow(OperatorTableRowData row) {
 		if (rows == null) {
@@ -39,6 +54,16 @@ public class OperatorTableData implements Serializable, DataHolder, Comparable<O
 		}
 		rows.add(row);
 	}
+	
+	public boolean isDateZoneEqual(ZoneId zone) {
+		for(OperatorTableRowData rowData : this.rows) {
+			if (!rowData.isDateZoneEqual(zone)) {
+				return false;
+			}
+		}
+		return true;
+	}
+		
 	@Override
 	public int compareTo(OperatorTableData o) {
 		String thisNameLowerCase = this.getOperatorName().toLowerCase();

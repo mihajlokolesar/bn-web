@@ -7,6 +7,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
 
+import enums.PaymentType;
 import utils.DataReader;
 import utils.ProjectUtils;
 
@@ -34,11 +35,13 @@ public class Purchase implements Serializable {
 		private User customer;
 		private int noOfTickets;
 		private String orderNumber;
+		private PaymentType paymentType;
 		
-		public OrderLine(User customer, int numberOfTickets, String orderNumber) {
+		public OrderLine(User customer, int numberOfTickets, String orderNumber, PaymentType paymentType) {
 			this.customer = customer;
 			this.noOfTickets = numberOfTickets;
 			this.orderNumber = orderNumber;
+			this.paymentType = paymentType;
 		}
 
 		public User getCustomer() {
@@ -64,9 +67,16 @@ public class Purchase implements Serializable {
 		public void setOrderNumber(String orderNumber) {
 			this.orderNumber = orderNumber;
 		}
-		
+
+		public PaymentType getPaymentType() {
+			return paymentType;
+		}
+
+		public void setPaymentType(PaymentType paymentType) {
+			this.paymentType = paymentType;
+		}
+
 	}
-	
 	
 	public Purchase() {
 		super();
@@ -135,12 +145,12 @@ public class Purchase implements Serializable {
 		this.additionalTenderedAmount = additionalTenderedAmount;
 	}
 	
-	public void addBoxOfficeOrderLine(User user, String orderNumber) {
+	public void addBoxOfficeOrderLine(User user, String orderNumber, PaymentType paymentType) {
 		if (boxOfficeOrderlines == null) {
 			this.boxOfficeOrderlines = new ArrayList<Purchase.OrderLine>();
 		}
 		
-		OrderLine orderLine = new OrderLine(user, this.numberOfTickets, orderNumber);
+		OrderLine orderLine = new OrderLine(user, this.numberOfTickets, orderNumber, paymentType);
 		this.boxOfficeOrderlines.add(orderLine);
 	}
 	

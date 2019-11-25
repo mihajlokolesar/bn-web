@@ -1,5 +1,6 @@
 package test.facade.reports;
 
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 
@@ -84,6 +85,11 @@ public class ReportsBoxOfficeFacade extends BaseFacadeSteps {
 		} else {
 			return false;
 		}
+	}
+	
+	public boolean isZoneInRowsEqual(ZoneId ordZoneId) {
+		ReportsBoxOfficePageData dataHolder = (ReportsBoxOfficePageData) getPageDataHolder();
+		return dataHolder.isZoneEqualTo(ordZoneId);
 	}
 
 	private boolean isDataInTablesOrdered(List<OperatorTableData> tables) {
