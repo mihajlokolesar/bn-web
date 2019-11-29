@@ -12,7 +12,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import pages.BaseComponent;
-import pages.TicketsConfirmationPage;
+import pages.tickets.TicketsConfirmationPage;
 import pages.user.MyEventsPage;
 import utils.Constants;
 import utils.SeleniumUtils;

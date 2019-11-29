@@ -12,7 +12,7 @@ import utils.Constants;
 
 public class MailinatorHomePage extends BasePage {
 
-	@FindBy(id = "inboxfield")
+	@FindBy(id = "addOverlay")
 	private WebElement searchBox;
 
 	public MailinatorHomePage(WebDriver driver) {
@@ -23,19 +23,25 @@ public class MailinatorHomePage extends BasePage {
 	public void presetUrl() {
 		setUrl(Constants.MAILINATOR_BASE_URL);
 	}
+	
+	public void goToInbox(String userEmail) {
+		navigate();
+		String username = userEmail.split("@")[0];
+		searchForUser(username);
+		checkIfOnUserInboxPage(username);
+	}
 
 	public void navigate() {
 		driver.get(getUrl());
 		explicitWait(10, 500, ExpectedConditions.urlToBe(getUrl()));
 	}
 	
-	
 	public void searchForUser(String userInboxName) {
 		try {
 			explicitWaitForVisiblity(searchBox);
 			explicitWaitForClickable(searchBox);
 			searchBox.sendKeys(userInboxName);
-			WebElement clickGoButton = driver.findElement(By.xpath("//body//div//span/button[@id='go_inbox1']"));
+			WebElement clickGoButton = driver.findElement(By.xpath("//button[@id='go-to-public']"));
 			waitVisibilityAndClick(clickGoButton);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -53,11 +59,6 @@ public class MailinatorHomePage extends BasePage {
 		return new MailinatorInboxPage(driver);
 	}
 	
-	public void goToInbox(String userEmail) {
-		navigate();
-		String username = userEmail.split("@")[0];
-		searchForUser(username);
-		checkIfOnUserInboxPage(username);
-	}
+	
 
 }

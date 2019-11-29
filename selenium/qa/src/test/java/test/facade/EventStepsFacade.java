@@ -2,18 +2,23 @@ package test.facade;
 
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
+import org.testng.asserts.SoftAssert;
 
+import data.holders.DataHolder;
+import data.holders.events.results.EventResultCardData;
 import model.CreditCard;
 import model.Event;
 import model.Purchase;
 import model.TicketType;
 import model.User;
+import model.Venue;
 import pages.EventsPage;
 import pages.HomePage;
 import pages.LoginPage;
-import pages.TicketsConfirmationPage;
-import pages.TicketsPage;
-import pages.TicketsSuccesPage;
+import pages.tickets.TicketsConfirmationPage;
+import pages.tickets.TicketsPage;
+import pages.tickets.TicketsSuccesPage;
+import utils.DateTimeCompareBuilder;
 import utils.ProjectUtils;
 
 public class EventStepsFacade extends BaseFacadeSteps {
@@ -27,7 +32,6 @@ public class EventStepsFacade extends BaseFacadeSteps {
 
 	public EventStepsFacade(WebDriver driver) {
 		super(driver);
-		//TODO: do some lazy proxying magic here, give it proxy and only when called by some function do the instance creation
 		this.eventsPage = new EventsPage(driver);
 		this.ticketsConfirmationPage = new TicketsConfirmationPage(driver);
 		this.ticketPage = new TicketsPage(driver);
@@ -39,8 +43,8 @@ public class EventStepsFacade extends BaseFacadeSteps {
 	public LoginPage getLoginPage() {
 		return loginPage;
 	}
-	
-	public EventsPage givenThatEventExist(Event event,User user) throws Exception {
+
+	public EventsPage givenThatEventExist(Event event, User user) throws Exception {
 		givenThatEventExist(event, user, true);
 		return eventsPage;
 	}
@@ -48,7 +52,7 @@ public class EventStepsFacade extends BaseFacadeSteps {
 	public void givenThatEventExist(Event event, User user, boolean random) throws Exception {
 		if (!eventsPage.isEventPresent(event.getEventName())) {
 			boolean isLoggedIn = false;
-			if(!loginPage.getHeader().isLoggedOut()) {
+			if (!loginPage.getHeader().isLoggedOut()) {
 				isLoggedIn = true;
 				loginPage.logOut();
 			}
@@ -109,10 +113,11 @@ public class EventStepsFacade extends BaseFacadeSteps {
 		ticketPage.clickOnContinue();
 	}
 	
-	public void whenUserExecutesEventPagesSteps(Event event) throws Exception {
-		whenUserSearchesAndClicksOnEvent(event);
+	public DataHolder whenUserExecutesEventPagesSteps(Event event) throws Exception {
+		DataHolder holder = whenUserSearchesAndClichOnEventWithDataCollection(event);
 		whenUserClickOnViewMap();
 		whenUserClicksOnPurchaseTicketLink();
+		return holder;
 	}
 	
 	public void whenUserDoesThePurchses(Purchase purchase, User customer) throws Exception {
@@ -129,7 +134,7 @@ public class EventStepsFacade extends BaseFacadeSteps {
 		whenUserClicksOnPurchaseTicketLink();
 	}
 	
-	public void whenUserClicksOnPurchaseTicketLink() throws Exception {
+	public void whenUserClicksOnPurchaseTicketLink() {
 		eventsPage.purchaseTicketLinkClick();
 	}
 	
@@ -173,8 +178,60 @@ public class EventStepsFacade extends BaseFacadeSteps {
 		this.ticketsConfirmationPage.ticketsConfirmationPageSteps(card);
 	}
 	
+	public void whenUserChecksValidityOfInfoOnTicketSuccessPage(DataHolder holder) {
+		SoftAssert softAssert = new SoftAssert();
+		compareEventAndVenueInfoFromResultsPageAndSuccesPage(holder, softAssert);
+		compareInfoOnTicketSuccessPage(softAssert);
+		softAssert.assertAll();
+	}
+
+	private void compareEventAndVenueInfoFromResultsPageAndSuccesPage(DataHolder holder, SoftAssert softAssert) {
+		EventResultCardData dataHolder = (EventResultCardData) holder;
+		Event resultsEvent = dataHolder.getEvent();
+		Venue resultsVenue = dataHolder.getVenue();
+
+		Event succesPageEvent = succesPage.getEventInfo();
+		Venue succesPageVenue = succesPage.getVenueInfo();
+
+		boolean isMonthDateTimeEqual = new DateTimeCompareBuilder()
+				.compareMonth().compareDayOfMonth().compareDayOfWeek().compareHour().compareMinute()
+				.compare(resultsEvent.getDate(), succesPageEvent.getDate());
+
+		softAssert.assertTrue(resultsEvent.getEventName().equals(succesPageEvent.getEventName()),
+				"Event names on event result card and ticket purchase page not the same");
+		softAssert.assertTrue(isMonthDateTimeEqual, 
+				"Event times on event result card and ticket purchase page not the same");
+		softAssert.assertTrue(resultsVenue.getName().equals(succesPageVenue.getName()), 
+				"Venue names on event result card and ticket purchase page not the same");
+		softAssert.assertTrue(dataHolder.getImageUrl().equals(succesPage.getImageUrl()), 
+				"Image url on on event result card and ticket purchase page not the same");
+	}
+	
+	private void compareInfoOnTicketSuccessPage(SoftAssert softAssert) {
+		softAssert.assertTrue(succesPage.compareOnPageEventInformation(),
+				"Event information on success page and order details not the same");
+		softAssert.assertTrue(succesPage.compareOnPageVenueInfos(),
+				"Venue inforamtion on success page and order details not the same");
+		softAssert.assertTrue(succesPage.compareOrderNumberAndNumberOfTickets(),
+				"Order number or ticket number on success page and order details not the same");
+		softAssert.assertTrue(succesPage.isTotalSumCalculationCorrect(),
+				"Sum of subtotal and fees total not equal of order total");
+		softAssert.assertTrue(succesPage.isTicketTotalEqualToOrderDetailsSubtotal(),
+				"Ticket Total and Subtotal not equal");
+		softAssert.assertTrue(succesPage.isCustomerSupportLinkCorrect(), 
+				"Customer support linke not valid");
+		softAssert.assertTrue(succesPage.isFAQLinkCorrect(), 
+				"FAQ link not valid");
+		softAssert.assertTrue(succesPage.checkValidityOfAppDownloadLinks(),
+				"App download links not valid");
+	}
+
 	private void whenUserSearchesAndClicksOnEvent(Event event) {
 		eventsPage.searchAndClickOnEvent(event.getEventName());
+	}
+
+	private DataHolder whenUserSearchesAndClichOnEventWithDataCollection(Event event) {
+		return eventsPage.searchAndClickWithInfoCollection(event.getEventName());
 	}
 
 	private void whenUserClickOnViewMap() {
@@ -196,7 +253,7 @@ public class EventStepsFacade extends BaseFacadeSteps {
 	public boolean thenUserIsAtTicketPurchaseSuccessPage() {
 		return this.succesPage.isAtPage();
 	}
-	
+
 	public void whenUserEntersPhoneNumberAndClicksSend(String phoneNumber) {
 		this.succesPage.enterPhoneNumberAndClickSend(phoneNumber);
 	}
@@ -209,4 +266,5 @@ public class EventStepsFacade extends BaseFacadeSteps {
 	protected Object getData(String key) {
 		return null;
 	}
+
 }

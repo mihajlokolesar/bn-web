@@ -1,4 +1,4 @@
-package pages;
+package pages.tickets;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -6,6 +6,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import model.CreditCard;
+import pages.BasePage;
 import pages.components.CreditCardDetailsFrame;
 import pages.components.user.TicketConfirmationDetails;
 import utils.SeleniumUtils;

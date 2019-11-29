@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +37,8 @@ public class Event implements Serializable {
 	private String doorTime;
 	@JsonProperty("ticket_types")
 	private List<TicketType> ticketTypes = new ArrayList<>();
+	
+	private LocalDateTime date;
 
 	public Organization getOrganization() {
 		return organization;
@@ -129,6 +132,14 @@ public class Event implements Serializable {
 		this.ticketTypes.add(ticketType);
 	}
 	
+	public LocalDateTime getDate() {
+		return date;
+	}
+
+	public void setDate(LocalDateTime date) {
+		this.date = date;
+	}
+
 	public void setDates(int offset, int range) {
 		String[] dateSpan = ProjectUtils.getDatesWithSpecifiedRangeInDaysWithStartOffset(offset, range);
 		this.startDate = dateSpan[0];

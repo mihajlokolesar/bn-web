@@ -32,7 +32,11 @@ public class AccessabilityUtil {
 	public String getTextOfElemenyLocatedBy(By by) {
 		WebElement element = new WebDriverWait(driver, 15).until(ExpectedConditions.visibilityOfElementLocated(by));
 		String text = element.getText();
-		return text;
+		return text.trim();
+	}
+	
+	public String getTextOfElement(WebElement element) {
+		return element.getText().trim();
 	}
 
 	public WebElement getChildElementFromParentLocatedBy(WebElement parent, By relativeChildBy) {
@@ -83,6 +87,11 @@ public class AccessabilityUtil {
 		WebElement el = getChildElementFromParentLocatedBy(parent, By.xpath(relativeElPath));
 		return getBigDecimalMoneyAmount(el);
 
+	}
+	
+	public BigDecimal getBigDecimalMoneyAmount(String xpath) {
+		WebElement element = driver.findElement(By.xpath(xpath));
+		return getBigDecimalMoneyAmount(element);
 	}
 
 	public BigDecimal getBigDecimalMoneyAmount(WebElement element) {

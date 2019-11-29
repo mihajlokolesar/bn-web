@@ -3,13 +3,16 @@ package test;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import data.holders.DataHolder;
 import model.Event;
 import model.Purchase;
 import model.User;
-import pages.EventsPage;
 import pages.mailinator.MailinatorHomePage;
 import pages.mailinator.inbox.MailinatorInboxPage;
 import test.facade.EventStepsFacade;
+import test.facade.FacadeProvider;
+import test.facade.LoginStepsFacade;
 import utils.DataConstants;
 
 public class PurchaseStepsIT extends BaseSteps {
@@ -17,16 +20,16 @@ public class PurchaseStepsIT extends BaseSteps {
 	@Test(dataProvider = "purchase_data", priority = 7, retryAnalyzer = utils.RetryAnalizer.class)
 	public void purchaseSteps(User user, Purchase purchase) throws Exception {
 		maximizeWindow();
-		EventStepsFacade eventsFacade = new EventStepsFacade(driver);
-
+		FacadeProvider fp = new FacadeProvider(driver);
+		EventStepsFacade eventsFacade = fp.getEventFacade();
+		LoginStepsFacade loginFacade = fp.getLoginFacade();
 		// given
 		eventsFacade.givenUserIsOnHomePage();
-		EventsPage eventsPage = eventsFacade.givenThatEventExist(purchase.getEvent(), user);
+		eventsFacade.givenThatEventExist(purchase.getEvent(), user);
 
 		// when
-		eventsFacade.whenUserExecutesEventPagesSteps(purchase.getEvent());
-		
-		Assert.assertTrue(eventsFacade.thenUserIsAtTicketsPage());
+		DataHolder holder = eventsFacade.whenUserExecutesEventPagesSteps(purchase.getEvent());
+		Assert.assertTrue(eventsFacade.thenUserIsAtTicketsPage(), "User is not on tickets page");
 		
 		eventsFacade.whenUserSelectsNumberOfTicketsAndClicksOnContinue(purchase);
 		eventsFacade.whenUserLogsInOnTicketsPage(user);
@@ -35,8 +38,9 @@ public class PurchaseStepsIT extends BaseSteps {
 
 		// then
 		eventsFacade.thenUserIsAtTicketPurchaseSuccessPage();
-		eventsPage.logOut();
-
+		eventsFacade.whenUserChecksValidityOfInfoOnTicketSuccessPage(holder);
+		loginFacade.logOut();
+		
 		MailinatorHomePage mailinatorHomePage = new MailinatorHomePage(driver);
 		MailinatorInboxPage inboxPage = mailinatorHomePage.goToUserInbox(user.getEmailAddress());
 		// then
