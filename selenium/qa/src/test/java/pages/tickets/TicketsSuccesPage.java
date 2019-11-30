@@ -7,14 +7,17 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import data.holders.DataHolder;
+import data.holders.DataHolderProvider;
 import model.Event;
+import model.User;
 import model.Venue;
 import pages.BasePage;
 import pages.components.tickets.DownloadAppComponent;
 import pages.components.tickets.OrderDetailsComponent;
 import utils.ProjectUtils;
 
-public class TicketsSuccesPage extends BasePage{
+public class TicketsSuccesPage extends BasePage implements DataHolderProvider {
 	
 	@FindBy(id = "phone")
 	private WebElement mobileNumberField;
@@ -98,6 +101,15 @@ public class TicketsSuccesPage extends BasePage{
 		BigDecimal detailsNumberOfTickets = getOrderDetails().getTicketQty();
 		return orderNumber.equals(detailsOrderNumber) && 
 				numberOfTickets.compareTo(detailsNumberOfTickets) == 0;
+	}
+	
+	@Override
+	public DataHolder getDataHolder() {
+		return getOrderDetails().getDataHolder();
+	}
+
+	public User getPurchasedUser() {
+		return getOrderDetails().getPurchaserUser();
 	}
 	
 	private String getOrderNumber() {

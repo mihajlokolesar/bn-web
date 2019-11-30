@@ -92,6 +92,11 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		return event;
 	}
 
+	public void whenUserGoesToEventDashboard(Event event) {
+		givenUserIsOnAdminEventsPage();
+		EventSummaryComponent eventSummary = findEventWithName(event);
+		eventSummary.clickOnEvent();
+	}
 	
 	public boolean whenUserDeletesEvent(Event event) {
 		EventSummaryComponent component = adminEvents.findEventByName(event.getEventName());

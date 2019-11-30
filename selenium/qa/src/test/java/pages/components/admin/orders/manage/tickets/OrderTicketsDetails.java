@@ -16,7 +16,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import pages.BaseComponent;
 import utils.SeleniumUtils;
 
-public class OrderDetails extends BaseComponent {
+public class OrderTicketsDetails extends BaseComponent {
 
 	@FindBy(xpath = "//main//div[div[div[div[div[p[text()='Ticket #']]]]]]")
 	private WebElement container;
@@ -30,7 +30,7 @@ public class OrderDetails extends BaseComponent {
 
 	private PerOrderFeeComponent perOrderFee;
 
-	public OrderDetails(WebDriver driver) {
+	public OrderTicketsDetails(WebDriver driver) {
 		super(driver);
 		this.perOrderFee = new PerOrderFeeComponent(driver);
 	}

@@ -95,7 +95,7 @@ public class ReportsBoxOfficeSalesPage extends BasePage implements DataHolderPro
 	}
 
 	public List<User> getAllOperators() {
-		return listOfOperators.stream().map(el -> new User(el.getText().trim())).collect(Collectors.toList());
+		return listOfOperators.stream().map(el -> new User(el.getText().trim().split(":")[1].trim())).collect(Collectors.toList());
 	}
 
 	public void enterDateRanges(String from, String to) {

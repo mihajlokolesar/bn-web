@@ -7,13 +7,16 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import data.holders.DataHolder;
+import data.holders.DataHolderProvider;
+import data.holders.ticket.order.OrderDetailsData;
 import model.Event;
 import model.User;
 import model.Venue;
 import pages.BaseComponent;
 import utils.ProjectUtils;
 
-public class OrderDetailsComponent extends BaseComponent {
+public class OrderDetailsComponent extends BaseComponent implements DataHolderProvider {
 
 	@FindBy(xpath = "//p[contains(text(),'Questions about your purchase')]/following-sibling::div")
 	private WebElement container;
@@ -30,7 +33,7 @@ public class OrderDetailsComponent extends BaseComponent {
 
 	private String pruchaserParentXpath = "//p[contains(text(),'Purchaser')]/following-sibling::";
 
-	private String firstLastNameXpath = pruchaserParentXpath + "/p";
+	private String firstLastNameXpath = pruchaserParentXpath + "p";
 	private String emailXpath = pruchaserParentXpath + "div[1]";
 	private String ticketTypeXpath = pruchaserParentXpath + "div[3]/div/div[1]/p";
 	private String ticketPriceXpath = pruchaserParentXpath + "div[3]/div/div[2]/p[1]";
@@ -48,6 +51,23 @@ public class OrderDetailsComponent extends BaseComponent {
 
 	public OrderDetailsComponent(WebDriver driver) {
 		super(driver);
+	}
+
+	@Override
+	public DataHolder getDataHolder() {
+		OrderDetailsData data = new OrderDetailsData();
+		data.setOrderNumber(getOrderNumber());
+		data.setTicketType(getTicketType());
+		data.setTicketPrice(getTicketPrice());
+		data.setQty(getTicketQty());
+		data.setTicketTotal(getTicketTotal());
+		data.setSubtotal(getSubtotal());
+		data.setFeesSubtotal(getTotalFees());
+		data.setOrderTotal(getOrderTotal());
+		data.setUser(getPurchaserUser());
+		data.setVenue(getVenueInfo());
+		data.setEvent(getEventInfo());
+		return data;
 	}
 	
 	public Event getEventInfo() {

@@ -37,7 +37,6 @@ public class DownloadAppComponent extends BaseComponent {
 		SeleniumUtils.switchWindow(parentHandle, driver);
 		
 		driver.close();
-//		SeleniumUtils.switchToParentWindow(parentHandle, driver);
 		waitForTime(600);
 		driver.switchTo().window(parentHandle);
 		boolean isOnParentPage = explicitWait(15, ExpectedConditions.urlToBe(parentUrl));

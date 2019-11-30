@@ -5,9 +5,12 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import data.holders.DataHolder;
+import data.holders.events.results.EventResultCardData;
+import data.holders.ticket.order.OrderDetailsData;
 import model.Event;
 import model.Purchase;
 import model.User;
+import pages.components.admin.orders.manage.ManageOrderRow;
 import pages.mailinator.MailinatorHomePage;
 import pages.mailinator.inbox.MailinatorInboxPage;
 import test.facade.EventStepsFacade;
@@ -18,7 +21,7 @@ import utils.DataConstants;
 public class PurchaseStepsIT extends BaseSteps {
 
 	@Test(dataProvider = "purchase_data", priority = 7, retryAnalyzer = utils.RetryAnalizer.class)
-	public void purchaseSteps(User user, Purchase purchase) throws Exception {
+	public void purchaseSteps(User user, Purchase purchase) {
 		maximizeWindow();
 		FacadeProvider fp = new FacadeProvider(driver);
 		EventStepsFacade eventsFacade = fp.getEventFacade();
@@ -28,7 +31,7 @@ public class PurchaseStepsIT extends BaseSteps {
 		eventsFacade.givenThatEventExist(purchase.getEvent(), user);
 
 		// when
-		DataHolder holder = eventsFacade.whenUserExecutesEventPagesSteps(purchase.getEvent());
+		eventsFacade.whenUserExecutesEventPagesSteps(purchase.getEvent());
 		Assert.assertTrue(eventsFacade.thenUserIsAtTicketsPage(), "User is not on tickets page");
 		
 		eventsFacade.whenUserSelectsNumberOfTicketsAndClicksOnContinue(purchase);
@@ -38,7 +41,6 @@ public class PurchaseStepsIT extends BaseSteps {
 
 		// then
 		eventsFacade.thenUserIsAtTicketPurchaseSuccessPage();
-		eventsFacade.whenUserChecksValidityOfInfoOnTicketSuccessPage(holder);
 		loginFacade.logOut();
 		
 		MailinatorHomePage mailinatorHomePage = new MailinatorHomePage(driver);
@@ -47,6 +49,40 @@ public class PurchaseStepsIT extends BaseSteps {
 		boolean retVal = inboxPage.openMailAndCheckValidity("Next Step - Get Your Tickets",
 				purchase.getNumberOfTickets(), purchase.getEvent().getEventName());
 		Assert.assertTrue(retVal);
+	}
+	
+	@Test(dataProvider = "purchase_data", priority = 7, retryAnalyzer = utils.RetryAnalizer.class)
+	public void purchaseWithOrderConfirmationDataValidation(User user, Purchase purchase) {
+		maximizeWindow();
+		FacadeProvider fp = new FacadeProvider(driver);
+		EventStepsFacade eventsFacade = fp.getEventFacade();
+		LoginStepsFacade loginFacade = fp.getLoginFacade();
+		eventsFacade.givenUserIsOnHomePage();
+		eventsFacade.givenThatEventExist(purchase.getEvent(), user);
+
+		DataHolder holder = eventsFacade.whenUserExecutesEventPageStepsWithDataAndWithoutMapView(purchase.getEvent());
+		Assert.assertTrue(eventsFacade.thenUserIsAtTicketsPage(), "User is not on tickets page");
+		
+		eventsFacade.whenUserSelectsNumberOfTicketsAndClicksOnContinue(purchase);
+		eventsFacade.whenUserLogsInOnTicketsPage(user);
+		eventsFacade.thenUserIsAtConfirmationPage();
+		eventsFacade.whenUserEntersCreditCardDetailsAndClicksOnPurchase(purchase.getCreditCard());
+
+		eventsFacade.thenUserIsAtTicketPurchaseSuccessPage();
+		eventsFacade.whenUserChecksValidityOfInfoOnTicketSuccessPage(holder, user);
+		OrderDetailsData orderDetailsData = (OrderDetailsData) eventsFacade.getOrderDetailsData();
+		loginFacade.logOut();
+		Assert.assertTrue(loginFacade.thenUserIsAtLoginPage(), "User should be on home page after logout");
+		
+		
+		loginFacade.givenAdminUserIsLogedIn(purchase.getEvent().getOrganization().getTeam().getOrgAdminUser());
+		fp.getOrganizationFacade().givenOrganizationExist(purchase.getEvent().getOrganization());
+		
+		fp.getAdminEventStepsFacade().whenUserGoesToEventDashboard(orderDetailsData.getEvent());
+		fp.getEventDashboardFacade().givenUserIsOnManageOrdersPage();
+		fp.getEventDashboardFacade().whenUserClickOnOrderWithOrderNumber(orderDetailsData.getOrderNumber(), fp.getOrderManageFacade());
+		fp.getOrderManageFacade().whenUserComparesDataFromTicketSuccesPageAndOrderManagePage(orderDetailsData);
+		loginFacade.logOut();
 	}
 
 	@DataProvider(name = "purchase_data")

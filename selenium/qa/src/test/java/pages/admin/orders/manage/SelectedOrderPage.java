@@ -13,7 +13,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import pages.BasePage;
 import pages.components.admin.orders.manage.ActivityItem;
-import pages.components.admin.orders.manage.tickets.OrderDetails;
+import pages.components.admin.orders.manage.OrderInfo;
+import pages.components.admin.orders.manage.tickets.OrderTicketsDetails;
 import pages.components.admin.orders.manage.tickets.TicketRow;
 import utils.Constants;
 import utils.ProjectUtils;
@@ -22,7 +23,9 @@ public class SelectedOrderPage extends BasePage {
 
 	private final String orderId;
 	
-	private OrderDetails orderDetails;
+	private OrderTicketsDetails orderDetails;
+	
+	private OrderInfo orderInfo;
 
 	@FindBy(xpath = "//main//div/p[contains(text(),'Show')]")
 	private WebElement showOrdersDetailsExpander;
@@ -61,8 +64,15 @@ public class SelectedOrderPage extends BasePage {
 		driver.navigate().refresh();
 	}
 	
+	public OrderInfo getOrderInfo() {
+		if (this.orderInfo == null) {
+			orderInfo = new OrderInfo(driver);
+		}
+		return this.orderInfo;
+	}
+	
 	public void expandOrderDetails() {
-		this.orderDetails = new OrderDetails(driver);
+		this.orderDetails = new OrderTicketsDetails(driver);
 		explicitWaitForVisibilityAndClickableWithClick(showOrdersDetailsExpander);
 	}
 	
@@ -89,7 +99,7 @@ public class SelectedOrderPage extends BasePage {
 		return isExplicitlyWaitVisible(5, refundButton);
 	}
 	
-	public OrderDetails getOrderDetails() {
+	public OrderTicketsDetails getOrderDetails() {
 		return this.orderDetails;
 	}
 	

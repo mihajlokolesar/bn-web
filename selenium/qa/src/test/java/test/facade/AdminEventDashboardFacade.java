@@ -120,6 +120,11 @@ public class AdminEventDashboardFacade extends BaseFacadeSteps {
 		ManageOrderRow orderRow = ordersManagePage.findOrderRowWithUserName(owner.getFirstName() + " ");
 		navigateToSelectedOrderPage(orderRow, orderManageFacade);
 	}
+	
+	public void whenUserClickOnOrderWithOrderNumber(String orderNumber, OrderManageFacade orderManageFacade) {
+		ManageOrderRow orderRow = ordersManagePage.findRowWithOrderId(orderNumber);
+		navigateToSelectedOrderPage(orderRow, orderManageFacade);
+	}
 
 	private void navigateToSelectedOrderPage(ManageOrderRow orderRow, OrderManageFacade orderFacade) {
 		String orderId = orderRow.getOrderId();

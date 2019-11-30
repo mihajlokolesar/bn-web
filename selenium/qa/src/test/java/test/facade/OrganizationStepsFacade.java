@@ -70,7 +70,7 @@ public class OrganizationStepsFacade extends BaseFacadeSteps {
 		return thenUserIsOnOrganizationsPage();
 	}
 
-	public boolean givenOrganizationExist(Organization org) throws Exception {
+	public boolean givenOrganizationExist(Organization org) {
 		Header header = new Header(driver);
 		boolean isOrgPresent = header.isOrganizationPresent(org.getName());
 
@@ -82,7 +82,7 @@ public class OrganizationStepsFacade extends BaseFacadeSteps {
 		}
 	}
 	
-	public boolean isOrganizationPresent(Organization org) throws Exception {
+	public boolean isOrganizationPresent(Organization org) {
 		return organizationPage.getHeader().isOrganizationPresent(org.getName());
 	}
 	

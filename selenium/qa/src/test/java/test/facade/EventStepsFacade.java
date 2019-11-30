@@ -44,12 +44,12 @@ public class EventStepsFacade extends BaseFacadeSteps {
 		return loginPage;
 	}
 
-	public EventsPage givenThatEventExist(Event event, User user) throws Exception {
+	public EventsPage givenThatEventExist(Event event, User user) {
 		givenThatEventExist(event, user, true);
 		return eventsPage;
 	}
 	
-	public void givenThatEventExist(Event event, User user, boolean random) throws Exception {
+	public void givenThatEventExist(Event event, User user, boolean random) {
 		if (!eventsPage.isEventPresent(event.getEventName())) {
 			boolean isLoggedIn = false;
 			if (!loginPage.getHeader().isLoggedOut()) {
@@ -75,7 +75,7 @@ public class EventStepsFacade extends BaseFacadeSteps {
 		homePage.navigate();
 	}
 	
-	private void createEventWithSuperuserLoginAndLogout(Event event, boolean randomizeName) throws Exception {
+	private void createEventWithSuperuserLoginAndLogout(Event event, boolean randomizeName) {
 		if (!loginPage.getHeader().isLoggedOut()) {
 			loginPage.logOut();
 		}
@@ -94,7 +94,6 @@ public class EventStepsFacade extends BaseFacadeSteps {
 		if (!retVal) {
 			Assert.fail("Event creationg in purchase steps failed");
 		} 
-		
 		loginPage.logOut();
 	}
 	
@@ -113,11 +112,10 @@ public class EventStepsFacade extends BaseFacadeSteps {
 		ticketPage.clickOnContinue();
 	}
 	
-	public DataHolder whenUserExecutesEventPagesSteps(Event event) throws Exception {
-		DataHolder holder = whenUserSearchesAndClichOnEventWithDataCollection(event);
+	public void whenUserExecutesEventPagesSteps(Event event) {
+		whenUserSearchesAndClicksOnEvent(event);
 		whenUserClickOnViewMap();
 		whenUserClicksOnPurchaseTicketLink();
-		return holder;
 	}
 	
 	public void whenUserDoesThePurchses(Purchase purchase, User customer) throws Exception {
@@ -127,6 +125,12 @@ public class EventStepsFacade extends BaseFacadeSteps {
 		thenUserIsAtConfirmationPage();
 		whenUserEntersCreditCardDetailsAndClicksOnPurchase(purchase.getCreditCard());
 		thenUserIsAtTicketPurchaseSuccessPage();
+	}
+	
+	public DataHolder whenUserExecutesEventPageStepsWithDataAndWithoutMapView(Event event) {
+		DataHolder holder = whenUserSearchesAndClickOnEventWithDataCollection(event);
+		whenUserClicksOnPurchaseTicketLink();
+		return holder;
 	}
 	
 	public void whenUserExecutesEventPagesStepsWithoutMapView(Event event) throws Exception {
@@ -178,10 +182,10 @@ public class EventStepsFacade extends BaseFacadeSteps {
 		this.ticketsConfirmationPage.ticketsConfirmationPageSteps(card);
 	}
 	
-	public void whenUserChecksValidityOfInfoOnTicketSuccessPage(DataHolder holder) {
+	public void whenUserChecksValidityOfInfoOnTicketSuccessPage(DataHolder holder, User user) {
 		SoftAssert softAssert = new SoftAssert();
 		compareEventAndVenueInfoFromResultsPageAndSuccesPage(holder, softAssert);
-		compareInfoOnTicketSuccessPage(softAssert);
+		compareInfoOnTicketSuccessPage(softAssert, user);
 		softAssert.assertAll();
 	}
 
@@ -207,7 +211,7 @@ public class EventStepsFacade extends BaseFacadeSteps {
 				"Image url on on event result card and ticket purchase page not the same");
 	}
 	
-	private void compareInfoOnTicketSuccessPage(SoftAssert softAssert) {
+	private void compareInfoOnTicketSuccessPage(SoftAssert softAssert, User user) {
 		softAssert.assertTrue(succesPage.compareOnPageEventInformation(),
 				"Event information on success page and order details not the same");
 		softAssert.assertTrue(succesPage.compareOnPageVenueInfos(),
@@ -218,6 +222,9 @@ public class EventStepsFacade extends BaseFacadeSteps {
 				"Sum of subtotal and fees total not equal of order total");
 		softAssert.assertTrue(succesPage.isTicketTotalEqualToOrderDetailsSubtotal(),
 				"Ticket Total and Subtotal not equal");
+		softAssert.assertTrue(succesPage.getPurchasedUser().equals(user),
+				"Logged in user: [" + user.toString() + "]\n and purchaser user: [" + 
+						succesPage.getPurchasedUser().toString() + " displayed not the same");
 		softAssert.assertTrue(succesPage.isCustomerSupportLinkCorrect(), 
 				"Customer support linke not valid");
 		softAssert.assertTrue(succesPage.isFAQLinkCorrect(), 
@@ -225,12 +232,16 @@ public class EventStepsFacade extends BaseFacadeSteps {
 		softAssert.assertTrue(succesPage.checkValidityOfAppDownloadLinks(),
 				"App download links not valid");
 	}
+	
+	public DataHolder getOrderDetailsData() {
+		return succesPage.getDataHolder();
+	}
 
 	private void whenUserSearchesAndClicksOnEvent(Event event) {
 		eventsPage.searchAndClickOnEvent(event.getEventName());
 	}
 
-	private DataHolder whenUserSearchesAndClichOnEventWithDataCollection(Event event) {
+	private DataHolder whenUserSearchesAndClickOnEventWithDataCollection(Event event) {
 		return eventsPage.searchAndClickWithInfoCollection(event.getEventName());
 	}
 

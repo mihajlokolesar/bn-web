@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.openqa.selenium.WebDriver;
+import org.testng.asserts.SoftAssert;
 
+import data.holders.ticket.order.OrderDetailsData;
 import model.Event;
 import model.Purchase;
 import model.TicketType;
@@ -17,8 +19,9 @@ import pages.components.admin.orders.manage.ActivityItem;
 import pages.components.admin.orders.manage.ActivityItem.ExpandedContent;
 import pages.components.admin.orders.manage.ActivityItem.NoteExpandedContent;
 import pages.components.admin.orders.manage.ActivityItem.RefundedExpandedContent;
+import pages.components.admin.orders.manage.OrderInfo;
 import pages.components.admin.orders.manage.tickets.TicketRow;
-import pages.components.admin.orders.manage.tickets.OrderDetails.PerOrderFeeComponent;
+import pages.components.admin.orders.manage.tickets.OrderTicketsDetails.PerOrderFeeComponent;
 import pages.components.dialogs.IssueRefundDialog;
 import pages.components.dialogs.IssueRefundDialog.RefundReason;
 import test.facade.BaseFacadeSteps;
@@ -286,6 +289,19 @@ public class OrderManageFacade extends BaseFacadeSteps{
 		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
 		selectedOrderPage.enterNote(note);
 		selectedOrderPage.clickOnAddNoteButton();
+	}
+	
+	public void whenUserComparesDataFromTicketSuccesPageAndOrderManagePage(OrderDetailsData data) {
+		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
+		OrderInfo orderInfo = selectedOrderPage.getOrderInfo();
+		SoftAssert softAssert = new SoftAssert();
+		softAssert.assertTrue(orderInfo.getFeesTotal().compareTo(data.getFeesSubtotal()) == 0, 
+				"Fees total are not the same on success page and order manage page");
+		softAssert.assertTrue(orderInfo.getTicketTotal().compareTo(data.getTicketTotal()) == 0, 
+				"Ticket total are not the same on success page and order manage page");
+		softAssert.assertTrue(orderInfo.getVenueInfo().getName().equals(data.getVenue().getName()), 
+				"Venue names are not the same on succes page and order manage page");
+		softAssert.assertAll();
 	}
 
 	public boolean thenNotificationNoteAddedShouldBeVisible() {
