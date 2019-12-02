@@ -13,6 +13,7 @@ import model.User;
 import pages.components.RecaptchaFrame;
 import utils.Constants;
 import utils.MsgConstants;
+import utils.SeleniumUtils;
 
 public class LoginPage extends BasePage {
 
@@ -80,12 +81,10 @@ public class LoginPage extends BasePage {
 	}
 
 	public void loginWithoutNavigate(String username, String password) {
-		explicitWaitForVisiblity(usernameField);
-		usernameField.sendKeys(username);
-		explicitWaitForVisiblity(passwordField);
-		passwordField.sendKeys(password);
-//		clickOnRecaptcha();
-		explicitWait(10, ExpectedConditions.elementToBeClickable(loginSubmitButton));
+		waitVisibilityAndClearFieldSendKeysF(usernameField, username);
+		waitVisibilityAndClearFieldSendKeysF(passwordField, password);
+		waitForTime(1000);
+		SeleniumUtils.jsScrollIntoView(loginSubmitButton, driver);
 		waitVisibilityAndBrowserCheckClick(loginSubmitButton);
 		if (checkForLoginFailedMessage()) {
 			waitForTime(1000);
