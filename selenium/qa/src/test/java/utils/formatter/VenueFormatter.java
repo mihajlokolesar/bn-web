@@ -1,4 +1,4 @@
-package utils;
+package utils.formatter;
 
 import model.Venue;
 
@@ -14,7 +14,7 @@ import model.Venue;
  * @author simpletask
  *
  */
-public class VenueFormater {
+public class VenueFormatter {
 
 	public enum VenueParsePattern {
 		VENUE_NAME("N"), ADDRESS_NAME("A"), ADDRESS_LOCACTION("L"), CITY("C"), STATE("S"), COUNTRY("CT");
@@ -55,7 +55,7 @@ public class VenueFormater {
 
 	private String pattern;
 
-	public VenueFormater(String pattern) {
+	public VenueFormatter(String pattern) {
 		this.pattern = pattern;
 	}
 

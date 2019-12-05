@@ -16,7 +16,7 @@ import pages.BasePage;
 import pages.components.tickets.DownloadAppComponent;
 import pages.components.tickets.OrderDetailsComponent;
 import utils.ProjectUtils;
-import utils.VenueFormater;
+import utils.formatter.VenueFormatter;
 
 public class TicketsSuccesPage extends BasePage implements DataHolderProvider {
 	
@@ -132,7 +132,7 @@ public class TicketsSuccesPage extends BasePage implements DataHolderProvider {
 		String[] venueInformation = venueInfo.getText().split("\\n");
 		String venueName = venueInformation[0];
 		String venueLocation = venueInformation[1];
-		Venue venue = new VenueFormater("A, L, C, S").parse(venueLocation);
+		Venue venue = new VenueFormatter("A, L, C, S").parse(venueLocation);
 		venue.setName(venueName);
 		return venue;
 	}

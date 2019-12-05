@@ -13,7 +13,7 @@ import model.Event;
 import model.Venue;
 import pages.BaseComponent;
 import utils.ProjectUtils;
-import utils.VenueFormater;
+import utils.formatter.VenueFormatter;
 
 public class EventResultCardComponent extends BaseComponent implements DataHolderProvider {
 
@@ -41,7 +41,7 @@ public class EventResultCardComponent extends BaseComponent implements DataHolde
 	
 	public Venue getVenueInfo() {
 		String venueText = getAccessUtils().getTextOfElement(getVenueElement());
-		Venue venue = new VenueFormater("N, C, S").parse(venueText);
+		Venue venue = new VenueFormatter("N, C, S").parse(venueText);
 		return venue;
 	}
 

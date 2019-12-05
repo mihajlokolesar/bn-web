@@ -11,7 +11,7 @@ import model.Venue;
 import pages.BaseComponent;
 import pages.components.dialogs.IssueRefundDialog.RefundReason;
 import utils.SeleniumUtils;
-import utils.VenueFormater;
+import utils.formatter.VenueFormatter;
 
 public class ActivityItem extends BaseComponent {
 
@@ -285,7 +285,7 @@ public class ActivityItem extends BaseComponent {
 		}
 
 		public Venue getVenue() {
-			return new VenueFormater("A, L ,C , S, CT").parse(getVenueLocation().trim());
+			return new VenueFormatter("A, L ,C , S, CT").parse(getVenueLocation().trim());
 		}
 		
 		public String getVenueLocation() {

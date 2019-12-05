@@ -15,7 +15,7 @@ import model.User;
 import model.Venue;
 import pages.BaseComponent;
 import utils.ProjectUtils;
-import utils.VenueFormater;
+import utils.formatter.VenueFormatter;
 
 public class OrderDetailsComponent extends BaseComponent implements DataHolderProvider {
 
@@ -84,7 +84,7 @@ public class OrderDetailsComponent extends BaseComponent implements DataHolderPr
 	public Venue getVenueInfo() {
 		 WebElement location = getAccessUtils().getChildElementFromParentLocatedBy(container, By.xpath(relativeVenueLocationXpath));
 		 WebElement name= getAccessUtils().getChildElementFromParentLocatedBy(container, By.xpath(relativeVenueNameXpath));
-		 Venue venue = new VenueFormater("A, L, C, S").parse(location.getText().trim());
+		 Venue venue = new VenueFormatter("A, L, C, S").parse(location.getText().trim());
 		 venue.setName(name.getText().trim());
 		 return venue;
 	}
