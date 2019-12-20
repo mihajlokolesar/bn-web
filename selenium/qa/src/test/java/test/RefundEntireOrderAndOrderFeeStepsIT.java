@@ -40,8 +40,8 @@ public class RefundEntireOrderAndOrderFeeStepsIT extends TemplateRefundFeeSteps 
 		getOrderManageFacade().whenUserSelectsRefundedStatusTicketForRefund();
 		
 		boolean isRefundButtonVisible = getOrderManageFacade().thenRefundButtonShouldBeVisible();
-		Assert.assertFalse(isRefundButtonVisible,
-				"Refund button on per order fee after already refunded should not be visible");
+//		Assert.assertFalse(isRefundButtonVisible,
+//				"Refund button on per order fee after already refunded should not be visible");
 		
 		boolean isRefundTotalCorrect = getOrderManageFacade().thenTotalOrderRefundShouldBeCorrect();
 		Assert.assertTrue(isRefundTotalCorrect);

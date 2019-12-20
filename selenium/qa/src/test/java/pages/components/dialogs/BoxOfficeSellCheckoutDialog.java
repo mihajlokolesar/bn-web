@@ -69,12 +69,12 @@ public class BoxOfficeSellCheckoutDialog extends DialogContainerComponent {
 
 	public void clickOnPayWithCash() {
 		explicitWaitForVisibilityAndClickableWithClick(payWithCashButton);
-		waitForTime(1000);
+		waitForTime(1500);
 	}
 
 	public void clickOnPayWithCreditCard() {
 		explicitWaitForVisibilityAndClickableWithClick(payWithCreditCardButton);
-		waitForTime(1000);
+		waitForTime(1500);
 	}
 	
 	public void clickOnCompleteOrderButton() {

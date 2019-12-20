@@ -57,9 +57,6 @@ public class CreateVenuePage extends BasePage {
 	@FindBy(id = "menu-state")
 	private WebElement stateContainer;
 
-	@FindBy(id = "country")
-	private WebElement countryField;
-
 	@FindBy(xpath = "//form//div/button[@type='submit' and span[text()='Create']]")
 	private WebElement createButton;
 
@@ -83,20 +80,15 @@ public class CreateVenuePage extends BasePage {
 		}
 		functions.add(p -> enterAddress(p));
 		functions.add(p -> enterCity(p));
-		functions.add(p -> enterZip(p));
 		if (createVenue) {
 			functions.add(p -> enterState(p));
 		}
-		functions.add(p -> enterCountry(p));
+		functions.add(p -> enterZip(p));
 		return functions;
 	}
 	
 	public void clearFields() {
-		getAccessUtils().clearInputFields(venueNameField, addressField, cityField, zipField, countryField);
-	}
-	
-	public void clearCountryField() {
-		getAccessUtils().clearInputField(countryField);
+		getAccessUtils().clearInputFields(venueNameField, addressField, cityField, zipField);
 	}
 	
 	public List<String> getListOfStatesInDropDown(){
@@ -179,14 +171,6 @@ public class CreateVenuePage extends BasePage {
 	
 	public void enterZip(String zip) {
 		waitVisibilityAndClearFieldSendKeysF(zipField, zip);
-	}
-
-	public void enterCountry(Venue venue) {
-		enterCountry(venue.getCountry());
-	}
-	
-	public void enterCountry(String country) {
-		waitVisibilityAndClearFieldSendKeysF(countryField, country);
 	}
 
 	public void enterPhoneNumber(String phoneNumber) {

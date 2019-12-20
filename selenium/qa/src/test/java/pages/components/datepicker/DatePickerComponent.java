@@ -1,6 +1,7 @@
 package pages.components.datepicker;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,11 +41,6 @@ public class DatePickerComponent extends BaseComponent {
 		this.inputField = inputField;
 	}
 
-	/**
-	 * NOTE: currently this does not check if the year matches. Only month and day
-	 * 
-	 * @param target
-	 */
 	public void selectDate(String target) {
 		LocalDate date = ProjectUtils.parseDate(ProjectUtils.DATE_FORMAT, target);
 		selectDate(date);
@@ -65,7 +61,7 @@ public class DatePickerComponent extends BaseComponent {
 	}
 
 	private void selectMonth(LocalDate target) {
-		int diff = differenceBetweenTargetAndCurrentMonth(target);
+		int diff = diffrenceBetweenTargetAndCurrentDateMonths(target);
 		if (diff != 0) {
 			if (diff > 0) {
 				clickOnMonthArrow(monthArrowRight, diff);
@@ -86,10 +82,9 @@ public class DatePickerComponent extends BaseComponent {
 			waitVisibilityAndBrowserCheckClick(datePickerContainer);
 	}
 
-	private int differenceBetweenTargetAndCurrentMonth(LocalDate target) {
-		int currentM = getCurrentMonthYear().getMonthValue();
-		int targetM = target.getMonthValue();
-		return targetM - currentM;
+	private int diffrenceBetweenTargetAndCurrentDateMonths(LocalDate target) {
+		Period period = getCurrentMonthYear().until(target);
+		return period.getMonths();
 	}
 
 	private void clickOnMonthArrow(WebElement arrow, int times) {

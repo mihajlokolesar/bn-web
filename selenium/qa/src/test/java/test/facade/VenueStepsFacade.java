@@ -58,7 +58,6 @@ public class VenueStepsFacade extends BaseFacadeSteps {
 		givenUserIsOnVenuesPage();
 		if (createVenue) {
 			givenUserIsOnCreateVenuePage();
-			createVenuePage.clearCountryField();
 		} else {
 			whenUserClicksOnEditButtonOfSelectedVenue(venue.getName());
 			createVenuePage.clearFields();
@@ -138,9 +137,8 @@ public class VenueStepsFacade extends BaseFacadeSteps {
 		createVenuePage.enterPhoneNumber(venue.getPhoneNumber());
 		createVenuePage.enterAddress(venue.getAddress());
 		createVenuePage.enterCity(venue.getCity());
-		createVenuePage.enterZip(venue.getZip());
 		createVenuePage.enterState(venue.getState());
-		createVenuePage.enterCountry(venue.getCountry());
+		createVenuePage.enterZip(venue.getZip());
 	}
 	
 	public void checkStatesIfStatesAreAbbreviated(SoftAssert softAssert) {

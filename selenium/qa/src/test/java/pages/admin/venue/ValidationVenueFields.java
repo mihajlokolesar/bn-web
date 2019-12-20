@@ -26,8 +26,6 @@ public class ValidationVenueFields extends AbstractBase{
 	private WebElement zipErrorText;
 	@FindBy(xpath = "//p[@id='state-error-text' and contains(text(), 'Missing state')]")
 	private WebElement stateErrorText;
-	@FindBy(xpath = "//p[@id='country-error-text' and contains(text(), 'Missing country')]")
-	private WebElement countryErrorText;
 	
 	public ValidationVenueFields(WebDriver driver) {
 		super(driver);
@@ -53,11 +51,10 @@ public class ValidationVenueFields extends AbstractBase{
 		elements.add(timezoneErrorText);
 		elements.add(addressErrorText);
 		elements.add(cityErrorText);
-		elements.add(zipErrorText);
 		if (createVenue) {
 			elements.add(stateErrorText);
 		}
-		elements.add(countryErrorText);
+		elements.add(zipErrorText);
 		return elements;
 	}
 	
