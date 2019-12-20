@@ -16,7 +16,10 @@ import servedImage from "../../../helpers/imagePathHelper";
 const styles = theme => ({
 	root: {},
 	content: {
-		padding: theme.spacing.unit * 8
+		padding: theme.spacing.unit * 8,
+		[theme.breakpoints.down("xs")]: {
+			padding: theme.spacing.unit * 2
+		}
 	},
 	cardHeader: {
 		display: "flex",
@@ -24,17 +27,28 @@ const styles = theme => ({
 	},
 	logo: {
 		width: 80,
-		height: 80
+		height: 80,
+		[theme.breakpoints.down("xs")]: {
+			width: "100%",
+			height: "100%",
+			maxWidth: 40
+		}
 	},
 	orderNumber: {
 		fontFamily: fontFamilyDemiBold,
-		fontSize: theme.typography.fontSize * 1.7
+		fontSize: theme.typography.fontSize * 1.7,
+		[theme.breakpoints.down("xs")]: {
+			fontSize: theme.typography.fontSize * 1.1
+		}
 	},
 	purchasedOn: {
 		fontFamily: fontFamilyDemiBold,
 		textTransform: "uppercase",
 		fontSize: theme.typography.fontSize * 0.9,
-		marginBottom: theme.spacing.unit * 6
+		marginBottom: theme.spacing.unit * 6,
+		[theme.breakpoints.down("xs")]: {
+			marginBottom: theme.spacing.unit * 3
+		}
 	},
 	date: {
 		textTransform: "none",
@@ -44,7 +58,11 @@ const styles = theme => ({
 		maxWidth: 600,
 		fontFamily: fontFamilyDemiBold,
 		fontSize: theme.typography.fontSize * 2,
-		marginBottom: theme.spacing.unit * 6
+		marginBottom: theme.spacing.unit * 6,
+		[theme.breakpoints.down("xs")]: {
+			fontSize: theme.typography.fontSize * 1.2,
+			marginBottom: theme.spacing.unit * 3
+		}
 	},
 	itemHeading: {
 		fontFamily: fontFamilyDemiBold,
@@ -57,19 +75,19 @@ const styles = theme => ({
 
 const LineEntry = ({ col1, col2, col3, col4 }) => (
 	<Grid alignItems="center" container>
-		<Grid item xs={2} sm={2} md={2} lg={2} style={{ textAlign: "center" }}>
+		<Grid item xs={3} sm={2} md={2} lg={2} style={{ textAlign: "center" }}>
 			{col1}
 		</Grid>
 
-		<Grid item xs={6} sm={6} md={6} lg={6}>
+		<Grid item xs={3} sm={6} md={6} lg={6}>
 			{col2}
 		</Grid>
 
-		<Grid item xs={2} sm={2} md={2} lg={2} style={{ textAlign: "right" }}>
+		<Grid item xs={3} sm={2} md={2} lg={2} style={{ textAlign: "right" }}>
 			{col3}
 		</Grid>
 
-		<Grid item xs={2} sm={2} md={2} lg={2} style={{ textAlign: "right" }}>
+		<Grid item xs={3} sm={2} md={2} lg={2} style={{ textAlign: "right" }}>
 			{col4}
 		</Grid>
 	</Grid>

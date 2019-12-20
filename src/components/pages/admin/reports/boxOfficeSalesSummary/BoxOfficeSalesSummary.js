@@ -156,19 +156,32 @@ class BoxOfficeSalesSummary extends Component {
 		downloadCSV(csvRows, "box-office-sales-summary");
 	}
 
-	refreshData(
-		dataParams = {
-			start_utc: null,
-			end_utc: null,
-			startDate: null,
-			endDate: null
-		}
-	) {
-		const { startDate, endDate, start_utc, end_utc } = dataParams;
+	updateDateRange({
+		start_utc = null,
+		end_utc = null,
+		startDate = null,
+		endDate = null
+	}) {
+		this.setState(
+			{ startDate, endDate, end_utc, start_utc, page: 0 },
+			this.refreshData.bind(this)
+		);
+	}
 
-		const { organizationId, onLoad, organizationTimezone } = this.props;
-
-		const queryParams = { organization_id: organizationId, start_utc, end_utc };
+	refreshData() {
+		const { startDate, endDate, end_utc, start_utc } = this.state;
+		const {
+			organizationId,
+			onLoad,
+			organizationTimezone,
+			startUtc,
+			endUtc
+		} = this.props;
+		const queryParams = {
+			organization_id: organizationId,
+			start_utc: startUtc ? startUtc : start_utc,
+			end_utc: endUtc ? endUtc : end_utc
+		};
 
 		Bigneon()
 			.reports.boxOfficeSalesSummary(queryParams)
@@ -255,6 +268,8 @@ class BoxOfficeSalesSummary extends Component {
 			startDateDisplay,
 			endDateDisplay,
 			operators,
+			end_utc,
+			start_utc,
 			payments
 		} = this.state;
 		const isLoaded = operators && payments;
@@ -286,7 +301,9 @@ class BoxOfficeSalesSummary extends Component {
 							</Button>
 						) : null}
 						<Button
-							href={`/exports/reports/?type=box_office_sales_summary`} //TODO add date range here
+							href={`/exports/reports/?type=box_office_sales_summary${
+								start_utc ? `&start_utc=${start_utc}` : ""
+							}${end_utc ? `&end_utc=${end_utc}` : ""}`} //TODO add date range here
 							target={"_blank"}
 							iconUrl="/icons/pdf-active.svg"
 							variant="text"
@@ -305,7 +322,7 @@ class BoxOfficeSalesSummary extends Component {
 				<ReportsDate
 					defaultStartTimeBeforeNow={{ value: 0, unit: "d" }}
 					timezone={organizationTimezone}
-					onChange={this.refreshData.bind(this)}
+					onChange={this.updateDateRange.bind(this)}
 				/>
 				{this.renderGrandTotal()}
 				{this.renderOperators()}
@@ -318,6 +335,8 @@ BoxOfficeSalesSummary.propTypes = {
 	classes: PropTypes.object.isRequired,
 	organizationId: PropTypes.string.isRequired,
 	organizationTimezone: PropTypes.string.isRequired,
+	startUtc: PropTypes.string,
+	endUtc: PropTypes.string,
 	printVersion: PropTypes.bool,
 	onLoad: PropTypes.func
 };

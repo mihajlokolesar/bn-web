@@ -8,8 +8,18 @@ import StyledLink from "../../elements/StyledLink";
 import PageHeading from "../../elements/PageHeading";
 import orders from "../../../stores/orders";
 import Loader from "../../elements/loaders/Loader";
+import Order from "./Order";
+import PropTypes from "prop-types";
 
-const styles = theme => ({});
+const styles = theme => {
+	return {
+		paragraph: {
+			[theme.breakpoints.down("xs")]: {
+				fontSize: "0.6rem"
+			}
+		}
+	};
+};
 
 @observer
 class OrderList extends Component {
@@ -22,6 +32,7 @@ class OrderList extends Component {
 	}
 
 	renderOrders() {
+		const { classes } = this.props;
 		const { items, orderCount } = orders;
 
 		if (items === null) {
@@ -32,11 +43,11 @@ class OrderList extends Component {
 			return (
 				<div>
 					<OrderRow>
-						<Typography variant="subheading">Date</Typography>
-						<Typography>Order # </Typography>
-						<Typography>Event</Typography>
-						<Typography>Tickets</Typography>
-						<Typography>Total</Typography>
+						<Typography className={classes.paragraph} variant="subheading">Date</Typography>
+						<Typography className={classes.paragraph}>Order # </Typography>
+						<Typography className={classes.paragraph}>Event</Typography>
+						<Typography className={classes.paragraph}>Tickets</Typography>
+						<Typography className={classes.paragraph}>Total</Typography>
 					</OrderRow>
 					{items.map(order => {
 						const { id, date, total_in_cents, items } = order;
@@ -61,15 +72,15 @@ class OrderList extends Component {
 
 						return (
 							<OrderRow item key={id}>
-								<Typography>{formattedDate}</Typography>
-								<Typography>
+								<Typography className={classes.paragraph}>{formattedDate}</Typography>
+								<Typography className={classes.paragraph}>
 									<StyledLink underlined to={`/orders/${id}`}>
 										{orderNumber}
 									</StyledLink>
 								</Typography>
-								<Typography>{eventName}</Typography>
-								<Typography>{ticketCount}</Typography>
-								<Typography>$ {(total_in_cents / 100).toFixed(2)}</Typography>
+								<Typography className={classes.paragraph}>{eventName}</Typography>
+								<Typography className={classes.paragraph}>{ticketCount}</Typography>
+								<Typography className={classes.paragraph}>$ {(total_in_cents / 100).toFixed(2)}</Typography>
 							</OrderRow>
 						);
 					})}
@@ -89,5 +100,9 @@ class OrderList extends Component {
 		);
 	}
 }
+
+OrderList.propTypes = {
+	classes: PropTypes.object.isRequired
+};
 
 export default withStyles(styles)(OrderList);

@@ -22,7 +22,7 @@ public class AdminOrganizationsPage extends BasePage {
 
 	@Override
 	public void presetUrl() {
-		setUrl(Constants.getAdminOrganizations());
+		setUrl(Constants.getAdminOrganizations()+"/");
 	}
 
 	public void clickOnCreateOrganizationButton() {

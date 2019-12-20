@@ -18,8 +18,9 @@ import { dollars } from "../../../../helpers/money";
 import FanActivityPurchaseRow from "./FanActivityPurchaseRow";
 import { Link } from "react-router-dom";
 import Button from "../../../elements/Button";
-import CancelTransferDialog from "../../myevents/transfers/CancelTransferDialog";
+import CancelTransferDialog from "./CancelTransferDialog";
 import nl2br from "../../../../helpers/nl2br";
+import user from "../../../../stores/user";
 
 const styles = theme => ({
 	root: {
@@ -154,7 +155,7 @@ class FanHistoryActivityCard extends Component {
 		this.setState({ cancelTransferKey });
 	}
 
-	renderActivity(type) {
+	renderActivity(type, canCancelTransfer) {
 		const {
 			ticket_quantity,
 			order_number,
@@ -736,17 +737,15 @@ class FanHistoryActivityCard extends Component {
 													? "Cancelled by"
 													: "Accepted by"}
 											</Typography>
-											{status === "Pending" ? (
+											{canCancelTransfer ? (
 												<Button
-													variant="warning"
+													variant="default"
 													size="small"
 													onClick={() =>
 														this.onOpenCancelTransferDialog(transfer_key)
 													}
 												>
-													<span className={classes.smallTextCap}>
-														Cancel Transfer
-													</span>
+													Cancel Transfer
 												</Button>
 											) : (
 												<div/>
@@ -815,7 +814,7 @@ class FanHistoryActivityCard extends Component {
 		return activityCard;
 	}
 
-	renderActivityMobile(type) {
+	renderActivityMobile(type, canCancelTransfer) {
 		const {
 			onExpandChange,
 			expanded,
@@ -1476,9 +1475,9 @@ class FanHistoryActivityCard extends Component {
 										</div>
 										<br/>
 										<div>
-											{status === "Pending" ? (
+											{canCancelTransfer ? (
 												<Button
-													variant="warning"
+													variant="default"
 													className={classes.mobiFullWidthCTA}
 													size="small"
 													onClick={() =>
@@ -1508,8 +1507,14 @@ class FanHistoryActivityCard extends Component {
 	}
 
 	render() {
-		const { type } = this.props.item;
+		const { type, status, eligible_for_cancelling } = this.props.item;
 		const { cancelTransferKey } = this.state;
+
+		const canCancelTransfer =
+	            eligible_for_cancelling &&
+	            ((user.hasScope("transfer:cancel-accepted") && status === "Completed")
+								|| (user.hasScope("transfer:cancel") && status === "Pending"));
+
 		return (
 			<div>
 				<CancelTransferDialog
@@ -1519,10 +1524,10 @@ class FanHistoryActivityCard extends Component {
 							cancelTransferKey: null
 						})
 					}
-					// onSuccess={() => this.refreshGuests()}
+					// onSuccess={() => this.refresh()}
 				/>
-				<Hidden smDown>{this.renderActivity(type)}</Hidden>
-				<Hidden mdUp>{this.renderActivityMobile(type)}</Hidden>
+				<Hidden smDown>{this.renderActivity(type, canCancelTransfer)}</Hidden>
+				<Hidden mdUp>{this.renderActivityMobile(type, canCancelTransfer)}</Hidden>
 			</div>
 		);
 	}

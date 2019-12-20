@@ -8,7 +8,7 @@ export default venue => {
 		googleMapsLink = `https://www.google.com/maps/place/?q=place_id:${google_places_id}`;
 	} else if (address) {
 		//Try make a google maps search query for missing places ID
-		googleMapsLink = `https://www.google.co.za/maps/place/${address
+		googleMapsLink = `https://www.google.com/maps/place/${address
 			.split(" ")
 			.join("+")}/`;
 	}

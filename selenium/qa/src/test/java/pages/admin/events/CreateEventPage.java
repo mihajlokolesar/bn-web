@@ -8,6 +8,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import junit.framework.Assert;
 import model.TicketType;
 import pages.BasePage;
 import pages.components.GenericDropDown;
@@ -161,14 +162,6 @@ public class CreateEventPage extends BasePage {
 				venueName);
 	}
 
-	private void enterDate(WebElement element, String date) {
-		if (date != null && !date.isEmpty()) {
-			explicitWaitForVisiblity(element);
-			SeleniumUtils.clearInputField(element, driver);
-			waitForTime(500);
-			waitVisibilityAndSendKeys(element, date);
-		}
-	}
 
 	public void addTicketTypes(List<TicketType> list) {
 		if (list == null) {
@@ -198,7 +191,10 @@ public class CreateEventPage extends BasePage {
 	}
 
 	public boolean checkMessage() {
-		return isNotificationDisplayedWithMessage(MsgConstants.EVENT_PUBLISHED);
+		if (!isNotificationDisplayedWithMessage(MsgConstants.EVENT_PUBLISHED)) {
+			Assert.fail(getNotificationMessage(2));
+		} 
+		return true;
 	}
 
 	public boolean checkSaveDraftMessage() {

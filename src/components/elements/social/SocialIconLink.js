@@ -3,6 +3,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import servedImage from "../../../helpers/imagePathHelper";
+import classnames from "classnames";
 
 import {
 	textColorPrimary,
@@ -27,7 +28,7 @@ const styles = theme => {
 };
 
 const SocialIconLink = props => {
-	const { classes, userName, onClick, href, icon, style, size, color } = props;
+	const { classes, className, userName, onClick, href, icon, style, size, color } = props;
 
 	let src = "";
 	let socialLink = "";
@@ -58,7 +59,7 @@ const SocialIconLink = props => {
 			socialLink = `https://bandcamp.com/${userName}`;
 			break;
 		case "spotify":
-			src = `/images/social/spotify-circle.png`; // Only one color of icon
+			src = `/images/social/spotify-circle-${color}.png`;
 			socialLink = `https://open.spotify.com/artist/${userName}`;
 			break;
 		case "website":
@@ -77,7 +78,10 @@ const SocialIconLink = props => {
 
 	return (
 		<a
-			className={classes.container}
+			className={classnames({
+				[classes. container]: true,
+				[className]: !!className
+			})}
 			onClick={onClick}
 			target={toLink ? "_blank" : null}
 			href={toLink ? toLink : null}
@@ -100,6 +104,7 @@ SocialIconLink.defaultProps = {
 
 SocialIconLink.propTypes = {
 	classes: PropTypes.object.isRequired,
+	className: PropTypes.string,
 	onClick: PropTypes.func,
 	href: PropTypes.string,
 	icon: PropTypes.oneOf([
@@ -114,7 +119,7 @@ SocialIconLink.propTypes = {
 	]).isRequired,
 	userName: PropTypes.string,
 	size: PropTypes.number,
-	color: PropTypes.oneOf(["white", "black"])
+	color: PropTypes.oneOf(["white", "black", "neon"])
 };
 
 export default withStyles(styles)(SocialIconLink);

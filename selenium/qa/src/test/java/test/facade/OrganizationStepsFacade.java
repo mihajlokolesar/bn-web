@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.openqa.selenium.WebDriver;
+import org.testng.Assert;
 
 import model.Organization;
 import model.organization.FeesSchedule;
@@ -39,11 +40,19 @@ public class OrganizationStepsFacade extends BaseFacadeSteps {
 		this.data = new HashMap<>();
 	}
 	
-	public boolean givenUserIsOnOrganizationsPage() {
-		adminSideBar.clickOnOrganizations();
-		return thenUserIsOnOrganizationsPage();
+	public void updateSteps(Organization organization) {
+		thenUserIsOnOrganizationSettingsPage();
+		createOrganizationPage.fillFormAndConfirm(organization);
+		if (organization.getOtherFees() != null) {
+			boolean isFeeScheduledUpdated = whenUserClickOnOtherFeesAndMakesChanges(organization.getOtherFees());
+			Assert.assertTrue(isFeeScheduledUpdated, "Notification, fee scheduled not displayed");
+		}
+		if (organization.getFeesSchedule() != null) {
+			boolean isNotificationVisible = whenUserClickOnOtherFeesAndMakesChanges(organization.getOtherFees());
+			Assert.assertTrue(isNotificationVisible, "Notification, organization updated not displayed");
+		}
 	}
-
+	
 	public boolean createOrganization(Organization org) {
 		boolean retVal = adminEventPage.isAtPage();
 		Header header = adminEventPage.getHeader();
@@ -55,8 +64,13 @@ public class OrganizationStepsFacade extends BaseFacadeSteps {
 		retVal = retVal && createOrganizationPage.checkPopupMessage();
 		return retVal;
 	}
+	
+	public boolean givenUserIsOnOrganizationsPage() {
+		adminSideBar.clickOnOrganizations();
+		return thenUserIsOnOrganizationsPage();
+	}
 
-	public boolean givenOrganizationExist(Organization org) throws Exception {
+	public boolean givenOrganizationExist(Organization org) {
 		Header header = new Header(driver);
 		boolean isOrgPresent = header.isOrganizationPresent(org.getName());
 
@@ -66,6 +80,10 @@ public class OrganizationStepsFacade extends BaseFacadeSteps {
 			header.selectOrganizationFromDropDown(org.getName());
 			return true;
 		}
+	}
+	
+	public boolean isOrganizationPresent(Organization org) {
+		return organizationPage.getHeader().isOrganizationPresent(org.getName());
 	}
 	
 	public void whenUserPicksOrganizationAndClickOnEdit(Organization org) {

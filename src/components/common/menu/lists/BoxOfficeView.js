@@ -36,7 +36,7 @@ const BoxOfficeList = observer(props => {
 				iconName="my-events"
 				to="/box-office/guests"
 			>
-				Guests
+				Attendee List
 			</MenuItem>
 
 			{user.hasScope("order:read") && activeEventId ? (

@@ -26,6 +26,9 @@
 	font-family: TTCommons-DemiBold;
 	cursor: pointer;
 	color: #ff20b1;
+	overflow-wrap: break-word;
+	word-wrap: break-word;
+	hyphens: auto;
 }
 
 .rich-edit-content strong {

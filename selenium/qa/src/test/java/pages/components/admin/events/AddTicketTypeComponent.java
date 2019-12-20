@@ -134,15 +134,10 @@ public class AddTicketTypeComponent extends BaseComponent {
 	}
 
 	private void fillOutAtSpecificTimeDetails(WebElement date, WebElement time, String dateValue, String timeValue) {
+		waitForTime(700);
 		enterDate(date, dateValue);
+		waitForTime(700);
 		enterTime(time, timeValue);
-	}
-
-	private void enterDate(WebElement element, String value) {
-		waitForTime(500);
-		SeleniumUtils.clearInputField(element, driver);
-		waitForTime(500);
-		waitVisibilityAndSendKeys(element, value);
 	}
 
 	private void enterTime(WebElement element, String time) {

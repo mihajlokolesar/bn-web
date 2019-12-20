@@ -564,7 +564,7 @@ class User {
 
 	@computed
 	get hasOrgEventSettlementReport() {
-		if (this.isAdmin) {
+		if (this.isOrgAdmin || this.isOrgOwner) {
 			return true;
 		}
 

@@ -141,7 +141,8 @@ class ExportPDF extends Component {
 		const event_id = getUrlParam("event_id");
 		const settlement_id = getUrlParam("settlement_id");
 		const type = getUrlParam("type");
-
+		const start_utc = getUrlParam("start_utc");
+		const end_utc = getUrlParam("end_utc");
 		const reportType = reportTypes[type];
 
 		if (!reportType) {
@@ -194,9 +195,12 @@ class ExportPDF extends Component {
 					organizationTimezone={organizationTimezone}
 					eventId={event_id}
 					printVersion
+					startUtc={start_utc}
+					endUtc={end_utc}
 					onLoad={this.onReportLoad}
 					venueTimeZone={venueTimeZone}
 					settlementId={settlement_id}
+					isPDFExport={true}
 				/>
 			</div>
 		);

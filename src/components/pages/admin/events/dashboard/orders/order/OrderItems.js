@@ -142,7 +142,7 @@ class OrderItems extends Component {
 			mobileOptionsControlOpen: false,
 
 			showRefundType: null,
-			refundAmountInCents: 0
+			refundAmountInCents: null
 		};
 
 		this.toggleShowOrderDetails = this.toggleShowOrderDetails.bind(this);
@@ -201,12 +201,13 @@ class OrderItems extends Component {
 			selectedRefundOrderItem[id] = !selectedRefundOrderItem[id];
 			return { selectedRefundOrderItem };
 		}, this.setRefundAmount.bind(this));
+
 	}
 
 	setRefundAmount() {
 		const { items } = this.props;
 		const { selectedRefundOrderItem } = this.state;
-
+		
 		let refundAmountInCents = 0;
 		if (items) {
 			items.forEach((item, index) => {
@@ -222,7 +223,7 @@ class OrderItems extends Component {
 
 	orderRefundable() {
 		const { items } = this.props;
-
+		
 		let result = false;
 		if (items) {
 			items.forEach(i => {

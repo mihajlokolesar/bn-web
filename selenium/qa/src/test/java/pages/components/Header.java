@@ -12,7 +12,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import pages.BaseComponent;
-import pages.TicketsConfirmationPage;
+import pages.tickets.TicketsConfirmationPage;
 import pages.user.MyEventsPage;
 import utils.Constants;
 import utils.SeleniumUtils;
@@ -151,7 +151,7 @@ public class Header extends BaseComponent {
 		dropDown.selectOrganizationByName(organizationName);
 	}
 
-	public boolean isOrganizationPresent(String organizationName) throws Exception {
+	public boolean isOrganizationPresent(String organizationName) {
 		waitVisibilityAndClick(currentOrganizationDropDown);
 		CurrentOrganizationDropDown dropDown = new CurrentOrganizationDropDown(driver);
 		boolean retVal = false;
@@ -159,11 +159,7 @@ public class Header extends BaseComponent {
 			dropDown.findOrganizationByName(organizationName);
 			retVal = true;
 		} catch (Exception e) {
-			if (e instanceof NoSuchElementException) {
-				retVal = false;
-			} else {
-				throw new Exception(e);
-			}
+			retVal = false;
 		}
 		//close the drop down
 		WebElement element = explicitWait(15,

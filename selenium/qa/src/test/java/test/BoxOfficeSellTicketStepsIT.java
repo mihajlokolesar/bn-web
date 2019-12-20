@@ -8,7 +8,7 @@ import config.MailinatorEnum;
 import model.Event;
 import model.Purchase;
 import model.User;
-import pages.components.admin.events.TicketTypeRowComponent;
+import pages.components.boxoffice.sell.TicketTypeRowComponent;
 import pages.mailinator.MailinatorFactory;
 import pages.mailinator.inbox.BOSellPagePurchaseWithCashMailinatorPage;
 import test.facade.AdminBoxOfficeFacade;
@@ -46,7 +46,7 @@ public class BoxOfficeSellTicketStepsIT extends BaseSteps {
 		boxOfficeFacade.whenUserRemovesQuantityAndClicksCheckout(ticketTypeRow, ticketNumRemove);
 		boxOfficeFacade.whenUserPicksCashOption();
 		
-		boolean isChangeDueCorrect = boxOfficeFacade.whenUserEntersTenderedAndChecksChangeDueIsCorrect(ticketTypeRow, addToTendered);
+		boolean isChangeDueCorrect = boxOfficeFacade.whenUserEntersTenderedAndChecksChangeDueIsCorrect(addToTendered);
 		Assert.assertTrue(isChangeDueCorrect);
 		Double totalAmount = boxOfficeFacade.whenUserChecksOrderTotal();
 		boxOfficeFacade.whenUserEntersGuestInformationAndClicksOnCompleteOrder(receiverOfTickets, purchase.getOrderNote());

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { observer } from "mobx-react";
-import { withStyles, Grid, Collapse } from "@material-ui/core";
+import { withStyles, Grid, Collapse, Typography } from "@material-ui/core";
 import moment from "moment-timezone";
 import Bn from "bn-api-node";
 
@@ -753,6 +753,9 @@ class Details extends Component {
 				<Grid container spacing={32}>
 					<Grid item xs={12} sm={12} md={12} lg={12}>
 						<FormatInputLabel>Additional event info</FormatInputLabel>
+						{/*<Typography>*/}
+						{/*	<i>We’ve put together a list of tips & tricks to help improve Google search engine rankings for your event, <a href="https://support.bigneon.com/hc/en-us/articles/360036471652" target="_blank" style={{textDecoration: "underline"}}>click here</a>.</i>*/}
+						{/*</Typography>*/}
 						<RichTextInputField
 							value={additionalInfo}
 							onChange={htmlString =>

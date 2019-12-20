@@ -61,3 +61,7 @@
 .RichEditor-activeButton {
 	color: #000000;
 }
+
+.RichEditor-block {
+	margin-bottom: 20px;
+}

@@ -31,7 +31,7 @@ import OrgAnalytics from "../../common/OrgAnalytics";
 import Bigneon from "../../../helpers/bigneon";
 import moment from "moment-timezone";
 import Settings from "../../../config/settings";
-
+import classNames from "classnames";
 import PurchaseDetails from "./PurchaseDetails";
 import Hero from "./SuccessHero";
 import removeCountryFromAddress from "../../../helpers/removeCountryFromAddress";
@@ -46,16 +46,19 @@ const styles = theme => {
 			backgroundColor: "#FFFFFF"
 		},
 		mobileContent: {
-			flex: 1,
+			// flex: 1,
+			paddingTop: 40,
 			flexDirection: "column",
 			background: "linear-gradient(180deg, #9C2D82 0%, #3965A6 40%)",
 			display: "flex"
 		},
 		mobileTopContent: {
-			flex: 1,
+			// flex: 1,
 			display: "flex",
 			flexDirection: "column",
 			justifyContent: "center",
+			alignItems: "center",
+			minHeight: "70vh",
 			paddingLeft: 22,
 			paddingRight: 22,
 			[iPhone5MediaQuery]: {
@@ -123,12 +126,19 @@ const styles = theme => {
 			backgroundImage: "linear-gradient(255deg, #e53d96, #5491cc)",
 			backgroundRepeat: "no-repeat",
 			backgroundSize: "cover",
+			OBackgroundSize: "cover",
+			MozBackgroundSize: "cover",
+			WebkitBackgroundSize: "cover",
 			boxShadow: "0 4px 15px 2px rgba(0,0,0,0.15)",
 			backgroundPosition: "center",
 			[theme.breakpoints.down("md")]: {
 				height: 170,
 				width: 332
 			}
+		},
+		downloadBtn: {
+			width: 140,
+			height: 47
 		},
 		desktopCardContent: {
 			paddingRight: theme.spacing.unit * 4,
@@ -138,7 +148,7 @@ const styles = theme => {
 		mobileCardContent: {
 			paddingRight: theme.spacing.unit,
 			paddingLeft: theme.spacing.unit,
-			textAlign: "left"
+			textAlign: "center"
 		},
 		desktopCoverImage: {
 			height: heroHeight,
@@ -180,7 +190,10 @@ const styles = theme => {
 		desktopEventDetailText: {
 			color: "#FFFFFF",
 			fontSize: 15,
-			lineHeight: "18px"
+			lineHeight: "18px",
+			[theme.breakpoints.down("md")]: {
+				textAlign: "center"
+			}
 		},
 		boldText: {
 			fontFamily: fontFamilyDemiBold,
@@ -200,12 +213,26 @@ const styles = theme => {
 			color: "#3C383F",
 			fontSize: 17,
 			lineHeight: "20px",
+			marginTop: 10,
 			fontFamily: fontFamilyDemiBold
 		},
+		desktopFooterTextTitle: {
+			marginBottom: 15
+		},
+		fakeList: {
+			color: "#3C383F",
+			fontSize: 17,
+			lineHeight: "20px",
+			fontFamily: fontFamilyDemiBold,
+			maxWidth: 220,
+			display: "flex",
+			margin: "0 auto",
+			textAlign: "left"
+		},
 		desktopCardFooterContainer: {
-			padding: 10,
-			paddingRight: 10,
-			paddingLeft: 10,
+			// padding: 10,
+			// paddingRight: 10,
+			// paddingLeft: 10,
 			textAlign: "center",
 			[theme.breakpoints.down("md")]: {
 				textAlign: "left"
@@ -240,26 +267,31 @@ const styles = theme => {
 		},
 		iconText: {
 			display: "flex",
-			flexDirection: "row",
-			alignItems: "center",
-			justifyContent: "flex-start",
+			flexDirection: "column",
+			alignItems: "flex-start",
 			marginLeft: theme.spacing.unit * 6,
+			marginBottom: 25,
 			[theme.breakpoints.down("md")]: {
-				marginLeft: 0
+				marginLeft: 0,
+				marginBottom: theme.spacing.unit * 2
 			}
 		},
 		iconHolder: {
 			width: 26,
-			marginRight: theme.spacing.unit * 2
+			marginRight: theme.spacing.unit * 2,
+			flexDirection: "column",
+			alignItems: "center",
+			display: "flex"
 		},
 		icon: {
-			maxWidth: 24
+			maxWidth: 24,
+			marginRight: 10
 		},
 		heartLogo: {
 			height: 55,
 			width: 53,
-			marginTop: theme.spacing.unit * 2,
-			marginBottom: theme.spacing.unit * 2
+			marginTop: 25,
+			marginBottom: 25
 		},
 		cardLargeText: {
 			color: "#3C383F",
@@ -267,9 +299,9 @@ const styles = theme => {
 			fontFamily: fontFamilyBold,
 			lineHeight: "28px",
 			[theme.breakpoints.down("md")]: {
-				fontSize: 17,
+				fontSize: 22,
 				fontFamily: fontFamilyBold,
-				lineHeight: "19px"
+				lineHeight: "24px"
 			}
 		},
 		cardMedText: {
@@ -277,16 +309,16 @@ const styles = theme => {
 			fontSize: 18,
 			fontFamily: fontFamilyBold,
 			lineHeight: "21px",
-			marginTop: theme.spacing.unit * 2,
-			marginBottom: theme.spacing.unit * 2
+			marginTop: 0,
+			marginBottom: 25
 		},
 		btnContainer: {
 			display: "flex",
 			flexDirection: "row",
 			alignItems: "center",
-			justifyContent: "space-between",
-			marginTop: theme.spacing.unit * 2,
-			marginBottom: theme.spacing.unit * 2
+			justifyContent: "space-around",
+			maxWidth: 330,
+			margin: "25px auto 25px auto"
 		},
 		purchaseInfoBlock: {
 			padding: theme.spacing.unit * 4,
@@ -321,9 +353,9 @@ const styles = theme => {
 			height: 1,
 			width: "100%",
 			opacity: "0.2",
-			backgroundColor: "rgba(0,0,0,0.3)",
-			marginTop: theme.spacing.unit * 2,
-			marginBottom: theme.spacing.unit * 2
+			backgroundColor: "rgba(0,0,0,0.75)",
+			marginTop: 25,
+			marginBottom: 25
 		},
 		leftColumn: {
 			display: "flex",
@@ -339,7 +371,8 @@ const styles = theme => {
 			color: "#3C383F",
 			fontSize: 17,
 			fontFamily: fontFamilyBold,
-			lineHeight: "19px"
+			lineHeight: "19px",
+			textTransform: "uppercase"
 		},
 		orderTotalValue: {
 			color: "#3C383F",
@@ -370,9 +403,9 @@ const styles = theme => {
 			textAlign: "center",
 			margin: "-90px auto 30px auto",
 			[theme.breakpoints.down("md")]: {
-				marginTop: theme.spacing.unit * 2,
-				textAlign: "left",
-				marginBottom: theme.spacing.unit * 2
+				marginTop: theme.spacing.unit * 3,
+				textAlign: "center",
+				marginBottom: theme.spacing.unit * 3
 			}
 		},
 		pinkSpan: {
@@ -579,69 +612,72 @@ class CheckoutSuccess extends Component {
 												Get your tickets now by downloading the Big Neon App
 											</Typography>
 											<div className={classes.btnContainer}>
-												<AppButton
-													color="pinkBackground"
-													variant="ios"
-													href={Settings().appStoreIos}
-													style={{ marginRight: 5 }}
-												>
-													APP STORE
-												</AppButton>
-												<AppButton
-													color="pinkBackground"
-													variant="android"
-													href={Settings().appStoreAndroid}
-													style={{ marginRight: 5 }}
-												>
-													GOOGLE PLAY
-												</AppButton>
+												<a href={Settings().appStoreIos} target="_blank">
+													<img
+														className={classes.downloadBtn}
+														src={servedImage("/images/appstore-apple.png")}
+														alt="App Store download button"
+													/>
+												</a>
+												{/*<AppButton*/}
+												{/*	color="pinkBackground"*/}
+												{/*	variant="ios"*/}
+												{/*	href={Settings().appStoreIos}*/}
+												{/*	style={{ marginRight: 5 }}*/}
+												{/*>*/}
+												{/*	APP STORE*/}
+												{/*</AppButton>*/}
+												<a href={Settings().appStoreAndroid} target="_blank">
+													<img
+														className={classes.downloadBtn}
+														src={servedImage(
+															"/images/appstore-google-play.png"
+														)}
+														alt="Google Play download button"
+													/>
+												</a>
+												{/*<AppButton*/}
+												{/*	color="pinkBackground"*/}
+												{/*	variant="android"*/}
+												{/*	href={Settings().appStoreAndroid}*/}
+												{/*	style={{ marginRight: 5 }}*/}
+												{/*>*/}
+												{/*	GOOGLE PLAY*/}
+												{/*</AppButton>*/}
 											</div>
 											<Typography className={classes.cardMedText}>
-												(or just bring your photo ID to the door)
+												2 ways to get your tickets:
+											</Typography>
+											<Typography className={classes.fakeList}>
+												1. Get the App (Quickest entry)
+												<br/>
+												2. Show your ID at the door
 											</Typography>
 										</div>
 
-										<Divider/>
+										<div className={classes.divider}/>
 
 										<div className={classes.desktopCardFooterContainer}>
-											<Typography className={classes.desktopFooterText}>
-												You’ll need the Big Neon App to:
+											<Typography
+												className={classNames({
+													[classes.desktopFooterText]: true,
+													[classes.desktopFooterTextTitle]: true
+												})}
+											>
+												With the Big Neon App you can:
 											</Typography>
-											<br/>
 											<div className={classes.iconText}>
-												<div className={classes.iconHolder}>
-													<img
-														alt="Emoji Icon"
-														className={classes.icon}
-														src={servedImage("/icons/dance-emoji-icon.png")}
-													/>
-												</div>
 												<Typography className={classes.desktopFooterText}>
+													<span className={classes.icon}>&#x1F46F;</span>
 													Transfer tickets to friends
 												</Typography>
-											</div>
-											<div className={classes.iconText}>
-												<div className={classes.iconHolder}>
-													<img
-														alt="Emoji Icon"
-														className={classes.icon}
-														src={servedImage("/icons/envelope-emoji-icon.png")}
-													/>
-												</div>
 												<Typography className={classes.desktopFooterText}>
-													Get pre-sale access to future events
+													<span className={classes.icon}>&#x1F430;</span>
+													Speed through the line
 												</Typography>
-											</div>
-											<div className={classes.iconText}>
-												<div className={classes.iconHolder}>
-													<img
-														alt="Emoji Icon"
-														className={classes.icon}
-														src={servedImage("/icons/drink-emoji-icon.png")}
-													/>
-												</div>
 												<Typography className={classes.desktopFooterText}>
-													Receive special perks at event
+													<span className={classes.icon}>&#x1F379;</span>
+													Score presale access to events
 												</Typography>
 											</div>
 										</div>
@@ -651,19 +687,13 @@ class CheckoutSuccess extends Component {
 						/>
 					</div>
 					<Typography className={classes.questionsText}>
-						Questions about your purchase? Please contact&nbsp;
+						Any questions?&nbsp;
 						<span>
 							<a
 								className={classes.pinkSpan}
 								href={Settings().submitSupportLink}
 							>
 								Big Neon Customer Support
-							</a>
-						</span>
-						&nbsp; or&nbsp;
-						<span>
-							<a className={classes.pinkSpan} href={Settings().supportFAQLink}>
-								see our FAQ
 							</a>
 						</span>
 					</Typography>
@@ -755,78 +785,44 @@ class CheckoutSuccess extends Component {
 														variant="secondary"
 														style={{ width: "80vw" }}
 													>
-														Download the Big Neon App
+														DOWNLOAD THE BIG NEON APP
 													</CustomButton>
 												</a>
 											</div>
-											<Typography className={classes.cardMedText}>
-												(or just bring your photo ID to the door)
-											</Typography>
 										</div>
 
 										<Divider/>
 
 										<div className={classes.desktopCardFooterContainer}>
 											<Typography className={classes.desktopFooterText}>
-												You’ll need the Big Neon App to:
+												With the Big Neon App you can:
 											</Typography>
 											<br/>
 											<div className={classes.iconText}>
-												<div className={classes.iconHolder}>
-													<img
-														alt="Emoji Icon"
-														className={classes.icon}
-														src={servedImage("/icons/dance-emoji-icon.png")}
-													/>
-												</div>
 												<Typography className={classes.desktopFooterText}>
+													<span className={classes.icon}>&#x1F46F;</span>
 													Transfer tickets to friends
 												</Typography>
-											</div>
-											<div className={classes.iconText}>
-												<div className={classes.iconHolder}>
-													<img
-														alt="Emoji Icon"
-														className={classes.icon}
-														src={servedImage("/icons/envelope-emoji-icon.png")}
-													/>
-												</div>
 												<Typography className={classes.desktopFooterText}>
-													Get pre-sale access to future events
+													<span className={classes.icon}>&#x1F430;</span>
+													Speed through the line
 												</Typography>
-											</div>
-											<div className={classes.iconText}>
-												<div className={classes.iconHolder}>
-													<img
-														alt="Emoji Icon"
-														className={classes.icon}
-														src={servedImage("/icons/drink-emoji-icon.png")}
-													/>
-												</div>
 												<Typography className={classes.desktopFooterText}>
-													Receive special perks at event
+													<span className={classes.icon}>&#x1F379;</span>
+													Score presale access to events
 												</Typography>
 											</div>
 										</div>
 										<Divider/>
 
 										<Typography className={classes.questionsText}>
-											Questions about your purchase? Please contact&nbsp;
+											Any questions?&nbsp;
 											<span>
 												<a
 													className={classes.pinkSpan}
 													href={Settings().submitSupportLink}
 												>
 													Big Neon Customer Support
-												</a>
-											</span>
-											&nbsp; or&nbsp;
-											<span>
-												<a
-													className={classes.pinkSpan}
-													href={Settings().supportFAQLink}
-												>
-													see our FAQ
 												</a>
 											</span>
 										</Typography>

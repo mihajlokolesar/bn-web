@@ -44,6 +44,8 @@ import getAllUrlParams from "../../../helpers/getAllUrlParams";
 import LinkifyReact from "linkifyjs/react";
 import FormattedAdditionalInfo from "./FormattedAdditionalInfo";
 import EventDetail from "./EventDetail";
+import Grid from "@material-ui/core/Grid";
+import ArtistSummary from "../../elements/event/ArtistSummary";
 
 const styles = theme => {
 	return {
@@ -124,6 +126,20 @@ const styles = theme => {
 		divider: {
 			marginTop: theme.spacing.unit,
 			marginBottom: theme.spacing.unit * 4
+		},
+		artistsContainer: {
+			paddingTop: theme.spacing.unit * 5
+		},
+		artistsPerforming: {
+			marginBottom: 30,
+			marginTop: 0
+		},
+		dividerMobile: {
+			marginTop: 30,
+			marginBottom: 30,
+			[theme.breakpoints.up("md")]: {
+				display: "none"
+			}
 		}
 	};
 };
@@ -348,7 +364,6 @@ class ViewEvent extends Component {
 			ticket_types,
 			hasAvailableTickets
 		} = selectedEvent;
-
 		if (event === null) {
 			return (
 				<div>
@@ -433,28 +448,36 @@ class ViewEvent extends Component {
 						{venue.name}
 						<br/>
 						{addressLineSplit(venue.address)}
+						<br/>
+						{venue.city}, {venue.state}
 					</Typography>
+					{venue.googleMapsLink ? (
+						<a target="_blank" href={venue.googleMapsLink}>
+							<span className={classes.eventDetailLinkText}>
+								View map
+							</span>
+						</a>
+					) : null}
+					<br/>
 					<br/>
 					<Typography className={classes.eventDetailText}>
 						More Events at{" "}
 						<Link to={`/venues/${venue.slug}`}>
 							<span className={classes.eventDetailLinkText}>{venue.name}</span>{" "}
 						</Link>
-						|{" "}
-						{venue.googleMapsLink ? (
-							<a target="_blank" href={venue.googleMapsLink}>
-								<span className={classes.eventDetailLinkText}>
-									Get Directions
-								</span>
-							</a>
-						) : null}
 					</Typography>
-					<Typography className={classes.eventDetailText}>
-						More Events in{" "}
-						<Link to={`/cities/${venue.city_slug}`}>
-							<span className={classes.eventDetailLinkText}>{venue.city}</span>
-						</Link>
-					</Typography>
+					{
+						venue.city_slug ?
+							(
+								<Typography className={classes.eventDetailText}>
+									More Events in{" "}
+									<Link to={`/cities/${venue.city_slug}`}>
+										<span className={classes.eventDetailLinkText}>{venue.city}</span>
+									</Link>
+								</Typography>
+							)
+							: null
+					}
 				</EventDetail>
 			</div>
 		);
@@ -576,11 +599,31 @@ class ViewEvent extends Component {
 									</FormattedAdditionalInfo>
 								</EventDetail>
 
-								<Divider
-									className={classes.divider}
-									style={{ marginBottom: 0 }}
-								/>
+								{/*<Divider*/}
+								{/*	className={classes.divider}*/}
+								{/*	style={{ marginBottom: 0 }}*/}
+								{/*/>*/}
 							</div>
+						) : null}
+
+						{artists && artists.length !== 0 ? (
+							<Grid
+								className={classes.artistsContainer}
+								container
+								direction="row"
+								justify="flex-start"
+								alignItems="flex-start"
+							>
+								<Grid item xs={12} style={{ paddingBottom: 0, paddingTop: 0 }}>
+									<h4 className={classes.artistsPerforming}>Artists Performing</h4>
+								</Grid>
+								{artists.map(({ artist, importance }, index) => (
+									<Grid item xs={12} key={index}>
+										<ArtistSummary headliner={importance === 0} {...artist}/>
+										<Divider className={classes.divider}/>
+									</Grid>
+								))}
+							</Grid>
 						) : null}
 					</div>
 

@@ -1,4 +1,4 @@
-package pages;
+package pages.tickets;
 
 import java.net.URISyntaxException;
 import java.util.List;
@@ -11,6 +11,8 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import model.TicketType;
+import pages.BasePage;
+import pages.LoginPage;
 import utils.MsgConstants;
 import utils.SeleniumUtils;
 

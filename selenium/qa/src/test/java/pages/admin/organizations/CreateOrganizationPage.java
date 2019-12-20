@@ -4,10 +4,11 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import model.Organization;
 import pages.BasePage;
+import pages.components.AutoCompleteInputField;
+import pages.components.GenericDropDown;
 import utils.Constants;
 import utils.MsgConstants;
 
@@ -42,7 +43,7 @@ public class CreateOrganizationPage extends BasePage {
 
 	public void fillFormAndConfirm(Organization org) {
 		fillForm(org);
-		explicitWaitForVisibilityAndClickableWithClick(createButton);
+		waitVisibilityAndBrowserCheckClick(createButton);
 	}
 
 	private void fillForm(Organization org) {
@@ -53,17 +54,12 @@ public class CreateOrganizationPage extends BasePage {
 	}
 
 	private void enterOrganizationAddress(String address) {
-		explicitWait(15, ExpectedConditions.visibilityOf(addressAutoSearchField));
-		waitForTime(2000);
-		addressAutoSearchField.sendKeys(address);
-		WebElement firstInList = explicitWait(15, ExpectedConditions.visibilityOfElementLocated(By.xpath(
-				"//div[contains(@class,'autocomplete-dropdown-container')]/div[contains(@class,'suggestion-item')]")));
-		explicitWaitForVisibilityAndClickableWithClick(firstInList);
+		AutoCompleteInputField autocomplete = new AutoCompleteInputField(driver, addressAutoSearchField);
+		autocomplete.selectFromAutocomplete(address);
 	}
 
 	private void enterPhoneNumber(String phoneNumber) {
-		explicitWaitForVisiblity(phoneNumberField);
-		phoneNumberField.sendKeys(phoneNumber);
+		waitVisibilityAndClearFieldSendKeysF(phoneNumberField, phoneNumber);
 	}
 
 	private void selectTimeZone(String timeZone) {
@@ -71,17 +67,12 @@ public class CreateOrganizationPage extends BasePage {
 	}
 
 	private void enterOrganizationName(String organizationName) {
-		waitVisibilityAndSendKeys(nameField, organizationName);
+		waitVisibilityAndClearFieldSendKeysF(nameField, organizationName);
 	}
 
 	private void selectOnTimeZone(String timeZone) {
-		explicitWaitForVisiblity(timeZoneDropDown);
-		timeZoneDropDown.click();
-		explicitWaitForVisiblity(timeZoneList);
-		WebElement selectedTimeZone = timeZoneList.findElement(By.xpath(".//li[@data-value='" + timeZone + "']"));
-		explicitWait(10, ExpectedConditions.elementToBeClickable(selectedTimeZone));
-		waitForTime(2000);
-		selectedTimeZone.click();
+		GenericDropDown dropDown = new GenericDropDown(driver, timeZoneDropDown, timeZoneList);
+		dropDown.selectElementFromDropDownHiddenInput(By.xpath(".//li[@data-value='" + timeZone + "']"), timeZone);
 
 	}
 

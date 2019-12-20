@@ -73,7 +73,15 @@ class PreviewSendDialog extends React.Component {
 
 	render() {
 		const { email, errors } = this.state;
-		const { onClose, open, classes, isSent, isSending, ...rest } = this.props;
+		const {
+			onClose,
+			open,
+			classes,
+			isSent,
+			isSending,
+			onSend,
+			...rest
+		} = this.props;
 
 		return (
 			<Dialog

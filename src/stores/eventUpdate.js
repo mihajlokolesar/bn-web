@@ -49,6 +49,9 @@ class EventUpdate {
 	ticketTypeActiveIndex = null;
 
 	@observable
+	artistTypeActiveIndex = null;
+
+	@observable
 	timezone = "";
 
 	@action
@@ -114,6 +117,32 @@ class EventUpdate {
 	}
 
 	@action
+	moveOrderArtist(fromIndex, direction) {
+		//TODO this will be redone
+		const artists = this.artists;
+
+		if (direction === "up") {
+			if (fromIndex < 1) {
+				return;
+			}
+
+			artists.splice(fromIndex - 1, 0, artists.splice(fromIndex, 1)[0]);
+		} else if (direction === "down") {
+			if (fromIndex + 1 >= this.artists.length) {
+				return;
+			}
+
+			artists.splice(fromIndex + 1, 0, artists.splice(fromIndex, 1)[0]);
+		}
+
+		artists.forEach((tt, i) => {
+			artists[i].rank = i;
+		});
+
+		this.artists = artists;
+	}
+
+	@action
 	loadTicketTypes(event, updateTimezones) {
 		if (!this.id) {
 			//No event yet, add one ticket by default
@@ -170,7 +199,7 @@ class EventUpdate {
 			capacity: "",
 			priceAtDoor: "",
 			increment: 1,
-			limitPerPerson: undefined,
+			limitPerPerson: 10,
 			price_in_cents: "",
 			visibility: "Always",
 			//By default the server will create a Default ticket price point, anything additional added to this array is an override.
@@ -194,6 +223,11 @@ class EventUpdate {
 	@action
 	ticketTypeActivate(index) {
 		this.ticketTypeActiveIndex = index;
+	}
+
+	@action
+	artistActivate(index) {
+		this.artistTypeActiveIndex = index;
 	}
 
 	@action

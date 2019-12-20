@@ -18,9 +18,8 @@ const styles = theme => ({
 		borderRadius: 0
 	},
 	content: {
-		paddingLeft: theme.spacing.unit * 2,
-		//paddingRight: theme.spacing.unit * 2,
-		paddingBottom: theme.spacing.unit,
+		padding: 16,
+		paddingTop: 24,
 		display: "flex",
 		flex: 2,
 
@@ -60,7 +59,9 @@ const EventArtist = props => {
 		onBlur,
 		socialAccounts,
 		importance,
-		onChangeImportance
+		onChangeImportance,
+		onMoveUp,
+		onMoveDown
 	} = props;
 
 	return (
@@ -98,6 +99,20 @@ const EventArtist = props => {
 
 				<div className={classes.rightColumn}>
 					<div>
+						<IconButton
+							onClick={onMoveUp}
+							iconUrl={`/icons/up-gray.svg`}
+							disabled={!onMoveUp}
+						>
+							Move up
+						</IconButton>
+						<IconButton
+							onClick={onMoveDown}
+							iconUrl={`/icons/down-gray.svg`}
+							disabled={!onMoveDown}
+						>
+							Move down
+						</IconButton>
 						<IconButton onClick={onDelete} iconUrl="/icons/delete-gray.svg">
 							Delete
 						</IconButton>
@@ -135,7 +150,9 @@ EventArtist.propTypes = {
 	onBlur: PropTypes.func,
 	socialAccounts: PropTypes.object.isRequired,
 	importance: PropTypes.number.isRequired,
-	onChangeImportance: PropTypes.func
+	onChangeImportance: PropTypes.func,
+	onMoveUp: PropTypes.func,
+	onMoveDown: PropTypes.func
 };
 
 export default withStyles(styles)(EventArtist);

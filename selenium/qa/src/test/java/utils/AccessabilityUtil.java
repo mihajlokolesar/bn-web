@@ -15,13 +15,13 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class AccessabilityUtil {
-	
+
 	private WebDriver driver;
-	
+
 	public AccessabilityUtil(WebDriver driver) {
 		this.driver = driver;
 	}
-	
+
 	public String getUrlPath() throws URISyntaxException {
 		String url = driver.getCurrentUrl();
 		URI uri = new URI(url);
@@ -29,11 +29,25 @@ public class AccessabilityUtil {
 		return path;
 	}
 
-	
 	public String getTextOfElemenyLocatedBy(By by) {
 		WebElement element = new WebDriverWait(driver, 15).until(ExpectedConditions.visibilityOfElementLocated(by));
 		String text = element.getText();
-		return text;
+		return text.trim();
+	}
+	
+	public List<String> getTextOfElements(List<WebElement> elements){
+		if (elements == null) {
+			throw new IllegalArgumentException("List passed to getTextOfElements method is null");
+		}
+		List<String> retVal = new ArrayList<>(elements.size());
+		for(WebElement el : elements) {
+			retVal.add(getTextOfElement(el));
+		}
+		return retVal;
+	}
+	
+	public String getTextOfElement(WebElement element) {
+		return element.getText().trim();
 	}
 
 	public WebElement getChildElementFromParentLocatedBy(WebElement parent, By relativeChildBy) {
@@ -52,6 +66,15 @@ public class AccessabilityUtil {
 		return elements;
 	}
 
+	public Integer getIntegerAmount(WebElement parent, By relativeChildBy, WebDriver driver) {
+		WebElement el = getChildElementFromParentLocatedBy(parent, relativeChildBy);
+		String text = el.getText();
+		if (text.isEmpty()) {
+			return null;
+		}
+		return Integer.parseInt(text.trim());
+	}
+
 	public Integer getIntAmount(WebElement parent, String relativeElPath) {
 		if (!isChildElementVisibleFromParentLocatedBy(parent, By.xpath(relativeElPath), 3)) {
 			return null;
@@ -68,12 +91,47 @@ public class AccessabilityUtil {
 		return Integer.parseInt(text.trim());
 	}
 
+	public BigDecimal getBigDecimalMoneyAmount(WebElement parent, String relativeElPath) {
+		if (!isChildElementVisibleFromParentLocatedBy(parent, By.xpath(relativeElPath), 3)) {
+			return null;
+		}
+		WebElement el = getChildElementFromParentLocatedBy(parent, By.xpath(relativeElPath));
+		return getBigDecimalMoneyAmount(el);
+
+	}
+	
+	public BigDecimal getBigDecimalMoneyAmount(String xpath) {
+		WebElement element = driver.findElement(By.xpath(xpath));
+		return getBigDecimalMoneyAmount(element);
+	}
+
+	public BigDecimal getBigDecimalMoneyAmount(WebElement element) {
+		return getBigDecimalMoneyAmount(element, "$", "");
+
+	}
+	
+	public BigDecimal getBigDecimalMoneyAmount(WebElement element, String oldChar, String newChar) {
+		String text = ProjectUtils.getTextForElementAndReplace(element, oldChar, newChar);
+		if(text == null || text.isEmpty()) {
+			return null;
+		}
+		return new BigDecimal(text.trim());
+	}
+
 	public Double getDoubleAmount(WebElement parent, String relativeElPath) {
 		if (!isChildElementVisibleFromParentLocatedBy(parent, By.xpath(relativeElPath), 3)) {
 			return null;
 		}
 		WebElement el = getChildElementFromParentLocatedBy(parent, By.xpath(relativeElPath));
 		return getDoubleAmount(el, "$", "");
+	}
+	
+	public String getText(WebElement parent, By by) {
+		if (!isChildElementVisibleFromParentLocatedBy(parent, by, 3)) {
+			return null;
+		}
+		WebElement el = getChildElementFromParentLocatedBy(parent, by);
+		return el.getText().trim();
 	}
 
 	public Double getDoubleAmount(WebElement element, String oldChar, String newChar) {
@@ -109,7 +167,7 @@ public class AccessabilityUtil {
 			return false;
 		}
 	}
-	
+
 	public boolean refreshElement(List<WebElement> toBeRefreshed) {
 		try {
 			new WebDriverWait(driver, 10)
@@ -133,6 +191,12 @@ public class AccessabilityUtil {
 			retVal = false;
 		}
 		return retVal;
+	}
+	
+	public void clearInputFields(WebElement... inputFields) {
+		for(WebElement el : inputFields) {
+			clearInputField(el);
+		}
 	}
 
 	public void clearInputField(WebElement inputField) {

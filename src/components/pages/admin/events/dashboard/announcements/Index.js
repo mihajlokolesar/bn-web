@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Typography, withStyles } from "@material-ui/core";
+import moment from "moment-timezone";
 
 import notifications from "../../../../../../stores/notifications";
 import Bigneon from "../../../../../../helpers/bigneon";
@@ -10,7 +11,8 @@ import PreviewSendDialog from "./PreviewSendDialog";
 import ConfirmSendDialog from "./ConfirmSendDialog";
 import EmailHistory from "./EmailHistory";
 import Loader from "../../../../../elements/loaders/Loader";
-import moment from "moment-timezone";
+import user from "../../../../../../stores/user";
+import splitByCamelCase from "../../../../../../helpers/splitByCamelCase";
 
 const styles = theme => ({
 	root: {},
@@ -59,11 +61,33 @@ class Announcements extends Component {
 
 	componentDidMount() {
 		Bigneon()
+			.events.ticketHolderCount({ id: this.eventId })
+			.then(response => {
+				this.setState({
+					numberOfRecipients: response.data
+				});
+			})
+			.catch(error => {
+				console.error(error);
+				notifications.showFromErrorResponse({
+					error,
+					defaultMessage: "Loading ticket holders failed."
+				});
+			});
+
+		Bigneon()
 			.events.read({ id: this.eventId })
 			.then(response => {
 				const { venue } = response.data;
 
-				this.loadEventHistory(venue.timezone);
+				//TODO we need an endpoint to get numberOfRecipients
+				// this.setState({
+				// 	numberOfRecipients: event.sold_held + event.sold_unreserved
+				// });
+
+				this.timezone = venue.timezone;
+
+				this.loadEventHistory();
 			})
 			.catch(error => {
 				console.error(error);
@@ -74,19 +98,44 @@ class Announcements extends Component {
 			});
 	}
 
-	loadEventHistory(eventTimezone) {
+	loadEventHistory() {
 		Bigneon()
 			.events.broadcasts.index({ event_id: this.eventId })
 			.then(response => {
 				const { data } = response.data;
 				const emailHistory = [];
 
+				const timezone = this.timezone || user.currentOrgTimezone;
+
 				data.forEach(email => {
-					const { id, notification_type, send_at, status } = email;
-					if (notification_type === "Custom") {
-						email.sendAtDisplay = send_at
-							? moment.utc(send_at).tz(eventTimezone)
-							: null;
+					const {
+						id,
+						created_at,
+						notification_type,
+						send_at,
+						status,
+						preview_email
+					} = email;
+					if (notification_type === "Custom" && !preview_email) {
+						const dateFormat = "MM/DD/YY hh:mm A z";
+
+						if (send_at) {
+							//If send in past
+							if (moment.utc(send_at).isBefore(moment.utc())) {
+								email.sentAtDisplay = moment
+									.utc(send_at)
+									.tz(timezone)
+									.format(dateFormat);
+							} else {
+								//If scheduled for future, use the status
+								email.sentAtDisplay = splitByCamelCase(status);
+							}
+						} else {
+							email.sentAtDisplay = moment
+								.utc(created_at)
+								.tz(timezone)
+								.format(dateFormat);
+						}
 
 						emailHistory.push(email);
 					}
@@ -118,9 +167,31 @@ class Announcements extends Component {
 
 	onPreviewSend(email) {
 		this.setState({ previewIsSending: true });
-		setTimeout(() => {
-			this.setState({ previewIsSent: true });
-		}, 1000);
+
+		const { subject, htmlBodyString } = this.state;
+
+		Bigneon()
+			.events.broadcasts.create({
+				event_id: this.eventId,
+				name: subject,
+				message: htmlBodyString,
+				audience: "TicketHolders",
+				channel: "Email",
+				notification_type: "Custom",
+				preview_email: email
+			})
+			.then(response => {
+				this.setState({
+					previewIsSending: false,
+					previewIsSent: true
+				});
+			})
+			.catch(error => {
+				notifications.showFromErrorResponse({
+					error,
+					defaultMessage: "Failed to trigger notifications."
+				});
+			});
 	}
 
 	onPreviewDialogClose() {
@@ -173,16 +244,13 @@ class Announcements extends Component {
 				notification_type: "Custom"
 			})
 			.then(response => {
+				setTimeout(() => this.loadEventHistory(), 1000);
+
 				this.setState({
 					isSending: false,
 					isSent: true,
 					subject: "",
 					htmlBodyString: ""
-				});
-
-				notifications.show({
-					message: "Notification triggered!",
-					variant: "success"
 				});
 			})
 			.catch(error => {
@@ -262,17 +330,17 @@ class Announcements extends Component {
 						Need to make an announcement?
 					</Typography>
 
-					{numberOfRecipients ? (
-						<Typography className={classes.explainerText}>
-							Email all current ticket holders (
-							<span className={classes.boldText}>{numberOfRecipients}</span>) to
-							announce any major event updates including cancellation,
-							postponement, rescheduled date/time, or new location.
-							<br/>
-							<span className={classes.boldText}>Disclaimer:</span> Not intended
-							for marketing purposes.
-						</Typography>
-					) : null}
+					<Typography className={classes.explainerText}>
+						Email all current ticket holders
+						{numberOfRecipients !== null ? (
+							<span className={classes.boldText}> ({numberOfRecipients}) </span>
+						) : null}
+						to announce any major event updates including cancellation,
+						postponement, rescheduled date/time, or new location.
+						<br/>
+						<span className={classes.boldText}>Disclaimer:</span> Not intended
+						for marketing purposes.
+					</Typography>
 				</div>
 
 				<NewAnnouncementCard

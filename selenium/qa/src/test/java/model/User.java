@@ -25,6 +25,16 @@ public class User extends Model implements Serializable {
 	private String lastName;
 	@JsonProperty("phone_number")
 	private String phoneNumber;
+	
+	public User() {
+		super();
+	}
+	
+	public User(String fullName) {
+		String[] tokens = fullName.split(" ");
+		this.firstName = tokens[0];
+		this.lastName = tokens[1];
+	}
 
 	public String getEmailAddress() {
 		return emailAddress;
@@ -75,6 +85,43 @@ public class User extends Model implements Serializable {
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((emailAddress == null) ? 0 : emailAddress.hashCode());
+		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
+		result = prime * result + ((lastName == null) ? 0 : lastName.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (emailAddress == null) {
+			if (other.emailAddress != null)
+				return false;
+		} else if (!emailAddress.equals(other.emailAddress))
+			return false;
+		if (firstName == null) {
+			if (other.firstName != null)
+				return false;
+		} else if (!firstName.equals(other.firstName))
+			return false;
+		if (lastName == null) {
+			if (other.lastName != null)
+				return false;
+		} else if (!lastName.equals(other.lastName))
+			return false;
+		return true;
+	}
+
+	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		String[] fields = { this.emailAddress, this.firstName, this.lastName, this.pass, this.passConfirm };
@@ -109,15 +156,6 @@ public class User extends Model implements Serializable {
 		return users;
 	}
 
-	public static User generateUser() {
-		User user = new User();
-		user.setEmailAddress("bluetestneouser@mailinator.com");
-		user.setPass("test1111");
-		user.setFirstName("test");
-		user.setLastName("testqa");
-		return user;
-	}
-
 	public static User generateRandomUser() {
 		User user = generateUserFromJson(DataConstants.GENERATE_NEW_USER_KEY);
 		user.setEmailAddress(user.getFirstName() + ProjectUtils.generateRandomInt(DataConstants.RANDOM_NUMBER_SIZE_10M) + "@" + DataConstants.MAILINATOR_MAIL_DOMAIN);
@@ -134,4 +172,5 @@ public class User extends Model implements Serializable {
 		retVal.setPassConfirm(DataConstants.USER_PASS);
 		return retVal;
 	}
+	
 }

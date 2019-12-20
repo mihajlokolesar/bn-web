@@ -17,6 +17,7 @@ import eventUpdateStore from "../../../../../stores/eventUpdate";
 import user from "../../../../../stores/user";
 import Loader from "../../../../elements/loaders/Loader";
 import servedImage from "../../../../../helpers/imagePathHelper";
+import FlipMove from "react-flip-move";
 
 const styles = theme => ({
 	paddedContent: {
@@ -355,67 +356,100 @@ class ArtistDetails extends Component {
 	render() {
 		const { classes, errors } = this.props;
 		const { availableArtists, showArtistSelect } = this.state;
-		const { artists } = eventUpdateStore;
+		const { artists, artistTypeActiveIndex } = eventUpdateStore;
 
 		return (
 			<div>
-				{artists.map((eventArtist, index) => {
-					const { id, setTime, importance } = eventArtist;
+				<FlipMove staggerDurationBy="50">
+					{artists.map((eventArtist, index) => {
+						const { id, setTime, importance } = eventArtist;
 
-					let name = "Loading..."; // If we haven't loaded all the available artists we won't have this guys name yet
-					let thumb_image_url = "";
-					let socialAccounts = {};
-					if (availableArtists) {
-						const artist = availableArtists.find(artist => artist.id === id);
+						let name = "Loading..."; // If we haven't loaded all the available artists we won't have this guys name yet
+						let thumb_image_url = "";
+						let socialAccounts = {};
+						if (availableArtists) {
+							const artist = availableArtists.find(artist => artist.id === id);
 
-						if (artist) {
-							name = artist.name;
-							thumb_image_url = artist.thumb_image_url || artist.image_url;
-							const {
-								bandcamp_username,
-								facebook_username,
-								instagram_username,
-								snapchat_username,
-								soundcloud_username,
-								website_url
-							} = artist;
-							socialAccounts = {
-								bandcamp: bandcamp_username,
-								facebook: facebook_username,
-								instagram: instagram_username,
-								snapchat: snapchat_username,
-								soundcloud: soundcloud_username,
-								website: website_url
-							};
+							if (artist) {
+								name = artist.name;
+								thumb_image_url = artist.thumb_image_url || artist.image_url;
+								const {
+									bandcamp_username,
+									facebook_username,
+									instagram_username,
+									snapchat_username,
+									soundcloud_username,
+									website_url
+								} = artist;
+								socialAccounts = {
+									bandcamp: bandcamp_username,
+									facebook: facebook_username,
+									instagram: instagram_username,
+									snapchat: snapchat_username,
+									soundcloud: soundcloud_username,
+									website: website_url
+								};
+							}
 						}
-					}
 
-					return (
-						<LeftAlignedSubCard key={index}>
-							<EventArtist
-								socialAccounts={socialAccounts}
-								typeHeading={index === 0 ? "Headline act *" : "Supporting act"}
-								title={name}
-								setTime={setTime}
-								importance={importance}
-								onChangeSetTime={setTime => {
-									eventUpdateStore.changeArtistSetTime(index, setTime);
-								}}
-								onChangeImportance={currentImportance => {
-									eventUpdateStore.changeArtistImportance(
-										index,
-										currentImportance ? 0 : 1
-									);
-								}}
-								imgUrl={
-									thumb_image_url || "/images/profile-pic-placeholder.png"
-								}
-								error={errors ? errors[index] : null}
-								onDelete={() => this.onDelete(index)}
-							/>
-						</LeftAlignedSubCard>
-					);
-				})}
+						let active = index === artistTypeActiveIndex;
+						const isCancelled = eventArtist.status === "Cancelled";
+
+						const ticketTypeErrors =
+							errors && errors[index] ? errors[index] : {};
+
+						//If we have errors, force their eyes to see them
+						if (Object.keys(ticketTypeErrors).length > 0) {
+							active = true;
+						}
+
+						const onMoveUp =
+							index < 1
+								? null
+								: () => {
+									active ? eventUpdateStore.artistActivate(null) : null;
+									eventUpdateStore.moveOrderArtist(index, "up");
+								};
+
+						const onMoveDown =
+							index + 1 >= artists.length
+								? null
+								: () => {
+									active ? eventUpdateStore.artistActivate(null) : null;
+									eventUpdateStore.moveOrderArtist(index, "down");
+								};
+
+						const uniqueFlipKey = eventArtist.id || index;
+
+						return (
+							<LeftAlignedSubCard key={uniqueFlipKey} active={active}>
+								<EventArtist
+									socialAccounts={socialAccounts}
+									typeHeading={importance === 0 ? "Headline act *" : "Supporting act"}
+									title={name}
+									setTime={setTime}
+									importance={importance}
+									onChangeSetTime={setTime => {
+										eventUpdateStore.changeArtistSetTime(index, setTime);
+									}}
+									onChangeImportance={currentImportance => {
+										eventUpdateStore.changeArtistImportance(
+											index,
+											currentImportance ? 0 : 1
+										);
+									}}
+									imgUrl={
+										thumb_image_url || "/images/profile-pic-placeholder.png"
+									}
+									error={errors ? errors[index] : null}
+									onDelete={() => this.onDelete(index)}
+									onMoveUp={onMoveUp}
+									onMoveDown={onMoveDown}
+								/>
+							</LeftAlignedSubCard>
+						);
+					})}
+				</FlipMove>
 
 				<div className={classes.paddedContent}>
 					{showArtistSelect || artists.length === 0

@@ -3,8 +3,7 @@ import {
 	Editor,
 	EditorState,
 	RichUtils,
-	getDefaultKeyBinding,
-	ContentState
+	getDefaultKeyBinding
 } from "draft-js";
 import { convertToHTML, convertFromHTML } from "draft-convert";
 import { withStyles } from "@material-ui/core";
@@ -60,6 +59,8 @@ const getBlockStyle = block => {
 	switch (block.getType()) {
 		case "blockquote":
 			return "RichEditor-blockquote";
+		case "unstyled":
+			return "RichEditor-block";
 		default:
 			return null;
 	}
@@ -159,12 +160,18 @@ class RichTextInputField extends Component {
 			currentHtml &&
 			prevProps.value !== currentHtml
 		) {
-			const editorState = convertHtmlPropToEditorState(currentHtml);
 			this.htmlHasBeenSet = true;
-			this.setState({ editorState });
-			this.applyLinkStyle();
+			if (currentHtml === "<p></p>") {
+				return;
+			} else {
+				const editorState = convertHtmlPropToEditorState(currentHtml);
+				this.setState({ editorState });
+
+				if (currentHtml.indexOf("<a") > -1) {
+					this.applyLinkStyle();
+				}
+			}
 		} else if (prevProps.value && currentHtml === "") {
-			//Html was cleared from the input
 			this.setState({ editorState: EditorState.createEmpty() });
 		}
 	}
@@ -174,7 +181,7 @@ class RichTextInputField extends Component {
 			const currentContent = this.state.editorState.getCurrentContent();
 			//const html = convertToHTML(currentContent);
 
-			let html = convertToHTML({
+			const html = convertToHTML({
 				styleToHTML: style => {},
 				blockToHTML: block => {},
 				entityToHTML: (entity, originalText) => {
@@ -188,10 +195,6 @@ class RichTextInputField extends Component {
 					return originalText;
 				}
 			})(currentContent);
-			
-			if (html === "<p></p>") {
-				html = "";
-			}
 
 			this.props.onChange(html);
 		});
@@ -208,6 +211,18 @@ class RichTextInputField extends Component {
 				);
 				if (newEditorState !== this.state.editorState) {
 					this.onChange(newEditorState);
+				}
+				break;
+			}
+			case 13: {
+				// SHIFT + RETURN <br/>
+				if(e.shiftKey) {
+					const newEditorState = RichUtils.insertSoftNewline(this.state.editorState);
+					if (newEditorState !== this.state.editorState) {
+						this.onChange(newEditorState);
+					}
+				} else {
+					return getDefaultKeyBinding(e);
 				}
 				break;
 			}
@@ -289,7 +304,6 @@ class RichTextInputField extends Component {
 						/>
 					</div>
 				</div>
-
 				{error ? (
 					<FormHelperText error className={classes.errorHelperText}>
 						{error}

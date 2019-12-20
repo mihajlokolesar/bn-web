@@ -234,15 +234,28 @@ class SummaryAudit extends Component {
 		}
 	}
 
-	refreshData(
-		dataParams = {
-			start_utc: null,
-			end_utc: null,
-			startDate: null,
-			endDate: null
-		}
-	) {
-		const { startDate, endDate, start_utc, end_utc } = dataParams;
+	updateDateRange({
+		start_utc = null,
+		end_utc = null,
+		startDate = null,
+		endDate = null
+	}) {
+		this.setState(
+			{ startDate, endDate, end_utc, start_utc, page: 0 },
+			this.refreshData.bind(this)
+		);
+	}
+
+	refreshData() {
+		const { startDate, endDate, end_utc, start_utc } = this.state;
+		const {
+			eventId,
+			organizationId,
+			onLoad,
+			organizationTimezone,
+			startUtc,
+			endUtc
+		} = this.props;
 
 		this.setState({
 			...this.initialState,
@@ -251,12 +264,11 @@ class SummaryAudit extends Component {
 			isLoading: true
 		});
 
-		const { eventId, organizationId } = this.props;
 		const summaryQueryParams = {
 			organization_id: organizationId,
 			event_id: eventId,
-			start_utc,
-			end_utc
+			start_utc: startUtc ? startUtc : start_utc,
+			end_utc: endUtc ? endUtc : end_utc
 		};
 
 		//Refresh event summary
@@ -422,6 +434,7 @@ class SummaryAudit extends Component {
 
 	render() {
 		const { printVersion, classes } = this.props;
+		const { start_utc, end_utc } = this.state;
 
 		if (printVersion) {
 			return (
@@ -458,6 +471,8 @@ class SummaryAudit extends Component {
 					<Button
 						href={`/exports/reports/?type=summary_audit&event_id=${
 							this.props.eventId
+						}${start_utc ? `&start_utc=${start_utc}` : ""}${
+							end_utc ? `&end_utc=${end_utc}` : ""
 						}`}
 						target={"_blank"}
 						iconUrl="/icons/pdf-active.svg"
@@ -470,7 +485,7 @@ class SummaryAudit extends Component {
 				{currentOrgTimezone ? (
 					<ReportsDate
 						timezone={currentOrgTimezone}
-						onChange={this.refreshData.bind(this)}
+						onChange={this.updateDateRange.bind(this)}
 						onChangeButton
 					/>
 				) : null}
@@ -497,6 +512,8 @@ SummaryAudit.propTypes = {
 	classes: PropTypes.object.isRequired,
 	organizationId: PropTypes.string.isRequired,
 	eventId: PropTypes.string.isRequired,
+	startUtc: PropTypes.string,
+	endUtc: PropTypes.string,
 	eventName: PropTypes.string,
 	printVersion: PropTypes.bool,
 	onLoad: PropTypes.func

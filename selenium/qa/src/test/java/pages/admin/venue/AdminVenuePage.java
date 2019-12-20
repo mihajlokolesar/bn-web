@@ -39,6 +39,10 @@ public class AdminVenuePage extends BasePage {
 				.filter(predicate).findFirst();
 		return optional.isPresent() ? optional.get() : null;
 	}
+
+	public boolean isVenueWithNamePresent(String venueName) {
+		return isExplicitlyWaitVisible(4, findVenuesByXpathWithName(venueName));
+	}
 	
 	public AdminVenueComponent findVenueByName(String venueName) {
 		WebElement venueEl = findVenueElementWithName(venueName);
@@ -48,7 +52,7 @@ public class AdminVenuePage extends BasePage {
 			return new AdminVenueComponent(driver, venueEl);
 		}
 	}
-
+	
 	public List<AdminVenueComponent> findVenuesByName(String venueName) {
 		List<WebElement> elements = findVenueElementsWithName(venueName);
 		return elements.stream().map(v -> new AdminVenueComponent(driver, v)).collect(Collectors.toList());

@@ -24,6 +24,7 @@
 			<class name="test.RefundEntireOrderAndOrderFeeStepsIT" />
 			<class name="test.RefundEntireOrderExcludingOrderFeeStepsIT" />
 			<class name="test.RefundPartialCheckOrderFeeRefundDisabledStepsIT" />
+			<class name="test.reports.ReportBoxOfficeStepsIT" />
 		</classes>
 	</test>
 </suite>

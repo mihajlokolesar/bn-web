@@ -103,7 +103,7 @@ public class IssueRefundDialog extends DialogContainerComponent {
 	}
 	
 	public BigDecimal getRefundTotalAmount() {
-		BigDecimal retVal = getAccessUtils().getBigDecimalAmount(refundTotal, "$","");
+		BigDecimal retVal = getAccessUtils().getBigDecimalMoneyAmount(refundTotal, "$","");
 		return retVal;
 	}
 

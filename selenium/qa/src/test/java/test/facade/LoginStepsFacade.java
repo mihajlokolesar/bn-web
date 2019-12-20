@@ -67,6 +67,10 @@ public class LoginStepsFacade extends BaseFacadeSteps {
 	public void whenUserSelectsMyEventsFromProfileDropDown() {
 		loginPage.getHeader().clickOnMyEvents();
 	}
+	
+	public boolean thenUserIsAtLoginPage() {
+		return loginPage.isAtPage();
+	}
 
 	@Override
 	protected void setData(String key, Object value) {

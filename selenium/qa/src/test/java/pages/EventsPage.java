@@ -1,11 +1,15 @@
 package pages;
 
+import java.util.Map;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import data.holders.DataHolder;
+import pages.components.events.EventResultCardComponent;
 import utils.Constants;
 import utils.SeleniumUtils;
 
@@ -17,7 +21,7 @@ public class EventsPage extends BasePage {
 	@FindBy(xpath = "//body//main//header")
 	private WebElement dropHeader;
 
-	@FindBy(linkText = "Get Directions")
+	@FindBy(xpath = "//a[span[contains(text(),'View map')]]")
 	private WebElement viewMapLink;
 	
 	@FindBy(xpath = "//a[parent::div]/button[span[contains(text(),'Purchase Tickets')]]")
@@ -72,6 +76,14 @@ public class EventsPage extends BasePage {
 		WebElement event = findWithSearchEvent(eventName);
 		waitVisibilityAndBrowserCheckClick(event);
 	}
+	
+	public DataHolder searchAndClickWithInfoCollection(String eventName) {
+		WebElement event = findWithSearchEvent(eventName);
+		EventResultCardComponent eventCard = new EventResultCardComponent(driver, event);
+		DataHolder dataHolder = eventCard.getDataHolder();
+		event.click();
+		return dataHolder;
+	}
 
 	public void clickOnViewMap() {
 		explicitWaitForVisiblity(viewMapLink);
@@ -81,10 +93,9 @@ public class EventsPage extends BasePage {
 		driver.close();
 		waitForTime(2000);
 		driver.switchTo().window(parentHandle);
-
 	}
 
-	public void purchaseTicketLinkClick() throws Exception {
+	public void purchaseTicketLinkClick() {
 		waitVisibilityAndBrowserCheckClick(purchaseButton);
 	}
 	

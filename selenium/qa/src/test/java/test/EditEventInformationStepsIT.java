@@ -6,7 +6,8 @@ import org.testng.annotations.Test;
 
 import model.Event;
 import model.User;
-import pages.components.admin.AdminEventComponent;
+import model.Venue;
+import pages.components.admin.events.EventSummaryComponent;
 import test.facade.AdminEventStepsFacade;
 import test.facade.LoginStepsFacade;
 import test.facade.OrganizationStepsFacade;
@@ -26,7 +27,7 @@ public class EditEventInformationStepsIT extends BaseSteps {
 		organizationFacade.givenOrganizationExist(event.getOrganization());
 
 		adminEventFacade.givenUserIsOnAdminEventsPage();
-		AdminEventComponent eventComp = adminEventFacade.givenEventWithNameAndPredicateExists(event,
+		EventSummaryComponent eventComp = adminEventFacade.givenEventWithNameAndPredicateExists(event,
 				component -> !component.isEventDrafted());
 
 		eventComp.editEvent(event);//userIsOnEventPage
@@ -47,7 +48,8 @@ public class EditEventInformationStepsIT extends BaseSteps {
 	public static Object[][] editEventData() {
 		User superuser = User.generateUserFromJson(DataConstants.SUPERUSER_DATA_KEY);
 		Event event = Event.generateEventFromJson(DataConstants.EVENT_DATA_STANARD_KEY, "TestUNameEvent", false, 1, 5);
-		event.setVenueName("Arcade Empire");
+		Venue venue = Venue.generateVenueFromJson(DataConstants.VENUE_CST);
+		event.setVenue(venue);
 		return new Object[][] { { superuser, event } };
 	}
 }

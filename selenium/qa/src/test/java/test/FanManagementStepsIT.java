@@ -4,19 +4,16 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import model.CreditCard;
 import model.Event;
 import model.Purchase;
 import model.User;
-import pages.EventsPage;
 import pages.admin.orders.manage.SelectedOrderPage;
 import pages.components.admin.orders.manage.ActivityItem;
 import pages.components.admin.orders.manage.ActivityItem.ExpandedContent;
 import pages.components.dialogs.IssueRefundDialog.RefundReason;
-import test.facade.AdminEventDashboardFacade;
 import test.facade.AdminFanManagementFacade;
 import test.facade.EventStepsFacade;
-import test.facade.LoginStepsFacade;
+import test.facade.FacadeProvider;
 import utils.DataConstants;
 
 public class FanManagementStepsIT extends BaseSteps {
@@ -35,23 +32,22 @@ public class FanManagementStepsIT extends BaseSteps {
 	 */
 	@Test(dataProvider = "fan_profile_data", dependsOnMethods = {"predifinedDataUserPurchasesTickets"},
 			priority = 24, retryAnalyzer = utils.RetryAnalizer.class )
-	public void viewFanProfileAndEventsFiltering(User fan, User orgAdmin) {
-		
-		LoginStepsFacade loginFacade = new LoginStepsFacade(driver);
-		AdminFanManagementFacade fanManagementFacade = new AdminFanManagementFacade(driver);
+	public void viewFanProfileAndEventsFiltering(User fan, User orgAdmin) throws Exception {
+
+		FacadeProvider fp = new FacadeProvider(driver);
 		maximizeWindow();
-		loginAndNavigationToFanProfilePage(loginFacade, fanManagementFacade, fan, orgAdmin);
+		loginAndNavigationToFanProfilePage(fp, fan, orgAdmin);
 		
-		boolean isFanInfoValid = fanManagementFacade.whenUserChecksValidityOfFanInformation(fan);
+		boolean isFanInfoValid = fp.getFanManagmentFacade().whenUserChecksValidityOfFanInformation(fan);
 		Assert.assertTrue(isFanInfoValid, "Fan information on fan profile page is not valid for fan: " + fan.getEmailAddress());
 		
-		fanManagementFacade.whenUserChecksUpcomingEventList();
-		boolean isOnPastEventsPage = fanManagementFacade.whenUserClicksOnPastEventsLink();
+		fp.getFanManagmentFacade().whenUserChecksUpcomingEventList();
+		boolean isOnPastEventsPage = fp.getFanManagmentFacade().whenUserClicksOnPastEventsLink();
 		Assert.assertTrue(isOnPastEventsPage, "Failed to load past event list for fan: " + fan.getEmailAddress());
 		
-		boolean checkIfEventsAreDifferent = fanManagementFacade.thenUserComparesUpcomingAndPastEventLists();
+		boolean checkIfEventsAreDifferent = fp.getFanManagmentFacade().thenUserComparesUpcomingAndPastEventLists();
 		Assert.assertTrue(checkIfEventsAreDifferent, "Events in upcoming and past list are not different");
-		loginFacade.logOut();
+		fp.getLoginFacade().logOut();
 	}
 	
 	/**
@@ -60,16 +56,15 @@ public class FanManagementStepsIT extends BaseSteps {
 	 * @param orgAdmin
 	 */
 	@Test(dataProvider = "fan_profile_data", priority = 25, retryAnalyzer = utils.RetryAnalizer.class)
-	public void fanProfileEventSummaryCardsContainData(User fan, User orgAdmin) {
-		LoginStepsFacade loginFacade = new LoginStepsFacade(driver);
-		AdminFanManagementFacade fanManagementFacade = new AdminFanManagementFacade(driver);
+	public void fanProfileEventSummaryCardsContainData(User fan, User orgAdmin) throws Exception {
+		FacadeProvider fp = new FacadeProvider(driver);
 		maximizeWindow();
-		loginAndNavigationToFanProfilePage(loginFacade, fanManagementFacade, fan, orgAdmin);
+		loginAndNavigationToFanProfilePage(fp, fan, orgAdmin);
 		
-		boolean isSummaryCardDataPresent = fanManagementFacade.thenEventSummaryDataShouldBePresentAndActivitiesCollapsed();
+		boolean isSummaryCardDataPresent = fp.getFanManagmentFacade().thenEventSummaryDataShouldBePresentAndActivitiesCollapsed();
 		Assert.assertTrue(isSummaryCardDataPresent);
 		
-		loginFacade.logOut();
+		fp.getLoginFacade().logOut();
 	}
 	/**
 	 * Automation: Big Neon Test 34: Fan Management: ActivityItem/Purchased #1843
@@ -77,17 +72,17 @@ public class FanManagementStepsIT extends BaseSteps {
 	 * @param orgAdmin
 	 */
 	@Test(dataProvider = "fan_profile_data", priority = 26, retryAnalyzer = utils.RetryAnalizer.class)
-	public void fanProfilePurchasedActivityItems(User fan, User orgAdmin) {
-		LoginStepsFacade loginFacade = new LoginStepsFacade(driver);
-		AdminFanManagementFacade fanManagementFacade = new AdminFanManagementFacade(driver);
+	public void fanProfilePurchasedActivityItems(User fan, User orgAdmin) throws Exception {
+		
+		FacadeProvider fp = new FacadeProvider(driver);
 		maximizeWindow();
-		loginAndNavigationToFanProfilePage(loginFacade, fanManagementFacade, fan, orgAdmin);
-		ActivityItem item = fanManagementFacade.whenUserClicksOnShowDetailsOfSelectedSummaryCard(purchase.getEvent());
+		loginAndNavigationToFanProfilePage(fp, fan, orgAdmin);
+		ActivityItem item = fp.getFanManagmentFacade().whenUserClicksOnShowDetailsOfSelectedSummaryCard(purchase.getEvent());
 		ExpandedContent expandedContent = item.getExpandedContent();
 		boolean isDataVisible = expandedContent.isDataVisible();
 		Assert.assertTrue(isDataVisible, "Not all data in expanded purchased activity item is visible");
 		
-		loginFacade.logOut();
+		fp.getLoginFacade().logOut();
 	}
 	/**
 	 * Automation: Big Neon: Fan Management: Test 35: ActivityItems/Refunded Created
@@ -95,34 +90,34 @@ public class FanManagementStepsIT extends BaseSteps {
 	 * @param orgAdmin
 	 */
 	@Test(dataProvider = "fan_profile_data", priority = 27, retryAnalyzer = utils.RetryAnalizer.class)
-	public void fanProfileRefundedActivityItem(User fan, User orgAdmin) {
-		LoginStepsFacade loginFacade = new LoginStepsFacade(driver);
-		AdminFanManagementFacade fanManagementFacade = new AdminFanManagementFacade(driver);
-		AdminEventDashboardFacade dashboardFacade = new AdminEventDashboardFacade(driver);
+	public void fanProfileRefundedActivityItem(User fan, User orgAdmin) throws Exception {
+
+		FacadeProvider fp = new FacadeProvider(driver);
 		maximizeWindow();
 		
 		//given
-		loginAndNavigationToFanProfilePage(loginFacade, fanManagementFacade, fan, orgAdmin);
+		loginAndNavigationToFanProfilePage(fp, fan, orgAdmin);
 		
 		//when
-		fanManagementFacade.whenUserPicksEventSummaryCard(this.purchase.getEvent());
-		SelectedOrderPage selectedOrderPage = fanManagementFacade.whenUserClicksOnPurchasedActivityItemOrderNumberLink();
-		boolean isOnOrderManagePage = dashboardFacade.thenUserIsOnSelectedManageOrderPage(selectedOrderPage);
+		fp.getFanManagmentFacade().whenUserPicksEventSummaryCard(this.purchase.getEvent());
+		SelectedOrderPage selectedOrderPage = fp.getFanManagmentFacade().whenUserClicksOnPurchasedActivityItemOrderNumberLink();
+		boolean isOnOrderManagePage = fp.getOrderManageFacade().thenUserIsOnSelectedManageOrderPage(selectedOrderPage);
 		Assert.assertTrue(isOnOrderManagePage, "Not on orders manage page");
-		dashboardFacade.refundSteps(RefundReason.UNABLE_TO_ATTEND);
-		navigateToFanProfilePage(fanManagementFacade, fan);
-		fanManagementFacade.whenUserPicksEventSummaryCard(this.purchase.getEvent());
+		fp.getOrderManageFacade().refundSteps(RefundReason.UNABLE_TO_ATTEND);
+		navigateToFanProfilePage(fp.getFanManagmentFacade(), fan);
+		fp.getFanManagmentFacade().whenUserPicksEventSummaryCard(this.purchase.getEvent());
 		
 		//then
-		boolean isRefundDataVisible = fanManagementFacade.thenRefundedActivityItemForSpecificEventShouldBeVisible(orgAdmin, fan);
+		boolean isRefundDataVisible = fp.getFanManagmentFacade().thenRefundedActivityItemForSpecificEventShouldBeVisible(orgAdmin, fan);
 		Assert.assertTrue(isRefundDataVisible, "Refund data on activity item missing");
-		loginFacade.logOut();
+		fp.getLoginFacade().logOut();
 		
 	}
 	
-	private void loginAndNavigationToFanProfilePage(LoginStepsFacade loginFacade, AdminFanManagementFacade fanManagementFacade, User fan, User orgAdmin) {
-		loginFacade.givenAdminUserIsLogedIn(orgAdmin);
-		navigateToFanProfilePage(fanManagementFacade, fan);
+	private void loginAndNavigationToFanProfilePage(FacadeProvider fp, User fan, User orgAdmin) throws Exception {
+		fp.getLoginFacade().givenAdminUserIsLogedIn(orgAdmin);
+		fp.getOrganizationFacade().givenOrganizationExist(this.purchase.getEvent().getOrganization());
+		navigateToFanProfilePage(fp.getFanManagmentFacade(), fan);
 	}
 	
 	private void navigateToFanProfilePage(AdminFanManagementFacade fanManagementFacade, User fan) {
@@ -177,7 +172,6 @@ public class FanManagementStepsIT extends BaseSteps {
 
 	private static Purchase preparePurchase() {
 		Purchase purchase = Purchase.generatePurchaseFromJson(DataConstants.REGULAR_USER_PURCHASE_KEY);
-		purchase.setCreditCard(CreditCard.generateCreditCard());
 		purchase.setNumberOfTickets(PURCHASE_QUANTITY);
 		purchase.setEvent(Event.generateEventFromJson(DataConstants.EVENT_DATA_STANARD_KEY,
 				EVENT_NAME, true, START_DAY_OFFSET, DAYS_RANGE));

@@ -7,11 +7,15 @@ import Divider from "../../../../common/Divider";
 import Button from "../../../../elements/Button";
 import downloadCSV from "../../../../../helpers/downloadCSV";
 import EventTicketCountTable from "./EventTicketCountTable";
-import { fontFamilyDemiBold, secondaryHex } from "../../../../../config/theme";
+import {
+	fontFamilyDemiBold,
+	primaryHex,
+	secondaryHex
+} from "../../../../../config/theme";
 import ticketCountReport from "../../../../../stores/reports/ticketCountReport";
 import { observer } from "mobx-react";
 import Loader from "../../../../elements/loaders/Loader";
-import Card from "../../../../elements/Card";
+import TicketCountEmailDialog from "./TicketCountEmailDialog";
 
 const styles = theme => ({
 	root: {},
@@ -21,8 +25,23 @@ const styles = theme => ({
 	},
 	header: {
 		display: "flex",
-		minHeight: 60,
-		alignItems: "center"
+		flexDirection: "row",
+		minHeight: 45,
+		alignItems: "center",
+		[theme.breakpoints.down("sm")]: {
+			justifyContent: "flex-center",
+			flexDirection: "column",
+			alignItems: "flex-start"
+		}
+	},
+	btnHolder: {
+		display: "flex",
+		flexDirection: "row",
+		[theme.breakpoints.down("sm")]: {
+			justifyContent: "flex-center",
+			flexDirection: "column",
+			alignItems: "flex-start"
+		}
 	},
 	multiEventContainer: {
 		marginBottom: theme.spacing.unit * 8
@@ -40,7 +59,14 @@ const styles = theme => ({
 	},
 	subheading: {
 		fontFamily: fontFamilyDemiBold,
+		fontSize: 20,
 		marginBottom: theme.spacing.unit
+	},
+	capTitleSmall: {
+		textTransform: "uppercase",
+		fontFamily: fontFamilyDemiBold,
+		fontSize: 12,
+		color: secondaryHex
 	}
 });
 
@@ -49,11 +75,18 @@ class TicketCounts extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = {};
+		this.state = {
+			openReportEventId: null
+		};
+		this.onOpenEmailDialog = this.onOpenEmailDialog.bind(this);
 	}
 
 	componentDidMount() {
 		this.refreshData();
+	}
+
+	onOpenEmailDialog(eventID) {
+		this.setState({ openReportEventId: eventID });
 	}
 
 	componentWillUnmount() {
@@ -142,6 +175,12 @@ class TicketCounts extends Component {
 									>
 										Export PDF
 									</Button>
+									{/*<Button*/}
+									{/*	onClick={() => this.onOpenEmailDialog(reportEventId)}*/}
+									{/*	variant="plainWhite"*/}
+									{/*>*/}
+									{/*	Autocount Email*/}
+									{/*</Button>*/}
 								</div>
 							</div>
 
@@ -158,7 +197,8 @@ class TicketCounts extends Component {
 	}
 
 	render() {
-		const { eventId, classes, printVersion } = this.props;
+		const { eventId, classes, printVersion, eventName } = this.props;
+		const { openReportEventId } = this.state;
 
 		if (printVersion) {
 			return this.renderList();
@@ -166,13 +206,23 @@ class TicketCounts extends Component {
 
 		return (
 			<div className={classes.root}>
+				<TicketCountEmailDialog
+					onClose={() => this.setState({ openReportEventId: null })}
+					eventId={openReportEventId}
+				/>
+				{eventId ? (
+					<Typography className={classes.capTitleSmall}>
+						Event ticket counts report
+					</Typography>
+				) : null}
+
 				<div className={classes.header}>
 					<Typography className={classes.pageTitle}>
-						{eventId ? "Event" : "Organization"} ticket counts report
+						{eventId ? eventName : "Organization ticket counts report"}
 					</Typography>
 					<span style={{ flex: 1 }}/>
 					{eventId ? (
-						<div>
+						<div className={classes.btnHolder}>
 							<Button
 								iconUrl="/icons/csv-active.svg"
 								variant="text"
@@ -188,10 +238,23 @@ class TicketCounts extends Component {
 							>
 								Export PDF
 							</Button>
+							<Button
+								onClick={() => this.onOpenEmailDialog(eventId)}
+								variant="plainWhite"
+							>
+								Autocount Email
+							</Button>
 						</div>
 					) : null}
 				</div>
-				<Divider style={{ marginBottom: 40 }}/>
+				{eventId ? (
+					<div>
+						{/*<Typography>ID: {eventId}</Typography>*/}
+						<br/>
+						<br/>
+						<Typography className={classes.subheading}> Inventory </Typography>
+					</div>
+				) : null}
 				{this.renderList()}
 			</div>
 		);

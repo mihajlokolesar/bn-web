@@ -26,6 +26,7 @@ import optimizedImageUrl from "../../../../../../helpers/optimizedImageUrl";
 import MaintainAspectRatio from "../../../../../elements/MaintainAspectRatio";
 import Settings from "../../../../../../config/settings";
 import Hidden from "@material-ui/core/Hidden";
+import lineBreakHtmlToPlainText from "../../../../../../helpers/lineBreakHtmlToPlainText";
 
 const styles = theme => ({
 	root: {},
@@ -169,16 +170,22 @@ class FacebookEvents extends Component {
 	}
 
 	componentDidMount() {
+		this.refreshPages(true);
+		this.refreshEvent();
+	}
+
+	refreshEvent() {
 		const { eventId } = this.props;
 
-		this.refreshPages(true);
 		Bigneon()
 			.events.read({ id: eventId })
 			.then(response => {
 				this.setState({
 					event: response.data,
 					title: htmlToPlainText(response.data.name || ""),
-					description: htmlToPlainText(response.data.additional_info || ""),
+					description: lineBreakHtmlToPlainText(
+						response.data.additional_info || ""
+					),
 					customAddress: response.data.venue.address,
 					facebookEventId: response.data.facebook_event_id
 				});
@@ -223,25 +230,22 @@ class FacebookEvents extends Component {
 			facebookCategory,
 			description,
 			locationType,
-			customAddress
+			customAddress,
+			title
 		} = this.state;
 		this.setState({ isSubmitting: true });
 		Bigneon()
 			.external.facebook.createEvent({
 				event_id: this.props.eventId,
+				title: title,
 				page_id: pageId,
 				category: facebookCategory,
 				description,
 				location_type: locationType,
 				custom_address: customAddress ? customAddress : null
 			})
-			.then(response => {
-				this.setState({
-					isSubmitting: false,
-					isFacebookLinked: true,
-					facebookEventId: response.data.facebook_event_id,
-					facebookResponseSuccess: true
-				});
+			.then(() => {
+				this.refreshEvent();
 				notification.show({
 					message: "Event published to Facebook",
 					variant: "success"
@@ -338,7 +342,7 @@ class FacebookEvents extends Component {
 
 		let bullet3 = {
 			label:
-				"Don't worry, we won't create the event on Facebook until you review the settings and publish the event."
+				"Facebook requires that your page has a physical street address set in order to publish your event."
 		};
 
 		if (facebookEventId || facebookResponseSuccess) {
@@ -480,7 +484,7 @@ class FacebookEvents extends Component {
 										</Typography>
 										<input
 											value={title}
-											name="title "
+											name="title"
 											className={classes.inputStyle}
 											type="text"
 											onChange={e =>

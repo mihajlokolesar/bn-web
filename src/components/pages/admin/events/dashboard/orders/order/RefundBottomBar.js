@@ -56,7 +56,7 @@ const styles = theme => {
 };
 
 const RefundBottomBar = ({ classes, onClick, amountInCents }) => {
-	if (!amountInCents) {
+	if (amountInCents === null) {
 		return null;
 	}
 

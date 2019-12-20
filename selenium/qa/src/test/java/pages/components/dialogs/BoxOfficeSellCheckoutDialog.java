@@ -69,10 +69,12 @@ public class BoxOfficeSellCheckoutDialog extends DialogContainerComponent {
 
 	public void clickOnPayWithCash() {
 		explicitWaitForVisibilityAndClickableWithClick(payWithCashButton);
+		waitForTime(1000);
 	}
 
 	public void clickOnPayWithCreditCard() {
 		explicitWaitForVisibilityAndClickableWithClick(payWithCreditCardButton);
+		waitForTime(1000);
 	}
 	
 	public void clickOnCompleteOrderButton() {
@@ -80,8 +82,7 @@ public class BoxOfficeSellCheckoutDialog extends DialogContainerComponent {
 	}
 
 	public void enterAmountToTenderedField(int amount) {
-		SeleniumUtils.clearInputField(cashTenederedField, driver);
-		waitVisibilityAndSendKeys(cashTenederedField, amount + "");
+		waitVisibilityAndClearFieldSendKeysF(cashTenederedField, amount + "");
 	}
 	
 	public void enterFirstName(String firstName) {

@@ -455,7 +455,7 @@ class EventDashboardContainer extends Component {
 						selected={isActiveReportMenu("fb-events")}
 						onClick={this.handleMarketingMenuClose.bind(this)}
 					>
-						Facebook events
+						Facebook Events
 					</MenuItem>
 				</Link>
 			);

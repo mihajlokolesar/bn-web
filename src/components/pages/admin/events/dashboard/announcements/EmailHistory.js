@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
-import { Typography } from "@material-ui/core";
+import { Hidden, Typography } from "@material-ui/core";
 import SentEmailCard from "./SentEmailCard";
 import { fontFamilyDemiBold } from "../../../../../../config/theme";
 
@@ -45,28 +45,30 @@ class EmailHistory extends React.Component {
 		const { emails, classes } = this.props;
 
 		const colStyles = [
-			{ flex: 1 },
-			{ flex: 4 },
-			{ flex: 1 },
-			{ flex: 1, textAlign: "right" }
+			{ flex: 2 },
+			{ flex: 5 },
+			{ flex: 2 },
+			{ flex: 2, textAlign: "right" }
 		];
 
 		return (
 			<div className={classes.root}>
 				{emails.length > 0 ? (
 					<div>
-						<div className={classes.headerRow}>
-							<Typography style={colStyles[0]} className={classes.headerText}>
-								Date sent
-							</Typography>
-							<Typography style={colStyles[1]} className={classes.headerText}>
-								Subject line
-							</Typography>
-							<Typography style={colStyles[2]} className={classes.headerText}>
-								Recipients
-							</Typography>
-							<span style={colStyles[3]}/>
-						</div>
+						<Hidden smDown>
+							<div className={classes.headerRow}>
+								<Typography style={colStyles[0]} className={classes.headerText}>
+									Date sent
+								</Typography>
+								<Typography style={colStyles[1]} className={classes.headerText}>
+									Subject line
+								</Typography>
+								<Typography style={colStyles[2]} className={classes.headerText}>
+									Recipients
+								</Typography>
+								<span style={colStyles[3]}/>
+							</div>
+						</Hidden>
 						{emails.map(email => (
 							<SentEmailCard
 								key={email.id}

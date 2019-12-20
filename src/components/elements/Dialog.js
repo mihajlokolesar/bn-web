@@ -66,7 +66,15 @@ class CustomDialog extends Component {
 	}
 
 	render() {
-		const { children, onClose, iconUrl, title, classes, ...rest } = this.props;
+		const {
+			children,
+			onClose,
+			onEnter,
+			iconUrl,
+			title,
+			classes,
+			...rest
+		} = this.props;
 
 		return (
 			<React.Fragment>
@@ -75,6 +83,7 @@ class CustomDialog extends Component {
 					<Dialog
 						TransitionComponent={DialogTransition}
 						onClose={onClose}
+						onEnter={onEnter}
 						aria-labelledby="dialog-title"
 						PaperProps={{
 							className: classes.paper
@@ -101,6 +110,7 @@ class CustomDialog extends Component {
 						fullScreen
 						TransitionComponent={DialogTransition}
 						onClose={onClose}
+						onEnter={onEnter}
 						aria-labelledby="dialog-title"
 						onEntering={() => iosScrollBackgroundHack(true)}
 						onExiting={() => iosScrollBackgroundHack(false)}

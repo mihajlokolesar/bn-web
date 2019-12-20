@@ -43,6 +43,16 @@ public class MailinatorInboxPage extends BasePage {
 		mailRowCell.click();
 	}
 
+	public boolean openMailAndCheckValidity(String mailSubjectValue, int numberOfTickets, String eventName) {
+		goToMail(mailSubjectValue);
+		boolean retVal = isCorrectMail(numberOfTickets, eventName);
+		if (retVal) {
+			deleteMail();
+		}
+		return retVal;
+
+	}
+	
 	public boolean isCorrectMail(int numberOfTickets, String eventName) {
 		waitForTime(1000);
 		explicitWait(10, ExpectedConditions.urlContains("msgpane"));
@@ -58,16 +68,6 @@ public class MailinatorInboxPage extends BasePage {
 		} else {
 			return false;
 		}
-	}
-
-	public boolean openMailAndCheckValidity(String mailSubjectValue, int numberOfTickets, String eventName) {
-		goToMail(mailSubjectValue);
-		boolean retVal = isCorrectMail(numberOfTickets, eventName);
-		if (retVal) {
-			deleteMail();
-		}
-		return retVal;
-
 	}
 
 	public void clickOnClaimTicket() {

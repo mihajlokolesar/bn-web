@@ -37,7 +37,7 @@ CustomIconButton.defaultProps = {};
 
 CustomIconButton.propTypes = {
 	classes: PropTypes.object.isRequired,
-	children: PropTypes.oneOfType([PropTypes.string]).isRequired,
+	children: PropTypes.oneOfType([PropTypes.string]),
 	iconUrl: PropTypes.string
 };
 

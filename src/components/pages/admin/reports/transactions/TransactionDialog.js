@@ -84,6 +84,12 @@ class TransactionDialog extends React.Component {
 			promo_redemption_code,
 			promo_discount_value_in_cents,
 			promo_quantity,
+
+			client_fee_in_cents,
+			client_fee_in_cents_total,
+			face_price_in_cents,
+			face_price_in_cents_total,
+
 			...rest
 		} = item;
 
@@ -109,13 +115,11 @@ class TransactionDialog extends React.Component {
 				</Detail>
 
 				<Detail label={"Service fee"} classes={classes}>
-					{dollars(
-						event_fee_gross_in_cents_total +
-							gross_fee_in_cents_total +
-							credit_card_fee_gross_in_cents_total
-					)}
+					{dollars(client_fee_in_cents_total)}
 				</Detail>
-
+				<Detail label={"Discount"} classes={classes}>
+					{dollars(promo_discount_value_in_cents)}
+				</Detail>
 				<Detail label={"Gross"} classes={classes}>
 					{dollars(gross)}
 				</Detail>
