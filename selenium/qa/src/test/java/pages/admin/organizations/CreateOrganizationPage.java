@@ -1,13 +1,11 @@
 package pages.admin.organizations;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import model.Organization;
 import pages.BasePage;
-import pages.components.AutoCompleteInputField;
 import pages.components.GenericDropDown;
 import utils.Constants;
 import utils.MsgConstants;
@@ -26,8 +24,20 @@ public class CreateOrganizationPage extends BasePage {
 	@FindBy(id = "menu-timezone")
 	private WebElement timeZoneList;
 
-	@FindBy(xpath = "//body//main//form//div[contains(@class, 'location-search-input')]//input")
-	private WebElement addressAutoSearchField;
+	@FindBy(id = "address")
+	private WebElement streetAddressField;
+
+	@FindBy(id = "city")
+	private WebElement cityField;
+
+	@FindBy(xpath = "//form//input[@id='state']/preceding-sibling::div[@aria-haspopup='true']")
+	private WebElement stateDropDownActivate;
+
+	@FindBy(id = "menu-state")
+	private WebElement stateDropDownContainer;
+
+	@FindBy(id = "postal_code")
+	private WebElement postalCodeField;
 
 	@FindBy(xpath = "//body//main//form//button[@type='submit']")
 	private WebElement createButton;
@@ -47,33 +57,47 @@ public class CreateOrganizationPage extends BasePage {
 	}
 
 	private void fillForm(Organization org) {
-		enterOrganizationName(org.getName());
-		enterPhoneNumber(org.getPhoneNumber());
-		selectTimeZone(org.getTimeZone());
-		enterOrganizationAddress(org.getLocation());
+		enterOrganizationName(org);
+		enterPhoneNumber(org);
+		selectTimeZone(org);
+		enterStreetAddress(org);
+		enterCity(org);
+		enterState(org);
+		enterPostalCode(org);
 	}
 
-	private void enterOrganizationAddress(String address) {
-		AutoCompleteInputField autocomplete = new AutoCompleteInputField(driver, addressAutoSearchField);
-		autocomplete.selectFromAutocomplete(address);
+	private void enterOrganizationName(Organization org) {
+		waitVisibilityAndClearFieldSendKeysF(nameField, org.getName());
 	}
 
-	private void enterPhoneNumber(String phoneNumber) {
-		waitVisibilityAndClearFieldSendKeysF(phoneNumberField, phoneNumber);
+	private void enterPhoneNumber(Organization org) {
+		waitVisibilityAndClearFieldSendKeysF(phoneNumberField, org.getPhoneNumber());
 	}
 
-	private void selectTimeZone(String timeZone) {
-		selectOnTimeZone(timeZone);
-	}
-
-	private void enterOrganizationName(String organizationName) {
-		waitVisibilityAndClearFieldSendKeysF(nameField, organizationName);
-	}
-
-	private void selectOnTimeZone(String timeZone) {
+	private void selectTimeZone(Organization org) {
 		GenericDropDown dropDown = new GenericDropDown(driver, timeZoneDropDown, timeZoneList);
-		dropDown.selectElementFromDropDownHiddenInput(By.xpath(".//li[@data-value='" + timeZone + "']"), timeZone);
+		dropDown.selectElementFromDropDownHiddenInput(
+				GenericDropDown.dropDownListContainsXpath(org.getTimeZone()),
+				org.getTimeZone());
+	}
 
+	private void enterStreetAddress(Organization org) {
+		waitVisibilityAndClearFieldSendKeysF(streetAddressField, org.getStreetAddress());
+	}
+
+	private void enterCity(Organization org) {
+		waitVisibilityAndClearFieldSendKeysF(cityField, org.getCity());
+	}
+
+	private void enterState(Organization org) {
+		GenericDropDown dropDown = new GenericDropDown(driver, stateDropDownActivate, stateDropDownContainer);
+		dropDown.selectElementFromDropDownHiddenInput(
+				GenericDropDown.dropDownListContainsXpath(org.getState()),
+				org.getState());
+	}
+
+	private void enterPostalCode(Organization org) {
+		waitVisibilityAndClearFieldSendKeysF(postalCodeField, org.getPostalCode());
 	}
 
 	public boolean checkPopupMessage() {

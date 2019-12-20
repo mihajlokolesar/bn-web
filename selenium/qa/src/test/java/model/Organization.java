@@ -22,8 +22,16 @@ public class Organization implements Serializable {
 	private String phoneNumber;
 	@JsonProperty("time_zone")
 	private String timeZone;
-	@JsonProperty("location")
-	private String location;
+	@JsonProperty("street_address")
+	private String streetAddress;
+	@JsonProperty("city")
+	private String city;
+	@JsonProperty("state")
+	private String state;
+	@JsonProperty("state_abbr")
+	private String stateAbbr;
+	@JsonProperty("postal_code")
+	private String postalCode;
 	@JsonProperty("fees_schedule")
 	private FeesSchedule feesSchedule;
 	@JsonProperty("other_fees")
@@ -49,11 +57,35 @@ public class Organization implements Serializable {
 	public void setTimeZone(String timeZone) {
 		this.timeZone = timeZone;
 	}
-	public String getLocation() {
-		return location;
+	public String getStreetAddress() {
+		return streetAddress;
 	}
-	public void setLocation(String location) {
-		this.location = location;
+	public void setStreetAddress(String streetAddress) {
+		this.streetAddress = streetAddress;
+	}
+	public String getCity() {
+		return city;
+	}
+	public void setCity(String city) {
+		this.city = city;
+	}
+	public String getState() {
+		return state;
+	}
+	public void setState(String state) {
+		this.state = state;
+	}
+	public String getStateAbbr() {
+		return stateAbbr;
+	}
+	public void setStateAbbr(String stateAbbr) {
+		this.stateAbbr = stateAbbr;
+	}
+	public String getPostalCode() {
+		return postalCode;
+	}
+	public void setPostalCode(String postalCode) {
+		this.postalCode = postalCode;
 	}
 	public FeesSchedule getFeesSchedule() {
 		return feesSchedule;

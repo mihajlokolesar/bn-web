@@ -18,7 +18,7 @@ public class DataConstants {
 	public static final String LOGIN_FB_CRED_KEY = "user_fb_credentials";
 	public static final String FORGOT_PASS_CREDS_KEY = "reset_password_credentials";
 	
-	public static final String ORGANIZATION_STD_KEY = "auto_test_organization_std";
+	public static final String ORGANIZATION_TEST_AUTO_KEY = "auto_test_organization_std";
 	public static final String ORGANIZATION_STANDARD_KEY = "organization_standard";
 	public static final String ORGANIZATION_SAST = "organization_SAST";
 	

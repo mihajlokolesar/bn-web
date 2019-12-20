@@ -40,16 +40,18 @@ public class OrganizationStepsFacade extends BaseFacadeSteps {
 		this.data = new HashMap<>();
 	}
 	
-	public void updateSteps(Organization organization) {
+	public void updateSteps(Organization organization,boolean updateDetails ,boolean updateFees) {
 		thenUserIsOnOrganizationSettingsPage();
-		createOrganizationPage.fillFormAndConfirm(organization);
-		if (organization.getOtherFees() != null) {
-			boolean isFeeScheduledUpdated = whenUserClickOnOtherFeesAndMakesChanges(organization.getOtherFees());
-			Assert.assertTrue(isFeeScheduledUpdated, "Notification, fee scheduled not displayed");
-		}
-		if (organization.getFeesSchedule() != null) {
-			boolean isNotificationVisible = whenUserClickOnOtherFeesAndMakesChanges(organization.getOtherFees());
-			Assert.assertTrue(isNotificationVisible, "Notification, organization updated not displayed");
+		if (updateDetails)createOrganizationPage.fillFormAndConfirm(organization);
+		if (updateFees) {
+			if (organization.getOtherFees() != null) {
+				boolean isFeeScheduledUpdated = whenUserClickOnOtherFeesAndMakesChanges(organization.getOtherFees());
+				Assert.assertTrue(isFeeScheduledUpdated, "Notification, fee scheduled not displayed");
+			}
+			if (organization.getFeesSchedule() != null) {
+				boolean isNotificationVisible = whenUserClickOnFeesScheeduleAndMakesChanges(organization.getFeesSchedule());
+				Assert.assertTrue(isNotificationVisible, "Notification, organization updated not displayed");
+			}
 		}
 	}
 	

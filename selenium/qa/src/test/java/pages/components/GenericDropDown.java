@@ -79,5 +79,9 @@ public class GenericDropDown extends BaseComponent {
 		waitVisibilityAndBrowserCheckClick(dropDownContainer);
 		return retVal; 
 	}
+	
+	public static By dropDownListContainsXpath(String value) {
+		return By.xpath(".//ul//li[contains(text(),'" + value + "')]");
+	}
 
 }

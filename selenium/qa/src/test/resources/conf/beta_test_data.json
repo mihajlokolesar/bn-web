@@ -93,10 +93,14 @@
 		"last_name": "qaselenium"
 	},
 	"auto_test_organization_std": {
-		"name": "Auto test ",
-		"phone_number": "1111111111",
-		"time_zone": "Africa/Johannesburg",
-		"location": "Johannesburg, South Africa",
+		"name": "TA_Org",
+		"phone_number": "123456789012",
+		"time_zone": "America/Indiana/Knox",
+		"street_address": "1700 SW Jewell Ave, Topeka",
+		"city":"Topeka",
+		"state":"Kansas",
+		"state_abbr":"KS",
+		"postal_code":"66621",
 		"fees_schedule":{
 			"minimum_price":0.1,
 			"client_fee":0.5,
