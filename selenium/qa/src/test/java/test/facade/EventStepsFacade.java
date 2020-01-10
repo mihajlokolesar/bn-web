@@ -50,7 +50,7 @@ public class EventStepsFacade extends BaseFacadeSteps {
 	}
 	
 	public void givenThatEventExist(Event event, User user, boolean random) {
-		if (!eventsPage.isEventPresent(event.getEventName())) {
+		if (!isEventPresent(event)) {
 			boolean isLoggedIn = false;
 			if (!loginPage.getHeader().isLoggedOut()) {
 				isLoggedIn = true;
@@ -65,6 +65,10 @@ public class EventStepsFacade extends BaseFacadeSteps {
 			homePage.navigate();
 			driver.navigate().refresh();
 		}
+	}
+	
+	public boolean isEventPresent(Event event) {
+		return eventsPage.isEventPresent(event.getEventName());
 	}
 	
 	public void givenUserIsOnEventPage() {

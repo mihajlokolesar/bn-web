@@ -38,6 +38,10 @@ public class AdminEventDashboardFacade extends BaseFacadeSteps {
 		whenUserSelectsManageOrdersFromOrdersDropDown();
 		thenUserIsOnOrderManagePage();
 	}
+	
+	public void whenUserSelectsAnnouncementFromToolDropDown() {
+		dashboardEventPage.selectAnnouncementFromTools();
+	}
 
 	public void whenUserSelectsManageOrdersFromOrdersDropDown() {
 		dashboardEventPage.selectManageOrdersFromOrdersTab();

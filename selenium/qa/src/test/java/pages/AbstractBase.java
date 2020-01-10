@@ -286,5 +286,15 @@ public class AbstractBase implements Serializable {
 		actions.moveToElement(element).perform();
 		return actions;
 	}
+	
+	public void clickOnButtonWithLabel(String label) {
+		waitVisibilityAndBrowserCheckClick(getButtonWithLabel(label));
+	}
+	
+	public WebElement getButtonWithLabel(String label) {
+		return explicitWaitForVisibilityBy(By.xpath("//button[span[contains(text(),'" + label + "')]"));
+	}
+	
+	
 
 }

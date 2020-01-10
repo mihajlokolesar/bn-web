@@ -43,6 +43,8 @@ public class DataConstants {
 	public static final String VENUE_CST = "venue_CST";
 	public static final String VENUE_PST = "venue_PST";
 	
+	public static final String ANNOUNCEMENT_MAIL_KEY = "announcement_mail";
+	
 	public static final String ORGANIZATION_ADMIN_USER_KEY = "organization_admin_user";
 	
 	public static int RANDOM_NUMBER_SIZE_10M = 10000000;

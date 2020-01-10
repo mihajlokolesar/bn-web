@@ -38,9 +38,17 @@ public class DashboardEventPage extends BasePage {
 		return explicitWait(15, ExpectedConditions.urlMatches(Constants.getAdminEvents() + "/*.*/dashboard"));
 	}
 	
+	public void selectAnnouncementFromTools() {
+		selectFromToolsDropDown("Announcements");
+	}
+	
 	public void selectManageOrdersFromTools() {
+		selectFromToolsDropDown("Manage orders");
+	}
+	
+	private void selectFromToolsDropDown(String option) {
 		GenericDropDown dropDown = new GenericDropDown(driver, toolsLink, toolsDropDownContainer);
-		dropDown.selectElementFromDropDownNoValueCheck(getByXpathForToolsDropDown("Manage orders"));
+		dropDown.selectElementFromDropDownNoValueCheck(getByXpathForToolsDropDown(option));
 	}
 	
 	public void selectManageOrdersFromOrdersTab() {

@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import org.openqa.selenium.WebDriver;
 
+import test.facade.announcement.AnnouncementFacade;
 import test.facade.orders.order.OrderManageFacade;
 import test.facade.reports.AdminEventReportsFacade;
 import test.facade.reports.ReportsBoxOfficeFacade;
@@ -70,6 +71,10 @@ public class FacadeProvider {
 	
 	public AdminEventReportsFacade getEventReportsFacade() {
 		return (AdminEventReportsFacade) getFacade(AdminEventReportsFacade.class);
+	}
+	
+	public AnnouncementFacade getAnnauncementFacade() {
+		return (AnnouncementFacade) getFacade(AnnouncementFacade.class);
 	}
 
 	private BaseFacadeSteps getFacade(Class clazz) {

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.openqa.selenium.WebDriver;
+import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
 import data.holders.ticket.order.OrderDetailsData;
@@ -40,6 +41,24 @@ public class OrderManageFacade extends BaseFacadeSteps{
 	public OrderManageFacade(WebDriver driver) {
 		super(driver);
 		this.dataMap = new HashMap<String, Object>();
+	}
+	
+	public void refundSteps(RefundReason refundReason) {
+		refundSteps(refundReason, false);
+	}
+	
+	public void refundSteps(RefundReason refundReason, boolean isFullRefund) {
+		whenUserExpandOrderDetailsAndCheckIfExpanded();
+		if (isFullRefund) {
+			whenUserSelectsAllTicketsForRefund();
+			whenUserClicksOnOrderFeeCheckBox();
+		} else {
+			whenUserSelectsTicketForRefundAndClicksOnRefundButton();
+		}
+		thenRefundDialogShouldBeVisible();
+		whenUserSelectRefundReasonAndClicksOnConfirmButton(RefundReason.OTHER);
+		thenRefundDialogShouldBeVisible();
+		whenUserClicksOnGotItButtonOnRefundSuccessDialog();
 	}
 	
 	public boolean whenUserExpandOrderDetailsAndCheckIfExpanded() {
@@ -164,15 +183,6 @@ public class OrderManageFacade extends BaseFacadeSteps{
 		IssueRefundDialog refundDialog = (IssueRefundDialog) getData(ISSUE_REFUND_DIALOG_KEY);
 		refundDialog.isVisible();
 		refundDialog.clickOnGotItButton();
-	}
-	
-	public void refundSteps(RefundReason refundReason) {
-		whenUserExpandOrderDetailsAndCheckIfExpanded();
-		whenUserSelectsTicketForRefundAndClicksOnRefundButton();
-		thenRefundDialogShouldBeVisible();
-		whenUserSelectRefundReasonAndClicksOnConfirmButton(RefundReason.OTHER);
-		thenRefundDialogShouldBeVisible();
-		whenUserClicksOnGotItButtonOnRefundSuccessDialog();
 	}
 	
 	public boolean thenUserIsOnSelectedManageOrderPage(SelectedOrderPage selectedOrderPage) {
