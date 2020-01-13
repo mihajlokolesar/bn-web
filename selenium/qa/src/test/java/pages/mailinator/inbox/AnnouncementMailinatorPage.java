@@ -17,6 +17,7 @@ public class AnnouncementMailinatorPage extends MailinatorInboxPage{
 	public static final String MAIL_KEY = "mail_key";
 	public static final String FIXTURE_EVENT_KEY = "event_key";
 	public static final String SOFT_ASSERT_KEY = "soft_assert_key";
+	public static final String FULL_REFUND_KEY = "full_refund_key";
 	
 	public AnnouncementMailinatorPage(WebDriver driver) {
 		super(driver);
@@ -26,11 +27,20 @@ public class AnnouncementMailinatorPage extends MailinatorInboxPage{
 		AnnouncementMail mail = (AnnouncementMail) data.get(MAIL_KEY);
 		By by = By.xpath(".//table//tbody//tr[td[contains(text(),'Big Neon')] and td/a[contains(text(),'" +
 				mail.getSubject() + "')]]/td[contains(text(),'Big Neon')]");
-		goToMail(by);
-		isCorrectMail(data);
-		if (true) {
-			deleteMail();
+		try {
+			goToMail(by);
+		} catch (Exception e) {
+			boolean isFullRefund = (boolean) data.get(FULL_REFUND_KEY);
+			if (isFullRefund) {
+				SoftAssert sa = (SoftAssert) data.get(SOFT_ASSERT_KEY);
+				sa.assertTrue(true);
+				return;
+			} else {
+				throw e;
+			}
 		}
+		isCorrectMail(data);
+		deleteMail();
 	}
 	
 	public void isCorrectMail(Map<String,Object> data) {

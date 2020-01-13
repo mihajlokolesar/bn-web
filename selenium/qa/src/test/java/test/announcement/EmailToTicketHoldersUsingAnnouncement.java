@@ -21,14 +21,14 @@ import test.BaseSteps;
 import test.facade.FacadeProvider;
 import utils.DataConstants;
 
-public class EmailTicketToBuyersUsingAnnouncement extends BaseSteps {
+public class EmailToTicketHoldersUsingAnnouncement extends BaseSteps {
 
 	private static final String EVENT_NAME = "TestAnnoucementNameEvent";
 	private static final Integer EVENT_DATE_OFFEST = 50;
 	private static final Integer EVENT_DATE_SPAN = 1;
 
 	@Test(dataProvider = "announcement_data", dependsOnMethods = "prepareDataFixture")
-	public void emailToTicketBuyers(AnnouncementMail mail, User adminUser, User customer, Event event) {
+	public void emailToTicketHolders(AnnouncementMail mail, User adminUser, User fullRefundCustomer, User partialRefundCustomer, Event event) {
 		maximizeWindow();
 		FacadeProvider fp = new FacadeProvider(driver);
 		SoftAssert softAssert = new SoftAssert();
@@ -46,24 +46,31 @@ public class EmailTicketToBuyersUsingAnnouncement extends BaseSteps {
 		data.put(AnnouncementMailinatorPage.FIXTURE_EVENT_KEY, event);
 		data.put(AnnouncementMailinatorPage.SOFT_ASSERT_KEY, softAssert);
 
+		checkMailOfCustomer(fullRefundCustomer, data, true);
+		checkMailOfCustomer(partialRefundCustomer, data, false);
+		softAssert.assertAll();
+	}
+	
+	private void checkMailOfCustomer(User customer, Map<String,Object> data, boolean isFullRefund) {
 		AnnouncementMailinatorPage mailPage = (AnnouncementMailinatorPage) MailinatorFactory
 				.getInboxPage(MailinatorEnum.ANNOUNCEMENT_TO_BUYERS, driver, customer.getEmailAddress());
+		data.put(AnnouncementMailinatorPage.FULL_REFUND_KEY, isFullRefund);
 		mailPage.openMailAndCheckValidity(data);
-		softAssert.assertAll();
 	}
 
 	@DataProvider(name = "announcement_data")
 	public static Object[][] announcementDataProvider() {
 		AnnouncementMail mail = AnnouncementMail.generateAnnouncementFromJson(DataConstants.ANNOUNCEMENT_MAIL_KEY);
 		User adminUser = User.generateUserFromJson(DataConstants.ORGANIZATION_ADMIN_USER_KEY);
-		User customer = User.generateUserFromJson(DataConstants.USER_STANDARD_KEY);
+		User fullRefundConstomer = User.generateUserFromJson(DataConstants.USER_STANDARD_KEY);
+		User partialRefundCustomer = User.generateUserFromJson(DataConstants.DISTINCT_USER_TWO_KEY);
 		Event event = Event.generateEventFromJson(DataConstants.EVENT_DATA_STANARD_KEY, EVENT_NAME, false,
 				EVENT_DATE_OFFEST, EVENT_DATE_SPAN);
-		return new Object[][] { { mail, adminUser, customer, event } };
+		return new Object[][] { { mail, adminUser, fullRefundConstomer, partialRefundCustomer, event } };
 	}
 
 	@Test(dataProvider = "announcement_prepare_data_fixture")
-	public void prepareDataFixture(User superuser, User customer, Purchase purchase) throws Exception {
+	public void prepareDataFixture(User superuser, User fullRefundCustomer, User partialRefundCustomer, Purchase purchase) throws Exception {
 		maximizeWindow();
 		FacadeProvider fp = new FacadeProvider(driver);
 		fp.getEventFacade().givenUserIsOnHomePage();
@@ -73,8 +80,8 @@ public class EmailTicketToBuyersUsingAnnouncement extends BaseSteps {
 			fp.getAdminEventStepsFacade().givenEventWithNameAndPredicateExists(purchase.getEvent(), comp -> !comp.isEventCanceled(), false);
 			fp.getLoginFacade().logOut();
 
-			String orderIdFullRefund = purchaseSteps(fp, purchase, customer);
-			String orderIdPartialRefund = purchaseSteps(fp, purchase, customer);
+			String orderIdFullRefund = purchaseSteps(fp, purchase, fullRefundCustomer);
+			String orderIdPartialRefund = purchaseSteps(fp, purchase, partialRefundCustomer);
 
 			fp.getLoginFacade().givenAdminUserIsLogedIn(superuser);
 			fp.getOrganizationFacade().givenOrganizationExist(purchase.getEvent().getOrganization());
@@ -106,9 +113,10 @@ public class EmailTicketToBuyersUsingAnnouncement extends BaseSteps {
 				EVENT_DATE_OFFEST, EVENT_DATE_SPAN);
 		Purchase purchase = Purchase.generatePurchaseFromJson(DataConstants.REGULAR_USER_PURCHASE_KEY);
 		purchase.setEvent(event);
-		User customer = User.generateUserFromJson(DataConstants.USER_STANDARD_KEY);
+		User fullRefundConstomer = User.generateUserFromJson(DataConstants.USER_STANDARD_KEY);
+		User partialRefundCustomer = User.generateUserFromJson(DataConstants.DISTINCT_USER_TWO_KEY);
 		User superuser = User.generateSuperUser();
-		return new Object[][] { { superuser, customer, purchase } };
+		return new Object[][] { { superuser, fullRefundConstomer, partialRefundCustomer, purchase } };
 	}
 
 }

@@ -67,6 +67,7 @@ public class AnnouncementPage extends BasePage{
 	}
 	
 	public boolean isAnnouncementTextValid() {
+		explicitWaitForVisiblity(announcementText);
 		String splitRegex = "\\(\\+?\\d+\\)";
 		String text = getAccessUtils().getTextOfElement(announcementText);
 		String[] templateTokens = ANNOUNCEMENT_TEXT_REG_EX.split(splitRegex);
