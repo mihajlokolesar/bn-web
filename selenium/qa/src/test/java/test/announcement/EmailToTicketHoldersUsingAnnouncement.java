@@ -27,8 +27,9 @@ public class EmailToTicketHoldersUsingAnnouncement extends BaseSteps {
 	private static final Integer EVENT_DATE_OFFEST = 50;
 	private static final Integer EVENT_DATE_SPAN = 1;
 
-	@Test(dataProvider = "announcement_data", dependsOnMethods = "prepareDataFixture")
-	public void emailToTicketHolders(AnnouncementMail mail, User adminUser, User fullRefundCustomer, User partialRefundCustomer, Event event) {
+	@Test(dataProvider = "announcement_data", priority = 36, alwaysRun = true, dependsOnMethods = "prepareDataFixture")
+	public void emailToTicketHolders(AnnouncementMail mail, User adminUser, User fullRefundCustomer,
+			User partialRefundCustomer, Event event) {
 		maximizeWindow();
 		FacadeProvider fp = new FacadeProvider(driver);
 		SoftAssert softAssert = new SoftAssert();
@@ -37,7 +38,8 @@ public class EmailToTicketHoldersUsingAnnouncement extends BaseSteps {
 		fp.getAdminEventStepsFacade().whenUserGoesToEventDashboard(event);
 		fp.getEventDashboardFacade().whenUserSelectsAnnouncementFromToolDropDown();
 		Assert.assertTrue(fp.getAnnauncementFacade().isOnAnnouncementPage(), "Not on announcement page");
-		softAssert.assertTrue(fp.getAnnauncementFacade().isAnnouncementTextValid(), "Announcement page text not correct");
+		softAssert.assertTrue(fp.getAnnauncementFacade().isAnnouncementTextValid(),
+				"Announcement page text not correct");
 		fp.getAnnauncementFacade().sendPreviewMail(mail);
 		fp.getAnnauncementFacade().sendEmailToBuyers(mail);
 
@@ -50,8 +52,8 @@ public class EmailToTicketHoldersUsingAnnouncement extends BaseSteps {
 		checkMailOfCustomer(partialRefundCustomer, data, false);
 		softAssert.assertAll();
 	}
-	
-	private void checkMailOfCustomer(User customer, Map<String,Object> data, boolean isFullRefund) {
+
+	private void checkMailOfCustomer(User customer, Map<String, Object> data, boolean isFullRefund) {
 		AnnouncementMailinatorPage mailPage = (AnnouncementMailinatorPage) MailinatorFactory
 				.getInboxPage(MailinatorEnum.ANNOUNCEMENT_TO_BUYERS, driver, customer.getEmailAddress());
 		data.put(AnnouncementMailinatorPage.FULL_REFUND_KEY, isFullRefund);
@@ -69,15 +71,17 @@ public class EmailToTicketHoldersUsingAnnouncement extends BaseSteps {
 		return new Object[][] { { mail, adminUser, fullRefundConstomer, partialRefundCustomer, event } };
 	}
 
-	@Test(dataProvider = "announcement_prepare_data_fixture")
-	public void prepareDataFixture(User superuser, User fullRefundCustomer, User partialRefundCustomer, Purchase purchase) throws Exception {
+	@Test(dataProvider = "announcement_prepare_data_fixture", priority = 36)
+	public void prepareDataFixture(User superuser, User fullRefundCustomer, User partialRefundCustomer,
+			Purchase purchase) throws Exception {
 		maximizeWindow();
 		FacadeProvider fp = new FacadeProvider(driver);
 		fp.getEventFacade().givenUserIsOnHomePage();
 		if (!fp.getEventFacade().isEventPresent(purchase.getEvent())) {
 			fp.getLoginFacade().givenUserIsLogedIn(superuser);
 			fp.getOrganizationFacade().givenOrganizationExist(purchase.getEvent().getOrganization());
-			fp.getAdminEventStepsFacade().givenEventWithNameAndPredicateExists(purchase.getEvent(), comp -> !comp.isEventCanceled(), false);
+			fp.getAdminEventStepsFacade().givenEventWithNameAndPredicateExists(purchase.getEvent(),
+					comp -> !comp.isEventCanceled(), false);
 			fp.getLoginFacade().logOut();
 
 			String orderIdFullRefund = purchaseSteps(fp, purchase, fullRefundCustomer);

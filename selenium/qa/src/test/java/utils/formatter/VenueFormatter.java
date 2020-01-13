@@ -18,7 +18,7 @@ public class VenueFormatter {
 
 	public enum VenueParsePattern {
 		VENUE_NAME("N"), ADDRESS_NAME("A"), ADDRESS_LOCACTION("L"), CITY("C"), STATE("S"), 
-		STATE_ABBR("Sa"), COUNTRY("CT"), COUNTRY_ABBR("CTa"),ZIP_CODE("Z");
+		STATE_ABBR("Sa"), COUNTRY("CT"), COUNTRY_ABBR("CTa"), ZIP_CODE("Z");
 
 		private String value;
 
