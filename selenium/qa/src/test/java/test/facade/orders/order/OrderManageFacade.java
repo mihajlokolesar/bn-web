@@ -52,6 +52,8 @@ public class OrderManageFacade extends BaseFacadeSteps{
 		if (isFullRefund) {
 			whenUserSelectsAllTicketsForRefund();
 			whenUserClicksOnOrderFeeCheckBox();
+			thenRefundButtonShouldBeVisible();
+			whenUserClicksOnRefundButton();
 		} else {
 			whenUserSelectsTicketForRefundAndClicksOnRefundButton();
 		}

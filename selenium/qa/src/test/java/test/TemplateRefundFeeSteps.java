@@ -69,7 +69,7 @@ public abstract class TemplateRefundFeeSteps extends BaseSteps {
 
 	public void navigateToOrderManage(Event event) {
 		getAdminEventsFacade().thenUserIsAtEventsPage();
-		EventSummaryComponent eventCardComp = getAdminEventsFacade().findEventIsOpenedAndHasSoldItem(event);
+		EventSummaryComponent eventCardComp = getAdminEventsFacade().findEventWithName(event);
 		eventCardComp.clickOnEvent();
 		getEventDashboardFacade().givenUserIsOnManageOrdersPage();
 		getEventDashboardFacade().whenUserClickOnOrderLinkOfFirstOrder(getOrderManageFacade());

@@ -44,6 +44,10 @@ public class AnnouncementFacade extends BaseFacadeSteps{
 		sentDialog.clickOnCloseButton();
 	}
 	
+	public boolean isAnnouncementTextValid() {
+		return announcementPage.isAnnouncementTextValid();
+	}
+	
 	@Override
 	protected void setData(String key, Object value) {
 		// TODO Auto-generated method stub

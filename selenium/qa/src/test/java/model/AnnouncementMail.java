@@ -1,13 +1,17 @@
 package model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import utils.DataReader;
 
 public class AnnouncementMail {
 
-	private String email;
+	@JsonProperty("address")
+	private String address;
+	@JsonProperty("subject")
 	private String subject;
+	@JsonProperty("body")
 	private String body;
 
 	public String getSubject() {
@@ -26,12 +30,12 @@ public class AnnouncementMail {
 		this.body = body;
 	}
 	
-	public String getEmail() {
-		return email;
+	public String getAddress() {
+		return address;
 	}
 
-	public void setEmail(String email) {
-		this.email = email;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 	public static TypeReference<AnnouncementMail> getTypeReference() {

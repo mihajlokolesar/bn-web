@@ -18,7 +18,7 @@ public class VenueFormatter {
 
 	public enum VenueParsePattern {
 		VENUE_NAME("N"), ADDRESS_NAME("A"), ADDRESS_LOCACTION("L"), CITY("C"), STATE("S"), 
-		STATE_ABBR("Sa"), COUNTRY("CT"), COUNTRY_ABBR("CTa");
+		STATE_ABBR("Sa"), COUNTRY("CT"), COUNTRY_ABBR("CTa"),ZIP_CODE("Z");
 
 		private String value;
 
@@ -136,6 +136,9 @@ public class VenueFormatter {
 				break;
 			case COUNTRY_ABBR:
 				venue.setCountryAbbr(val);
+				break;
+			case ZIP_CODE:
+				venue.setZip(val);
 				break;
 			default:
 				break;

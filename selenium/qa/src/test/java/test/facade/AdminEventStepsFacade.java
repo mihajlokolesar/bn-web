@@ -51,6 +51,11 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		return adminEvents.findEventByName(event.getEventName());
 	}
 
+	public EventSummaryComponent findEventWithNameAndPredicate(Event event, Predicate<EventSummaryComponent> predicate) {
+		EventSummaryComponent selectedEvent = adminEvents.findEvent(event.getEventName(), predicate);
+		return selectedEvent;
+	}
+
 	public EventSummaryComponent findEventIsOpenedAndHasSoldItem(Event event) {
 		EventSummaryComponent selectedEvent =  adminEvents.findEvent(event.getEventName(),
 				comp -> comp.isEventPublished() && comp.isEventOnSale() && comp.isSoldToAmountGreaterThan(0));
@@ -69,17 +74,26 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 
 	public EventSummaryComponent givenEventWithNameAndPredicateExists(Event event,
 			Predicate<EventSummaryComponent> predicate) throws URISyntaxException {
+		return givenEventWithNameAndPredicateExists(event, predicate, true);
+	}
+	
+	public EventSummaryComponent givenEventWithNameAndPredicateExists(Event event, Predicate<EventSummaryComponent> predicate, boolean randomizeName) throws URISyntaxException {
 		EventSummaryComponent selectedEvent = adminEvents.findEvent(event.getEventName(), predicate);
 		if (selectedEvent == null) {
-			createNewRandomEvent(event);
+			createNewEvent(event, randomizeName);
 			selectedEvent = adminEvents.findEvent(event.getEventName(), predicate);
 		}
 		return selectedEvent;
 	}
 
-	
 	private Event createNewRandomEvent(Event event) throws URISyntaxException {
-		event.setEventName(event.getEventName() + ProjectUtils.generateRandomInt(10000000));
+		return createNewEvent(event, true);
+	}
+
+	private Event createNewEvent(Event event, boolean randomizeName) throws URISyntaxException {
+		if (randomizeName) {
+			event.setEventName(event.getEventName() + ProjectUtils.generateRandomInt(10000000));
+		}
 		boolean retVal = createEvent(event);
 
 		Assert.assertTrue(retVal,
@@ -94,7 +108,7 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 
 	public void whenUserGoesToEventDashboard(Event event) {
 		givenUserIsOnAdminEventsPage();
-		EventSummaryComponent eventSummary = findEventWithName(event);
+		EventSummaryComponent eventSummary = findEventWithNameAndPredicate(event, comp-> !comp.isEventCanceled());
 		eventSummary.clickOnEvent();
 	}
 	

@@ -21,7 +21,7 @@ public class AnnouncementPreviewSendDialog extends DialogContainerComponent {
 	}
 	
 	public void enterEmail(AnnouncementMail mail) {
-		waitVisibilityAndClearFieldSendKeys(emailField, mail.getEmail());
+		waitVisibilityAndClearFieldSendKeysF(emailField, mail.getAddress());
 	}
 	
 	public void clickOnCancelButton() {

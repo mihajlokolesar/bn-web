@@ -430,5 +430,10 @@
 		"country": "United States",
 		"country_abbr": "USA",
 		"image_name":"lorem_ipsum_img_101.jpg"
+	},
+	"announcement_mail":{
+		"address":"bluetestneouser@mailinator.com",
+		"subject":"announcement subject",
+		"body":"this is body for announcement mail test"
 	}
 }

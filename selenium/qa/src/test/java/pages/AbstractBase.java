@@ -292,7 +292,7 @@ public class AbstractBase implements Serializable {
 	}
 	
 	public WebElement getButtonWithLabel(String label) {
-		return explicitWaitForVisibilityBy(By.xpath("//button[span[contains(text(),'" + label + "')]"));
+		return explicitWaitForVisibilityBy(By.xpath("//button[span[contains(text(),'" + label + "')]]"));
 	}
 	
 	

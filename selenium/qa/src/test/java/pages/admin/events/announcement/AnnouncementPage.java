@@ -1,5 +1,6 @@
 package pages.admin.events.announcement;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -47,7 +48,14 @@ public class AnnouncementPage extends BasePage{
 	}
 	
 	private void enterBody(AnnouncementMail mail) {
-		waitVisibilityAndSendKeys(emailBody, mail.getBody());
+		if(!isContentPresent(mail.getBody())) {
+			waitVisibilityAndSendKeys(emailBody, mail.getBody());
+		}
+	}
+	
+	private boolean isContentPresent(String content) {
+		return isExplicitlyWaitVisible(2,
+				By.xpath("//div[span[span[@data-text='true' and contains(text(),'" + content + "')]]]"));
 	}
 	
 	public void clickOnSendPreviewButton() {

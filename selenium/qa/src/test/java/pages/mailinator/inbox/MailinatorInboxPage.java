@@ -31,15 +31,18 @@ public class MailinatorInboxPage extends BasePage {
 	}
 	
 	public void goToMail(String subjectValue) {
+		goToMail(By.xpath(
+						".//table//tbody//tr[td[contains(text(),'noreply@bigneon.com')] and td/a[contains(text(),'"
+								+ subjectValue + "')]]/td[contains(text(),'noreply@bigneon.com')]"));
+	}
+	
+	public void goToMail(By by) {
 		waitForTime(1500);
 		for (int i = 0; i < 5; i++) {
 			driver.navigate().refresh();
 		}
 		WebElement mailRowCell = explicitWait(20, 2000,
-				ExpectedConditions.presenceOfElementLocated(By.xpath(
-						".//table//tbody//tr[td[contains(text(),'noreply@bigneon.com')] and td/a[contains(text(),'"
-								+ subjectValue + "')]]/td[contains(text(),'noreply@bigneon.com')]")));
-
+				ExpectedConditions.presenceOfElementLocated(by));
 		mailRowCell.click();
 	}
 
