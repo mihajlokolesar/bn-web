@@ -4,7 +4,6 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import model.CreditCard;
 import model.Event;
 import model.Purchase;
 import model.User;
@@ -26,7 +25,7 @@ public class RefundEntireOrderAndOrderFeeStepsIT extends TemplateRefundFeeSteps 
 	@Override
 	public void customSteps() {
 		getOrderManageFacade().whenUserSelectsAllTicketsForRefund();
-		getOrderManageFacade().whenUserClicksOnOrderFeeCheckBox();
+		getOrderManageFacade().whenUserClicksOnOrderFeeCheckBox(true,true);
 		boolean isRefundButtonAmountCorrect = getOrderManageFacade().thenRefundButtonAmountShouldBeCorrect();
 		Assert.assertTrue(isRefundButtonAmountCorrect, "Refund amount on refund button incorect");
 
