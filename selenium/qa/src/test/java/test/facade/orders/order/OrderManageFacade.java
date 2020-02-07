@@ -103,10 +103,11 @@ public class OrderManageFacade extends BaseFacadeSteps{
 		addAmountToTotalRefundAmount(ticketsTotal);
 	}
 
-	public void whenUserSelectsRefundedStatusTicketForRefund() {
+	public boolean whenUserSelectsRefundedStatusTicketForRefundAndCheckBoxStatus() {
 		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
 		TicketRow row = selectedOrderPage.findTicketRow(ticket -> ticket.isTicketRefunded());
 		row.clickOnCheckoutBoxInTicket();
+		return row.isChecked();
 	}
 
 	public void whenUserSelectsPurchasedStatusTicketForRefund() {
