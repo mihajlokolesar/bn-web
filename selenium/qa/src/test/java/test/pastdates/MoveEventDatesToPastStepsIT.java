@@ -20,6 +20,7 @@ public class MoveEventDatesToPastStepsIT extends BaseSteps {
 	private static final String EVENT_NAME = "TestMoveDatesNameEvent";
 	private static final Integer START_DAY_OFFSET = 2;
 	private static final Integer DAYS_RANGE = 0;
+	private Event event;
 
 	@Test(dataProvider = "move_event_dates_to_past_data_create_date_fixture", priority = 80, retryAnalyzer = utils.RetryAnalizer.class)
 	public void moveEventDatesToPastWhenNoPurchaseOrRefundIsDone(User orgAdmin, Event event) {
@@ -32,7 +33,7 @@ public class MoveEventDatesToPastStepsIT extends BaseSteps {
 		fp.getLoginFacade().logOut();
 	}
 
-	@Test(dataProvider = "move_event_dates_test_data", priority = 82 , 
+	@Test(dataProvider = "move_event_dates_test_data", priority = 82,
 			retryAnalyzer = utils.RetryAnalizer.class )
 	public void movingEventDateToPastWhenThereIsItemsInShopingBasket(User customer, User orgAdmin, Purchase purchase) {
 		maximizeWindow();
@@ -40,6 +41,7 @@ public class MoveEventDatesToPastStepsIT extends BaseSteps {
 		SoftAssert sa = new SoftAssert();
 		purchase.getEvent().randomizeName();
 		createEvent(fp, orgAdmin, purchase.getEvent(), true);
+		this.event = purchase.getEvent();
 		fp.getEventFacade().givenUserIsOnHomePage();
 		fp.getEventFacade().whenUserPlacesItemsInBasket(purchase, customer);
 		fp.getLoginFacade().logOut();
@@ -69,6 +71,7 @@ public class MoveEventDatesToPastStepsIT extends BaseSteps {
 	public void purchaseTicketsAndMoveEventDatesToPast(User customer, User orgAdmin, Purchase purchase) {
 		maximizeWindow();
 		FacadeProvider fp = new FacadeProvider(driver);
+		purchase.setEvent(this.event);
 		SoftAssert sa = new SoftAssert();
 		fp.getEventFacade().givenUserIsOnHomePage();
 		fp.getEventFacade().whenUserDoesThePurchses(purchase, customer);
@@ -83,13 +86,13 @@ public class MoveEventDatesToPastStepsIT extends BaseSteps {
 	}
 
 	@Test(dataProvider = "move_event_dates_test_data", priority = 86, 
-			dependsOnMethods="purchaseTicketsAndMoveEventDatesToPast" , 
+			dependsOnMethods="purchaseTicketsAndMoveEventDatesToPast" , alwaysRun = true,
 			retryAnalyzer = utils.RetryAnalizer.class)
 	public void refundAndMoveEventDatesToPast(User customer, User orgAdmin, Purchase purchase) throws Exception {
 		maximizeWindow();
 		FacadeProvider fp = new FacadeProvider(driver);
 		SoftAssert sa = new SoftAssert();
-		Event event = purchase.getEvent();
+		Event event = this.event;
 		fp.getLoginFacade().givenUserIsLogedIn(orgAdmin);
 		fp.getOrganizationFacade().givenOrganizationExist(event.getOrganization());
 		navigateAndRefundAllTickets(fp, event);
@@ -100,6 +103,8 @@ public class MoveEventDatesToPastStepsIT extends BaseSteps {
 
 	private void findEventAndExecuteMoveDatesSteps(FacadeProvider fp, Event event, SoftAssert sa,
 			boolean expectedResult, int startDaysSubtract, int endDaysSubtract) {
+		fp.getOrganizationFacade().givenOrganizationExist(event.getOrganization());
+		fp.getAdminEventStepsFacade().thenUserIsAtEventsPage();
 		EventSummaryComponent eventComp = fp.getAdminEventStepsFacade().findEventWithName(event);
 		eventComp.whenUserSelectEditEventFromDropDown(event);
 		fp.getAdminEventStepsFacade().whenUserExecutesMoveDatesToPastSteps(expectedResult, sa, startDaysSubtract,
@@ -118,6 +123,7 @@ public class MoveEventDatesToPastStepsIT extends BaseSteps {
 
 	public void navigateAndRefundAllTickets(FacadeProvider fp, Event event) {
 		fp.getAdminEventStepsFacade().thenUserIsAtEventsPage();
+		driver.navigate().refresh();
 		EventSummaryComponent eventCardComp = fp.getAdminEventStepsFacade().findEventWithName(event);
 		eventCardComp.clickOnEvent();
 		fp.getEventDashboardFacade().givenUserIsOnManageOrdersPage();
