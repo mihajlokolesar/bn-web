@@ -39,7 +39,7 @@ public class RefundOverrideEntireOrderWithOutFees extends TemplateRefundFeeSteps
 		boolean isRefundTotalCorrect = getOrderManageFacade().thenTotalOrderRefundShouldBeCorrect();
 		boolean isTicketChecked = getOrderManageFacade().whenUserSelectsRefundedStatusTicketForRefundAndCheckBoxStatus();
 		sa.assertFalse(isTicketChecked, "Refunded ticket checkbox should not be checked");
-		Assert.assertTrue(isRefundTotalCorrect);
+		Assert.assertTrue(isRefundTotalCorrect, "Refunded total is not correct");
 		sa.assertAll();
 	}
 	

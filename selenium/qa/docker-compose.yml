@@ -31,6 +31,17 @@ services:
       - HUB_PORT=4444
     ports:
       - "9002:5900"
+  firefox-debug:
+    image: selenium/node-firefox-debug:3.141.59-selenium
+    volumes:
+      - /dev/shm:/dev/shm
+    depends_on:
+      - selenium-hub
+    environment:
+      - HUB_HOST=selenium-hub
+      - HUB_PORT=4444
+    ports:
+      - "9002:5900"
 
   firefox:
     image: selenium/node-firefox:3.141.59-selenium
@@ -72,7 +83,6 @@ services:
       - HUB_PORT=4444
       - CONFIG=chrome.suite.conf.json
 
-
   test-firefox:
     build:
       context: .
@@ -88,7 +98,6 @@ services:
       - HUB_HOST=selenium-hub
       - HUB_PORT=4444
       - CONFIG=firefox.suite.conf.json
-
   test-chrome-debug:
     build:
       context: .
@@ -104,4 +113,18 @@ services:
       - HUB_HOST=selenium-hub
       - HUB_PORT=4444
       - CONFIG=chrome.suite.conf.json
-
+  test-firefox-debug:
+    build:
+      context: .
+      dockerfile: local.Dockerfile
+    depends_on:
+      - firefox-debug
+    volumes:
+      - ./tmp/selenium:/usr/src/report
+      - ./tmp/maven:/root/.m2
+    env_file:
+      - .env
+    environment:
+      - HUB_HOST=selenium-hub
+      - HUB_PORT=4444
+      - CONFIG=firefox.suite.conf.json

@@ -3,6 +3,7 @@ package pages.components.dialogs;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 public class RefundOverrideDialog extends DialogContainerComponent {
 
@@ -21,7 +22,11 @@ public class RefundOverrideDialog extends DialogContainerComponent {
 	}
 	
 	public void clickOnConfirmButton() {
-		clickOnButtonWithLabel("Confirm");
+		waitForTime(1000);
+		WebElement element = getButtonWithLabel("Confirm");
+		explicitWait(5, ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(element)));
+		waitVisibilityAndBrowserCheckClick(element);
+		
 	}
 
 }

@@ -63,7 +63,7 @@ public class EventStepsFacade extends BaseFacadeSteps {
 			}
 			
 			homePage.navigate();
-			driver.navigate().refresh();
+			homePage.navigate();
 		}
 	}
 	
