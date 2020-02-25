@@ -20,7 +20,7 @@ public class RefundOverrideEntireOrderWithOutFees extends TemplateRefundFeeSteps
 	private static final Integer DAYS_RANGE = 0;
 	
 	
-	@Test(dataProvider = "refund_override_entire_order_without_fees_data")
+	@Test(dataProvider = "refund_override_entire_order_without_fees_data", priority=39)
 	public void refundOverrideEntireOrderWithOutFees(Purchase purchase, User superuser) throws Exception {
 		templateSteps(purchase, superuser);
 	}
@@ -39,7 +39,7 @@ public class RefundOverrideEntireOrderWithOutFees extends TemplateRefundFeeSteps
 		boolean isRefundTotalCorrect = getOrderManageFacade().thenTotalOrderRefundShouldBeCorrect();
 		boolean isTicketChecked = getOrderManageFacade().whenUserSelectsRefundedStatusTicketForRefundAndCheckBoxStatus();
 		sa.assertFalse(isTicketChecked, "Refunded ticket checkbox should not be checked");
-		Assert.assertTrue(isRefundTotalCorrect);
+		Assert.assertTrue(isRefundTotalCorrect, "Refunded total is not correct");
 		sa.assertAll();
 	}
 	
