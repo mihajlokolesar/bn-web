@@ -16,90 +16,6 @@ import DateFlag from "../../../elements/event/DateFlag";
 import servedImage from "../../../../helpers/imagePathHelper";
 import optimizedImageUrl from "../../../../helpers/optimizedImageUrl";
 
-const styles = theme => {
-	return {
-		media: {
-			minHeight: 250,
-			height: "100%",
-			width: "100%",
-			backgroundImage: "linear-gradient(255deg, #e53d96, #5491cc)",
-			backgroundRepeat: "no-repeat",
-			backgroundSize: "cover",
-			backgroundPosition: "center",
-			paddingLeft: theme.spacing.unit * 2
-		},
-		eventDetailsContainer: {
-			paddingLeft: theme.spacing.unit * 2,
-			display: "flex",
-			flexDirection: "column",
-			justifyContent: "space-between"
-		},
-		topRow: {
-			display: "flex",
-			justifyContent: "space-between",
-			paddingRight: theme.spacing.unit
-		},
-		eventName: {
-			paddingTop: theme.spacing.unit * 2,
-			textTransform: "capitalize",
-			fontFamily: fontFamilyDemiBold,
-			fontSize: theme.typography.fontSize * 1.6
-		},
-		venueName: {
-			textTransform: "uppercase",
-			fontFamily: fontFamilyDemiBold
-		},
-		eventDate: {
-			color: "#9DA3B4"
-		},
-		totalsContainer: {
-			display: "flex",
-			justifyContent: "flex-start"
-		},
-		totalsDivider: {
-			borderLeft: "1px solid",
-			borderColor: "#9da3b4",
-			opacity: 0.5,
-			marginRight: theme.spacing.unit * 2,
-			marginLeft: theme.spacing.unit * 2
-		},
-		totalHeading: {
-			fontSize: theme.typography.fontSize * 0.9
-		},
-		totalValue: {
-			fontSize: theme.typography.fontSize
-		},
-		statusContainer: {
-			display: "flex"
-		},
-		bottomPadding: {
-			paddingBottom: theme.spacing.unit * 2
-		},
-		progressBarContainer: {
-			display: "flex",
-			paddingRight: theme.spacing.unit * 2
-		},
-		expandIconRow: {
-			display: "flex",
-			justifyContent: "center",
-			cursor: "pointer",
-			paddingBottom: theme.spacing.unit * 2,
-			paddingTop: theme.spacing.unit * 2
-		},
-		expandIconRowPlaceholder: {
-			display: "flex",
-			justifyContent: "center",
-			paddingBottom: theme.spacing.unit * 2,
-			paddingTop: theme.spacing.unit * 2
-		},
-		expandedViewContent: {
-			paddingTop: theme.spacing.unit * 2,
-			paddingRight: theme.spacing.unit * 3,
-			paddingLeft: theme.spacing.unit * 3
-		}
-	};
-};
-
 const Total = ({ children, color, value, classes }) => (
 	<div>
 		<Typography className={classes.totalHeading} style={{ color }}>
@@ -130,7 +46,9 @@ const EventSummaryCard = props => {
 		onExpandClick,
 		ticketTypes,
 		cancelled,
-		eventEnded
+		eventEnded,
+		publishDate,
+		status
 	} = props;
 
 	const mediaStyle = imageUrl
@@ -138,6 +56,7 @@ const EventSummaryCard = props => {
 		: {};
 
 	const displayEventStartDate = eventDate.format("dddd, MMMM Do YYYY h:mm A");
+	const publishedDateAfterNowAndNotDraft = moment.utc(publishDate).isAfter(moment.utc()) && status !== "Draft";
 
 	let tags = null;
 	if (cancelled) {
@@ -157,9 +76,13 @@ const EventSummaryCard = props => {
 			<div className={classes.statusContainer}>
 				<ColorTag
 					style={{ marginRight: 10 }}
-					variant={isPublished ? "secondary" : "disabled"}
+					variant={isPublished || publishedDateAfterNowAndNotDraft ? "secondary" : "disabled"}
 				>
-					{isPublished ? "Published" : "Draft"}
+					{isPublished
+						? "Published"
+						: publishedDateAfterNowAndNotDraft
+							? "Scheduled"
+							: "Draft"}
 				</ColorTag>
 				{onSaleTag}
 			</div>
@@ -296,6 +219,90 @@ const EventSummaryCard = props => {
 	);
 };
 
+const styles = theme => {
+	return {
+		media: {
+			minHeight: 250,
+			height: "100%",
+			width: "100%",
+			backgroundImage: "linear-gradient(255deg, #e53d96, #5491cc)",
+			backgroundRepeat: "no-repeat",
+			backgroundSize: "cover",
+			backgroundPosition: "center",
+			paddingLeft: theme.spacing.unit * 2
+		},
+		eventDetailsContainer: {
+			paddingLeft: theme.spacing.unit * 2,
+			display: "flex",
+			flexDirection: "column",
+			justifyContent: "space-between"
+		},
+		topRow: {
+			display: "flex",
+			justifyContent: "space-between",
+			paddingRight: theme.spacing.unit
+		},
+		eventName: {
+			paddingTop: theme.spacing.unit * 2,
+			textTransform: "capitalize",
+			fontFamily: fontFamilyDemiBold,
+			fontSize: theme.typography.fontSize * 1.6
+		},
+		venueName: {
+			textTransform: "uppercase",
+			fontFamily: fontFamilyDemiBold
+		},
+		eventDate: {
+			color: "#9DA3B4"
+		},
+		totalsContainer: {
+			display: "flex",
+			justifyContent: "flex-start"
+		},
+		totalsDivider: {
+			borderLeft: "1px solid",
+			borderColor: "#9da3b4",
+			opacity: 0.5,
+			marginRight: theme.spacing.unit * 2,
+			marginLeft: theme.spacing.unit * 2
+		},
+		totalHeading: {
+			fontSize: theme.typography.fontSize * 0.9
+		},
+		totalValue: {
+			fontSize: theme.typography.fontSize
+		},
+		statusContainer: {
+			display: "flex"
+		},
+		bottomPadding: {
+			paddingBottom: theme.spacing.unit * 2
+		},
+		progressBarContainer: {
+			display: "flex",
+			paddingRight: theme.spacing.unit * 2
+		},
+		expandIconRow: {
+			display: "flex",
+			justifyContent: "center",
+			cursor: "pointer",
+			paddingBottom: theme.spacing.unit * 2,
+			paddingTop: theme.spacing.unit * 2
+		},
+		expandIconRowPlaceholder: {
+			display: "flex",
+			justifyContent: "center",
+			paddingBottom: theme.spacing.unit * 2,
+			paddingTop: theme.spacing.unit * 2
+		},
+		expandedViewContent: {
+			paddingTop: theme.spacing.unit * 2,
+			paddingRight: theme.spacing.unit * 3,
+			paddingLeft: theme.spacing.unit * 3
+		}
+	};
+};
+
 EventSummaryCard.propTypes = {
 	classes: PropTypes.object.isRequired,
 	id: PropTypes.string.isRequired,
@@ -315,7 +322,8 @@ EventSummaryCard.propTypes = {
 	onExpandClick: PropTypes.func.isRequired,
 	ticketTypes: PropTypes.array.isRequired,
 	cancelled: PropTypes.bool,
-	eventEnded: PropTypes.bool
+	eventEnded: PropTypes.bool,
+	publishDate: PropTypes.string
 };
 
 export default withStyles(styles)(EventSummaryCard);

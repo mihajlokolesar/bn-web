@@ -588,7 +588,7 @@ class EventDashboardContainer extends Component {
 			return <Loader/>;
 		}
 
-		const { id, publish_date, on_sale, localized_times } = event;
+		const { id, publish_date, on_sale, localized_times, status } = event;
 		const isPublished = moment.utc(publish_date).isBefore(moment.utc());
 		const isOnSale = isPublished && moment.utc(on_sale).isBefore(moment.utc());
 
@@ -600,6 +600,8 @@ class EventDashboardContainer extends Component {
 				eventEnded = true;
 			}
 		}
+
+		const publishedDateAfterNowAndNotDraft = moment.utc(publish_date).isAfter(moment.utc()) && status !== "Draft";
 
 		return (
 			<div>
@@ -631,9 +633,17 @@ class EventDashboardContainer extends Component {
 							<div>
 								<ColorTag
 									style={{ marginRight: 10 }}
-									variant={isPublished ? "secondary" : "disabled"}
+									variant={
+										isPublished || publishedDateAfterNowAndNotDraft
+											? "secondary"
+											: "disabled"
+									}
 								>
-									{isPublished ? "Published" : "Draft"}
+									{isPublished
+										? "Published"
+										: publishedDateAfterNowAndNotDraft
+											? "Scheduled"
+											: "Draft"}
 								</ColorTag>
 							</div>
 							<div>

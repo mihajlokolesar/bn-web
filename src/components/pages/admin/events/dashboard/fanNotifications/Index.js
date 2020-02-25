@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Typography, withStyles, Grid, Hidden } from "@material-ui/core";
-
 import notifications from "../../../../../../stores/notifications";
 import Bigneon from "../../../../../../helpers/bigneon";
 import {
@@ -11,94 +10,13 @@ import SelectGroup from "../../../../../common/form/SelectGroup";
 import moment from "moment-timezone";
 import servedImage from "../../../../../../helpers/imagePathHelper";
 import {
-	TIME_FORMAT_YYYY_MM_DD_NO_TIMEZONE,
 	TIME_FORMAT_MM_DD_YYYY_NO_TIMEZONE
 } from "../../../../../../helpers/time";
 import SendDialog from "./sections/SendDialog";
-import MobileView from "./sections/MobileView";
-import DesktopView from "./sections/DesktopView";
-
-const styles = theme => ({
-	root: {},
-	parentHeading: {
-		color: secondaryHex,
-		fontFamily: fontFamilyDemiBold,
-		textTransform: "uppercase",
-		fontSize: theme.typography.fontSize * 0.8
-	},
-	heading: {
-		fontFamily: fontFamilyDemiBold,
-		fontSize: theme.typography.fontSize * 1.4
-	},
-	headingContainer: {
-		padding: "30px 10px"
-	},
-	description: {
-		fontSize: theme.typography.fontSize * 1.1
-	},
-	descriptionHeading: {
-		fontFamily: fontFamilyDemiBold
-	},
-	actionButtonContainer: {
-		marginTop: theme.spacing.unit * 2,
-		marginBottom: theme.spacing.unit * 2,
-		[theme.breakpoints.down("xs")]: {
-			textAlign: "center",
-			marginTop: 0,
-			marginBottom: 0
-		}
-	},
-	dialogContainer: {
-		textAlign: "center",
-		marginBottom: theme.spacing.unit * 2,
-		marginTop: theme.spacing.unit * 2
-	},
-	pinkText: {
-		color: secondaryHex
-	},
-	speech: {
-		width: "80%",
-		float: "right",
-		[theme.breakpoints.down("xs")]: {
-			width: "100%",
-			float: "none"
-		}
-	},
-	content: {
-		marginTop: 20,
-		maxWidth: 540
-	},
-	notificationBg: {
-		backgroundColor: "#F5F7FA",
-		padding: theme.spacing.unit * 1,
-		borderRadius: 8,
-		textAlign: "center"
-	},
-	percentage: {
-		color: "#C4C3C5",
-		fontSize: 14,
-		float: "right"
-	},
-	greyText: {
-		color: "#C4C3C5",
-		fontSize: 14
-	},
-	blackText: {
-		color: "#3C383F",
-		fontSize: 14
-	},
-	progressBar: {
-		borderRadius: 10,
-		backgroundColor: "#F5F7FA",
-		height: 8
-	},
-	mobileContainer: {
-		padding: "40px 20px"
-	},
-	actionInfoContainer: {
-		paddingTop: 40
-	}
-});
+import MainContent from "./sections/MainContent";
+import getPhoneOS from "../../../../../../helpers/getPhoneOS";
+import Card from "../../../../../elements/Card";
+import Container from "../Container";
 
 class Index extends Component {
 	constructor(props) {
@@ -115,10 +33,8 @@ class Index extends Component {
 			openConfirmDialog: false,
 			isCustom: false,
 			broadcastSent: false,
-			lastCallMessage: "",
 			errors: {},
 			broadcastData: {},
-			customNotificationMessage: "",
 			eventStart: null,
 			eventEnd: null,
 			times: [],
@@ -127,21 +43,60 @@ class Index extends Component {
 			scheduledAt: null,
 			scheduleProgress: null,
 			scheduleSent: null,
-			isSchedule: false,
-			updateNotification: false,
 			broadcastId: null,
-			isNotificationAfter: true,
 			isEventEnded: false,
 			datesOptions: [],
-			hasEventStarted: true
+			hasEventStarted: true,
+			count: 1,
+			inProgress: false,
+			isNotificationAfterNow: true
 		};
 	}
 
 	componentDidMount() {
+		const { broadcastSent, inProgress } = this.state;
 		//TODO check if the event is running before enabling the button
 		this.setState({ canTrigger: true });
 
 		this.loadNotificationDetails();
+	}
+
+	gradualTimer() {
+		let { count } = this.state;
+		setTimeout(() => {
+			this.fetchNotificationQuantity();
+			count++;
+			this.setState({ count });
+			// 12 * 5000 = 600000 or 2 minutes
+			if (count < 12) {
+				this.gradualTimer();
+			}
+		}, count * 5000);
+	}
+
+	fetchNotificationQuantity() {
+		Bigneon()
+			.events.broadcasts.index({ event_id: this.eventId })
+			.then(response => {
+				const { data } = response.data;
+				data.forEach(
+					({ notification_type, sent_quantity, opened_quantity }) => {
+						if (notification_type === "LastCall") {
+							this.setState({
+								scheduleProgress: opened_quantity,
+								scheduleSent: sent_quantity
+							});
+						}
+					}
+				);
+			})
+			.catch(error => {
+				console.error(error);
+				notifications.showFromErrorResponse({
+					error,
+					defaultMessage: "Loading existing notifications failed."
+				});
+			});
 	}
 
 	loadEventBroadcast() {
@@ -151,6 +106,7 @@ class Index extends Component {
 			.then(response => {
 				const { data } = response.data;
 				let broadcastSent = true;
+				let inProgress = false;
 				data.forEach(
 					({
 						id,
@@ -162,14 +118,15 @@ class Index extends Component {
 						opened_quantity
 					}) => {
 						if (notification_type === "LastCall") {
-							broadcastSent = status !== "Pending" && status !== "InProgress";
+							broadcastSent = status !== "Pending";
+							inProgress = status === "InProgress";
 							const scheduledAt = send_at !== null ? send_at : updated_at;
 
-							const isNotificationAfter = !!moment
+							const isNotificationAfterNow = !!moment
 								.utc(scheduledAt)
 								.isAfter(moment.utc());
 							this.setState({
-								isNotificationAfter,
+								isNotificationAfterNow,
 								broadcastSent,
 								scheduledAt,
 								scheduleProgress: opened_quantity,
@@ -178,8 +135,12 @@ class Index extends Component {
 								sendAt: moment
 									.utc(scheduledAt)
 									.tz(timezone)
-									.format(TIME_FORMAT_MM_DD_YYYY_NO_TIMEZONE)
+									.format(TIME_FORMAT_MM_DD_YYYY_NO_TIMEZONE),
+								inProgress
 							});
+							if (inProgress) {
+								this.gradualTimer();
+							}
 						}
 					}
 				);
@@ -204,9 +165,7 @@ class Index extends Component {
 					venue,
 					status
 				} = response.data;
-				const hasEventStarted = !!moment
-					.utc(door_time)
-					.isBefore(moment.utc());
+				const hasEventStarted = !!moment.utc(door_time).isBefore(moment.utc());
 				this.setState(
 					{
 						event_start,
@@ -386,8 +345,8 @@ class Index extends Component {
 
 	onAction() {
 		this.setState({
-			broadcastSent: true,
-			updateNotification: true
+			updateNotification: true,
+			scheduledAt: null
 		});
 	}
 
@@ -449,7 +408,7 @@ class Index extends Component {
 			errors,
 			scheduledAt,
 			broadcastSent,
-			isNotificationAfter,
+			isNotificationAfterNow,
 			isEventEnded,
 			timezone,
 			datesOptions
@@ -463,7 +422,7 @@ class Index extends Component {
 			return null;
 		}
 
-		if (!isNotificationAfter || !isEventEnded) {
+		if (!isNotificationAfterNow || !isEventEnded) {
 			return (
 				<SelectGroup
 					value={sendAt}
@@ -491,11 +450,12 @@ class Index extends Component {
 			eventStart,
 			eventEnd,
 			timezone,
-			isNotificationAfter,
+			isNotificationAfterNow,
 			isEventEnded,
 			scheduleSent,
 			isCustom,
-			hasEventStarted
+			hasEventStarted,
+			inProgress
 		} = this.state;
 
 		const Details = (
@@ -528,6 +488,31 @@ class Index extends Component {
 			</Grid>
 		);
 
+		const MainContentConst = (
+			<MainContent
+				classes={classes}
+				broadcastSent={broadcastSent}
+				scheduleProgress={scheduleProgress}
+				scheduledAt={scheduledAt}
+				eventStart={eventStart}
+				eventEnd={eventEnd}
+				timezone={timezone}
+				isNotificationAfterNow={isNotificationAfterNow}
+				isEventEnded={isEventEnded}
+				scheduleSent={scheduleSent}
+				isSending={isSending}
+				isCustom={isCustom}
+				renderTimes={this.renderTimes()}
+				onSend={this.onSend.bind(this)}
+				onAction={this.onAction.bind(this)}
+				onSendNow={this.onSendNow.bind(this)}
+				details={Details}
+				eventId={this.eventId}
+				hasEventStarted={hasEventStarted}
+				inProgress={inProgress}
+			/>
+		);
+
 		return (
 			<div>
 				<SendDialog
@@ -538,55 +523,115 @@ class Index extends Component {
 					sendNow={this.sendNow.bind(this)}
 					validateFields={this.validateFields.bind(this)}
 				/>
-				<Hidden smDown>
-					<DesktopView
-						classes={classes}
-						broadcastSent={broadcastSent}
-						scheduleProgress={scheduleProgress}
-						scheduledAt={scheduledAt}
-						eventStart={eventStart}
-						eventEnd={eventEnd}
-						timezone={timezone}
-						isNotificationAfter={isNotificationAfter}
-						isEventEnded={isEventEnded}
-						scheduleSent={scheduleSent}
-						isSending={isSending}
-						isCustom={isCustom}
-						renderTimes={this.renderTimes()}
-						onSend={this.onSend.bind(this)}
-						onAction={this.onAction.bind(this)}
-						onSendNow={this.onSendNow.bind(this)}
-						details={Details}
-						eventId={this.eventId}
-						hasEventStarted={hasEventStarted}
-					/>
-				</Hidden>
-				<Hidden mdUp>
-					<MobileView
-						classes={classes}
-						broadcastSent={broadcastSent}
-						scheduleProgress={scheduleProgress}
-						scheduledAt={scheduledAt}
-						eventStart={eventStart}
-						eventEnd={eventEnd}
-						timezone={timezone}
-						isNotificationAfter={isNotificationAfter}
-						isEventEnded={isEventEnded}
-						scheduleSent={scheduleSent}
-						isSending={isSending}
-						isCustom={isCustom}
-						renderTimes={this.renderTimes()}
-						onSend={this.onSend.bind(this)}
-						onAction={this.onAction.bind(this)}
-						onSendNow={this.onSendNow.bind(this)}
-						details={Details}
-						eventId={this.eventId}
-						hasEventStarted={hasEventStarted}
-					/>
-				</Hidden>
+				<Container
+					eventId={this.eventId}
+					subheading={"tools"}
+					layout={getPhoneOS() ? "childrenOutsideNoCard" : "childrenInsideCard"}
+				>
+					<Hidden smDown>
+						<Typography className={classes.parentHeading}>
+							Fan Notifications
+						</Typography>
+						<Typography className={classes.heading}>Last Call</Typography>
+						{MainContentConst}
+					</Hidden>
+					<Hidden mdUp>
+						<div className={classes.headingContainer}>
+							<Typography className={classes.parentHeading}>
+								Fan Notifications
+							</Typography>
+							<Typography className={classes.heading}>Last Call</Typography>
+						</div>
+						<Card className={classes.mobileContainer}>
+							{MainContentConst}
+						</Card>
+					</Hidden>
+				</Container>
 			</div>
 		);
 	}
 }
+
+const styles = theme => ({
+	root: {},
+	parentHeading: {
+		color: secondaryHex,
+		fontFamily: fontFamilyDemiBold,
+		textTransform: "uppercase",
+		fontSize: theme.typography.fontSize * 0.8
+	},
+	heading: {
+		fontFamily: fontFamilyDemiBold,
+		fontSize: theme.typography.fontSize * 1.4
+	},
+	headingContainer: {
+		padding: "30px 10px"
+	},
+	description: {
+		fontSize: theme.typography.fontSize * 1.1
+	},
+	descriptionHeading: {
+		fontFamily: fontFamilyDemiBold
+	},
+	actionButtonContainer: {
+		marginTop: theme.spacing.unit * 2,
+		marginBottom: theme.spacing.unit * 2,
+		[theme.breakpoints.down("xs")]: {
+			textAlign: "center",
+			marginTop: 0,
+			marginBottom: 0
+		}
+	},
+	dialogContainer: {
+		textAlign: "center",
+		marginBottom: theme.spacing.unit * 2,
+		marginTop: theme.spacing.unit * 2
+	},
+	pinkText: {
+		color: secondaryHex
+	},
+	speech: {
+		width: "80%",
+		float: "right",
+		[theme.breakpoints.down("xs")]: {
+			width: "100%",
+			float: "none"
+		}
+	},
+	content: {
+		marginTop: 20,
+		maxWidth: 540
+	},
+	notificationBg: {
+		backgroundColor: "#F5F7FA",
+		padding: theme.spacing.unit * 1,
+		borderRadius: 8,
+		textAlign: "center"
+	},
+	percentage: {
+		color: "#C4C3C5",
+		fontSize: 14,
+		float: "right"
+	},
+	greyText: {
+		color: "#C4C3C5",
+		fontSize: 14
+	},
+	blackText: {
+		color: "#3C383F",
+		fontSize: 14
+	},
+	progressBar: {
+		borderRadius: 10,
+		backgroundColor: "#F5F7FA",
+		height: 8
+	},
+	mobileContainer: {
+		padding: "40px 20px"
+	},
+	actionInfoContainer: {
+		paddingTop: 40
+	}
+});
 
 export default withStyles(styles)(Index);

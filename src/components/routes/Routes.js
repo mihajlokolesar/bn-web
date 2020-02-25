@@ -184,12 +184,15 @@ class Routes extends Component {
 			analytics.trackPageLoadTime(Date.now() - startLoadTime);
 		}
 		const { access_token, refresh_token, ...params } = getAllUrlParams();
-		if (access_token && refresh_token) {
+		if (refresh_token) {
 			try {
 				//Attempt to decode these, if they are not valid do not store them.
-				decodeJWT(access_token);
+				if (access_token) {
+					decodeJWT(access_token);
+					localStorage.setItem("access_token", access_token );
+				}
 				decodeJWT(refresh_token);
-				localStorage.setItem("access_token", access_token);
+
 				localStorage.setItem("refresh_token", refresh_token);
 				user.refreshUser();
 			} catch (e) {

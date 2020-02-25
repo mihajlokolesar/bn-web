@@ -3,72 +3,19 @@ import PropTypes from "prop-types";
 import Button from "../../../../../../elements/Button";
 
 class ActionButton extends Component {
-	constructor(props) {
-		super(props);
-
-		const {
-			scheduledAt,
-			isSending,
-			isNotificationAfter,
-			isEventEnded,
-			isCustom,
-			onAction,
-			broadcastSent,
-			onSendNow,
-			hasEventStarted
-		} = this.props;
-
-		this.defaultState = {
-			scheduledAt,
-			isSending,
-			isNotificationAfter,
-			isEventEnded,
-			isCustom,
-			onAction,
-			broadcastSent,
-			onSendNow,
-			hasEventStarted
-		};
-
-		this.state = this.defaultState;
-	}
-
-	static getDerivedStateFromProps(props, state) {
-		const {
-			scheduledAt,
-			isSending,
-			isNotificationAfter,
-			isEventEnded,
-			onAction,
-			broadcastSent,
-			onSendNow,
-			hasEventStarted
-		} = props;
-
-		return {
-			scheduledAt,
-			isSending,
-			isNotificationAfter,
-			isEventEnded,
-			onAction,
-			broadcastSent,
-			onSendNow,
-			hasEventStarted
-		};
-	}
-
 	render() {
 		const {
 			scheduledAt,
-			isNotificationAfter,
+			isNotificationAfterNow,
 			isEventEnded,
 			onAction,
 			broadcastSent,
 			onSendNow,
-			hasEventStarted
+			hasEventStarted,
+			inProgress
 		} = this.props;
 
-		if (scheduledAt && !broadcastSent && isNotificationAfter) {
+		if (scheduledAt && !broadcastSent) {
 			return (
 				<Button
 					variant={"whiteCTA"}
@@ -79,7 +26,7 @@ class ActionButton extends Component {
 					Change
 				</Button>
 			);
-		} else if(isNotificationAfter && hasEventStarted) {
+		} else if(isNotificationAfterNow && hasEventStarted && !inProgress) {
 			return (
 				<Button
 					variant={"whiteCTA"}
@@ -100,12 +47,13 @@ ActionButton.propTypes = {
 	classes: PropTypes.object.isRequired,
 	scheduledAt: PropTypes.string,
 	isSending: PropTypes.bool.isRequired,
-	isNotificationAfter: PropTypes.bool.isRequired,
+	isNotificationAfterNow: PropTypes.bool.isRequired,
 	isEventEnded: PropTypes.bool.isRequired,
 	broadcastSent: PropTypes.bool,
 	onAction: PropTypes.func.isRequired,
 	onSendNow: PropTypes.func.isRequired,
-	hasEventStarted: PropTypes.bool
+	hasEventStarted: PropTypes.bool,
+	inProgress: PropTypes.bool
 };
 
 export default ActionButton;

@@ -36,263 +36,7 @@ import DeleteCancelEventDialog from "../DeleteCancelEventDialog";
 import classnames from "classnames";
 
 import ArtistSummary from "../../../../elements/event/ArtistSummary";
-
-const styles = theme => ({
-	paddedContent: {
-		paddingRight: theme.spacing.unit * 12,
-		paddingLeft: theme.spacing.unit * 12,
-		[theme.breakpoints.down("sm")]: {
-			paddingRight: theme.spacing.unit * 2,
-			paddingLeft: theme.spacing.unit * 2
-		}
-	},
-	spacer: {
-		marginBottom: theme.spacing.unit * 10
-	},
-	eventHeaderInfo: {
-		padding: "45px 50px",
-		display: "flex",
-		flexDirection: "row",
-		[theme.breakpoints.down("sm")]: {
-			padding: 0,
-			display: "block"
-		}
-	},
-	headerInfo: {
-		display: "flex",
-		flexDirection: "column",
-		width: "100%",
-		paddingLeft: 25,
-		[theme.breakpoints.down("sm")]: {
-			padding: "25px 25px 5px 25px"
-		}
-	},
-	headerImage: {
-		width: 240,
-		height: 160,
-		backgroundImage: "linear-gradient(255deg, #e53d96, #5491cc)",
-		backgroundRepeat: "no-repeat",
-		backgroundSize: "cover",
-		backgroundPosition: "center",
-		borderRadius: 3,
-		[theme.breakpoints.down("sm")]: {
-			width: "100%"
-		}
-	},
-	statusContainer: {
-		[theme.breakpoints.down("sm")]: {
-			paddingTop: 20
-		}
-	},
-	dividerStyle: {
-		margin: "25px 0",
-		backgroundColor: "#DEE2E8"
-	},
-	headerTitle: {
-		fontSize: 22,
-		color: "#2C3136",
-		fontFamily: fontFamilyDemiBold,
-		lineHeight: "25px"
-	},
-	headerSupportingSubtitle: {
-		color: "#979797",
-		fontSize: 15,
-		fontWeight: fontFamilyDemiBold,
-		lineHeight: "18px"
-	},
-	dateInfoContainer: {
-		display: "flex",
-		flexDirection: "row",
-		[theme.breakpoints.down("sm")]: {
-			marginBottom: 25
-		}
-	},
-	venueInfoContainer: {
-		display: "flex",
-		flexDirection: "row",
-		paddingLeft: 40,
-		[theme.breakpoints.down("sm")]: {
-			marginBottom: 25,
-			paddingLeft: 0
-		}
-	},
-	headerEventDateInfo: {
-		display: "flex",
-		flexDirection: "row",
-		marginTop: theme.spacing.unit,
-		[theme.breakpoints.down("sm")]: {
-			display: "block",
-			marginTop: 0
-		}
-	},
-	icon: {
-		width: 17.65,
-		height: 17.65
-	},
-	infoSmallTitle: {
-		fontFamily: fontFamilyDemiBold,
-		fontSize: 17,
-		color: "#2C3136"
-	},
-	infoSmallContainer: {
-		marginLeft: theme.spacing.unit * 2
-	},
-	infoSmallText: {
-		color: "#979797",
-		fontSize: 15,
-		lineHeight: "18px"
-	},
-	justifyBetween: {
-		display: "flex",
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
-		[theme.breakpoints.down("sm")]: {
-			display: "block",
-			paddingTop: 5
-		}
-	},
-	eventAllDetailsContainer: {
-		marginTop: 50,
-		[theme.breakpoints.down("sm")]: {
-			padding: "0px",
-			border: 0,
-			background: "none",
-			boxShadow: "none"
-		}
-	},
-	eventAllDetailsTitle: {
-		color: "#2C3136",
-		fontSize: 28,
-		fontFamily: fontFamilyDemiBold,
-		marginBottom: 25,
-		marginTop: 50,
-		lineHeight: "32px"
-	},
-	artistImage: {
-		width: 61,
-		height: 56,
-		backgroundRepeat: "no-repeat",
-		backgroundSize: "cover",
-		backgroundPosition: "center",
-		borderRadius: 3,
-		marginRight: 20,
-		float: "left",
-		[theme.breakpoints.down("sm")]: {
-			width: 60
-		}
-	},
-	detailsCardStyle: {
-		padding: "22px 30px",
-		marginBottom: 10,
-		boxShadow: "0 4px 15px 2px rgba(112,124,237,0.13)",
-		[theme.breakpoints.down("sm")]: {
-			boxShadow: "none",
-			border: "1px solid #DEE2E8",
-			borderRadius: 6,
-			padding: "25px 26px"
-		}
-	},
-	expandIconRow: {
-		cursor: "pointer",
-		paddingBottom: theme.spacing.unit * 2,
-		paddingRight: theme.spacing.unit * 2,
-		position: "absolute",
-		right: 20,
-		zIndex: 500
-	},
-	expandIconRowDesktop: {
-		display: "flex",
-		flexDirection: "column",
-		alignItems: "center",
-		justifyContent: "center",
-		position: "absolute",
-		right: 10,
-		bottom: 10,
-		zIndex: 500
-	},
-	expandIcon: {
-		width: 20
-	},
-	ticketsCardStyle: {
-		padding: "22px 30px",
-		margin: 5,
-		width: "95%",
-		boxShadow: "0 4px 15px 2px rgba(112,124,237,0.13)"
-	},
-	artistsOverviewCard: {
-		flexDirection: "row",
-		alignItems: "center"
-	},
-	smallGreyCapTitle: {
-		opacity: 0.2,
-		color: "#000000",
-		fontSize: 12,
-		fontFamily: fontFamilyDemiBold,
-		lineHeight: "14px",
-		textTransform: "uppercase",
-		marginBottom: 10,
-		paddingRight: 10,
-		[theme.breakpoints.down("sm")]: {
-			paddingRight: 0
-		}
-	},
-	smallTitle: {
-		fontFamily: fontFamily,
-		fontWeight: 500,
-		color: "#000000",
-		fontSize: 16,
-		lineHeight: "18px",
-		paddingRight: 10,
-		[theme.breakpoints.down("sm")]: {
-			marginBottom: 15,
-			paddingRight: 0
-		}
-	},
-	detailsTopRow: {
-		display: "flex",
-		[theme.breakpoints.up("sm")]: {
-			position: "relative"
-		}
-	},
-	detailsTopRowHolder: {
-		display: "flex",
-		flexDirection: "row",
-		[theme.breakpoints.up("sm")]: {
-			position: "relative"
-		}
-	},
-	detailsLeft: {
-		display: "flex",
-		flexDirection: "column",
-		width: "55%",
-		[theme.breakpoints.up("sm")]: {
-			position: "relative"
-		}
-	},
-	detailsRight: {
-		display: "flex",
-		flexDirection: "column",
-		width: "45%",
-		[theme.breakpoints.up("sm")]: {
-			position: "relative"
-		}
-	},
-	detailsContainer: {
-		marginBottom: 10
-	},
-	menuButton: {
-		float: "right",
-		marginBottom: 15,
-		[theme.breakpoints.down("sm")]: {
-			float: "none",
-			width: "100%"
-		}
-	},
-	noBackground: {
-		backgroundColor: "transparent"
-	}
-});
+import { TIME_FORMAT_MM_DD_YYYY_WITH_TIMEZONE } from "../../../../../helpers/time";
 
 class EventOverview extends Component {
 	constructor(props) {
@@ -412,7 +156,9 @@ class EventOverview extends Component {
 						venue,
 						publish_date,
 						door_time,
-						cancelled_at
+						cancelled_at,
+						updated_at,
+						status
 					} = event;
 
 					this.getTickets(selectedEventId);
@@ -444,29 +190,38 @@ class EventOverview extends Component {
 						);
 						event.shortDate = moment(event_start).format("ddd, MMM D, YYYY");
 
-						const isPublished = moment.utc(publish_date).isBefore(moment.utc());
-						event.isPublished = isPublished;
+						const publishedDateAfterNowAndNotDraft = moment.utc(publish_date).isAfter(moment.utc()) && status !== "Draft";
+						const publishedDateBeforeNow = moment.utc(publish_date).isBefore(moment.utc());
+						event.isPublished = publishedDateBeforeNow;
+						event.publishedDateAfterNowAndNotDraft = publishedDateAfterNowAndNotDraft;
 						event.isOnSale =
-							isPublished &&
+							publishedDateBeforeNow &&
 							moment.utc(sales_start_date).isBefore(moment.utc());
 						event.eventEnded = moment.utc(event_end).isBefore(moment.utc());
 
-						event.publishStatusHeading = moment
-							.utc(publish_date)
-							.isBefore(moment.utc())
+						event.publishStatusHeading = publishedDateBeforeNow
 							? "Published on"
-							: "Publish date";
+							: publishedDateAfterNowAndNotDraft
+								? "Scheduled on"
+								: "Publish date";
 
 						event.publishStatus = cancelled_at
 							? "Cancelled"
-							: moment.utc(publish_date).isBefore(moment.utc())
+							: publishedDateBeforeNow
 								? "Published"
-								: "Draft";
+								: publishedDateAfterNowAndNotDraft
+									? "Scheduled"
+									: "Draft";
 
 						event.publishedDateFormatted = moment
 							.utc(publish_date)
 							.tz(venueTimezone)
-							.format("MM/DD/YYYY HH:mm A z");
+							.format(TIME_FORMAT_MM_DD_YYYY_WITH_TIMEZONE);
+
+						event.unpublishedDateFormatted = moment
+							.utc(updated_at)
+							.tz(venueTimezone)
+							.format(TIME_FORMAT_MM_DD_YYYY_WITH_TIMEZONE);
 
 						this.setState({
 							...event
@@ -715,5 +470,265 @@ class EventOverview extends Component {
 		);
 	}
 }
+
+const styles = theme => ({
+	paddedContent: {
+		paddingRight: theme.spacing.unit * 12,
+		paddingLeft: theme.spacing.unit * 12,
+		[theme.breakpoints.down("sm")]: {
+			paddingRight: theme.spacing.unit * 2,
+			paddingLeft: theme.spacing.unit * 2
+		}
+	},
+	spacer: {
+		marginBottom: theme.spacing.unit * 10
+	},
+	eventHeaderInfo: {
+		padding: "45px 50px",
+		display: "flex",
+		flexDirection: "row",
+		[theme.breakpoints.down("sm")]: {
+			padding: 0,
+			display: "block"
+		}
+	},
+	headerInfo: {
+		display: "flex",
+		flexDirection: "column",
+		width: "100%",
+		paddingLeft: 25,
+		[theme.breakpoints.down("sm")]: {
+			padding: "25px 25px 5px 25px"
+		}
+	},
+	headerImage: {
+		width: 240,
+		height: 160,
+		backgroundImage: "linear-gradient(255deg, #e53d96, #5491cc)",
+		backgroundRepeat: "no-repeat",
+		backgroundSize: "cover",
+		backgroundPosition: "center",
+		borderRadius: 3,
+		[theme.breakpoints.down("sm")]: {
+			width: "100%"
+		}
+	},
+	statusContainer: {
+		[theme.breakpoints.down("sm")]: {
+			paddingTop: 20
+		}
+	},
+	dividerStyle: {
+		margin: "25px 0",
+		backgroundColor: "#DEE2E8"
+	},
+	headerTitle: {
+		fontSize: 22,
+		color: "#2C3136",
+		fontFamily: fontFamilyDemiBold,
+		lineHeight: "25px"
+	},
+	headerSupportingSubtitle: {
+		color: "#979797",
+		fontSize: 15,
+		fontWeight: fontFamilyDemiBold,
+		lineHeight: "18px"
+	},
+	dateInfoContainer: {
+		display: "flex",
+		flexDirection: "row",
+		[theme.breakpoints.down("sm")]: {
+			marginBottom: 25
+		}
+	},
+	venueInfoContainer: {
+		display: "flex",
+		flexDirection: "row",
+		paddingLeft: 40,
+		[theme.breakpoints.down("sm")]: {
+			marginBottom: 25,
+			paddingLeft: 0
+		}
+	},
+	headerEventDateInfo: {
+		display: "flex",
+		flexDirection: "row",
+		marginTop: theme.spacing.unit,
+		[theme.breakpoints.down("sm")]: {
+			display: "block",
+			marginTop: 0
+		}
+	},
+	icon: {
+		width: 17.65,
+		height: 17.65
+	},
+	infoSmallTitle: {
+		fontFamily: fontFamilyDemiBold,
+		fontSize: 17,
+		color: "#2C3136"
+	},
+	infoSmallContainer: {
+		marginLeft: theme.spacing.unit * 2
+	},
+	infoSmallText: {
+		color: "#979797",
+		fontSize: 15,
+		lineHeight: "18px"
+	},
+	justifyBetween: {
+		display: "flex",
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+		[theme.breakpoints.down("sm")]: {
+			display: "block",
+			paddingTop: 5
+		}
+	},
+	eventAllDetailsContainer: {
+		marginTop: 50,
+		[theme.breakpoints.down("sm")]: {
+			padding: "0px",
+			border: 0,
+			background: "none",
+			boxShadow: "none"
+		}
+	},
+	eventAllDetailsTitle: {
+		color: "#2C3136",
+		fontSize: 28,
+		fontFamily: fontFamilyDemiBold,
+		marginBottom: 25,
+		marginTop: 50,
+		lineHeight: "32px"
+	},
+	artistImage: {
+		width: 61,
+		height: 56,
+		backgroundRepeat: "no-repeat",
+		backgroundSize: "cover",
+		backgroundPosition: "center",
+		borderRadius: 3,
+		marginRight: 20,
+		float: "left",
+		[theme.breakpoints.down("sm")]: {
+			width: 60
+		}
+	},
+	detailsCardStyle: {
+		padding: "22px 30px",
+		marginBottom: 10,
+		boxShadow: "0 4px 15px 2px rgba(112,124,237,0.13)",
+		[theme.breakpoints.down("sm")]: {
+			boxShadow: "none",
+			border: "1px solid #DEE2E8",
+			borderRadius: 6,
+			padding: "25px 26px"
+		}
+	},
+	expandIconRow: {
+		cursor: "pointer",
+		paddingBottom: theme.spacing.unit * 2,
+		paddingRight: theme.spacing.unit * 2,
+		position: "absolute",
+		right: 20,
+		zIndex: 500
+	},
+	expandIconRowDesktop: {
+		display: "flex",
+		flexDirection: "column",
+		alignItems: "center",
+		justifyContent: "center",
+		position: "absolute",
+		right: 10,
+		bottom: 10,
+		zIndex: 500
+	},
+	expandIcon: {
+		width: 20
+	},
+	ticketsCardStyle: {
+		padding: "22px 30px",
+		margin: 5,
+		width: "95%",
+		boxShadow: "0 4px 15px 2px rgba(112,124,237,0.13)"
+	},
+	artistsOverviewCard: {
+		flexDirection: "row",
+		alignItems: "center",
+		[theme.breakpoints.down("sm")]: {
+			padding: "15px 15px"
+		}
+	},
+	smallGreyCapTitle: {
+		opacity: 0.2,
+		color: "#000000",
+		fontSize: 12,
+		fontFamily: fontFamilyDemiBold,
+		lineHeight: "14px",
+		textTransform: "uppercase",
+		marginBottom: 10,
+		paddingRight: 10,
+		[theme.breakpoints.down("sm")]: {
+			paddingRight: 0
+		}
+	},
+	smallTitle: {
+		fontFamily: fontFamily,
+		fontWeight: 500,
+		color: "#000000",
+		fontSize: 16,
+		lineHeight: "18px",
+		paddingRight: 10,
+		[theme.breakpoints.down("sm")]: {
+			marginBottom: 15,
+			paddingRight: 0
+		}
+	},
+	detailsTopRow: {
+		display: "flex",
+		[theme.breakpoints.up("sm")]: {
+			position: "relative"
+		}
+	},
+	detailsTopRowHolder: {
+		display: "flex",
+		flexDirection: "row",
+		[theme.breakpoints.up("sm")]: {
+			position: "relative"
+		}
+	},
+	detailsLeft: {
+		display: "flex",
+		flexDirection: "column",
+		width: "55%",
+		[theme.breakpoints.up("sm")]: {
+			position: "relative"
+		}
+	},
+	detailsRight: {
+		display: "flex",
+		flexDirection: "column",
+		width: "45%",
+		[theme.breakpoints.up("sm")]: {
+			position: "relative"
+		}
+	},
+	detailsContainer: {
+		marginBottom: 10
+	},
+	menuButton: {
+		float: "right",
+		marginBottom: 15,
+		[theme.breakpoints.down("sm")]: {
+			float: "none",
+			width: "100%"
+		}
+	},
+	noBackground: {
+		backgroundColor: "transparent"
+	}
+});
 
 export default withStyles(styles)(EventOverview);
