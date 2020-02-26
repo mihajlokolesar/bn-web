@@ -93,8 +93,6 @@ public class OrderManageFacade extends BaseFacadeSteps{
 			return true;
 		}
 		return false;
-		
-		
 	}
 	
 	public void whenUserSelectsAllTicketsForRefund() {
@@ -129,6 +127,11 @@ public class OrderManageFacade extends BaseFacadeSteps{
 	public void whenUserClicksOnRefundButton() {
 		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
 		selectedOrderPage.clickOnRefundButton();
+	}
+	
+	public void whenUserClickOnResendConfirmationEmail() {
+		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
+		selectedOrderPage.clickOnResendConfirmationEmail();
 	}
 
 	public boolean thenRefundButtonShouldBeVisible() {

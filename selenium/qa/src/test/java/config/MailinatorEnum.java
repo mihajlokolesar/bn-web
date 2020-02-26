@@ -5,7 +5,8 @@ public enum MailinatorEnum {
 	TICKET_TRANSFER_CANCEL("ticket_transfer_cancel"),
 	BO_SELL_WITH_CASH("bo_sell_with_cash"),
 	RESET_PASSWORD("reset_password"),
-	ANNOUNCEMENT_TO_BUYERS("announcement_to_buyers");
+	ANNOUNCEMENT_TO_BUYERS("announcement_to_buyers"),
+	TOTAL_REFUND_CONFIRMATION("total_refund_confirmation");
 	
 	private String label;
 	
