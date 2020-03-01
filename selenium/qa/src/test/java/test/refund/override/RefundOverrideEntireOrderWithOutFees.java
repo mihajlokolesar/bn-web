@@ -20,7 +20,7 @@ public class RefundOverrideEntireOrderWithOutFees extends TemplateRefundFeeSteps
 	private static final Integer DAYS_RANGE = 0;
 	
 	
-	@Test(dataProvider = "refund_override_entire_order_without_fees_data", priority=39)
+	@Test(dataProvider = "refund_override_entire_order_without_fees_data", priority = 39, retryAnalyzer = utils.ProjectUtils.class)
 	public void refundOverrideEntireOrderWithOutFees(Purchase purchase, User superuser) throws Exception {
 		templateSteps(purchase, superuser);
 	}

@@ -134,6 +134,12 @@ public class AccessabilityUtil {
 		WebElement el = getChildElementFromParentLocatedBy(parent, by);
 		return el.getText().trim();
 	}
+	
+	public String getValue(WebElement element) {
+		waitVisiblity(element);
+		String value = element.getAttribute("value");
+		return value;
+	}
 
 	public Double getDoubleAmount(WebElement element, String oldChar, String newChar) {
 		String text = ProjectUtils.getTextForElementAndReplace(element, oldChar, newChar);
@@ -206,5 +212,13 @@ public class AccessabilityUtil {
 		for (int i = 0; i < text.length() + 4; i++) {
 			inputField.sendKeys(Keys.BACK_SPACE);
 		}
+	}
+	
+	private void waitVisiblity(WebElement element) {
+		waitVisibility(element, 10);
+	}
+	
+	private void waitVisibility(WebElement element, int timeInSec) {
+		new WebDriverWait(driver, timeInSec).until(ExpectedConditions.visibilityOf(element));
 	}
 }
