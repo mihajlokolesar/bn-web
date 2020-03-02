@@ -37,6 +37,8 @@ public class MsgConstants {
 	public static final String ORDER_MANANGE_ACTIVITY_ITEM_NOTE_ADDED = "Note saved";
 	
 	
+	public static final String RESEND_ORDER_CONFIRMATION = "Resent order confirmation";
+	
 	public static String resetPasswordMessage(String mail) {
 		return "Your request has been received; " + mail + " will receive an email shortly with a link to reset your password if it is an account on file";
 	}

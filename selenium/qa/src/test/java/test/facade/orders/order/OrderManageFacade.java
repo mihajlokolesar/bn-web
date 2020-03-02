@@ -133,7 +133,13 @@ public class OrderManageFacade extends BaseFacadeSteps{
 		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
 		selectedOrderPage.clickOnResendConfirmationEmail();
 	}
-
+	
+	public boolean thenNotificationResendOrderConfirmationShouldBeVisible() {
+		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
+		return selectedOrderPage.isNotificationDisplayedWithMessage(MsgConstants.RESEND_ORDER_CONFIRMATION);
+		
+	}
+	
 	public boolean thenRefundButtonShouldBeVisible() {
 		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
 		return selectedOrderPage.isRefundButtonVisible();
@@ -307,6 +313,11 @@ public class OrderManageFacade extends BaseFacadeSteps{
 		}
 		softAssert.assertAll();
 		
+	}
+	
+	public OrderInfo whenUserCollectsOrderInfo() {
+		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
+		return selectedOrderPage.getOrderInfo();
 	}
 	
 	public boolean thenOrderFeesAreChecked(boolean checkEventFee, boolean checkCreditCardFee) {
