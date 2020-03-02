@@ -18,7 +18,7 @@ public class MsgConstants {
 	public static final String VENUE_CREATED_SUCCESS = "Venue created";
 	public static final String VENUE_UPDATED_SUCCESS = "Venue updated";
 		
-	public static final String EVENT_PUBLISHED = "Event published";
+	public static final String EVENT_PUBLISHED = "Event saved";
 	public static final String EVENT_SAVED_TO_DRAFT = "Draft saved";
 	public static final String EVENT_DELETION_FAILED = "Event is ineligible for deletion";
 	public static final String INVALID_EVENT_DETAILS = "There are invalid event details.";

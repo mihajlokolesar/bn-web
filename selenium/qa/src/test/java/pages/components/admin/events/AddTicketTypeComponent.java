@@ -7,13 +7,12 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import model.AdditionalOptionsTicketType;
-import model.TicketType;
 import model.AdditionalOptionsTicketType.SaleEnd;
 import model.AdditionalOptionsTicketType.SaleStart;
+import model.TicketType;
 import pages.BaseComponent;
 import pages.components.GenericDropDown;
 import pages.components.TimeMenuDropDown;
-import utils.SeleniumUtils;
 
 public class AddTicketTypeComponent extends BaseComponent {
 
@@ -66,6 +65,11 @@ public class AddTicketTypeComponent extends BaseComponent {
 
 	@FindBy(xpath = "//div[div[div[span[span[contains(text(),'Sales end')]]]]]//input[@id='endTime']")
 	private WebElement endTime;
+	
+	@FindBy(id = "maxTicketsPerCustomer")
+	private WebElement maxTicketsPerCustomerField;
+	
+	private String MAX_TICKET_PER_CUSOMER_BUTTON_LABEL = "Set max tix per customer" ;
 
 	public AddTicketTypeComponent(WebDriver driver) {
 		super(driver);
@@ -99,8 +103,8 @@ public class AddTicketTypeComponent extends BaseComponent {
 		if (options.getSaleEnd() != null) {
 			fillOutSaleEndOptions(options);
 		}
+		setMaxTicketsPerCustomer(options.getMaxTicketsPerCustomer());
 		waitForTime(1000);
-
 	}
 
 	private void fillOutSaleStartOptions(AdditionalOptionsTicketType options) {
@@ -152,5 +156,13 @@ public class AddTicketTypeComponent extends BaseComponent {
 	private By getByXpathForElementInDropDownList(String name) {
 		return By.xpath(".//li[contains(text(),'" + name + "')]");
 	}
+	
+	private void setMaxTicketsPerCustomer(String maxTickets) {
+		if (maxTickets != null) {
+			clickOnButtonWithLabel(MAX_TICKET_PER_CUSOMER_BUTTON_LABEL);
+			waitVisibilityAndClearFieldSendKeys(maxTicketsPerCustomerField, maxTickets);
+		}
+	}
+	
 
 }

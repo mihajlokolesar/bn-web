@@ -34,7 +34,7 @@ public class ResendConfirmationMailStepsIT extends BaseSteps{
 		fp.getLoginFacade().logOut();
 		
 		fp.getEventFacade().givenUserIsOnEventPage();
-		fp.getEventFacade().whenUserDoesThePurchses(purchase, customer);
+//		fp.getEventFacade().whenUserDoesThePurchses(purchase, customer);
 	}
 
 }

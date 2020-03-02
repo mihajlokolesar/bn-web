@@ -39,6 +39,7 @@ public class PurchaseStepsIT extends BaseSteps {
 
 		// then
 		eventsFacade.thenUserIsAtTicketPurchaseSuccessPage();
+		eventsFacade.whenUserClosesChatbot();
 		loginFacade.logOut();
 		
 		MailinatorHomePage mailinatorHomePage = new MailinatorHomePage(driver);
@@ -67,6 +68,7 @@ public class PurchaseStepsIT extends BaseSteps {
 		eventsFacade.whenUserEntersCreditCardDetailsAndClicksOnPurchase(purchase.getCreditCard());
 
 		eventsFacade.thenUserIsAtTicketPurchaseSuccessPage();
+		eventsFacade.whenUserClosesChatbot();
 		eventsFacade.whenUserChecksValidityOfInfoOnTicketSuccessPage(holder, user);
 		OrderDetailsData orderDetailsData = (OrderDetailsData) eventsFacade.getOrderDetailsData();
 		loginFacade.logOut();

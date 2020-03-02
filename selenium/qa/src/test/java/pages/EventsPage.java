@@ -1,7 +1,5 @@
 package pages;
 
-import java.util.Map;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -66,6 +64,7 @@ public class EventsPage extends BasePage {
 	
 	private WebElement findEventOnPage(String eventName) {
 		String lowerCaseName = eventName.toLowerCase();
+		waitForTime(2500);
 		explicitWait(25, ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(eventListContainer)));
 		WebElement event = explicitWait(25, ExpectedConditions.elementToBeClickable(
 				eventListContainer.findElement(By.xpath(".//div/a[contains(@href, '" + lowerCaseName + "')]/div"))));

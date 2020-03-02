@@ -143,12 +143,18 @@
 			{
 				"ticket_type_name": "GA",
 				"capacity": "100",
-				"price": "1"
+				"price": "1",
+				"additional_options": {
+					"max_tickets_per_customer":"50"
+				}
 			},
 			{
 				"ticket_type_name": "VIP",
 				"capacity": "70",
-				"price": "2"
+				"price": "2",
+				"additional_options": {
+					"max_tickets_per_customer":"50"
+				}
 			}
 		]
 	},
@@ -169,7 +175,8 @@
 					"sale_start": {
 						"label": "Immediately",
 						"value": "immediately"
-					}
+					},
+					"max_tickets_per_customer":"50"
 				}
 			},
 			{
@@ -186,7 +193,8 @@
 						"label": "At a specific time",
 						"value": "custom"
 					},
-					"end_sale_time": "10:30 AM"
+					"end_sale_time": "10:30 AM",
+					"max_tickets_per_customer":"50"
 				}
 			},
 			{
@@ -217,10 +225,7 @@
 		"phone_number": ""
 	},
 	"box_office_sell_event_std": {
-		"organization": {
-			"name": "4000 Tix Org",
-			"time_zone": "America/Los_Angeles"
-		},
+		"organization_ref": "organization_standard",
 		"artist_name": "TheTestArtistAuto",
 		"event_name": "TestNameEventBO4000",
 		"venue_ref": "venue_standard",

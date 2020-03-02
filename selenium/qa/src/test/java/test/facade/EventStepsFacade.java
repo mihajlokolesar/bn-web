@@ -15,6 +15,7 @@ import model.Venue;
 import pages.EventsPage;
 import pages.HomePage;
 import pages.LoginPage;
+import pages.components.chatboot.ChatBotFrame;
 import pages.tickets.TicketsConfirmationPage;
 import pages.tickets.TicketsPage;
 import pages.tickets.TicketsSuccesPage;
@@ -118,6 +119,7 @@ public class EventStepsFacade extends BaseFacadeSteps {
 		whenUserPlacesItemsInBasket(purchase, customer);
 		whenUserEntersCreditCardDetailsAndClicksOnPurchase(purchase.getCreditCard());
 		thenUserIsAtTicketPurchaseSuccessPage();
+		whenUserClosesChatbot();
 	}
 	
 	public void whenUserPlacesItemsInBasket(Purchase purchase, User customer) {
@@ -270,6 +272,14 @@ public class EventStepsFacade extends BaseFacadeSteps {
 
 	public boolean thenUserIsAtTicketPurchaseSuccessPage() {
 		return this.succesPage.isAtPage();
+	}
+	
+	public void whenUserClosesChatbot() {
+		thenUserIsAtTicketPurchaseSuccessPage();
+		ChatBotFrame chatBot = new ChatBotFrame(driver);
+		if(chatBot.isChatBotOpened()) {
+			chatBot.closeChatBot();
+		}
 	}
 
 	public void whenUserEntersPhoneNumberAndClicksSend(String phoneNumber) {

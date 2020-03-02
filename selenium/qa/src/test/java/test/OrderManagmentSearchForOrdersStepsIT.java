@@ -100,6 +100,7 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 
 		// then
 		eventsFacade.thenUserIsAtTicketPurchaseSuccessPage();
+		eventsFacade.whenUserClosesChatbot();
 		eventsPage.logOut();
 
 	}

@@ -142,7 +142,7 @@ public class FanManagementStepsIT extends BaseSteps {
 		// given
 		eventsFacade.givenUserIsOnEventPage();
 
-		eventsFacade.givenThatEventExist(purchas.getEvent(), fan, false);
+		eventsFacade.givenThatEventExist(purchas.getEvent(), fan, true);
 		if (this.purchase == null ) {
 			this.purchase = purchas;
 		}
@@ -158,6 +158,7 @@ public class FanManagementStepsIT extends BaseSteps {
 
 		// then
 		eventsFacade.thenUserIsAtTicketPurchaseSuccessPage();
+		eventsFacade.whenUserClosesChatbot();
 		eventsFacade.getLoginPage().logOut();
 	}
 
@@ -174,7 +175,7 @@ public class FanManagementStepsIT extends BaseSteps {
 		Purchase purchase = Purchase.generatePurchaseFromJson(DataConstants.REGULAR_USER_PURCHASE_KEY);
 		purchase.setNumberOfTickets(PURCHASE_QUANTITY);
 		purchase.setEvent(Event.generateEventFromJson(DataConstants.EVENT_DATA_STANARD_KEY,
-				EVENT_NAME, true, START_DAY_OFFSET, DAYS_RANGE));
+				EVENT_NAME, false, START_DAY_OFFSET, DAYS_RANGE));
 		return purchase;
 	}
 }

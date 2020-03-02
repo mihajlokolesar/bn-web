@@ -103,6 +103,7 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		Assert.assertTrue(retVal);
 		adminSideBar.clickOnEvents();
 		adminEvents.isAtPage();
+		driver.navigate().refresh();
 		return event;
 	}
 
@@ -188,8 +189,9 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		adminEvents.clickCreateEvent();
 		createEventPage.isAtPage();
 		createEventFillData(event);
-		createEventPage.clickOnPublish();
+		createEventPage.clickOnSave();
 		boolean retVal = createEventPage.checkMessage();
+		adminEvents.waitForTime(10000);
 		return retVal;
 	}
 

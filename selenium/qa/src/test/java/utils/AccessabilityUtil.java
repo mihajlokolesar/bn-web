@@ -208,9 +208,16 @@ public class AccessabilityUtil {
 
 	public void clearInputField(WebElement inputField) {
 		new WebDriverWait(driver, 10).until(ExpectedConditions.visibilityOf(inputField));
-		String text = inputField.getAttribute("value");
-		for (int i = 0; i < text.length() + 4; i++) {
-			inputField.sendKeys(Keys.BACK_SPACE);
+		boolean cleared = false;
+		while(!cleared) {
+			String text = inputField.getAttribute("value");
+			for (int i = 0; i < text.length() + 4; i++) {
+				inputField.sendKeys(Keys.BACK_SPACE);
+			}
+			String text2 = inputField.getAttribute("value");
+			if (text2.isEmpty()) {
+				cleared = true;
+			}
 		}
 	}
 	

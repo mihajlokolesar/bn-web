@@ -35,7 +35,7 @@ public class VenueStepsIT extends BaseSteps {
 		fp.getLoginFacade().logOut();
 	}
 	
-	@Test(dataProvider = "create_venue_data", priority = 22)
+	@Test(dataProvider = "create_venue_data", priority = 22, retryAnalyzer = utils.RetryAnalizer.class)
 	public void requiredFieldsCheckUpdate(Venue venue, User superuser) {
 		FacadeProvider fp = new FacadeProvider(driver);
 		maximizeWindow();

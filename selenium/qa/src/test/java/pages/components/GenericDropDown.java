@@ -74,6 +74,7 @@ public class GenericDropDown extends BaseComponent {
 		waitForTime(500);
 		new JsUtils(driver).jsScrollIntoView(activateDropDown);
 		waitVisibilityAndBrowserCheckClick(activateDropDown);
+		waitForTime(800);
 		explicitWaitForVisiblity(dropDownContainer);
 		List<WebElement> list = getAccessUtils().getChildElementsFromParentLocatedBy(dropDownContainer, By.xpath(".//li"));
 		List<String> retVal = getAccessUtils().getTextOfElements(list);

@@ -25,6 +25,7 @@ public class DataConstants {
 	public static final String REGULAR_USER_PURCHASE_KEY = "regular_user_purchase_std";
 	public static final String CREDIT_CARD_STANDARD = "credit_card_data_std";
 	
+	public static final String USER_STANDARD_KEY_ONE = "user_data";
 	public static final String USER_STANDARD_KEY = "user_data_2";
 	public static final String EVENT_DATA_STANARD_KEY = "event_data_standard";
 	public static final String SUPERUSER_DATA_KEY = "super_user" ;
