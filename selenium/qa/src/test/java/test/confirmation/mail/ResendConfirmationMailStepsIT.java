@@ -1,6 +1,7 @@
 package test.confirmation.mail;
 
 import java.math.BigDecimal;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,13 +32,13 @@ public class ResendConfirmationMailStepsIT extends BaseSteps {
 	private static final String EVENT_NAME = "TestConfirmationEventName";
 
 	@Test(dataProvider = "purchase_confirmation_mail_data", priority = 92)
-	public void resendPurchaseConfirmationMail(Purchase purchase, User orgAdmin, User customer) {
+	public void resendPurchaseConfirmationMail(Purchase purchase, User orgAdmin, User customer) throws URISyntaxException {
 		maximizeWindow();
 		FacadeProvider fp = new FacadeProvider(driver);
 		fp.getLoginFacade().givenUserIsLogedIn(orgAdmin);
 		fp.getOrganizationFacade().givenOrganizationExist(purchase.getEvent().getOrganization());
 		EventSummaryComponent eventSummaryComponent = fp.getAdminEventStepsFacade()
-				.findEventWithName(purchase.getEvent());
+				.givenEventExistAndIsNotCanceled(purchase.getEvent());
 		eventSummaryComponent.clickOnEvent();
 		fp.getEventDashboardFacade().whenUserSelectsManageOrdersFromOrdersDropDown();
 		fp.getEventDashboardFacade().whenUserClickOnOrderLinkOfFirstOrder(fp.getOrderManageFacade());
@@ -47,6 +48,8 @@ public class ResendConfirmationMailStepsIT extends BaseSteps {
 		OrderInfo orderInfo = fp.getOrderManageFacade().whenUserCollectsOrderInfo();
 		BigDecimal totalFees = orderInfo.getFeesTotal();
 		BigDecimal orderTotal = orderInfo.getOrderTotal();
+		
+		fp.getAdminEventStepsFacade().attemptEventCancel(purchase.getEvent());
 
 		fp.getLoginFacade().logOut();
 
@@ -59,7 +62,7 @@ public class ResendConfirmationMailStepsIT extends BaseSteps {
 		page.openMailAndCheckValidity(data);
 	}
 
-	@Test(dataProvider = "purchase_confirmation_mail_data")
+	@Test(dataProvider = "purchase_confirmation_mail_data", priority = 90)
 	public void prepareDataFixture(Purchase purchase, User orgAdmin, User customer) {
 		maximizeWindow();
 		FacadeProvider fp = new FacadeProvider(driver);
@@ -85,7 +88,7 @@ public class ResendConfirmationMailStepsIT extends BaseSteps {
 	private static Purchase preparePurchase() {
 		Purchase purchase = Purchase.generatePurchaseFromJson(DataConstants.REGULAR_USER_PURCHASE_KEY);
 		purchase.setNumberOfTickets(PURCHASE_QUANTITY);
-		purchase.setEvent(Event.generateEventFromJson(DataConstants.EVENT_DATA_STANARD_KEY, EVENT_NAME, false,
+		purchase.setEvent(Event.generateEventFromJson(DataConstants.EVENT_DATA_STANARD_KEY, EVENT_NAME, true,
 				START_DAY_OFFSET, DAYS_RANGE));
 		return purchase;
 	}

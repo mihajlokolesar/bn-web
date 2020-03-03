@@ -226,6 +226,15 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 			sa.assertTrue(retVal, MsgConstants.EVENT_PUBLISHED + " message not displayed");
 		}
 	}
+	
+	public void attemptEventCancel(Event event) {
+		try {
+			givenUserIsOnAdminEventsPage();
+			EventSummaryComponent component = findEventWithName(event);
+			component.cancelEvent();
+		}catch (Exception e) {
+		}
+	}
 
 	protected void setData(String key, Object value) {
 		dataMap.put(key, value);

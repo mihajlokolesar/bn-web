@@ -39,7 +39,8 @@ public abstract class ConfirmationMailPage extends MailinatorInboxPage {
 		SoftAssert sa = (SoftAssert) data.get(SOFT_ASSERT);
 		sa.assertTrue(mailTotalFees.compareTo(totalFees) == 0,
 				"total fees in mail and on manage order page not the same");
-		sa.assertTrue(mailOrderTotal.compareTo(orderTotal) == 0);
+		sa.assertTrue(mailOrderTotal.compareTo(orderTotal) == 0, 
+				"order total in mail and on manage order page not the same");
 		sa.assertAll();
 
 	}

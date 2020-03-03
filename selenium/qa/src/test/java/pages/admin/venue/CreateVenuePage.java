@@ -140,7 +140,7 @@ public class CreateVenuePage extends BasePage {
 			isOrgEntered = linkedOrgs.stream().anyMatch(org->org.isOrganization(organizationName));
 		} 
 		if (!isOrgEntered) {
-			Assert.fail("Selected organization: " + organizationName + "not found in linked organization list");
+			Assert.fail("Selected organization: " + organizationName + " not found in linked organization list");
 		}
 	}
 
