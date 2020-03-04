@@ -24,7 +24,6 @@ public abstract class ConfirmationMailPage extends MailinatorInboxPage {
 	public void openMailAndCheckValidity(Map<String, Object> data) {
 		goToMail(getSubject());
 		isCorrectMail(data);
-
 	}
 
 	public abstract BaseConfirmationFrame getConfirmationFrame();

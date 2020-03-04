@@ -1,5 +1,7 @@
 package pages.mailinator.inbox;
 
+import java.util.Map;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -55,6 +57,8 @@ public class MailinatorInboxPage extends BasePage {
 		return retVal;
 
 	}
+	
+	public void openMailAndCheckValidity(Map<String, Object> data) {}
 	
 	public boolean isCorrectMail(int numberOfTickets, String eventName) {
 		waitForTime(1000);

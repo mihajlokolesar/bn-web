@@ -65,6 +65,16 @@ public class OrderManageFacade extends BaseFacadeSteps{
 		whenUserClicksOnGotItButtonOnRefundSuccessDialog();
 	}
 	
+	public void whenUserIssuesFullRefund(RefundReason refundReason) {
+		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
+		selectedOrderPage.clickOnRefundEventTotal();
+		IssueRefundDialog issueRefundDialog = new IssueRefundDialog(driver);
+		issueRefundDialog.selectRefundReason(refundReason);
+		issueRefundDialog.clickOnContinue();
+		RefundSuccessfulDialog successDialog = new RefundSuccessfulDialog(driver);
+		successDialog.clickOnGotIt();
+	}
+	
 	public boolean whenUserExpandOrderDetailsAndCheckIfExpanded() {
 		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
 		selectedOrderPage.expandOrderDetails();
@@ -438,5 +448,7 @@ public class OrderManageFacade extends BaseFacadeSteps{
 	protected Object getData(String key) {
 		return dataMap.get(key);
 	}
+
+	
 
 }
