@@ -7,6 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.InvalidArgumentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
@@ -15,7 +16,9 @@ import model.TicketType;
 import pages.BasePage;
 import pages.components.GenericDropDown;
 import pages.components.TimeMenuDropDown;
+import pages.components.admin.UploadImageComponent;
 import pages.components.admin.events.AddTicketTypeComponent;
+import pages.components.admin.events.ArtistEventPageComponent;
 import utils.Constants;
 import utils.MsgConstants;
 import utils.ProjectUtils;
@@ -28,6 +31,9 @@ public class CreateEventPage extends BasePage {
 
 	@FindBy(xpath = "//body//div//h2[contains(text(),'Upload event image')]")
 	private WebElement uploadEventImage;
+	
+	@FindBy(xpath = "//div[contains(@title,'Event promo image')]")
+	private WebElement imageEventUploaded;
 
 	@FindBy(xpath = "//body[@id='cloudinary-overlay']//div[@id='cloudinary-navbar']//ul//li[@data-source='url']/span[contains(text(),'Web Address')]")
 	private WebElement webAddressLink;
@@ -47,10 +53,12 @@ public class CreateEventPage extends BasePage {
 	@FindBy(css = "div.css-10nd86i")
 	private WebElement artistInputDropDown;
 
+	@FindAll(@FindBy(xpath = "//div[div[h2[contains(text(),'Artists')]]]/following-sibling::div[1]/div[1]/div"))
+	private List<WebElement> artistList;
+	
 	@FindBy(id = "eventName")
 	private WebElement eventNameField;
 
-//	@FindBy(xpath = "//main//div[@aria-describedby='%venues-error-text']//div[div[@role='button'] and div[@aria-haspopup='true']]")
 	@FindBy(xpath = "//input[@id='venues']/preceding-sibling::div")
 	private WebElement venueDropDownSelect;
 
@@ -73,13 +81,12 @@ public class CreateEventPage extends BasePage {
 	@FindBy(id = "time-menu")
 	private WebElement timeMenu;
 
-//	@FindBy(xpath = "//main//div//div[div[input[@id='doorTimeHours' and @type='hidden']]]")
 	@FindBy(xpath = "//input[@id='doorTimeHours' and @type='hidden']/preceding-sibling::div")
 	private WebElement doorTimeDropDownActivate;
 
 	@FindBy(id = "menu-doorTimeHours")
 	private WebElement doorTimeMenuHoursContainer;
-
+	
 	@FindBy(xpath = "//main//div[aside[contains(text(),'Add another ticket type')]]")
 	private WebElement addTicketTypeButton;
 
@@ -91,7 +98,9 @@ public class CreateEventPage extends BasePage {
 
 	@FindBy(xpath = "//main//div//button[span[contains(text(),'Update')]]")
 	private WebElement updateButton;
-
+	
+	private final String CHANGE_CATEGORY_BUTTON_LABEL = "Change category";
+	
 	public CreateEventPage(WebDriver driver) {
 		super(driver);
 	}
@@ -103,21 +112,8 @@ public class CreateEventPage extends BasePage {
 	}
 
 	public void uploadImage(String imageLink) {
-		clickOnUploadImage();
-		explicitWait(15, ExpectedConditions.frameToBeAvailableAndSwitchToIt(imageUploadIframe));
-
-		waitVisibilityAndClick(webAddressLink);
-		waitVisibilityAndSendKeys(remoteImageUrlField, imageLink);
-		waitForTime(1100);
-		waitVisibilityAndClick(uploadButton);
-		waitForTime(1100);
-		explicitWaitForVisiblity(uploadCroppedButton);
-		explicitWaitForClickable(uploadCroppedButton);
-		uploadCroppedButton.click();
-		driver.switchTo().parentFrame();
-		while (!imageUploadIframe.isDisplayed()) {
-			waitForTime(500);
-		}
+		UploadImageComponent uploadImage = new UploadImageComponent(driver);
+		uploadImage.uploadImageFromResources(imageLink, uploadEventImage);
 	}
 
 	/**
@@ -151,6 +147,14 @@ public class CreateEventPage extends BasePage {
 				By.xpath("//div[contains(@class,'css-15k3avv')]//div[span[contains(text(),'" + artistName + "')]]"));
 		waitVisibilityAndClick(select);
 	}
+	
+	public ArtistEventPageComponent getArtistComponentByName(String name) {
+		explicitWait(15, ExpectedConditions.visibilityOfAllElements(artistList));
+		ArtistEventPageComponent artistComponent = artistList.stream()
+			.map(el -> new ArtistEventPageComponent(driver, el))
+			.filter(art -> art.isArtistName(name)).findFirst().orElse(null);
+		return artistComponent;
+	}
 
 	public void enterEventName(String eventName) {
 		waitVisibilityAndClick(eventNameField);
@@ -164,6 +168,10 @@ public class CreateEventPage extends BasePage {
 		dropDown.selectElementFromDropDownHiddenInput(
 				By.xpath(".//ul//li[contains(text(),'" + venueName + "')]"),
 				venueName);
+	}
+	
+	public void changeCategory(String category) {
+		clickOnButtonWithLabel(CHANGE_CATEGORY_BUTTON_LABEL);
 	}
 
 
@@ -213,7 +221,6 @@ public class CreateEventPage extends BasePage {
 	public LocalDate getEndDateValue() {
 		String endDateStr = getAccessUtils().getValue(endDateField);
 		return getDate(endDateStr);
-		
 	}
 	
 	private LocalDate getDate(String dateStr) {
