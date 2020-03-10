@@ -73,8 +73,13 @@ public class ProjectUtils {
 	}
 	
 	public static String formatDate(String pattern, LocalDate date) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
 		return formatter.format(date);
+	}
+	
+	public static String formatTime(String pattern, LocalTime time) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+		return formatter.format(time);
 	}
 	
 	public static LocalDateTime parseDateTimeWithoutYear(String pattern, String dateTimeWithOutYear) {

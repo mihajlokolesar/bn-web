@@ -3,7 +3,9 @@ package model;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -37,6 +39,8 @@ public class Event implements Serializable {
 	private String doorTime;
 	@JsonProperty("ticket_types")
 	private List<TicketType> ticketTypes = new ArrayList<>();
+	@JsonProperty("artists")
+	private Set<Artist> artists;
 	
 	private Venue venue;
 	
@@ -156,6 +160,13 @@ public class Event implements Serializable {
 		this.ticketTypes.add(ticketType);
 	}
 	
+	public void addArtist(Artist artist) {
+		if (this.artists == null) {
+			this.artists = new HashSet<>();
+		}
+		this.artists.add(artist);
+	}
+	
 	public LocalDateTime getDate() {
 		return date;
 	}
@@ -163,6 +174,8 @@ public class Event implements Serializable {
 	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
+	
+	
 
 	public void setDates(int offset, int range) {
 		String[] dateSpan = ProjectUtils.getDatesWithSpecifiedRangeInDaysWithStartOffset(offset, range);

@@ -7,21 +7,32 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import model.Venue;
 import pages.BaseComponent;
 import utils.ProjectUtils;
+import utils.formatter.VenueFormatter;
 
-public class OverviewTopComponent extends BaseComponent {
+public class EventOverviewTopComponent extends BaseComponent {
 	
 	private WebElement container;
+	private String eventName;
 	
 	private TimeInfoComponent timeComponent;
 	
-	private final String relativeVenueInfoXpath = "//div[img[contains(@alt,'Location Icon')]]/div[2]";
+	private final String relativeVenueContainerXpath = "//div[img[contains(@alt,'Location Icon')]]/div";
+	private final String relativeVenueNameXpath = relativeVenueContainerXpath + "/p[1]";
+	private final String relativeVenueAdressXpath = relativeVenueContainerXpath + "/p[2]";
+	private final String relativeVenueRestOfAddress = relativeVenueContainerXpath +"/p[2]";
 	
 
-	public OverviewTopComponent(WebDriver driver, String eventName) {
+	public EventOverviewTopComponent(WebDriver driver, String eventName) {
 		super(driver);
 		this.container = findContainerElement(eventName);
+		this.eventName = eventName;
+	}
+	
+	public String getInternaleEventName() {
+		return this.eventName;
 	}
 	
 	private WebElement findContainerElement(String eventName) {
@@ -43,13 +54,20 @@ public class OverviewTopComponent extends BaseComponent {
 		return timeComponent;
 	}
 	
-//	public Venue getVenue() {
-//		WebElement location = getAccessUtils()
-//				.getChildElementFromParentLocatedBy(container, By.xpath(relativeVenueInfoXpath));
-//		String text = location.getText();
-//		if(text.split(",").length )
-//		VenueFormatter venueFormatter = new VenueFormatter("N, A, C, Sa, CTa");
-//	}
+	public Venue getVenue() {
+		WebElement nameEl = getAccessUtils()
+				.getChildElementFromParentLocatedBy(container, By.xpath(relativeVenueNameXpath));
+		WebElement adressEl = getAccessUtils()
+				.getChildElementFromParentLocatedBy(container, By.xpath(relativeVenueAdressXpath));
+		WebElement cityStateZipEl = getAccessUtils()
+				.getChildElementFromParentLocatedBy(container, By.xpath(relativeVenueRestOfAddress));
+		String vName = nameEl.getText().trim();
+		String vAddress = adressEl.getText().trim();
+		String cityStateZip = cityStateZipEl.getText().trim();
+		VenueFormatter formater = new VenueFormatter("N, A, C, Sa, Z");
+		Venue venue = formater.parse(vName + ", " + vAddress + ", " + cityStateZip);
+		return venue;
+	}
 	
 	public class TimeInfoComponent extends BaseComponent {
 

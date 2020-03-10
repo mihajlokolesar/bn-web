@@ -49,6 +49,8 @@ public class EventSummaryComponent extends BaseComponent {
 	
 	private String editEventDDAction = "Edit event";
 	
+	private String eventOverviewDDAction = "Event overview";
+	
 	private String cancelEventDDAction = "Cancel event";
 
 	public EventSummaryComponent(WebDriver driver, WebElement event) {
@@ -106,7 +108,11 @@ public class EventSummaryComponent extends BaseComponent {
 		DeleteEventDialog deleteDialog = new DeleteEventDialog(driver);
 		deleteDialog.clickOnDeleteButton(event.getEventName());
 		return deleteDialog;
-		
+	}
+	
+	public void clickOnEventOverview() {
+		openDropDown();
+		findActionAndClickInDropDown(dropDownXpathElement(eventOverviewDDAction));
 	}
 	
 	public String getEventName() {
