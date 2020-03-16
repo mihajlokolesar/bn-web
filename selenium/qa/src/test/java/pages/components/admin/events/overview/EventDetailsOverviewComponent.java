@@ -32,16 +32,12 @@ public class EventDetailsOverviewComponent extends BaseComponent {
 		}
 	}
 	private static String relativeFirstLineXpath = "./div[p[contains(text(),'Event name')]]/following-sibling::div[1]";
-	private String relativeEventNameXpath = relativeFirstLineXpath + "/p[1]";
-	private String relativeVenueNameXpath = relativeFirstLineXpath + "/p[2]";
-	private String relativeTopLineInfoXpath = relativeFirstLineXpath + "/p[3]";
-	
 	
 	public enum SecondLineEnum implements IEventDetailsEnum {
 		START_DATE("/p[1]"),
 		START_TIME("/p[2]"),
 		DOOR_TIME("/p[3]"),
-		END_DATE("/[4]"),
+		END_DATE("/p[4]"),
 		END_TIME("/p[5]");
 		
 		private String value;
@@ -56,11 +52,6 @@ public class EventDetailsOverviewComponent extends BaseComponent {
 	}
 
 	private static final String relativeSecondLineXpath = "./div[p[contains(text(),'Event date')]]/following-sibling::div[1]";
-	private String relativeStartDateXpath = relativeSecondLineXpath + "/p[1]";
-	private String relativeStartTimeXpath = relativeSecondLineXpath + "/p[2]";
-	private String relativeDoorTimeXpath = relativeSecondLineXpath + "/p[3]";
-	private String relativeEndDateXpath = relativeSecondLineXpath + "/p[4]";
-	private String relativeEndTimeXpath = relativeSecondLineXpath + "/p[5]";
 	
 	public enum ThirdLineEnum implements IEventDetailsEnum {
 		AGE_LIMIT("/p[1]"),
@@ -80,10 +71,6 @@ public class EventDetailsOverviewComponent extends BaseComponent {
 		
 	}
 	private static final String relativeThirdLineXpath = "./div[p[contains(text(),'Age limit')]]/following-sibling::div[1]";
-	private String relativeAgeLimitXpath = relativeThirdLineXpath + "/p[1]";
-	private String relativeEventTypeXpath = relativeThirdLineXpath + "/p[2]";
-	private String relativeAccessCodeXpath = relativeThirdLineXpath + "/p[3]";
-	private String relativeStatusXpath = relativeThirdLineXpath + "/p[4]";
 	
 	public EventDetailsOverviewComponent(WebDriver driver) {
 		super(driver);

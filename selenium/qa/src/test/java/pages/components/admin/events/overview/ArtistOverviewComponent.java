@@ -11,7 +11,7 @@ public class ArtistOverviewComponent extends BaseComponent {
 	private WebElement container;
 	
 	private final String relativeHeadlinerXpath = ".//h6[contains(text(),'HEADLINER')]";
-	private final String relativeArtistNameXpath = ".//h6";
+	private final String relativeArtistNameXpath = ".//p";
 
 	public ArtistOverviewComponent(WebDriver driver, WebElement container) {
 		super(driver);

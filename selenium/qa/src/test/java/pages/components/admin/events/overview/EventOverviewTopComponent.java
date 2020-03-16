@@ -22,7 +22,7 @@ public class EventOverviewTopComponent extends BaseComponent {
 	private final String relativeVenueContainerXpath = "//div[img[contains(@alt,'Location Icon')]]/div";
 	private final String relativeVenueNameXpath = relativeVenueContainerXpath + "/p[1]";
 	private final String relativeVenueAdressXpath = relativeVenueContainerXpath + "/p[2]";
-	private final String relativeVenueRestOfAddress = relativeVenueContainerXpath +"/p[2]";
+	private final String relativeVenueRestOfAddress = relativeVenueContainerXpath +"/p[3]";
 	
 
 	public EventOverviewTopComponent(WebDriver driver, String eventName) {
@@ -64,8 +64,11 @@ public class EventOverviewTopComponent extends BaseComponent {
 		String vName = nameEl.getText().trim();
 		String vAddress = adressEl.getText().trim();
 		String cityStateZip = cityStateZipEl.getText().trim();
+		String[] tokens = cityStateZip.split(",");
+		String[] stateZipTokens = tokens[1].trim().split(" ");
+		
 		VenueFormatter formater = new VenueFormatter("N, A, C, Sa, Z");
-		Venue venue = formater.parse(vName + ", " + vAddress + ", " + cityStateZip);
+		Venue venue = formater.parse(vName + ", " + vAddress + ", " + tokens[0] + ", " + stateZipTokens[0] + ", " + stateZipTokens[1]);
 		return venue;
 	}
 	

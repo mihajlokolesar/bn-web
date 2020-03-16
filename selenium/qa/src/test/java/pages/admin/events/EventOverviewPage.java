@@ -2,6 +2,7 @@ package pages.admin.events;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,6 +15,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import model.Artist;
 import model.Event;
+import model.TicketType;
 import model.Venue;
 import pages.BasePage;
 import pages.components.admin.events.overview.ArtistOverviewComponent;
@@ -21,6 +23,7 @@ import pages.components.admin.events.overview.EventDetailsOverviewComponent;
 import pages.components.admin.events.overview.EventDetailsOverviewComponent.FirstLineEnum;
 import pages.components.admin.events.overview.EventDetailsOverviewComponent.SecondLineEnum;
 import pages.components.admin.events.overview.EventOverviewTopComponent;
+import pages.components.admin.events.overview.EventTicketTypeOverviewComponent;
 import utils.Constants;
 import utils.ProjectUtils;
 
@@ -57,6 +60,15 @@ public class EventOverviewPage extends BasePage {
 		} else {
 			return false;
 		}
+	}
+	
+	public Event getAllEventInfo() {
+		Event event = new Event();
+		composeEventInfoFromTopComponent(event);
+		composeEventInfoFromArtists(event);
+		composeEventInfoFromDetails(event);
+		composeEventInfoFromTicketType(event);
+		return event;
 	}
 	
 	public void composeEventInfoFromTopComponent(Event event) {
@@ -102,6 +114,20 @@ public class EventOverviewPage extends BasePage {
 		event.setDoorTime(detailsComponent.getStringValue(SecondLineEnum.DOOR_TIME));
 		event.setStartDate(ProjectUtils.formatDate(ProjectUtils.DATE_FORMAT, startDate));
 		event.setEndDate(ProjectUtils.formatDate(ProjectUtils.DATE_FORMAT, endDate));
+	}
+	
+	public void composeEventInfoFromTicketType(Event event) {
+		if (event == null) {
+			event = new Event();
+		}
+		List<TicketType> ticketTypes = new ArrayList<TicketType>();
+		explicitWait(15, ExpectedConditions.visibilityOfAllElements(ticketList));
+		for(WebElement container : ticketList) {
+			EventTicketTypeOverviewComponent ticketTypeComponent = new EventTicketTypeOverviewComponent(driver, container);
+			ticketTypes.add(ticketTypeComponent.getTicketTypeData());
+		}
+		event.setTicketTypes(ticketTypes);
+		
 	}
 	
 	private EventOverviewTopComponent getTopComponent() {

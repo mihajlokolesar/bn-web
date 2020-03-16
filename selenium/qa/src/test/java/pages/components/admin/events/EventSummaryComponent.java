@@ -151,7 +151,7 @@ public class EventSummaryComponent extends BaseComponent {
 	}
 	
 	private By dropDownXpathElement(String actionName) {
-		return By.xpath("//body//div[@id='long-menu']//ul/li[div[span[contains(text(),'" + actionName + "')]]]");
+		return By.xpath("//ul/li[div[span[contains(text(),'" + actionName + "')]]]");
 	}
 
 	private void findActionAndClickInDropDown(By by) {

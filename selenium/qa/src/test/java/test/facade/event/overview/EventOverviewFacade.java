@@ -28,6 +28,9 @@ public class EventOverviewFacade extends BaseFacadeSteps {
 		return this.eventOverviewPage;
 	}
 	
+	public void getAllEventOverviewInfo() {
+		this.eventOverviewPage.getAllEventInfo();
+	}
 	
 	public boolean thenUserIsAtOverviewPage() {
 		return getOverviewPage().isAtPage() && getOverviewPage().isTitleCorrect();
