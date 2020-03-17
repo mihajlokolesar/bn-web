@@ -49,7 +49,7 @@ public class EventOverviewStepsIT extends BaseSteps {
 		Organization org =Organization.generateOrganizationFromJson(DataConstants.ORGANIZATION_SAST, false);
 		fp.getOrganizationFacade().givenOrganizationExist(org);
 		Event event = Event.generateEventFromJson(DataConstants.EVENT_DATA_STANARD_KEY, false, 1, 1);
-		event.setEventName("TheTestArtistEvent");
+		event.setEventName("PrevTEst");
 		event.setOrganization(org);
 		EventSummaryComponent compo = fp.getAdminEventStepsFacade().findEventWithName(event);
 		String evnetName = compo.getEventName();

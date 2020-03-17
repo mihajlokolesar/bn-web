@@ -1,7 +1,9 @@
 package test.facade.event.overview;
 
 import org.openqa.selenium.WebDriver;
+import org.testng.asserts.SoftAssert;
 
+import model.Event;
 import pages.admin.events.EventOverviewPage;
 import test.facade.BaseFacadeSteps;
 
@@ -12,6 +14,15 @@ public class EventOverviewFacade extends BaseFacadeSteps {
 	public EventOverviewFacade(WebDriver driver) {
 		super(driver);
 		// TODO Auto-generated constructor stub
+	}
+	
+	public void getAllEventOverviewInfo() {
+		this.eventOverviewPage.getAllEventInfo();
+	}
+	
+	public void whenUserComparesInfoOnOverviewWithGivenEvent(Event data, SoftAssert sa) {
+		Event preview = getOverviewPage().getAllEventInfo();
+		
 	}
 	
 	public void setEventOverviewPage(String eventName) {
@@ -28,9 +39,6 @@ public class EventOverviewFacade extends BaseFacadeSteps {
 		return this.eventOverviewPage;
 	}
 	
-	public void getAllEventOverviewInfo() {
-		this.eventOverviewPage.getAllEventInfo();
-	}
 	
 	public boolean thenUserIsAtOverviewPage() {
 		return getOverviewPage().isAtPage() && getOverviewPage().isTitleCorrect();

@@ -20,8 +20,8 @@ import model.Venue;
 import pages.BasePage;
 import pages.components.admin.events.overview.ArtistOverviewComponent;
 import pages.components.admin.events.overview.EventDetailsOverviewComponent;
-import pages.components.admin.events.overview.EventDetailsOverviewComponent.FirstLineEnum;
-import pages.components.admin.events.overview.EventDetailsOverviewComponent.SecondLineEnum;
+import pages.components.admin.events.overview.EventDetailsOverviewComponent.BasicDetailInfo;
+import pages.components.admin.events.overview.EventDetailsOverviewComponent.TimeDetailInfo;
 import pages.components.admin.events.overview.EventOverviewTopComponent;
 import pages.components.admin.events.overview.EventTicketTypeOverviewComponent;
 import utils.Constants;
@@ -105,13 +105,13 @@ public class EventOverviewPage extends BasePage {
 		}
 		//compare info on page if the same
 		EventDetailsOverviewComponent detailsComponent = new EventDetailsOverviewComponent(driver);
-		LocalDate startDate = detailsComponent.getDateValue(SecondLineEnum.START_DATE);
-		LocalDate endDate = detailsComponent.getDateValue(SecondLineEnum.END_DATE);
+		LocalDate startDate = detailsComponent.getDateValue(TimeDetailInfo.START_DATE);
+		LocalDate endDate = detailsComponent.getDateValue(TimeDetailInfo.END_DATE);
 			
-		event.setEventName(detailsComponent.getStringValue(FirstLineEnum.EVENT_NAME));
-		event.setStartTime(detailsComponent.getStringValue(SecondLineEnum.START_TIME));
-		event.setEndTime(detailsComponent.getStringValue(SecondLineEnum.END_TIME));
-		event.setDoorTime(detailsComponent.getStringValue(SecondLineEnum.DOOR_TIME));
+		event.setEventName(detailsComponent.getStringValue(BasicDetailInfo.EVENT_NAME));
+		event.setStartTime(detailsComponent.getStringValue(TimeDetailInfo.START_TIME));
+		event.setEndTime(detailsComponent.getStringValue(TimeDetailInfo.END_TIME));
+		event.setDoorTime(detailsComponent.getStringValue(TimeDetailInfo.DOOR_TIME));
 		event.setStartDate(ProjectUtils.formatDate(ProjectUtils.DATE_FORMAT, startDate));
 		event.setEndDate(ProjectUtils.formatDate(ProjectUtils.DATE_FORMAT, endDate));
 	}

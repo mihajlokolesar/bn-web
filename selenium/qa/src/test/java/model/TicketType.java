@@ -51,6 +51,32 @@ public class TicketType implements Serializable{
 		this.additionalOptions = additionalOptions;
 	}
 	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((ticketTypeName == null) ? 0 : ticketTypeName.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		TicketType other = (TicketType) obj;
+		if (ticketTypeName == null) {
+			if (other.ticketTypeName != null)
+				return false;
+		} else if (!ticketTypeName.equals(other.ticketTypeName))
+			return false;
+		return true;
+	}
+	
+	
+	
 	
 	
 	

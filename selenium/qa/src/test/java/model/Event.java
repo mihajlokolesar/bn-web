@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.testng.asserts.SoftAssert;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
 
@@ -43,6 +45,56 @@ public class Event implements Serializable {
 	private Set<Artist> artists;
 	
 	private Venue venue;
+	
+	
+	
+	public void compareWithAssert(Object other, SoftAssert sa) {
+		if(!(other instanceof Event)) {
+			sa.fail("other not instance of event");
+		}
+		Event o = (Event)other;
+		assertEquals(sa,"eventName", this.eventName, o.eventName);
+		assertEquals(sa, "startDate", this.startDate, o.startDate);
+		assertEquals(sa, "doorTime", this.doorTime, o.doorTime);
+		assertEquals(sa, "startTime", this.startTime, o.startTime);
+		assertEquals(sa, "endDate", this.endDate, o.endDate);
+		assertEquals(sa, "endTime", this.endTime, o.endTime);
+		if ((this.venue != null) && (o.venue != null)) {
+			assertEquals(sa, "venueName", this.venue.getName(), o.venue.getName());
+			assertEquals(sa, "venueAddress", this.venue.getAddress(), o.venue.getAddress());
+			assertEquals(sa, "venueCity", this.venue.getCity(), o.venue.getCity());
+			assertEquals(sa, "venueStateAbbr", this.venue.getStateAbbr(), o.venue.getStateAbbr());
+			assertEquals(sa, "venueZip", this.venue.getZip(), o.venue.getZip());
+		}
+		if (this.artists != null && o.artists != null) {
+			if (this.artists.size() == o.artists.size()) {
+				for(Artist artist : artists) {
+					if(o.getArtists().contains(artist)) sa.assertTrue(true);
+				}
+			} else {
+				sa.fail("Event compare: Artist set size not the same ");
+			}
+		}
+//		if (this.ticketTypes != null && o.ticketTypes != null) {
+//			if (this.ticketTypes.size() == o.ticketTypes.size()) {
+//				for(TicketType ticketType : ticketTypes) {
+//					if (o.getTicketTypes().indexOf()) {
+//						
+//					}
+//				}
+//			}
+//		}
+		
+	}
+	
+	public void assertEquals(SoftAssert sa, String fieldName, Object first, Object second) {
+		sa.assertEquals(first, second, composeAssertMessage(fieldName, first, second));
+	}
+		
+	
+	private String composeAssertMessage(String fieldName, Object thisValue, Object otherValue) {
+		return "Event " + fieldName + " not the same: this." + thisValue + " ; other." +otherValue;
+	}
 	
 	private LocalDateTime date;
 
@@ -167,6 +219,14 @@ public class Event implements Serializable {
 		this.artists.add(artist);
 	}
 	
+	public Set<Artist> getArtists() {
+		return artists;
+	}
+
+	public void setArtists(Set<Artist> artists) {
+		this.artists = artists;
+	}
+
 	public LocalDateTime getDate() {
 		return date;
 	}
@@ -240,5 +300,9 @@ public class Event implements Serializable {
 		}
 		return event;
 	}
+
+	
+	
+	
 	
 }

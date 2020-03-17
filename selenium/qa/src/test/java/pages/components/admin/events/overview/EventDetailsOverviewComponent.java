@@ -15,7 +15,7 @@ public class EventDetailsOverviewComponent extends BaseComponent {
 	@FindBy(xpath = "//p[contains(text(),'Event Details')]//following-sibling::div[1]/div")
 	private WebElement container;
 	
-	public enum FirstLineEnum implements IEventDetailsEnum {
+	public enum BasicDetailInfo implements IEventDetailsEnum {
 		EVENT_NAME("/p[1]"),
 		VENUE_NAME("/p[2["),
 		TOP_LINE_INFO("/p[3]");
@@ -23,17 +23,18 @@ public class EventDetailsOverviewComponent extends BaseComponent {
 		private String value;
 		
 		
-		private FirstLineEnum(String value) {
+		private BasicDetailInfo(String value) {
 			this.value = value;
 		}
 		
 		public String getRelativePath() {
-			return relativeFirstLineXpath + this.value;  
+			return relativeBasicDetailsXpath + this.value;  
 		}
 	}
-	private static String relativeFirstLineXpath = "./div[p[contains(text(),'Event name')]]/following-sibling::div[1]";
 	
-	public enum SecondLineEnum implements IEventDetailsEnum {
+	private static String relativeBasicDetailsXpath = "./div[p[contains(text(),'Event name')]]/following-sibling::div[1]";
+	
+	public enum TimeDetailInfo implements IEventDetailsEnum {
 		START_DATE("/p[1]"),
 		START_TIME("/p[2]"),
 		DOOR_TIME("/p[3]"),
@@ -41,36 +42,48 @@ public class EventDetailsOverviewComponent extends BaseComponent {
 		END_TIME("/p[5]");
 		
 		private String value;
-		private SecondLineEnum(String value) {
+		private TimeDetailInfo(String value) {
 			this.value = value;
 		}
 		
 		public String getRelativePath() {
-			return relativeSecondLineXpath + this.value;
+			return relativeTimeDetailsXpath + this.value;
 		}
 		
 	}
 
-	private static final String relativeSecondLineXpath = "./div[p[contains(text(),'Event date')]]/following-sibling::div[1]";
+	private static final String relativeTimeDetailsXpath = "./div[p[contains(text(),'Event date')]]/following-sibling::div[1]";
 	
-	public enum ThirdLineEnum implements IEventDetailsEnum {
+	public enum ExtraDetailInfo implements IEventDetailsEnum {
 		AGE_LIMIT("/p[1]"),
 		EVENT_TYPE("/p[2]"),
 		ACCESS_CODE("/p[3]"),
 		STATUS("/p[4]");
 		
 		private String value;
-		private ThirdLineEnum(String value) {
+		private ExtraDetailInfo(String value) {
 			this.value = value;
 		}
 		@Override
 		public String getRelativePath() {
-			return relativeThirdLineXpath + this.value;
+			return relativeExtraDetailsXpath + this.value;
+		}
+	}
+	private static final String relativeExtraDetailsXpath = "./div[p[contains(text(),'Age limit')]]/following-sibling::div[1]";
+	
+	public enum DescriptionDetailsInfo implements IEventDetailsEnum {
+		ADDITIONAL_INFO("/div/p[contains(text(),'Additional Event info')]/following-sibling::div[1]//div");
+
+		private String value;
+		private DescriptionDetailsInfo(String value) {
+			this.value = value;
 		}
 		
-		
+		@Override
+		public String getRelativePath() {
+			return this.value;
+		}
 	}
-	private static final String relativeThirdLineXpath = "./div[p[contains(text(),'Age limit')]]/following-sibling::div[1]";
 	
 	public EventDetailsOverviewComponent(WebDriver driver) {
 		super(driver);

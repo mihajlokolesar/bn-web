@@ -52,6 +52,9 @@ public class CreateEventPage extends BasePage {
 
 	@FindBy(xpath = "//div[p[contains(text(),'Childish Gambino')]]")
 	private WebElement artistInputDropDown;
+	
+	@FindBy(id = "react-select-2-input")
+	private WebElement artistInputField;
 
 	@FindAll(@FindBy(xpath = "//div[div[h2[contains(text(),'Artists')]]]/following-sibling::div[1]/div[1]/div"))
 	private List<WebElement> artistList;
@@ -142,7 +145,8 @@ public class CreateEventPage extends BasePage {
 
 	public void enterArtistName(String artistName) {
 		waitForTime(1000);
-		waitVisibilityAndClick(artistInputDropDown);
+		waitVisibilityAndSendKeys(artistInputField, artistName);
+		waitForTime(2000);
 		WebElement select = driver.findElement(
 				By.xpath("//div[contains(@class,'menu')]//div[span[contains(text(),'" + artistName + "')]]"));
 		waitVisibilityAndClick(select);

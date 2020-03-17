@@ -26,6 +26,7 @@ public class ProjectUtils {
 	public static final String DATE_FORMAT = "MM/dd/yyyy";
 	public static final String TIME_FORMAT = "h:mm a";
 	public static final String EVENT_OVERVIEW_TIME_FORMAT = "h:mm a z";
+	public static final String EVENT_OVERVIEW_PUBLISHED_ON_DATE_TIME_FORMAT = "MM/dd/yyyy h:mm a z";
 	public static final String CONCATINATED_DATE_FORMAT = "MMddyyyy";
 	public static final String ADMIN_EVENT_DATE_TIME_FORMAT = "EEEE, MMMM d yyyy h:mm a";
 	public static final String ADMIN_EVENT_MANAGE_ORDERS_ORDER_ROW = "MM/dd/yyyy h:mm a";
