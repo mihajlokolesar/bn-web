@@ -10,8 +10,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.testng.Assert;
 
-import junit.framework.Assert;
 import model.TicketType;
 import pages.BasePage;
 import pages.components.GenericDropDown;
@@ -50,7 +50,7 @@ public class CreateEventPage extends BasePage {
 	@FindBy(xpath = "//div[@class='upload_cropped_holder']//a[@title='Upload']")
 	private WebElement uploadCroppedButton;
 
-	@FindBy(css = "div.css-10nd86i")
+	@FindBy(xpath = "//div[p[contains(text(),'Childish Gambino')]]")
 	private WebElement artistInputDropDown;
 
 	@FindAll(@FindBy(xpath = "//div[div[h2[contains(text(),'Artists')]]]/following-sibling::div[1]/div[1]/div"))
@@ -93,8 +93,8 @@ public class CreateEventPage extends BasePage {
 	@FindBy(xpath = "//main//div//button[span[contains(text(),'Save draft')]]")
 	private WebElement saveDraftButton;
 
-	@FindBy(xpath = "//main//div//button[span[contains(text(),'Publish')]]")
-	private WebElement publishButton;
+	@FindBy(xpath = "//main//div//button[span[text()='Save']]")
+	private WebElement saveButton;
 
 	@FindBy(xpath = "//main//div//button[span[contains(text(),'Update')]]")
 	private WebElement updateButton;
@@ -144,7 +144,7 @@ public class CreateEventPage extends BasePage {
 		waitForTime(1000);
 		waitVisibilityAndClick(artistInputDropDown);
 		WebElement select = driver.findElement(
-				By.xpath("//div[contains(@class,'css-15k3avv')]//div[span[contains(text(),'" + artistName + "')]]"));
+				By.xpath("//div[contains(@class,'menu')]//div[span[contains(text(),'" + artistName + "')]]"));
 		waitVisibilityAndClick(select);
 	}
 	
@@ -194,8 +194,8 @@ public class CreateEventPage extends BasePage {
 		waitVisibilityAndBrowserCheckClick(saveDraftButton);
 	}
 
-	public void clickOnPublish() {
-		waitVisibilityAndBrowserCheckClick(publishButton);
+	public void clickOnSave() {
+		waitVisibilityAndBrowserCheckClick(saveButton);
 	}
 
 	public void clickOnUpdateButton() {

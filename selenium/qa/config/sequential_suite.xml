@@ -24,6 +24,7 @@
 			<class name="test.refund.override.RefundOverrideEntireOrderWithOrderFees"/>
 			<class name="test.refund.override.RefundOverrideEntireOrderWithOutFees"/>
 			<class name="test.pastdates.MoveEventDatesToPastStepsIT" />
+			<class name="test.confirmation.mail.ResendConfirmationMailStepsIT" />
 		</classes>
 	</test>
 	<test name="Firefox">
@@ -49,6 +50,7 @@
 			<class name="test.refund.override.RefundOverrideEntireOrderWithOrderFees"/>
 			<class name="test.refund.override.RefundOverrideEntireOrderWithOutFees"/>
 			<class name="test.pastdates.MoveEventDatesToPastStepsIT" />
+			<class name="test.confirmation.mail.ResendConfirmationMailStepsIT" />
 		</classes>
 	</test>
 </suite>

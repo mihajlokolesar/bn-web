@@ -9,7 +9,10 @@ import "../../pages/events/rich-event-description.css";
 
 const styles = theme => ({
 	root: {
-		paddingTop: 10
+		paddingTop: 10,
+		[theme.breakpoints.down("sm")]: {
+			paddingTop: 0
+		}
 	},
 	readMoreLink: {
 		font: "inherit",
@@ -20,10 +23,13 @@ const styles = theme => ({
 		display: "block",
 		fontWeight: 100
 	},
+	textBlock: {
+		display: "-webkit-box"
+	},
 	shortenedTextBlock: {
 		overflow: "hidden",
 		display: "-webkit-box",
-		WebkitLineClamp: "3",
+		WebkitLineClamp: "5",
 		WebkitBoxOrient: "vertical",
 		textOverflow: "ellipsis"
 	},
@@ -79,7 +85,8 @@ class ReadMoreAdditionalInfo extends Component {
 			<div className={classes.root}>
 				<span
 					className={classnames({
-						[classes.shortenedTextBlock]: !showAllAdditionalInfo
+						[classes.shortenedTextBlock]: !showAllAdditionalInfo,
+						[classes.textBlock]: true
 					})}
 				>
 					<div

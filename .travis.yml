@@ -1,47 +1,53 @@
 language: node_js
 node_js:
-- "10"
+  - "10"
 cache: npm
 branches:
   only:
-  - master
+    - master
+    - live
 matrix:
   include:
-  - stage: tests
-    name: Tests
-    env:
-    - RUN_CMD="test"
-  - stage: tests
-    name: Linting
-    env:
-    - RUN_CMD="eslint-validate"
-  - stage: deploy
-    script: skip
-    deploy:
-    - provider: script
-      script: 'bash ./scripts/travis_tag.sh'
-      on:
-        branch: master
+    - stage: tests
+      name: Tests
+      env:
+        - RUN_CMD="test"
+    - stage: tests
+      name: Linting
+      env:
+        - RUN_CMD="eslint-validate"
+    - stage: deploy
+      script: skip
+      deploy:
+        - provider: script
+          script: 'bash ./scripts/travis_tag.sh'
+          on:
+            branch: master
+    - stage: deploy
+      script: skip
+      deploy:
+        - provider: script
+          script: 'bash ./scripts/notify_webhook.sh'
   fast_finish: true
 script:
-- npm run $RUN_CMD
+  - npm run $RUN_CMD
 before_install: []
 before_script: []
 after_script: []
 env:
   global:
-  - REACT_APP_API_PROTOCOL=https
-  - REACT_APP_API_HOST=localhost
-  - REACT_APP_API_PORT=8080
-  - REACT_APP_API_BASEPATH=/api
-  - REACT_APP_FACEBOOK_APP_ID=
-  - REACT_APP_NAME=BigNeon
-  - REACT_APP_GOOGLE_PLACES_API_KEY=
-  - REACT_APP_CLOUDINARY_CLOUD_NAME=
-  - REACT_APP_CLOUDINARY_UPLOAD_PRESET=
-  - REACT_APP_CLOUDINARY_API_KEY=
-  - REACT_APP_BRANCH_KEY=
-  - ENV=development
-  - REACT_APP_STRIPE_API_KEY=
-  - GH_USER_EMAIL='sdbondi@users.noreply.github.com'
-  - GH_USER_NAME='Travis CI'
+    - REACT_APP_API_PROTOCOL=https
+    - REACT_APP_API_HOST=localhost
+    - REACT_APP_API_PORT=8080
+    - REACT_APP_API_BASEPATH=/api
+    - REACT_APP_FACEBOOK_APP_ID=
+    - REACT_APP_NAME=BigNeon
+    - REACT_APP_GOOGLE_PLACES_API_KEY=
+    - REACT_APP_CLOUDINARY_CLOUD_NAME=
+    - REACT_APP_CLOUDINARY_UPLOAD_PRESET=
+    - REACT_APP_CLOUDINARY_API_KEY=
+    - REACT_APP_BRANCH_KEY=
+    - ENV=development
+    - REACT_APP_STRIPE_API_KEY=
+    - GH_USER_EMAIL='sdbondi@users.noreply.github.com'
+    - GH_USER_NAME='Travis CI'

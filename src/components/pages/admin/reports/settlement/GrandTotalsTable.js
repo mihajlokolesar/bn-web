@@ -1,31 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
-import Typography from "@material-ui/core/Typography";
 import { withStyles } from "@material-ui/core";
-
+import Bn from "bn-api-node";
 import TotalsRow from "./TotalsRow";
 import { dollars } from "../../../../../helpers/money";
 import { fontFamilyDemiBold, secondaryHex } from "../../../../../config/theme";
 
-const styles = theme => ({
-	root: {
-		marginBottom: theme.spacing.unit * 4,
-		maxWidth: 400
-	},
-	boldText: {
-		fontFamily: fontFamilyDemiBold
-	},
-	adjustmentText: {
-		fontSize: theme.typography.fontSize * 0.9,
-		fontFamily: fontFamilyDemiBold,
-		marginTop: 10
-	},
-	editText: {
-		fontFamily: fontFamilyDemiBold,
-		cursor: "pointer",
-		color: secondaryHex
-	}
-});
+const statusEnums = Bn.Enums.SettlementStatus;
 
 const GrandTotalsTable = props => {
 	const {
@@ -34,7 +15,8 @@ const GrandTotalsTable = props => {
 		totalRevenueShareInCents,
 		adjustmentsInCents,
 		onAddAdjustment,
-		totalSettlementInCents
+		totalSettlementInCents,
+		status
 	} = props;
 
 	const columnStyles = [
@@ -61,7 +43,7 @@ const GrandTotalsTable = props => {
 				{[
 					<span key={"adjustments"} className={classes.adjustmentText}>
 						Adjustments&nbsp;
-						{onAddAdjustment ? (
+						{onAddAdjustment && status === statusEnums.PENDING_SETTLEMENT ? (
 							<span className={classes.editText} onClick={onAddAdjustment}>
 								Add Adjustments
 							</span>
@@ -79,13 +61,34 @@ const GrandTotalsTable = props => {
 	);
 };
 
+const styles = theme => ({
+	root: {
+		marginBottom: theme.spacing.unit * 4,
+		maxWidth: 400
+	},
+	boldText: {
+		fontFamily: fontFamilyDemiBold
+	},
+	adjustmentText: {
+		fontSize: theme.typography.fontSize * 0.9,
+		fontFamily: fontFamilyDemiBold,
+		marginTop: 10
+	},
+	editText: {
+		fontFamily: fontFamilyDemiBold,
+		cursor: "pointer",
+		color: secondaryHex
+	}
+});
+
 GrandTotalsTable.propTypes = {
 	classes: PropTypes.object.isRequired,
 	adjustmentsInCents: PropTypes.number.isRequired,
 	onAddAdjustment: PropTypes.func,
 	totalFaceInCents: PropTypes.number.isRequired,
 	totalRevenueShareInCents: PropTypes.number.isRequired,
-	totalSettlementInCents: PropTypes.number.isRequired
+	totalSettlementInCents: PropTypes.number.isRequired,
+	status: PropTypes.string
 };
 
 export default withStyles(styles)(GrandTotalsTable);

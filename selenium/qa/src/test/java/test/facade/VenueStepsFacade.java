@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
@@ -13,7 +14,6 @@ import model.Venue;
 import pages.admin.venue.AdminVenuePage;
 import pages.admin.venue.CreateVenuePage;
 import pages.admin.venue.ValidationVenueFields;
-import pages.components.GenericDropDown;
 import pages.components.admin.AdminSideBar;
 import pages.components.admin.venues.AdminVenueComponent;
 import utils.MsgConstants;
@@ -158,8 +158,11 @@ public class VenueStepsFacade extends BaseFacadeSteps {
 	public void whenUserClicksOnEditButtonOfSelectedVenue(String venueName) {
 		AdminVenueComponent selectedVenue = venuePage.findVenueByName(venueName);
 		String vName = selectedVenue.getVenueName();
+		String href = selectedVenue.getVenueHref();
 		setData(VENUE_NAME_KEY, vName);
 		selectedVenue.clickOnEditButton();
+		createVenuePage.explicitWait(15, ExpectedConditions.urlContains(href));
+		createVenuePage.waitForTime(1500);
 	}
 
 

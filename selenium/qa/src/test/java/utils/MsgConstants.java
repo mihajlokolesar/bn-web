@@ -18,7 +18,7 @@ public class MsgConstants {
 	public static final String VENUE_CREATED_SUCCESS = "Venue created";
 	public static final String VENUE_UPDATED_SUCCESS = "Venue updated";
 		
-	public static final String EVENT_PUBLISHED = "Event published";
+	public static final String EVENT_PUBLISHED = "Event saved";
 	public static final String EVENT_SAVED_TO_DRAFT = "Draft saved";
 	public static final String EVENT_DELETION_FAILED = "Event is ineligible for deletion";
 	public static final String INVALID_EVENT_DETAILS = "There are invalid event details.";
@@ -36,6 +36,8 @@ public class MsgConstants {
 	public static final String FAN_PROFILE_LOAD_ERROR = "Failed to load fan profile";	
 	public static final String ORDER_MANANGE_ACTIVITY_ITEM_NOTE_ADDED = "Note saved";
 	
+	
+	public static final String RESEND_ORDER_CONFIRMATION = "Resent order confirmation";
 	
 	public static String resetPasswordMessage(String mail) {
 		return "Your request has been received; " + mail + " will receive an email shortly with a link to reset your password if it is an account on file";

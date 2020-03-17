@@ -57,6 +57,8 @@ class MainContent extends Component {
 								classes={classes}
 								isEventEnded={isEventEnded}
 								renderTimes={renderTimes}
+								eventStart={eventStart}
+								eventEnd={eventEnd}
 							/>
 						)
 					}

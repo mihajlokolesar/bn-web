@@ -12,6 +12,7 @@ import {
 } from "../../../../../../../config/theme";
 import ColorTag from "../../../../../../elements/ColorTag";
 import ellipsis from "../../../../../../../helpers/ellipsis";
+import user from "../../../../../../../stores/user";
 
 const styles = theme => ({
 	root: {
@@ -96,7 +97,11 @@ const TicketCard = ({
 			<Card className={classes.root}>
 				<div className={classes.detailsRow}>
 					<div style={colStyles[0]} className={classes.col1}>
-						{checkbox}
+						{user.canRefund ? (
+							checkbox
+						) : (
+							<div style={{ width: 20, background: "transparent" }}/>
+						)}
 						<Typography>{ticket_instance_id.slice(-8)}</Typography>
 					</div>
 
@@ -181,7 +186,7 @@ const TicketCard = ({
 	return (
 		<div className={classes.detailsRow}>
 			<div style={colStyles[0]} className={classes.col1}>
-				{checkbox}
+				{user.canRefund && checkbox}
 				<Typography className={classes.boldText}>{description}</Typography>
 			</div>
 

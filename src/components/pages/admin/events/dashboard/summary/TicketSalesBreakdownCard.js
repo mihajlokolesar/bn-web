@@ -156,7 +156,7 @@ class TicketSalesBreakdownCard extends Component {
 TicketSalesBreakdownCard.propTypes = {
 	classes: PropTypes.object.isRequired,
 	token: PropTypes.string.isRequired,
-	publish_date: PropTypes.string.isRequired,
+	publish_date: PropTypes.string,
 	event_end: PropTypes.string.isRequired,
 	venue: PropTypes.object.isRequired,
 	cubeApiUrl: PropTypes.string.isRequired

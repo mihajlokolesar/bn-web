@@ -11,6 +11,7 @@ import pages.LoginPage;
 import pages.mailinator.MailinatorHomePage;
 import pages.mailinator.inbox.MailinatorInboxPage;
 import test.facade.EventStepsFacade;
+import test.facade.FacadeProvider;
 import test.facade.LoginStepsFacade;
 import utils.DataConstants;
 
@@ -18,8 +19,9 @@ public class PurchaseWithTicketChangeStepsIT extends BaseSteps {
 
 	@Test(dataProvider = "purchase_data", priority = 8, retryAnalyzer = utils.RetryAnalizer.class)
 	private void purchaseStepsWithTicketChange(User user, Purchase purchase) throws Exception {
-		LoginStepsFacade loginFacade = new LoginStepsFacade(driver);
-		EventStepsFacade eventFacade = new EventStepsFacade(driver);
+		FacadeProvider fp = new FacadeProvider(driver);
+		LoginStepsFacade loginFacade = fp.getLoginFacade();
+		EventStepsFacade eventFacade = fp.getEventFacade();
 		
 		maximizeWindow();
 
@@ -36,6 +38,7 @@ public class PurchaseWithTicketChangeStepsIT extends BaseSteps {
 		
 		//then
 		Assert.assertTrue(eventFacade.thenUserIsAtTicketPurchaseSuccessPage());
+		eventFacade.whenUserClosesChatbot();
 		loginPage.logOut();
 
 		MailinatorHomePage mailinatorHomePage = new MailinatorHomePage(driver);

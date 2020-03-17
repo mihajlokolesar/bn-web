@@ -65,6 +65,16 @@ public class OrderManageFacade extends BaseFacadeSteps{
 		whenUserClicksOnGotItButtonOnRefundSuccessDialog();
 	}
 	
+	public void whenUserIssuesFullRefund(RefundReason refundReason) {
+		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
+		selectedOrderPage.clickOnRefundEventTotal();
+		IssueRefundDialog issueRefundDialog = new IssueRefundDialog(driver);
+		issueRefundDialog.selectRefundReason(refundReason);
+		issueRefundDialog.clickOnContinue();
+		RefundSuccessfulDialog successDialog = new RefundSuccessfulDialog(driver);
+		successDialog.clickOnGotIt();
+	}
+	
 	public boolean whenUserExpandOrderDetailsAndCheckIfExpanded() {
 		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
 		selectedOrderPage.expandOrderDetails();
@@ -93,8 +103,6 @@ public class OrderManageFacade extends BaseFacadeSteps{
 			return true;
 		}
 		return false;
-		
-		
 	}
 	
 	public void whenUserSelectsAllTicketsForRefund() {
@@ -130,7 +138,18 @@ public class OrderManageFacade extends BaseFacadeSteps{
 		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
 		selectedOrderPage.clickOnRefundButton();
 	}
-
+	
+	public void whenUserClickOnResendConfirmationEmail() {
+		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
+		selectedOrderPage.clickOnResendConfirmationEmail();
+	}
+	
+	public boolean thenNotificationResendOrderConfirmationShouldBeVisible() {
+		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
+		return selectedOrderPage.isNotificationDisplayedWithMessage(MsgConstants.RESEND_ORDER_CONFIRMATION);
+		
+	}
+	
 	public boolean thenRefundButtonShouldBeVisible() {
 		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
 		return selectedOrderPage.isRefundButtonVisible();
@@ -306,6 +325,11 @@ public class OrderManageFacade extends BaseFacadeSteps{
 		
 	}
 	
+	public OrderInfo whenUserCollectsOrderInfo() {
+		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
+		return selectedOrderPage.getOrderInfo();
+	}
+	
 	public boolean thenOrderFeesAreChecked(boolean checkEventFee, boolean checkCreditCardFee) {
 		SelectedOrderPage selectedOrderPage = (SelectedOrderPage) getData(SELECTED_ORDER_PAGE_KEY);
 		boolean retVal = true;
@@ -424,5 +448,7 @@ public class OrderManageFacade extends BaseFacadeSteps{
 	protected Object getData(String key) {
 		return dataMap.get(key);
 	}
+
+	
 
 }

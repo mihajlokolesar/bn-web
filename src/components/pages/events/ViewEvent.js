@@ -46,112 +46,7 @@ import FormattedAdditionalInfo from "./FormattedAdditionalInfo";
 import EventDetail from "./EventDetail";
 import Grid from "@material-ui/core/Grid";
 import ArtistSummary from "../../elements/event/ArtistSummary";
-
-const styles = theme => {
-	return {
-		root: {},
-		desktopContent: {
-			backgroundColor: "#FFFFFF"
-		},
-		mobileHeaderImage: {
-			height: "100%",
-			width: "100%",
-			backgroundImage: "linear-gradient(255deg, #e53d96, #5491cc)",
-			backgroundRepeat: "no-repeat",
-			backgroundSize: "cover",
-			backgroundPosition: "center"
-		},
-		cardTopLineInfo: {
-			fontFamily: fontFamilyBold,
-			textTransform: "uppercase",
-			color: "#979797",
-			fontSize: theme.typography.fontSize * 0.875,
-			marginBottom: 5
-		},
-		cardArtists: {
-			fontFamily: fontFamilyBold,
-			color: "#979797",
-			marginBottom: theme.spacing.unit * 2
-		},
-		desktopCardContent: {
-			padding: theme.spacing.unit * 2
-		},
-		mobileContainer: {
-			background: "#FFFFFF",
-			padding: theme.spacing.unit * 2,
-			paddingBottom: 0
-		},
-		mobileEventName: {
-			fontFamily: fontFamilyBold,
-			fontSize: theme.typography.fontSize * 1.565,
-			lineHeight: 1,
-			color: "#3C383F"
-		},
-		spacer: {
-			marginTop: theme.spacing.unit * 4
-		},
-		callToActionContainer: {
-			marginTop: theme.spacing.unit,
-			marginBottom: theme.spacing.unit
-		},
-		callToAction: {
-			width: "100%"
-		},
-		plainWhite: {
-			width: "100%",
-			color: "#000000 !important",
-			backgroundColor: "#E9E9E9",
-			opacity: 1,
-			"& span": {
-				fontFamily: "TTCommons-DemiBold"
-			}
-		},
-		eventDetailsRow: {
-			display: "flex"
-		},
-		iconContainer: {
-			flex: 1
-		},
-		icon: {
-			width: 22,
-			height: "auto"
-		},
-		eventDetailContainer: {
-			paddingTop: 4,
-			flex: 6
-		},
-		eventDetailText: {
-			color: "#3C383F"
-		},
-		eventDetailBoldText: {
-			font: "inherit",
-			fontFamily: fontFamilyBold
-		},
-		eventDetailLinkText: {
-			font: "inherit",
-			color: secondaryHex,
-			cursor: "pointer"
-		},
-		divider: {
-			marginTop: theme.spacing.unit,
-			marginBottom: theme.spacing.unit * 4
-		},
-		artistsContainer: {
-			paddingTop: theme.spacing.unit * 5
-		},
-		artistsPerforming: {
-			marginBottom: 30,
-			marginTop: 0
-		},
-		dividerMobile: {
-			marginTop: 30,
-			marginBottom: 30,
-			[theme.breakpoints.up("md")]: {
-				display: "none"
-			}
-		}
-	};
-};
+import ReadMoreAdditionalInfo from "../../elements/event/ReadMoreAdditionalInfo";
 
 @observer
 class ViewEvent extends Component {
@@ -612,9 +507,9 @@ class ViewEvent extends Component {
 									classes={classes}
 									iconUrl={"/icons/event-detail-black.svg"}
 								>
-									<FormattedAdditionalInfo>
+									<ReadMoreAdditionalInfo>
 										{additional_info}
-									</FormattedAdditionalInfo>
+									</ReadMoreAdditionalInfo>
 								</EventDetail>
 
 								{/*<Divider*/}
@@ -660,6 +555,112 @@ class ViewEvent extends Component {
 		);
 	}
 }
+
+const styles = theme => {
+	return {
+		root: {},
+		desktopContent: {
+			backgroundColor: "#FFFFFF"
+		},
+		mobileHeaderImage: {
+			height: "100%",
+			width: "100%",
+			backgroundImage: "linear-gradient(255deg, #e53d96, #5491cc)",
+			backgroundRepeat: "no-repeat",
+			backgroundSize: "cover",
+			backgroundPosition: "center"
+		},
+		cardTopLineInfo: {
+			fontFamily: fontFamilyBold,
+			textTransform: "uppercase",
+			color: "#979797",
+			fontSize: theme.typography.fontSize * 0.875,
+			marginBottom: 5
+		},
+		cardArtists: {
+			fontFamily: fontFamilyBold,
+			color: "#979797",
+			marginBottom: theme.spacing.unit * 2
+		},
+		desktopCardContent: {
+			padding: theme.spacing.unit * 2
+		},
+		mobileContainer: {
+			background: "#FFFFFF",
+			padding: theme.spacing.unit * 2,
+			paddingBottom: 0
+		},
+		mobileEventName: {
+			fontFamily: fontFamilyBold,
+			fontSize: theme.typography.fontSize * 1.565,
+			lineHeight: 1,
+			color: "#3C383F"
+		},
+		spacer: {
+			marginTop: theme.spacing.unit * 4
+		},
+		callToActionContainer: {
+			marginTop: theme.spacing.unit,
+			marginBottom: theme.spacing.unit
+		},
+		callToAction: {
+			width: "100%"
+		},
+		plainWhite: {
+			width: "100%",
+			color: "#000000 !important",
+			backgroundColor: "#E9E9E9",
+			opacity: 1,
+			"& span": {
+				fontFamily: "TTCommons-DemiBold"
+			}
+		},
+		eventDetailsRow: {
+			display: "flex"
+		},
+		iconContainer: {
+			flex: 1
+		},
+		icon: {
+			width: 22,
+			height: "auto"
+		},
+		eventDetailContainer: {
+			paddingTop: 4,
+			flex: 6
+		},
+		eventDetailText: {
+			color: "#3C383F"
+		},
+		eventDetailBoldText: {
+			font: "inherit",
+			fontFamily: fontFamilyBold
+		},
+		eventDetailLinkText: {
+			font: "inherit",
+			color: secondaryHex,
+			cursor: "pointer"
+		},
+		divider: {
+			marginTop: theme.spacing.unit,
+			marginBottom: theme.spacing.unit * 4
+		},
+		artistsContainer: {
+			paddingTop: theme.spacing.unit * 5
+		},
+		artistsPerforming: {
+			marginBottom: 30,
+			marginTop: 0
+		},
+		dividerMobile: {
+			marginTop: 30,
+			marginBottom: 30,
+			[theme.breakpoints.up("md")]: {
+				display: "none"
+			}
+		}
+	};
+};
 
 ViewEvent.propTypes = {
 	match: PropTypes.object.isRequired,

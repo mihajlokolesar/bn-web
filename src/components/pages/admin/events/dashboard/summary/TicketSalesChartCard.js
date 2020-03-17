@@ -11,9 +11,76 @@ import {
 } from "../../../../../../config/theme";
 import TicketSalesChart from "./charts/TicketSalesChart";
 import ticketCountReport from "../../../../../../stores/reports/ticketCountReport";
-import EventTicketCountTable from "../../../reports/counts/EventTicketCountTable";
-import Loader from "../../../../../elements/loaders/Loader";
 import getScreenWidth from "../../../../../../helpers/getScreenWidth";
+
+class TicketSalesChartCard extends Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			ticketCounts: null,
+			showTicketCounts: false,
+			publishDateMinusOneDayUTC: props.publish_date ? moment(props.publish_date)
+				.subtract(1, "days")
+				.format() : null
+		};
+	}
+
+	refreshData() {
+		const { organization_id, id } = this.props;
+		const queryParams = { organization_id, event_id: id };
+
+		ticketCountReport.fetchCountAndSalesData(queryParams, false, () => {
+			const ticketCounts = ticketCountReport.dataByPrice[id];
+
+			this.setState({ ticketCounts });
+		});
+	}
+
+	render() {
+		const {
+			classes,
+			token,
+			event_end,
+			venue,
+			cubeApiUrl,
+			cutOffDateString
+		} = this.props;
+
+		const title = "Ticket Sales";
+
+		const {
+			ticketCounts,
+			publishDateMinusOneDayUTC
+		} = this.state;
+		if (!ticketCounts) {
+			this.refreshData();
+		}
+
+		return (
+			<CollapseCard
+				title={title}
+				className={classes.root}
+				iconPath={"/icons/graph.png"}
+			>
+				<div className={classes.root}>
+					<Hidden smDown>
+						<Typography className={classes.titleText}>{title}</Typography>
+					</Hidden>
+
+					<TicketSalesChart
+						cubeApiUrl={cubeApiUrl}
+						token={token}
+						timezone={venue.timezone}
+						startDate={publishDateMinusOneDayUTC}
+						endDate={event_end}
+						cutOffDateString={cutOffDateString}
+					/>
+				</div>
+			</CollapseCard>
+		);
+	}
+}
 
 const styles = theme => {
 	return {
@@ -63,85 +130,10 @@ const styles = theme => {
 	};
 };
 
-class TicketSalesChartCard extends Component {
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			ticketCounts: null,
-			showTicketCounts: false,
-			publishDateMinusOneDayUTC: moment(props.publish_date)
-				.subtract(1, "days")
-				.format()
-		};
-	}
-
-	refreshData() {
-		const { organization_id, id } = this.props;
-		const queryParams = { organization_id, event_id: id };
-
-		ticketCountReport.fetchCountAndSalesData(queryParams, false, () => {
-			const ticketCounts = ticketCountReport.dataByPrice[id];
-
-			this.setState({ ticketCounts });
-		});
-	}
-
-	render() {
-		const {
-			classes,
-			token,
-			event_end,
-			venue,
-			cubeApiUrl,
-			name,
-			organization_id,
-			id,
-			publish_date,
-			cutOffDateString,
-			...rest
-		} = this.props;
-
-		const title = "Ticket Sales";
-
-		const {
-			ticketCounts,
-			showTicketCounts,
-			publishDateMinusOneDayUTC
-		} = this.state;
-		if (!ticketCounts) {
-			this.refreshData();
-		}
-
-		return (
-			<CollapseCard
-				title={title}
-				className={classes.root}
-				iconPath={"/icons/graph.png"}
-			>
-				<div className={classes.root}>
-					<Hidden smDown>
-						<Typography className={classes.titleText}>{title}</Typography>
-					</Hidden>
-
-					<TicketSalesChart
-						cubeApiUrl={cubeApiUrl}
-						token={token}
-						timezone={venue.timezone}
-						startDate={publishDateMinusOneDayUTC}
-						endDate={event_end}
-						cutOffDateString={cutOffDateString}
-					/>
-				</div>
-			</CollapseCard>
-		);
-	}
-}
-
 TicketSalesChartCard.propTypes = {
 	classes: PropTypes.object.isRequired,
 	token: PropTypes.string.isRequired,
-	publish_date: PropTypes.string.isRequired,
+	publish_date: PropTypes.string,
 	event_end: PropTypes.string.isRequired,
 	venue: PropTypes.object.isRequired,
 	cubeApiUrl: PropTypes.string.isRequired,

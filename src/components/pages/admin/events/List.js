@@ -263,9 +263,9 @@ class EventsList extends Component {
 						</IconButton>
 
 						<Menu
-							id="long-menu"
+							// id="long-menu"
 							anchorEl={optionsAnchorEl}
-							open={Boolean(optionsAnchorEl)}
+							open={Boolean(optionsAnchorEl) && eventMenuSelected === id}
 							onClose={this.handleOptionsClose}
 						>
 							{eventOptions.map(

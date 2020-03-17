@@ -286,4 +286,9 @@ export const urlPageParam = () => {
 	return page;
 };
 
+export const urlQueryParam = () => {
+	const queryString = getUrlParam("query");
+	return queryString;
+};
+
 export const Pagination = withStyles(styles)(PaginationBlock);

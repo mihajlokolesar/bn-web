@@ -279,7 +279,7 @@ class Artist extends Component {
 
 		//If some fields are not set, don't send through empty strings as they'll fail validation
 		const cleanParam = value => {
-			return value === "" ? undefined : value;
+			return typeof value === "string" && value.trim() === "" ? null : value;
 		};
 
 		const artistDetails = {

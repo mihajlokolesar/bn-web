@@ -37,11 +37,19 @@ public class CreateFixtures extends BaseSteps {
 		User userTwo = User.generateUserFromJson(DataConstants.DISTINCT_USER_TWO_KEY);
 		User userThree = User.generateUserFromJson(DataConstants.DISTINCT_USER_THREE_KEY);
 		User loginTestUser = User.generateUserFromJson(DataConstants.LOGIN_TEST_USER_CRED_KEY);
+		User orgAdmin = User.generateUserFromJson(DataConstants.ORGANIZATION_ADMIN_USER_KEY);
+		User boxOfficeUser = User.generateUserFromJson(DataConstants.BOX_OFFICE_USER_KEY);
+		User standardUserOne = User.generateUserFromJson(DataConstants.USER_STANDARD_KEY_ONE);
+		User standardUserTwo = User.generateUserFromJson(DataConstants.USER_STANDARD_KEY);
 		
 		return new Object[][] {
 			{userOne},
 			{userTwo},
 			{userThree},
+			{orgAdmin},
+			{boxOfficeUser},
+			{standardUserOne},
+			{standardUserTwo},
 			{loginTestUser}};
 		
 	}

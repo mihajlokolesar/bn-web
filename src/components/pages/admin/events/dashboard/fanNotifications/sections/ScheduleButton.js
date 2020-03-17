@@ -17,14 +17,15 @@ class ScheduleButton extends Component {
 			isEventEnded,
 			timezone,
 			classes,
-			onSend
+			onSend,
+			isNotificationAfterNow
 		} = this.props;
-
+		
 		if (scheduledAt) {
 			const scheduledAtFormatted = moment.utc(scheduledAt).tz(timezone).format(TIME_FORMAT_MM_DD_YYYY_NO_TIMEZONE);
 			return (
 				<Typography className={classes.notificationBg}>
-					Notification {broadcastSent ? `sent on ` : `scheduled for `}
+					Notification {isNotificationAfterNow ? `scheduled for ` : `sent on `}
 					<span className={classes.pinkText}>
 						&nbsp;{scheduledAtFormatted}
 					</span>

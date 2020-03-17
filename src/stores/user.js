@@ -444,6 +444,11 @@ class User {
 	}
 
 	@computed
+	get canRefund() {
+		return this.isAdmin || this.hasScope("order:refund");
+	}
+
+	@computed
 	get canViewStudio() {
 		return (
 			this.isOrgOwner ||

@@ -459,7 +459,7 @@ class Index extends Component {
 		} = this.state;
 
 		const Details = (
-			<Grid container>
+			<Grid container spacing={32}>
 				<Grid item xs={12} md={7}>
 					<Typography className={classes.description}>
 						<span className={classes.descriptionHeading}>

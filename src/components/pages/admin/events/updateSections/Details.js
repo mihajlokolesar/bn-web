@@ -197,6 +197,7 @@ const formatDataForInputs = event => {
 		top_line_info,
 		video_url,
 		promo_image_url,
+		original_promo_image_url,
 		is_external,
 		external_url,
 		publish_date,
@@ -259,6 +260,7 @@ const formatDataForInputs = event => {
 		showMarketingSettings: !!facebook_pixel_key,
 		showEmbeddedMedia: !!video_url,
 		promoImageUrl: promo_image_url,
+		originalPromoImageUrl: original_promo_image_url,
 		isExternal: is_external,
 		externalTicketsUrl: is_external && external_url ? external_url : "",
 		status,
@@ -294,7 +296,6 @@ class Details extends Component {
 		super(props);
 
 		this.state = {
-			venues: null,
 			selectedAgeLimitOption: null,
 			ageLimits: {},
 			dateError: {}
@@ -309,52 +310,23 @@ class Details extends Component {
 	}
 
 	componentDidMount() {
-		this.loadVenues();
-	}
+		const { availableVenues } = this.props;
+		//If it's a new event and there is only one private venue available then auto select that one
 
-	loadVenues() {
-		this.setState({ venues: null }, () => {
-			Bigneon()
-				.venues.index()
-				.then(response => {
-					const { data, paging } = response.data; //@TODO Implement pagination
-					this.setState({ venues: data });
-
-					//If it's a new event and there is only one private venue available then auto select that one
-					const privateVenues = data.filter(v => v.is_private);
-					if (privateVenues.length === 1 && !eventUpdateStore.id) {
-						this.changeDetails({ venueId: privateVenues[0].id });
-					}
-				})
-				.catch(error => {
-					console.error(error);
-
-					notifications.showFromErrorResponse({
-						defaultMessage: "Loading venues failed",
-						error
-					});
-				});
-		});
+		const privateVenues = availableVenues.filter(v => v.is_private);
+		if (privateVenues.length === 1 && !eventUpdateStore.id) {
+			this.changeDetails({ venueId: privateVenues[0].id });
+		}
 	}
 
 	renderVenues() {
-		const { venues } = this.state;
-		const { errors } = this.props;
+		const { errors, availableVenues } = this.props;
 		const { venueId } = eventUpdateStore.event;
-
 		const venueOptions = [];
 
-		let label = "";
-
-		if (venues !== null) {
-			venues.forEach(venue => {
-				venueOptions.push({ value: venue.id, label: venue.name });
-			});
-
-			label = "Venue *";
-		} else {
-			label = "Loading venues...";
-		}
+		availableVenues.forEach(venue => {
+			venueOptions.push({ value: venue.id, label: venue.name });
+		});
 
 		return (
 			<SelectGroup
@@ -363,7 +335,7 @@ class Details extends Component {
 				error={errors.venueId}
 				name={"venues"}
 				missingItemsLabel={"No available venues"}
-				label={label}
+				label={"Venue *"}
 				onChange={e => {
 					const venueId = e.target.value;
 					this.changeDetails({ venueId });

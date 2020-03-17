@@ -103,6 +103,7 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		Assert.assertTrue(retVal);
 		adminSideBar.clickOnEvents();
 		adminEvents.isAtPage();
+		driver.navigate().refresh();
 		return event;
 	}
 
@@ -188,8 +189,9 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		adminEvents.clickCreateEvent();
 		createEventPage.isAtPage();
 		createEventFillData(event);
-		createEventPage.clickOnPublish();
+		createEventPage.clickOnSave();
 		boolean retVal = createEventPage.checkMessage();
+		adminEvents.waitForTime(10000);
 		return retVal;
 	}
 
@@ -222,6 +224,15 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		} else {
 			boolean retVal = createEventPage.isNotificationDisplayedWithMessage(MsgConstants.EVENT_PUBLISHED);
 			sa.assertTrue(retVal, MsgConstants.EVENT_PUBLISHED + " message not displayed");
+		}
+	}
+	
+	public void attemptEventCancel(Event event) {
+		try {
+			givenUserIsOnAdminEventsPage();
+			EventSummaryComponent component = findEventWithName(event);
+			component.cancelEvent();
+		}catch (Exception e) {
 		}
 	}
 

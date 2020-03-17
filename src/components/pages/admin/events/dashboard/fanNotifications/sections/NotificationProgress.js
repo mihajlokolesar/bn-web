@@ -31,7 +31,7 @@ class NotificationProgress extends Component {
 					<Typography className={classes.descriptionHeading}>
 						Notifications Opened{" "}
 						<span className={classes.percentage}>
-							{scheduleProgress === null ? "0" : completed}%
+							{scheduleProgress === null ? "0" : +completed.toFixed(2)}%
 						</span>
 					</Typography>
 					<LinearProgress
@@ -42,32 +42,23 @@ class NotificationProgress extends Component {
 					/>
 				</Grid>
 				<Grid item xs={12} style={{ padding: "0 12px" }}>
-					<Grid container>
-						<Grid item xs={4}>
-							<Typography className={classes.greyText}>
-								People received:{" "}
-								<span className={classes.blackText}>
-									{scheduleSent === null ? "0" : scheduleSent}
-								</span>
-							</Typography>
-						</Grid>
-						<Grid item xs={1}>
-							<Typography
-								className={classes.greyText}
-							>
-								|
-							</Typography>
-						</Grid>
-						<Grid item xs={7}>
-							<Typography className={classes.greyText}>
-								Event Period:{" "}
-								<span className={classes.blackText}>
-									{eventStart ? eventStart : ""} -
-									{eventEnd ? eventEnd : ""}
-								</span>
-							</Typography>
-						</Grid>
-					</Grid>
+					<Typography className={classes.greyText}>
+						People received:{" "}
+						<span className={classes.blackText}>
+							{scheduleSent === null ? "0" : scheduleSent}
+						</span>
+						<span
+							className={classes.greyText}
+						>
+						&nbsp; | &nbsp;
+						</span>
+						Event Period:{" "}
+						<span className={classes.blackText}>
+							{eventStart ? eventStart : ""}
+							{" - "}
+							{eventEnd ? eventEnd : ""}
+						</span>
+					</Typography>
 				</Grid>
 			</Grid>
 		);

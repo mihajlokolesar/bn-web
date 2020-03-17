@@ -28,7 +28,7 @@
 		<serverauthname />
 		<serverauthpass />
 		<browser>rm</browser>
-		<baseurl/>
+		<baseurl />
 	</properties>
 
 	<dependencies>

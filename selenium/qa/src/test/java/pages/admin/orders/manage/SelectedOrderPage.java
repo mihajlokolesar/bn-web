@@ -12,6 +12,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import pages.BasePage;
+import pages.components.GenericDropDown;
 import pages.components.admin.orders.manage.ActivityItem;
 import pages.components.admin.orders.manage.OrderInfo;
 import pages.components.admin.orders.manage.tickets.OrderTicketsDetails;
@@ -44,6 +45,12 @@ public class SelectedOrderPage extends BasePage {
 
 	@FindBy(xpath = "//main//button[not(@disabled='') and @type='button' and span[contains(text(),'Add')]]")
 	private WebElement addNoteButton;
+	
+	@FindBy(xpath = "//div[p[contains(text(),'Event')]]/following-sibling::div//button[@type='button']")
+	private WebElement resendConfirmationMenuAction;
+	
+	@FindBy(id = "menu-appbar")
+	private WebElement confirmationDropDownContainer;
 	
 	public SelectedOrderPage(WebDriver driver, String orderId) {
 		super(driver);
@@ -155,6 +162,20 @@ public class SelectedOrderPage extends BasePage {
 		return retVal;
 	}
 	
+	public void clickOnResendConfirmationEmail() {
+		String listItemValue = "Resend Confirmation Email";
+		clickOnConfirmationOption(listItemValue);
+	}
+	
+	public void clickOnRefundEventTotal() {
+		String listItemValue = "Refund Event Total";
+		clickOnConfirmationOption(listItemValue);
+	}
+	
+	private void clickOnConfirmationOption(String listItemValue) {
+		GenericDropDown dropDown = new GenericDropDown(driver, resendConfirmationMenuAction, confirmationDropDownContainer);
+		dropDown.selectElementFromDropDownNoValueCheck(GenericDropDown.dropDownListContainsXpath(listItemValue));
+	}
 	
 	private List<WebElement> findOrderHistoryRows() {
 		List<WebElement> rows = explicitWaitForVisiblityForAllElements(

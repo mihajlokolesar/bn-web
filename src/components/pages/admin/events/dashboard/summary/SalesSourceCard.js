@@ -260,7 +260,7 @@ class SalesSourceCard extends Component {
 SalesSourceCard.propTypes = {
 	classes: PropTypes.object.isRequired,
 	token: PropTypes.string.isRequired,
-	on_sale: PropTypes.string.isRequired,
+	on_sale: PropTypes.string,
 	venue: PropTypes.object.isRequired,
 	cubeApiUrl: PropTypes.string.isRequired,
 	cutOffDateString: PropTypes.string

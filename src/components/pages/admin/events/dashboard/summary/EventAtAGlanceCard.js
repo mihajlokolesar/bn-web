@@ -256,7 +256,7 @@ const EventAtAGlanceCard = ({
 EventAtAGlanceCard.propTypes = {
 	classes: PropTypes.object.isRequired,
 	token: PropTypes.string.isRequired,
-	on_sale: PropTypes.string.isRequired,
+	on_sale: PropTypes.string,
 	sales_total_in_cents: PropTypes.number.isRequired,
 	cubeApiUrl: PropTypes.string.isRequired,
 	venue: PropTypes.object.isRequired

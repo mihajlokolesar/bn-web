@@ -98,6 +98,8 @@ public class MoveEventDatesToPastStepsIT extends BaseSteps {
 		navigateAndRefundAllTickets(fp, event);
 		fp.getAdminEventStepsFacade().givenUserIsOnAdminEventsPage();
 		findEventAndExecuteMoveDatesSteps(fp, event, sa, false, 6, 3);
+		
+		fp.getAdminEventStepsFacade().attemptEventCancel(event);
 		fp.getLoginFacade().logOut();	
 	}
 

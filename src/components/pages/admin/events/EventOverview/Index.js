@@ -10,7 +10,6 @@ import {
 } from "@material-ui/core";
 import PageHeading from "../../../../elements/PageHeading";
 import notifications from "../../../../../stores/notifications";
-import replaceIdWithSlug from "../../../../../helpers/replaceIdWithSlug";
 import analytics from "../../../../../helpers/analytics";
 import getAllUrlParams from "../../../../../helpers/getAllUrlParams";
 import user from "../../../../../stores/user";
@@ -162,11 +161,6 @@ class EventOverview extends Component {
 					} = event;
 
 					this.getTickets(selectedEventId);
-
-					//Replace the id in the URL with the slug if we have it and it isn't currently set
-					if (id === selectedEventId && slug) {
-						replaceIdWithSlug(id, slug);
-					}
 
 					if (event) {
 						const venueTimezone = venue.timezone || "America/Los_Angeles";

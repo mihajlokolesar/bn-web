@@ -448,17 +448,6 @@ class Venue extends Component {
 
 		return (
 			<div>
-				<SelectGroup
-					value={organizationId}
-					items={organizationOptions}
-					error={errors.organizationId}
-					name={"organization"}
-					label={"Organization *"}
-					onChange={e => {
-						this.setState({ organizationId: e.target.value });
-						this.addOrganizationToVenue(e.target.value);
-					}}
-				/>
 				<div>
 					{venueOrganizations && venueOrganizations.length > 0 ? (
 						<div>
@@ -478,6 +467,17 @@ class Venue extends Component {
 						</div>
 					) : null}
 				</div>
+				<SelectGroup
+					value={organizationId}
+					items={organizationOptions}
+					error={errors.organizationId}
+					name={"organization"}
+					label={"Add Organization"}
+					onChange={e => {
+						this.setState({ organizationId: e.target.value });
+						this.addOrganizationToVenue(e.target.value);
+					}}
+				/>
 			</div>
 		);
 	}

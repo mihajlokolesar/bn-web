@@ -95,7 +95,7 @@ const SelectGroup = props => {
 				{content}
 			</Select>
 
-			<FormHelperText id={`${name}-error-text`}>{error}</FormHelperText>
+			{error && <FormHelperText id={`${name}-error-text`}>{error}</FormHelperText>}
 		</FormControl>
 	);
 };

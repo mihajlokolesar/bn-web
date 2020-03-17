@@ -1,12 +1,31 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { withStyles, Typography } from "@material-ui/core";
-import classNames from "classnames";
 import {
 	fontFamily,
-	fontFamilyBold,
-	fontFamilyDemiBold
+	fontFamilyBold
 } from "../../../../../../../config/theme";
+
+const LegendRow = props => {
+	const { classes, color, label, valueLabel, subValueLabel } = props;
+
+	return (
+		(valueLabel !== 0) ? (
+			<div className={classes.root}>
+				<div className={classes.labelContainer}>
+					<div className={classes.dot} style={{ backgroundColor: color }}/>
+					<Typography className={classes.label}>{label}</Typography>
+				</div>
+				<Typography className={classes.valueLabel}>
+					{valueLabel}&nbsp;
+					<span className={classes.subValueLabel}>
+						{subValueLabel ? `(${subValueLabel})` : ""}
+					</span>
+				</Typography>
+			</div>
+		) : null
+	);
+};
 
 const styles = theme => {
 	return {
@@ -43,30 +62,9 @@ const styles = theme => {
 	};
 };
 
-const LegendRow = props => {
-	const { classes, color, label, valueLabel, subValueLabel } = props;
-
-	return (
-		(valueLabel !== 0) ? (
-			<div className={classes.root}>
-				<div className={classes.labelContainer}>
-					<div className={classes.dot} style={{ backgroundColor: color }}/>
-					<Typography className={classes.label}>{label}</Typography>
-				</div>
-				<Typography className={classes.valueLabel}>
-					{valueLabel}&nbsp;
-					<span className={classes.subValueLabel}>
-						{subValueLabel ? `(${subValueLabel})` : ""}
-					</span>
-				</Typography>
-			</div>
-		) : null
-	);
-};
-
 LegendRow.propTypes = {
 	classes: PropTypes.object.isRequired,
-	color: PropTypes.string.isRequired,
+	color: PropTypes.string,
 	label: PropTypes.string.isRequired,
 	valueLabel: PropTypes.string.isRequired,
 	subValueLabel: PropTypes.string

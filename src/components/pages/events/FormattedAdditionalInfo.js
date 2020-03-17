@@ -93,7 +93,7 @@ FormattedAdditionalInfo.defaultProps = { children: "" };
 
 FormattedAdditionalInfo.propTypes = {
 	classes: PropTypes.object.isRequired,
-	children: PropTypes.string.isRequired
+	children: PropTypes.string
 };
 
 export default withStyles(styles)(FormattedAdditionalInfo);

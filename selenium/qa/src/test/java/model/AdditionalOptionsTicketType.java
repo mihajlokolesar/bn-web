@@ -79,6 +79,8 @@ public class AdditionalOptionsTicketType implements Serializable {
 	private String endSaleDate;
 	@JsonProperty("end_sale_time")
 	private String endSaleTime;
+	@JsonProperty("max_tickets_per_customer")
+	private String maxTicketsPerCustomer;
 
 	public SaleStart getSaleStart() {
 		return saleStart;
@@ -135,5 +137,15 @@ public class AdditionalOptionsTicketType implements Serializable {
 	public void setEndSaleTime(String endSaleTime) {
 		this.endSaleTime = endSaleTime;
 	}
+
+	public String getMaxTicketsPerCustomer() {
+		return maxTicketsPerCustomer;
+	}
+
+	public void setMaxTicketsPerCustomer(String maxTicketsPerCustomer) {
+		this.maxTicketsPerCustomer = maxTicketsPerCustomer;
+	}
+	
+	
 
 }

@@ -282,7 +282,7 @@ class TicketSalesChart extends Component {
 
 TicketSalesChart.propTypes = {
 	token: PropTypes.string.isRequired,
-	startDate: PropTypes.string.isRequired,
+	startDate: PropTypes.string,
 	endDate: PropTypes.string.isRequired,
 	cubeApiUrl: PropTypes.string.isRequired,
 	timezone: PropTypes.string.isRequired,

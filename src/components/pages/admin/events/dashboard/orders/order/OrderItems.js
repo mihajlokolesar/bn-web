@@ -30,6 +30,7 @@ import Divider from "../../../../../../common/Divider";
 import MobileTicketCard from "./MobileTicketCard";
 import moment from "moment-timezone";
 import { TIME_FORMAT_MM_DD_YYYY_WITH_TIMEZONE } from "../../../../../../../helpers/time";
+import Button from "../../../../../../elements/Button";
 
 const styles = theme => ({
 	root: {
@@ -383,13 +384,12 @@ class OrderItems extends Component {
 			showRefundOverrideType
 		} = this.state;
 
-		const {
-			name: eventName,
-			venue,
-			event_start
-		} = eventDetails;
+		const { name: eventName, venue, event_start } = eventDetails;
 
-		const eventDisplayDate = moment.utc(event_start).tz(timezone).format(TIME_FORMAT_MM_DD_YYYY_WITH_TIMEZONE);
+		const eventDisplayDate = moment
+			.utc(event_start)
+			.tz(timezone)
+			.format(TIME_FORMAT_MM_DD_YYYY_WITH_TIMEZONE);
 		let code = "";
 		let codeType = "";
 		let qty = 0;
@@ -424,14 +424,14 @@ class OrderItems extends Component {
 
 		const orderControlOptions = [];
 
-		if (user.hasScope("order:resend-confirmation"))  {
+		if (user.hasScope("order:resend-confirmation")) {
 			orderControlOptions.push({
 				label: "Resend Confirmation Email",
 				onClick: this.resendConfirmationEmail.bind(this)
 			});
 		}
 
-		if (user.hasScope("order:refund")) {
+		if (user.canRefund) {
 			orderControlOptions.push({
 				label: `Refund Event Total ${!orderRefundable ? "(Unavailable)" : ""}`,
 				disabled: !orderRefundable,
@@ -661,11 +661,12 @@ class OrderItems extends Component {
 						</Card>
 					)}
 				</Hidden>
-
-				<RefundBottomBar
-					amountInCents={!showRefundType ? refundAmountInCents : null}
-					onClick={() => this.onRefundClick("items")}
-				/>
+				{user.canRefund ? (
+					<RefundBottomBar
+						amountInCents={!showRefundType ? refundAmountInCents : null}
+						onClick={() => this.onRefundClick("items")}
+					/>
+				) : null}
 			</React.Fragment>
 		);
 	}

@@ -7,7 +7,8 @@ import user from "../../../../../stores/user";
 import notifications from "../../../../../stores/notifications";
 import { validPhone } from "../../../../../validators";
 import Bigneon from "../../../../../helpers/bigneon";
-import removePhoneFormatting from "../../../../../helpers/removePhoneFormatting";
+import removePhoneFormatting
+	from "../../../../../helpers/removePhoneFormatting";
 import moment from "moment-timezone";
 import SelectGroup from "../../../../common/form/SelectGroup";
 import Grid from "@material-ui/core/Grid";
@@ -33,7 +34,7 @@ class OrganizationUpdate extends Component {
 			errors: {},
 			isSubmitting: false,
 			showApiKeys: false,
-			states: {}
+			states: []
 		};
 	}
 
@@ -274,7 +275,6 @@ class OrganizationUpdate extends Component {
 
 	renderStates() {
 		const { state, states, errors } = this.state;
-
 		return (
 			<SelectGroup
 				value={state}
@@ -303,7 +303,10 @@ class OrganizationUpdate extends Component {
 
 		return (
 			<div>
-				<form noValidate autoComplete="off" onSubmit={this.onSubmit.bind(this)}>
+				<form noValidate
+					  autoComplete="off"
+					  onSubmit={this.onSubmit.bind(this)}
+				>
 					<InputGroup
 						error={errors.name}
 						value={name}

@@ -40,3 +40,15 @@
 
 .rich-edit-content blockquote {
 }
+
+/*
+  ##Device = Most of the Smartphones Mobiles (Portrait)
+  ##Screen = B/w 320px to 479px
+*/
+
+@media (min-width: 320px) and (max-width: 480px) {
+	.rich-edit-content h1, .rich-edit-content h2, .rich-edit-content p {
+		margin: 0;
+		display: block;
+	}
+}

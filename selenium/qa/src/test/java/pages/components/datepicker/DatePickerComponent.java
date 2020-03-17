@@ -1,7 +1,6 @@
 package pages.components.datepicker;
 
 import java.time.LocalDate;
-import java.time.Period;
 import java.time.temporal.ChronoField;
 import java.util.ArrayList;
 import java.util.List;
@@ -83,8 +82,9 @@ public class DatePickerComponent extends BaseComponent {
 	}
 
 	private int diffrenceBetweenTargetAndCurrentDateMonths(LocalDate target) {
-		Period period = getCurrentMonthYear().until(target);
-		return period.getMonths();
+		LocalDate currentMonthAndYear = getCurrentMonthYear();
+		int diff = target.getMonthValue() - currentMonthAndYear.getMonthValue();
+		return diff;
 	}
 
 	private void clickOnMonthArrow(WebElement arrow, int times) {

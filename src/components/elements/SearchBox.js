@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import BoxInput from "./form/BoxInput";
+import { urlQueryParam } from "./pagination";
 
 const DEBOUNCE_DELAY = 500;
 
 class SearchBox extends Component {
 	state = {
-		searchQuery: ""
+		searchQuery: urlQueryParam() || ""
 	};
 
 	componentWillUnmount() {

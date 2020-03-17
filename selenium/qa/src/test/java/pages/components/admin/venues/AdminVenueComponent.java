@@ -3,6 +3,7 @@ package pages.components.admin.venues;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import pages.BaseComponent;
 import utils.SeleniumUtils;
@@ -29,6 +30,13 @@ public class AdminVenueComponent extends BaseComponent {
 	public void clickOnEditButton() {
 		WebElement editButton = findEditButtonElement();
 		waitVisibilityAndBrowserCheckClick(editButton);
+	}
+	
+	public String getVenueHref() {
+		WebElement button = findEditButtonElement();
+		WebElement hrefEl = explicitWait(15, ExpectedConditions.visibilityOf(button.findElement(By.xpath("./.."))));
+		String href = hrefEl.getAttribute("href");
+		return href;
 	}
 	
 	private WebElement getVenueNameElement() {
