@@ -10,6 +10,7 @@ import model.AdditionalOptionsTicketType.SaleEnd;
 import model.AdditionalOptionsTicketType.SaleStart;
 import model.TicketType;
 import pages.BaseComponent;
+import utils.ProjectUtils;
 
 public class EventTicketTypeOverviewComponent extends BaseComponent {
 
@@ -33,7 +34,7 @@ public class EventTicketTypeOverviewComponent extends BaseComponent {
 		AdditionalOptionsTicketType options = new AdditionalOptionsTicketType();
 		String name = getTicketName();
 		String quantity = getQuantity();
-		String price = getQuantity();
+		String price = getPrice();
 
 		setSaleStartOptions(options);
 		setSaleEndOptions(options);
@@ -78,7 +79,7 @@ public class EventTicketTypeOverviewComponent extends BaseComponent {
 
 	public String getPrice() {
 		WebElement el = getAccessUtils().getChildElementFromParentLocatedBy(container, By.xpath(relativePriceXpath));
-		return el.getText().trim();
+		return ProjectUtils.getTextForElementAndReplace(el, "$", "");
 	}
 
 	public AdditionalOptionsTicketType.SaleStart getSalesStartType() {

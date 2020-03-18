@@ -166,15 +166,25 @@
 		"start_time": "08:30 PM",
 		"end_time": "10:00 PM",
 		"door_time": "1",
+		"artists":[
+			{
+				"name":"TheTestArtistAuto",
+				"description":"the artist that wanted to be auto"
+			}
+		]
 		"ticket_types": [
 			{
 				"ticket_type_name": "GA",
 				"capacity": "100",
-				"price": "1",
+				"price": "1.00",
 				"additional_options": {
 					"sale_start": {
 						"label": "Immediately",
 						"value": "immediately"
+					},
+					"sale_end":{
+						"label": "Event End",
+						"value": "close"
 					},
 					"max_tickets_per_customer":"50"
 				}
@@ -182,7 +192,7 @@
 			{
 				"ticket_type_name": "VIP",
 				"capacity": "70",
-				"price": "2",
+				"price": "2.00",
 				"additional_options": {
 					"sale_start": {
 						"label": "At a specific time",
@@ -200,11 +210,15 @@
 			{
 				"ticket_type_name": "Special",
 				"capacity": "50",
-				"price": "1",
+				"price": "1.00",
 				"additional_options": {
 					"sale_start": {
 						"label": "When sales end for...",
 						"value": "parent"
+					},
+					"sale_end":{
+						"label": "Event End",
+						"value": "close"
 					},
 					"start_sale_ticket_type": "VIP"
 				}

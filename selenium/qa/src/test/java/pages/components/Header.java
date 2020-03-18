@@ -5,7 +5,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -152,19 +151,22 @@ public class Header extends BaseComponent {
 	}
 
 	public boolean isOrganizationPresent(String organizationName) {
-		waitVisibilityAndClick(currentOrganizationDropDown);
-		CurrentOrganizationDropDown dropDown = new CurrentOrganizationDropDown(driver);
 		boolean retVal = false;
-		try {
-			dropDown.findOrganizationByName(organizationName);
-			retVal = true;
-		} catch (Exception e) {
-			retVal = false;
+		if(isExplicitlyWaitVisible(currentOrganizationDropDown)) {
+			waitVisibilityAndBrowserCheckClick(currentOrganizationDropDown);
+			CurrentOrganizationDropDown dropDown = new CurrentOrganizationDropDown(driver);
+			
+			try {
+				dropDown.findOrganizationByName(organizationName);
+				retVal = true;
+			} catch (Exception e) {
+				retVal = false;
+			}
+			//close the drop down
+			WebElement element = explicitWait(15,
+					ExpectedConditions.visibilityOfElementLocated(By.xpath("//body//div[@id='menu-appbar']")));
+			element.click();
 		}
-		//close the drop down
-		WebElement element = explicitWait(15,
-				ExpectedConditions.visibilityOfElementLocated(By.xpath("//body//div[@id='menu-appbar']")));
-		element.click();
 		
 		return retVal;
 	}

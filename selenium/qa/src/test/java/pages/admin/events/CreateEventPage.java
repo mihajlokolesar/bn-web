@@ -125,7 +125,7 @@ public class CreateEventPage extends BasePage {
 	 * @param endDate   format "mm/dd/yyyy"
 	 * @param showTime  format "08:00 AM", "09:30 PM" ...
 	 * @param endTime   format "08:00 AM", "09:30 PM" ...
-	 * @param doorTime  format "0.5";"1";"2";..;"10"
+	 * @param doorTime  format "0","0.5";"1";"2";..;"10"
 	 */
 	public void enterDatesAndTimes(String startDate, String endDate, String showTime, String endTime, String doorTime) {
 		enterDate(startDateField, startDate);
@@ -240,7 +240,7 @@ public class CreateEventPage extends BasePage {
 	}
 
 	/**
-	 * Valid doorTime values are 0.1;1;2;3;4;5;6;7;8;9;10
+	 * Valid doorTime values are 0;0.5;1;1;2;3;4;5;6;7;8;9;10
 	 * 
 	 * @param doorTime
 	 * @return

@@ -5,9 +5,9 @@ import java.net.URISyntaxException;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 
 import model.Event;
-import model.Organization;
 import model.User;
 import pages.components.admin.events.EventSummaryComponent;
 import test.BaseSteps;
@@ -44,18 +44,20 @@ public class EventOverviewStepsIT extends BaseSteps {
 	@Test
 	public void testtest() {
 		User user = User.generateUserFromJson(DataConstants.ORGANIZATION_ADMIN_USER_KEY);
+		SoftAssert sa = new SoftAssert();
 		FacadeProvider fp = new FacadeProvider(driver);
 		fp.getLoginFacade().givenAdminUserIsLogedIn(user);
-		Organization org =Organization.generateOrganizationFromJson(DataConstants.ORGANIZATION_SAST, false);
-		fp.getOrganizationFacade().givenOrganizationExist(org);
-		Event event = Event.generateEventFromJson(DataConstants.EVENT_DATA_STANARD_KEY, false, 1, 1);
-		event.setEventName("PrevTEst");
-		event.setOrganization(org);
+		
+		Event event = Event.generateEventFromJson(DataConstants.EVENT_DATA_WITH_ADDITIONAL_STEPS_KEY, false, 2, 4);
+		fp.getOrganizationFacade().givenOrganizationExist(event.getOrganization());
+		event.setEventName("TestNameEvent4660956");
+//		event.setOrganization(org);
 		EventSummaryComponent compo = fp.getAdminEventStepsFacade().findEventWithName(event);
 		String evnetName = compo.getEventName();
 		compo.clickOnEventOverview();
 		fp.getEventOverviewFacade().setEventOverviewPage(evnetName);
-		fp.getEventOverviewFacade().getAllEventOverviewInfo();
+		fp.getEventOverviewFacade().whenUserComparesInfoOnOverviewWithGivenEvent(event, sa);
+		sa.assertAll();
 		
 	}
 	

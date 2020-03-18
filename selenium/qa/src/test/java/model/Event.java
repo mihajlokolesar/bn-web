@@ -2,9 +2,12 @@ package model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.testng.asserts.SoftAssert;
@@ -12,11 +15,14 @@ import org.testng.asserts.SoftAssert;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
 
+import enums.DoorTimeEnum;
+import model.interfaces.IAssertable;
+import model.interfaces.IAssertableField;
 import utils.DataConstants;
 import utils.DataReader;
 import utils.ProjectUtils;
 
-public class Event implements Serializable {
+public class Event implements Serializable, IAssertable<Event> {
 
 	private static final long serialVersionUID = 6081396679346519203L;
 	@JsonProperty("organization_ref")
@@ -43,60 +49,19 @@ public class Event implements Serializable {
 	private List<TicketType> ticketTypes = new ArrayList<>();
 	@JsonProperty("artists")
 	private Set<Artist> artists;
-	
+	private String comparableDoorTime;
 	private Venue venue;
 	
-	
-	
-	public void compareWithAssert(Object other, SoftAssert sa) {
-		if(!(other instanceof Event)) {
-			sa.fail("other not instance of event");
-		}
-		Event o = (Event)other;
-		assertEquals(sa,"eventName", this.eventName, o.eventName);
-		assertEquals(sa, "startDate", this.startDate, o.startDate);
-		assertEquals(sa, "doorTime", this.doorTime, o.doorTime);
-		assertEquals(sa, "startTime", this.startTime, o.startTime);
-		assertEquals(sa, "endDate", this.endDate, o.endDate);
-		assertEquals(sa, "endTime", this.endTime, o.endTime);
-		if ((this.venue != null) && (o.venue != null)) {
-			assertEquals(sa, "venueName", this.venue.getName(), o.venue.getName());
-			assertEquals(sa, "venueAddress", this.venue.getAddress(), o.venue.getAddress());
-			assertEquals(sa, "venueCity", this.venue.getCity(), o.venue.getCity());
-			assertEquals(sa, "venueStateAbbr", this.venue.getStateAbbr(), o.venue.getStateAbbr());
-			assertEquals(sa, "venueZip", this.venue.getZip(), o.venue.getZip());
-		}
-		if (this.artists != null && o.artists != null) {
-			if (this.artists.size() == o.artists.size()) {
-				for(Artist artist : artists) {
-					if(o.getArtists().contains(artist)) sa.assertTrue(true);
-				}
-			} else {
-				sa.fail("Event compare: Artist set size not the same ");
-			}
-		}
-//		if (this.ticketTypes != null && o.ticketTypes != null) {
-//			if (this.ticketTypes.size() == o.ticketTypes.size()) {
-//				for(TicketType ticketType : ticketTypes) {
-//					if (o.getTicketTypes().indexOf()) {
-//						
-//					}
-//				}
-//			}
-//		}
-		
-	}
-	
-	public void assertEquals(SoftAssert sa, String fieldName, Object first, Object second) {
-		sa.assertEquals(first, second, composeAssertMessage(fieldName, first, second));
-	}
-		
-	
-	private String composeAssertMessage(String fieldName, Object thisValue, Object otherValue) {
-		return "Event " + fieldName + " not the same: this." + thisValue + " ; other." +otherValue;
-	}
-	
 	private LocalDateTime date;
+	
+	public enum EventField implements IAssertableField {
+		EVENT_NAME,
+		START_DATE,
+		END_DATE,
+		START_TIME,
+		END_TIME,
+		DOOR_TIME
+	}
 
 	public String getOrganizationRef() {
 		return organizationRef;
@@ -226,7 +191,7 @@ public class Event implements Serializable {
 	public void setArtists(Set<Artist> artists) {
 		this.artists = artists;
 	}
-
+	
 	public LocalDateTime getDate() {
 		return date;
 	}
@@ -235,12 +200,102 @@ public class Event implements Serializable {
 		this.date = date;
 	}
 	
+	public String getComparableDoorTime() {
+		return comparableDoorTime;
+	}
+	/**
+	 * Based on this.startTime and given doorTime this method adds door time to start time and
+	 * returns string in pattern given, it expects this.startDate to follow the same pattern.
+	 * @param pattern
+	 * @param doorTime
+	 * @return
+	 */
+	public String calculateComparableDoorTime(String pattern, String doorTime) {
+		if (this.startTime != null && doorTime != null) {
+			LocalTime lt = ProjectUtils.parseTime(pattern, this.startTime);
+			DoorTimeEnum doorTimeEnum = DoorTimeEnum.findDoorEnum(doorTime);
+			if (doorTimeEnum != null) {
+				LocalTime calculated = lt.minusMinutes(doorTimeEnum.getMinutes());
+				return ProjectUtils.formatTime(pattern, calculated);
+			}
+		}
+		return null;
+	}
+
+	public void setComparableDoorTime(String comparableDoorTime) {
+		this.comparableDoorTime = comparableDoorTime;
+	}
 	
+	@Override
+	public void assertEquals(SoftAssert sa, Object obj, Map<Class, List<IAssertableField>> mapListFilds) {
+		Event other = isCorrectType(obj);
+		assertEquals(sa, obj, mapListFilds.get(this.getClass()));
+		if (this.getTicketTypes() != null && other.getTicketTypes() != null 
+				&& (this.getTicketTypes().size() == other.getTicketTypes().size())) {
+			for(TicketType ticketType : ticketTypes) {
+				int index = other.getTicketTypes().indexOf(ticketType);
+				
+				if (index != -1) {
+					TicketType otherTT = other.getTicketTypes().get(index);
+					Map<Class,List<IAssertableField>> ticketTypeFieldMap = new HashMap();
+					ticketTypeFieldMap.put(TicketType.class, mapListFilds.get(TicketType.class));
+					ticketTypeFieldMap.put(AdditionalOptionsTicketType.class, mapListFilds.get(AdditionalOptionsTicketType.class));
+					ticketType.assertEquals(sa, otherTT, ticketTypeFieldMap);
+				} else {
+					sa.fail("TicketType not found in event ticket types");
+				}
+			}
+		}
+		if ((this.venue != null) && (other.venue != null)) {
+			venue.assertEquals(sa, other.getVenue(), mapListFilds.get(Venue.class));
+		}
+		if (this.artists != null && other.artists != null) {
+			if (this.artists.size() == other.artists.size()) {
+				for(Artist artist : artists) {
+					if(other.getArtists().contains(artist)) sa.assertTrue(true);
+				}
+			} else {
+				sa.fail("Event compare: Artist set size not the same ");
+			}
+		}
+	}
+	
+	@Override
+	public void assertEquals(SoftAssert sa, Object obj, List<IAssertableField> fields) {
+		Event other = isCorrectType(obj);
+		if (fields != null) {
+			for (IAssertableField fieldEnum : fields) {
+				switch ((EventField) fieldEnum) {
+				case EVENT_NAME:
+					assertEquals(sa, fieldEnum, this.getEventName(), other.getEventName());
+					break;
+				case START_DATE:
+					assertEquals(sa, fieldEnum, this.getStartDate(), other.getStartDate());
+					break;
+				case END_DATE:
+					assertEquals(sa, fieldEnum, this.getEndDate(), other.getEndDate());
+					break;
+				case START_TIME:
+					assertEquals(sa, fieldEnum, this.getStartTime(), other.getStartTime());
+					break;
+				case END_TIME:
+					assertEquals(sa, fieldEnum, this.getEndTime(), other.getEndTime());
+					break;
+				case DOOR_TIME:
+					assertEquals(sa, fieldEnum, this.getComparableDoorTime(), other.getComparableDoorTime());
+					break;
+				default:
+					break;
+				}
+			}
+		}
+	}
 
 	public void setDates(int offset, int range) {
 		String[] dateSpan = ProjectUtils.getDatesWithSpecifiedRangeInDaysWithStartOffset(offset, range);
 		this.startDate = dateSpan[0];
 		this.endDate = dateSpan[1];
+		this.comparableDoorTime = calculateComparableDoorTime(ProjectUtils.TIME_FORMAT, getDoorTime());
 	}
 	
 	public void randomizeName() {
@@ -300,9 +355,4 @@ public class Event implements Serializable {
 		}
 		return event;
 	}
-
-	
-	
-	
-	
 }

@@ -81,7 +81,7 @@ public class EventOverviewPage extends BasePage {
 		LocalTime doorTime = getTopComponent().getTimeInfo().getDoorTime();
 		event.setStartDate(ProjectUtils.formatDate(ProjectUtils.DATE_FORMAT, startDate));
 		event.setStartTime(ProjectUtils.formatTime(ProjectUtils.TIME_FORMAT, startTIme));
-		event.setDoorTime(ProjectUtils.formatTime(ProjectUtils.TIME_FORMAT, doorTime));
+		event.setComparableDoorTime(ProjectUtils.formatTime(ProjectUtils.TIME_FORMAT, doorTime));
 		event.setVenue(venue);
 	}
 	

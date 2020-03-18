@@ -76,11 +76,11 @@ public class OrganizationStepsFacade extends BaseFacadeSteps {
 		Header header = new Header(driver);
 		boolean isOrgPresent = header.isOrganizationPresent(org.getName());
 
-		if (!isOrgPresent) {
-			return createOrganization(org);
-		} else {
+		if (isOrgPresent) {
 			header.selectOrganizationFromDropDown(org.getName());
 			return true;
+		} else {
+			return false;
 		}
 	}
 	

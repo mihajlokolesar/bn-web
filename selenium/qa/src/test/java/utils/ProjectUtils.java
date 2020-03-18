@@ -216,7 +216,7 @@ public class ProjectUtils {
 
 	public static String getTextForElementAndReplace(WebElement element, String oldChar, String newChar) {
 		String text = element.getText().trim();
-		return text.replace(oldChar, newChar);
+		return text.replace(oldChar, newChar).trim();
 
 	}
 

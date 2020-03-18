@@ -28,6 +28,7 @@ public class DataConstants {
 	public static final String USER_STANDARD_KEY_ONE = "user_data";
 	public static final String USER_STANDARD_KEY = "user_data_2";
 	public static final String EVENT_DATA_STANARD_KEY = "event_data_standard";
+	public static final String EVENT_DATA_WITH_ADDITIONAL_STEPS_KEY = "event_data_with_additional_steps_std";
 	public static final String SUPERUSER_DATA_KEY = "super_user" ;
 	public static final String EVENT_PST_TZ_KEY = "event_PST";
 	public static final String EVENT_EST_TZ_KEY = "event_EST";
