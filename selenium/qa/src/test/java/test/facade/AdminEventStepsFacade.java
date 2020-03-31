@@ -40,11 +40,11 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		adminSideBar.clickOnEvents();
 		adminEvents.isAtPage();
 	}
-	
+
 	public EventSummaryComponent givenEventExistAndIsNotCanceled(Event event) throws URISyntaxException {
 		return givenEventWithNameAndPredicateExists(event, comp -> !comp.isEventCanceled());
 	}
-	
+
 	public EventSummaryComponent findEventWithName(Event event) {
 		return adminEvents.findEventByName(event.getEventName());
 	}
@@ -112,7 +112,7 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		EventSummaryComponent eventSummary = findEventWithNameAndPredicate(event, comp -> !comp.isEventCanceled());
 		eventSummary.clickOnEvent();
 	}
-	
+
 	public boolean whenUserDeletesEvent(Event event) {
 		EventSummaryComponent component = adminEvents.findEventByName(event.getEventName());
 		DeleteEventDialog deleteDialog = component.deleteEvent(event);
@@ -122,12 +122,16 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		}
 		return true;
 	}
-	
+
 	public void whenUserUpdatesDataOfEvent(Event event) {
 		createEventPage.enterEventName(event.getEventName());
 		createEventPage.selectVenue(event.getVenue().getName());
 		createEventPage.enterDatesAndTimes(event.getStartDate(), event.getEndDate(), null, null, null);
 		createEventPage.waitForTime(1000);
+	}
+
+	public CreateEventPage getCreateEventPage(){
+		return this.createEventPage;
 	}
 
 	public void whenUserClicksOnUpdateEvent() {
@@ -143,7 +147,7 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		return retVal;
 
 	}
-	
+
 	public void whenUserClicksOnViewEventOfSelecteEvent(Event event) {
 		EventSummaryComponent eventComp = findEventWithName(event);
 		eventComp.viewEvent();
@@ -166,11 +170,11 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 			return false;
 		}
 	}
-	
+
 	public boolean thenUserIsAtEventsPage() {
 		return adminEvents.isAtPage();
 	}
-	
+
 	public void whenUserRefreshesThePage() {
 		driver.navigate().refresh();
 		adminEvents.waitForTime(3000);
@@ -226,7 +230,7 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 			sa.assertTrue(retVal, MsgConstants.EVENT_PUBLISHED + " message not displayed");
 		}
 	}
-	
+
 	public void attemptEventCancel(Event event) {
 		try {
 			givenUserIsOnAdminEventsPage();

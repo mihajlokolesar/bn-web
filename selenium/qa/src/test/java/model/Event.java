@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -16,6 +17,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.core.type.TypeReference;
 
 import enums.DoorTimeEnum;
+import model.AdditionalOptionsTicketType.SaleEnd;
+import model.AdditionalOptionsTicketType.SaleStart;
 import model.interfaces.IAssertable;
 import model.interfaces.IAssertableField;
 import utils.DataConstants;
@@ -51,9 +54,9 @@ public class Event implements Serializable, IAssertable<Event> {
 	private Set<Artist> artists;
 	private String comparableDoorTime;
 	private Venue venue;
-	
+
 	private LocalDateTime date;
-	
+
 	public enum EventField implements IAssertableField {
 		EVENT_NAME,
 		START_DATE,
@@ -101,7 +104,7 @@ public class Event implements Serializable, IAssertable<Event> {
 	public void setEventName(String eventName) {
 		this.eventName = eventName;
 	}
-	
+
 	public String getVenueRef() {
 		return venueRef;
 	}
@@ -120,7 +123,7 @@ public class Event implements Serializable, IAssertable<Event> {
 		}
 		return this.venue;
 	}
-	
+
 	public void setVenue(Venue venue) {
 		this.venue = venue;
 	}
@@ -176,14 +179,14 @@ public class Event implements Serializable, IAssertable<Event> {
 	public void addTicketType(TicketType ticketType) {
 		this.ticketTypes.add(ticketType);
 	}
-	
+
 	public void addArtist(Artist artist) {
 		if (this.artists == null) {
 			this.artists = new HashSet<>();
 		}
 		this.artists.add(artist);
 	}
-	
+
 	public Set<Artist> getArtists() {
 		return artists;
 	}
@@ -191,7 +194,7 @@ public class Event implements Serializable, IAssertable<Event> {
 	public void setArtists(Set<Artist> artists) {
 		this.artists = artists;
 	}
-	
+
 	public LocalDateTime getDate() {
 		return date;
 	}
@@ -199,7 +202,7 @@ public class Event implements Serializable, IAssertable<Event> {
 	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
-	
+
 	public String getComparableDoorTime() {
 		return comparableDoorTime;
 	}
@@ -222,19 +225,32 @@ public class Event implements Serializable, IAssertable<Event> {
 		return null;
 	}
 
+	public void setDefaultTicketTypeDates() {
+		for(TicketType tt : this.ticketTypes) {
+			AdditionalOptionsTicketType option = tt.getAdditionalOptions();
+
+			if (option.getSaleStart() != null && option.getSaleStart().equals(SaleStart.AT_SPECIFIC_TIME) &&  option.getStartSaleDate() == null) {
+				option.setStartSaleDate(ProjectUtils.formatDate(ProjectUtils.DATE_FORMAT, LocalDate.now()));
+			}
+			if (option.getSaleEnd() != null && option.getSaleEnd().equals(SaleEnd.AT_SPECIFIC_TIME) && option.getEndSaleDate() == null) {
+				option.setEndSaleDate(this.endDate);
+			}
+		}
+	}
+
 	public void setComparableDoorTime(String comparableDoorTime) {
 		this.comparableDoorTime = comparableDoorTime;
 	}
-	
+
 	@Override
 	public void assertEquals(SoftAssert sa, Object obj, Map<Class, List<IAssertableField>> mapListFilds) {
 		Event other = isCorrectType(obj);
 		assertEquals(sa, obj, mapListFilds.get(this.getClass()));
-		if (this.getTicketTypes() != null && other.getTicketTypes() != null 
+		if (this.getTicketTypes() != null && other.getTicketTypes() != null
 				&& (this.getTicketTypes().size() == other.getTicketTypes().size())) {
 			for(TicketType ticketType : ticketTypes) {
 				int index = other.getTicketTypes().indexOf(ticketType);
-				
+
 				if (index != -1) {
 					TicketType otherTT = other.getTicketTypes().get(index);
 					Map<Class,List<IAssertableField>> ticketTypeFieldMap = new HashMap();
@@ -259,7 +275,7 @@ public class Event implements Serializable, IAssertable<Event> {
 			}
 		}
 	}
-	
+
 	@Override
 	public void assertEquals(SoftAssert sa, Object obj, List<IAssertableField> fields) {
 		Event other = isCorrectType(obj);
@@ -297,7 +313,7 @@ public class Event implements Serializable, IAssertable<Event> {
 		this.endDate = dateSpan[1];
 		this.comparableDoorTime = calculateComparableDoorTime(ProjectUtils.TIME_FORMAT, getDoorTime());
 	}
-	
+
 	public void randomizeName() {
 		this.eventName = this.eventName + ProjectUtils.generateRandomInt(DataConstants.RANDOM_NUMBER_SIZE_10M);
 	}
@@ -312,12 +328,12 @@ public class Event implements Serializable, IAssertable<Event> {
 		return sb.toString();
 
 	}
-	
+
 	public static TypeReference<List<Event>> getListTypeReference() {
 		return new TypeReference<List<Event>>() {
 		};
 	}
-	
+
 	public static TypeReference<Event> getTypeReference(){
 		return new TypeReference<Event>() {
 		};
@@ -335,16 +351,17 @@ public class Event implements Serializable, IAssertable<Event> {
 		}
 		return events;
 	}
-	
+
 	public static Event generateEventFromJson(String key, boolean randomizeName, int dateOffset, int dateRangeInDays) {
 		Event event = (Event) DataReader.getInstance().getObject(key, Event.getTypeReference());
 		event.setDates(dateOffset, dateRangeInDays);
 		if(randomizeName) {
 			event.randomizeName();
 		}
+		event.setDefaultTicketTypeDates();
 		return event;
 	}
-	
+
 	public static Event generateEventFromJson(String key, String replaceName ,
 			boolean randomizeName, int dateOffset, int dateRangeInDays) {
 		Event event = (Event) DataReader.getInstance().getObject(key, Event.getTypeReference());
@@ -353,6 +370,7 @@ public class Event implements Serializable, IAssertable<Event> {
 		if(randomizeName) {
 			event.randomizeName();
 		}
+		event.setDefaultTicketTypeDates();
 		return event;
 	}
 }

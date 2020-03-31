@@ -28,8 +28,12 @@ public class EventOverviewFacade extends BaseFacadeSteps {
 		super(driver);
 	}
 	
-	public void getAllEventOverviewInfo() {
-		this.eventOverviewPage.getAllEventInfo();
+	public Event whenUserRemembersEventInfoFromOverviewPage() {
+		return this.eventOverviewPage.getAllEventInfo();
+	}
+	
+	public void whenUserSelectsEditEvent() {
+		getOverviewPage().selectOptionFromDD(EventOverviewPage.DD_MENU_EDIT_EVENT);
 	}
 	
 	public void whenUserComparesInfoOnOverviewWithGivenEvent(Event data, SoftAssert sa) {

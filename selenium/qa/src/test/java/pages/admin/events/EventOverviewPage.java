@@ -18,6 +18,7 @@ import model.Event;
 import model.TicketType;
 import model.Venue;
 import pages.BasePage;
+import pages.components.GenericDropDown;
 import pages.components.admin.events.overview.ArtistOverviewComponent;
 import pages.components.admin.events.overview.EventDetailsOverviewComponent;
 import pages.components.admin.events.overview.EventDetailsOverviewComponent.BasicDetailInfo;
@@ -30,13 +31,21 @@ import utils.ProjectUtils;
 public class EventOverviewPage extends BasePage {
 
 	private String eventName;
-	
+
 	@FindAll(@FindBy(xpath = "//div[div[p[contains(text(),'Artists')]]]/div[1]/div"))
 	private List<WebElement> artistList;
-	
+
 	@FindAll(@FindBy(xpath = "//div[p[contains(text(),'Ticketing')]]/div"))
 	private List<WebElement> ticketList;
-	
+
+	@FindBy(xpath = "//div[div[div[img]/p[contains(text(),'Event')]]]/following-sibling::div//button")
+	private WebElement optionDropDownActivate;
+
+	@FindBy(id = "long-menu")
+	private WebElement optionDropDownContainer;
+
+	public static final String DD_MENU_EDIT_EVENT = "Edit event";
+
 	private EventOverviewTopComponent topComponent;
 
 	public EventOverviewPage(WebDriver driver, String eventName) {
@@ -61,7 +70,7 @@ public class EventOverviewPage extends BasePage {
 			return false;
 		}
 	}
-	
+
 	public Event getAllEventInfo() {
 		Event event = new Event();
 		composeEventInfoFromTopComponent(event);
@@ -70,7 +79,12 @@ public class EventOverviewPage extends BasePage {
 		composeEventInfoFromTicketType(event);
 		return event;
 	}
-	
+
+	public void selectOptionFromDD(String label) {
+		GenericDropDown dropDown = new GenericDropDown(driver, optionDropDownActivate, optionDropDownContainer);
+		dropDown.selectElementFromDropDownNoValueCheck(By.xpath("//ul//li[div[span[contains(text(),'" + label + "')]]]"));
+	}
+
 	public void composeEventInfoFromTopComponent(Event event) {
 		if (event == null) {
 			event = new Event();
@@ -84,7 +98,7 @@ public class EventOverviewPage extends BasePage {
 		event.setComparableDoorTime(ProjectUtils.formatTime(ProjectUtils.TIME_FORMAT, doorTime));
 		event.setVenue(venue);
 	}
-	
+
 	public void composeEventInfoFromArtists(Event event) {
 		if (event == null) {
 			event = new Event();
@@ -98,7 +112,7 @@ public class EventOverviewPage extends BasePage {
 			event.addArtist(artist);
 		}
 	}
-	
+
 	public void composeEventInfoFromDetails(Event event) {
 		if (event == null) {
 			event = new Event();
@@ -107,15 +121,15 @@ public class EventOverviewPage extends BasePage {
 		EventDetailsOverviewComponent detailsComponent = new EventDetailsOverviewComponent(driver);
 		LocalDate startDate = detailsComponent.getDateValue(TimeDetailInfo.START_DATE);
 		LocalDate endDate = detailsComponent.getDateValue(TimeDetailInfo.END_DATE);
-			
+
 		event.setEventName(detailsComponent.getStringValue(BasicDetailInfo.EVENT_NAME));
 		event.setStartTime(detailsComponent.getStringValue(TimeDetailInfo.START_TIME));
 		event.setEndTime(detailsComponent.getStringValue(TimeDetailInfo.END_TIME));
-		event.setDoorTime(detailsComponent.getStringValue(TimeDetailInfo.DOOR_TIME));
+		event.setComparableDoorTime(detailsComponent.getStringValue(TimeDetailInfo.DOOR_TIME));
 		event.setStartDate(ProjectUtils.formatDate(ProjectUtils.DATE_FORMAT, startDate));
 		event.setEndDate(ProjectUtils.formatDate(ProjectUtils.DATE_FORMAT, endDate));
 	}
-	
+
 	public void composeEventInfoFromTicketType(Event event) {
 		if (event == null) {
 			event = new Event();
@@ -127,15 +141,15 @@ public class EventOverviewPage extends BasePage {
 			ticketTypes.add(ticketTypeComponent.getTicketTypeData());
 		}
 		event.setTicketTypes(ticketTypes);
-		
+
 	}
-	
+
 	private EventOverviewTopComponent getTopComponent() {
 		if (this.topComponent == null || !this.eventName.equals(this.topComponent.getInternaleEventName())) {
 			this.topComponent = new EventOverviewTopComponent(driver, this.eventName);
 		}
 		return this.topComponent;
 	}
-	
-	
+
+
 }

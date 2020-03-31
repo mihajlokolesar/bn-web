@@ -1,6 +1,7 @@
 package model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
@@ -52,7 +53,9 @@ public class TicketType implements Serializable,IAssertable<TicketType> {
 					assertEquals(sa, fieldEnum, this.getCapacity(), other.getCapacity());
 					break;
 				case PRICE:
-					assertEquals(sa, fieldEnum, this.getPrice(), other.getPrice());
+					BigDecimal thisPriceBD = new BigDecimal(this.getPrice());
+					BigDecimal otherPriceBD = new BigDecimal(other.getPrice());
+					assertEquals(sa, fieldEnum, thisPriceBD.doubleValue(), otherPriceBD.doubleValue());
 					break;
 				default:
 					break;
