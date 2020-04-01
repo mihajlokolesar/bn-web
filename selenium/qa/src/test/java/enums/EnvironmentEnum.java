@@ -2,7 +2,7 @@ package enums;
 
 public enum EnvironmentEnum {
 
-	TESTING_SCRATCH("testing","develop",false),
+	TESTING_SCRATCH("testing","develop_",false),
 	DEVELOP("develop","develop_",true),
 	BETA("beta","beta_",true),
 	LOCAL("local","local_",false);

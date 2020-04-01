@@ -1,8 +1,9 @@
 package test.event.overview;
 
 import java.net.URISyntaxException;
+import java.util.function.Predicate;
 
-import model.TicketType;
+import enums.EventStatus;
 import model.Venue;
 import org.apache.commons.lang3.SerializationUtils;
 import org.testng.Assert;
@@ -12,7 +13,7 @@ import org.testng.asserts.SoftAssert;
 
 import model.Event;
 import model.User;
-import pages.admin.events.CreateEventPage;
+import pages.admin.events.EventPage;
 import pages.components.admin.events.EventSummaryComponent;
 import test.BaseSteps;
 import test.facade.FacadeProvider;
@@ -54,16 +55,11 @@ public class EventOverviewStepsIT extends BaseSteps {
 		editedEvent.setDoorTime("5");
 		editedEvent.setComparableDoorTime(editedEvent.calculateComparableDoorTime(ProjectUtils.TIME_FORMAT_FULL, editedEvent.getDoorTime()));
 		editedEvent.setVenue(Venue.generateVenueFromJson(DataConstants.VENUE_CST));
-		CreateEventPage eventPage = fp.getAdminEventStepsFacade().getCreateEventPage();
+		EventPage eventPage = fp.getAdminEventStepsFacade().getEventPage();
 		eventPage.selectVenue(editedEvent.getVenue().getName());
 		eventPage.selectDoorTime(editedEvent.getDoorTime());
 		eventPage.clickOnUpdateButton();
-		fp.getAdminEventStepsFacade().givenUserIsOnAdminEventsPage();
-
-		EventSummaryComponent eventCardEdited = fp.getAdminEventStepsFacade().findEventWithName(editedEvent);
-		String editedEventName = eventCardEdited.getEventName();
-		eventCardEdited.clickOnEventOverview();
-		fp.getEventOverviewFacade().setEventOverviewPage(editedEventName);
+		findEventAndGoToOverviewPage(fp, editedEvent,null);
 		fp.getEventOverviewFacade().whenUserComparesInfoOnOverviewWithGivenEvent(editedEvent, sa);
 		sa.assertAll();
 
@@ -71,6 +67,44 @@ public class EventOverviewStepsIT extends BaseSteps {
 		EventSummaryComponent eventSummaryComponent = fp.getAdminEventStepsFacade().findEventWithName(editedEvent);
 		eventSummaryComponent.deleteEvent(editedEvent);
 	}
+
+	@Test(dataProvider = "event_overview_data_provider" , priority = 106)
+	public void overviewPageShouldReflectStatusOnAfterChange(Event event, User user) {
+		maximizeWindow();
+		FacadeProvider fp = new FacadeProvider(driver);
+		SoftAssert sa = new SoftAssert();
+		event.randomizeName();
+		fp.getLoginFacade().givenAdminUserIsLogedIn(user);
+		fp.getOrganizationFacade().givenOrganizationExist(event.getOrganization());
+		fp.getAdminEventStepsFacade().thenUserIsAtEventsPage();
+		fp.getAdminEventStepsFacade().whenUserEntesDataAndClicksOnSaveDraft(event);
+		String fullEventName = findEventAndGoToOverviewPage(fp,event, card->card.isEventDrafted());
+		fp.getEventOverviewFacade().thenEventStatusShouldBe(EventStatus.DRAFT, sa);
+		sa.assertAll();
+		fp.getEventOverviewFacade().whenUserSelectsEditEvent();
+		fp.getAdminEventStepsFacade().thenUserIsAtEditPage();
+		fp.getAdminEventStepsFacade().getEventPage().clickOnSave();
+		event.setEventName(fullEventName);
+		findEventAndGoToOverviewPage(fp, event, null);
+		fp.getEventOverviewFacade().thenEventStatusShouldBe(EventStatus.PUBLISHED, sa);
+		sa.assertAll();
+		this.fieldEvent = event;
+	}
+
+	private String findEventAndGoToOverviewPage(FacadeProvider fp, Event event, Predicate<EventSummaryComponent> predicate) {
+		fp.getAdminEventStepsFacade().givenUserIsOnAdminEventsPage();
+		EventSummaryComponent eventCard;
+		if (predicate != null) {
+			eventCard = fp.getAdminEventStepsFacade().findEventWithNameAndPredicate(event, predicate);
+		} else {
+			eventCard = fp.getAdminEventStepsFacade().findEventWithName(event);
+		}
+		String fullEventName = eventCard.getEventName();
+		eventCard.clickOnEventOverview();
+		fp.getEventOverviewFacade().setEventOverviewPage(fullEventName);
+		return fullEventName;
+	}
+
 
 	@Test(dataProvider = "event_overview_data_provider", priority = 100, retryAnalyzer = utils.RetryAnalizer.class)
 	public void prepareDataFixture(Event event, User user) {
@@ -84,11 +118,7 @@ public class EventOverviewStepsIT extends BaseSteps {
 	private void loginAndNavigateToOverviewPage(FacadeProvider fp, Event event, User user) throws URISyntaxException {
 		fp.getLoginFacade().givenAdminUserIsLogedIn(user);
 		fp.getOrganizationFacade().givenOrganizationExist(event.getOrganization());
-		EventSummaryComponent component = fp.getAdminEventStepsFacade()
-				.givenEventWithNameAndPredicateExists(event, comp->!comp.isEventCanceled());
-		String eventFullName = component.getEventName();
-		component.clickOnEventOverview();
-		fp.getEventOverviewFacade().setEventOverviewPage(eventFullName);
+		String eventFullName = findEventAndGoToOverviewPage(fp,event, card-> !card.isEventCanceled());
 		Assert.assertTrue(fp.getEventOverviewFacade().thenUserIsAtOverviewPage(), "User is not at event overview page for event: " +eventFullName);
 	}
 

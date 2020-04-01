@@ -24,6 +24,7 @@ import pages.components.admin.events.overview.EventDetailsOverviewComponent;
 import pages.components.admin.events.overview.EventDetailsOverviewComponent.BasicDetailInfo;
 import pages.components.admin.events.overview.EventDetailsOverviewComponent.TimeDetailInfo;
 import pages.components.admin.events.overview.EventOverviewTopComponent;
+import pages.components.admin.events.overview.EventPublishOverviewComponent;
 import pages.components.admin.events.overview.EventTicketTypeOverviewComponent;
 import utils.Constants;
 import utils.ProjectUtils;
@@ -47,6 +48,7 @@ public class EventOverviewPage extends BasePage {
 	public static final String DD_MENU_EDIT_EVENT = "Edit event";
 
 	private EventOverviewTopComponent topComponent;
+	private EventPublishOverviewComponent publishOptionsComponent;
 
 	public EventOverviewPage(WebDriver driver, String eventName) {
 		super(driver);
@@ -144,11 +146,18 @@ public class EventOverviewPage extends BasePage {
 
 	}
 
-	private EventOverviewTopComponent getTopComponent() {
+	public EventOverviewTopComponent getTopComponent() {
 		if (this.topComponent == null || !this.eventName.equals(this.topComponent.getInternaleEventName())) {
 			this.topComponent = new EventOverviewTopComponent(driver, this.eventName);
 		}
 		return this.topComponent;
+	}
+
+	public EventPublishOverviewComponent getPublishOptionsComponent() {
+		if (this.publishOptionsComponent == null) {
+			this.publishOptionsComponent = new EventPublishOverviewComponent(driver);
+		}
+		return this.publishOptionsComponent;
 	}
 
 

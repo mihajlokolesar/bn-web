@@ -228,12 +228,13 @@ public class Event implements Serializable, IAssertable<Event> {
 	public void setDefaultTicketTypeDates() {
 		for(TicketType tt : this.ticketTypes) {
 			AdditionalOptionsTicketType option = tt.getAdditionalOptions();
-
-			if (option.getSaleStart() != null && option.getSaleStart().equals(SaleStart.AT_SPECIFIC_TIME) &&  option.getStartSaleDate() == null) {
-				option.setStartSaleDate(ProjectUtils.formatDate(ProjectUtils.DATE_FORMAT, LocalDate.now()));
-			}
-			if (option.getSaleEnd() != null && option.getSaleEnd().equals(SaleEnd.AT_SPECIFIC_TIME) && option.getEndSaleDate() == null) {
-				option.setEndSaleDate(this.endDate);
+			if (option != null) {
+				if (option.getSaleStart() != null && option.getSaleStart().equals(SaleStart.AT_SPECIFIC_TIME) && option.getStartSaleDate() == null) {
+					option.setStartSaleDate(ProjectUtils.formatDate(ProjectUtils.DATE_FORMAT, LocalDate.now()));
+				}
+				if (option.getSaleEnd() != null && option.getSaleEnd().equals(SaleEnd.AT_SPECIFIC_TIME) && option.getEndSaleDate() == null) {
+					option.setEndSaleDate(this.endDate);
+				}
 			}
 		}
 	}

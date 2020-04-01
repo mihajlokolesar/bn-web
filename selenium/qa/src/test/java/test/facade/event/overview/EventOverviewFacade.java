@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import enums.EventStatus;
 import org.openqa.selenium.WebDriver;
 import org.testng.asserts.SoftAssert;
 
@@ -17,8 +18,10 @@ import model.TicketType.TicketTypeField;
 import model.Venue;
 import model.Venue.VenueField;
 import model.interfaces.IAssertableField;
+import org.xml.sax.SAXParseException;
 import pages.admin.events.EventOverviewPage;
 import test.facade.BaseFacadeSteps;
+import utils.ProjectUtils;
 
 public class EventOverviewFacade extends BaseFacadeSteps {
 
@@ -37,6 +40,7 @@ public class EventOverviewFacade extends BaseFacadeSteps {
 	}
 
 	public void whenUserComparesInfoOnOverviewWithGivenEvent(Event data, SoftAssert sa) {
+		data.setComparableDoorTime(data.calculateComparableDoorTime(ProjectUtils.TIME_FORMAT_FULL, data.getDoorTime()));
 		Event preview = getOverviewPage().getAllEventInfo();
 		IAssertableField[] eventFieldfields = new IAssertableField[] {
 				EventField.EVENT_NAME,EventField.START_TIME,EventField.END_TIME,
@@ -56,6 +60,13 @@ public class EventOverviewFacade extends BaseFacadeSteps {
 		mapListFields.put(AdditionalOptionsTicketType.class, Arrays.asList(additionalOptionsFields));
 		mapListFields.put(Venue.class, Arrays.asList(venueTypeFields));
 		data.assertEquals(sa, preview, mapListFields);
+	}
+
+	public void thenEventStatusShouldBe(EventStatus status, SoftAssert sa) {
+		boolean isStatus = getOverviewPage().getTopComponent().isStatusEqual(status);
+		sa.assertTrue(isStatus, "Expected event status in top event overview header " + status + " was not found");
+		String publishOptionsStatus = getOverviewPage().getPublishOptionsComponent().getStatus();
+		sa.assertEquals(status.getValue(), publishOptionsStatus);
 	}
 
 	public void setEventOverviewPage(String eventName) {

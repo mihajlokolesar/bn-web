@@ -3,6 +3,7 @@ package pages.components.admin.events.overview;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+import enums.EventStatus;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -44,14 +45,17 @@ public class EventOverviewTopComponent extends BaseComponent {
 		}
 	}
 
+	public boolean isStatusEqual(EventStatus status) {
+		WebElement element = findPublishStatusElement(status.getValue());
+		return element != null;
+	}
+
 	private WebElement findPublishStatusElement(String status) {
 		By by = By.xpath("//div[p[contains(text(),'" + this.eventName + "')]]//div/p[contains(text(),'" + status + "')]");
 		if (isExplicitlyWaitVisible(by)){
 			return explicitWaitForVisibilityBy(by);
 		}
 		return null;
-
-
 	}
 
 	public TimeInfoComponent getTimeInfo() {
