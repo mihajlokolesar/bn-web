@@ -7,21 +7,21 @@ import org.openqa.selenium.WebElement;
 import pages.BaseComponent;
 
 public class ArtistOverviewComponent extends BaseComponent {
-	
+
 	private WebElement container;
-	
+
 	private final String relativeHeadlinerXpath = ".//h6[contains(text(),'HEADLINER')]";
 	private final String relativeArtistNameXpath = ".//p";
 
 	public ArtistOverviewComponent(WebDriver driver, WebElement container) {
 		super(driver);
-		this.container = container;		
+		this.container = container;
 	}
-	
+
 	public boolean isHeadliner() {
 		return getAccessUtils().isChildElementVisibleFromParentLocatedBy(container, By.xpath(relativeHeadlinerXpath));
 	}
-	
+
 	public String getArtistName() {
 		By by = By.xpath(relativeArtistNameXpath);
 		String text = null;
@@ -31,8 +31,4 @@ public class ArtistOverviewComponent extends BaseComponent {
 		}
 		return text;
 	}
-	
-	
-	
-
 }

@@ -12,7 +12,7 @@ public class Artist implements Serializable {
 	private String name;
 	@JsonProperty("description")
 	private String description;
-	
+
 	public String getName() {
 		return name;
 	}
@@ -56,8 +56,5 @@ public class Artist implements Serializable {
 			return false;
 		return true;
 	}
-	
-	
-	
 
 }
