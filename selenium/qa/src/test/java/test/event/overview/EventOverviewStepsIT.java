@@ -88,7 +88,9 @@ public class EventOverviewStepsIT extends BaseSteps {
 		findEventAndGoToOverviewPage(fp, event, null);
 		fp.getEventOverviewFacade().thenEventStatusShouldBe(EventStatus.PUBLISHED, sa);
 		sa.assertAll();
-		this.fieldEvent = event;
+		fp.getAdminEventStepsFacade().givenUserIsOnAdminEventsPage();
+		EventSummaryComponent eventSummaryComponent = fp.getAdminEventStepsFacade().findEventWithName(event);
+		eventSummaryComponent.deleteEvent(event);
 	}
 
 	private String findEventAndGoToOverviewPage(FacadeProvider fp, Event event, Predicate<EventSummaryComponent> predicate) {
