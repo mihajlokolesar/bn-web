@@ -11,6 +11,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import pages.BasePage;
+import pages.components.PaginationComponent;
 import pages.components.admin.events.EventSummaryComponent;
 import utils.Constants;
 import utils.SeleniumUtils;
@@ -42,7 +43,18 @@ public class AdminEventsPage extends BasePage {
 	}
 
 	public EventSummaryComponent findEventByName(String eventName) {
-		if (isEventPresent(eventName)) {
+		boolean isEventPresent = isEventPresent(eventName);
+		Integer pageIndex = -1;
+		while(!isEventPresent) {
+			PaginationComponent paginationComponent = new PaginationComponent(driver);
+			if (!paginationComponent.navigateNext(pageIndex)){
+				break;
+			} else {
+				isEventPresent = isEventPresent(eventName);
+			}
+		}
+
+		if (isEventPresent) {
 			WebElement element = findWebElementEventByName(eventName);
 			EventSummaryComponent component = new EventSummaryComponent(driver, element);
 			return component;
@@ -52,7 +64,18 @@ public class AdminEventsPage extends BasePage {
 	}
 
 	public EventSummaryComponent findEvent(String eventName, Predicate<EventSummaryComponent> predicate) {
-		if (isEventPresent(eventName)) {
+		boolean isEventPresent = isEventPresent(eventName);
+		Integer pageIndex = -1;
+		while(!isEventPresent) {
+			PaginationComponent paginationComponent = new PaginationComponent(driver);
+			if (!paginationComponent.navigateNext(pageIndex)){
+				break;
+			} else {
+				isEventPresent = isEventPresent(eventName);
+			}
+		}
+
+		if (isEventPresent) {
 			List<WebElement> elements = findWebElementsEventByName(eventName);
 			Optional<EventSummaryComponent> optionalComponent = elements.stream()
 					.map(e -> new EventSummaryComponent(driver, e)).filter(predicate).findFirst();

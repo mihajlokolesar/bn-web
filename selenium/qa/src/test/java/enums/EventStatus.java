@@ -10,7 +10,7 @@ public enum EventStatus {
 
 	private String value;
 
-	EventStatus(String value) {
+	private EventStatus(String value) {
 		this.value = value;
 	}
 

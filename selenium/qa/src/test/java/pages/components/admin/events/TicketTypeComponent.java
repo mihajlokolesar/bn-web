@@ -14,7 +14,11 @@ import pages.BaseComponent;
 import pages.components.GenericDropDown;
 import pages.components.TimeMenuDropDown;
 
-public class AddTicketTypeComponent extends BaseComponent {
+public class TicketTypeComponent extends BaseComponent {
+
+	private WebElement container;
+
+	private String relativeTicketTypeNameTitleXpath = "./div/div/div/h3";
 
 	@FindBy(xpath = "//main//button//img[@alt='Edit']")
 	private WebElement editSaveButton;
@@ -65,14 +69,31 @@ public class AddTicketTypeComponent extends BaseComponent {
 
 	@FindBy(xpath = "//div[div[div[span[span[contains(text(),'Sales end')]]]]]//input[@id='endTime']")
 	private WebElement endTime;
-	
+
 	@FindBy(id = "maxTicketsPerCustomer")
 	private WebElement maxTicketsPerCustomerField;
-	
+
 	private String MAX_TICKET_PER_CUSOMER_BUTTON_LABEL = "Set max tix per customer" ;
 
-	public AddTicketTypeComponent(WebDriver driver) {
+	public TicketTypeComponent(WebDriver driver) {
 		super(driver);
+	}
+
+	public TicketTypeComponent(WebDriver driver, WebElement container) {
+		super(driver);
+		this.container = container;
+	}
+
+	public boolean isEventName(String name) {
+		if(this.container != null){
+			WebElement element = getAccessUtils().getChildElementFromParentLocatedBy(container,
+					By.xpath(relativeTicketTypeNameTitleXpath));
+			String text = getAccessUtils().getTextOfElement(element);
+			if (name.equalsIgnoreCase(text)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private WebElement editSaveButtonForTicketType(String ticketTypeName) {
@@ -83,9 +104,9 @@ public class AddTicketTypeComponent extends BaseComponent {
 	}
 
 	public void addNewTicketType(TicketType ticketType) {
-		waitVisibilityAndSendKeys(ticketNameField, ticketType.getTicketTypeName());
-		waitVisibilityAndSendKeys(capacityField, ticketType.getCapacity());
-		waitVisibilityAndSendKeys(priceValueField, ticketType.getPrice());
+		waitVisibilityAndClearFieldSendKeysF(ticketNameField, ticketType.getTicketTypeName());
+		waitVisibilityAndClearFieldSendKeysF(capacityField, ticketType.getCapacity());
+		waitVisibilityAndClearFieldSendKeysF(priceValueField, ticketType.getPrice());
 
 		if (ticketType.getAdditionalOptions() != null) {
 			addAdditionalOptions(ticketType.getAdditionalOptions());
@@ -111,9 +132,11 @@ public class AddTicketTypeComponent extends BaseComponent {
 
 		GenericDropDown dropDown = new GenericDropDown(driver, startSalesOptions,
 				startSalesOptionsMenuDropDownContainer);
-		dropDown.selectElementFromDropDownHiddenInput(
-				getByXpathForElementInDropDownList(options.getSaleStart().getLabel()),
-				options.getSaleStart().getLabel());
+		if(!dropDown.isOptionSelected(options.getSaleStart().getLabel())) {
+			dropDown.selectElementFromDropDownHiddenInput(
+					getByXpathForElementInDropDownList(options.getSaleStart().getLabel()),
+					options.getSaleStart().getLabel());
+		}
 
 		if (options.getSaleStart().equals(AdditionalOptionsTicketType.SaleStart.AT_SPECIFIC_TIME)) {
 			fillOutAtSpecificTimeDetails(startDate, startTime, options.getStartSaleDate(), options.getStartSaleTime());
@@ -121,17 +144,20 @@ public class AddTicketTypeComponent extends BaseComponent {
 		} else if (options.getSaleStart().equals(SaleStart.WHEN_SALES_END_FOR)) {
 			GenericDropDown drop = new GenericDropDown(driver, selectTicketTypesForSalesOptions,
 					menuSelectTicketTypesDropDownContainer);
-
-			drop.selectElementFromDropDownHiddenInput(
-					getByXpathForElementInDropDownList(options.getStartSaleTicketType()),
-					options.getStartSaleTicketType());
+			if(!drop.isOptionSelected(options.getStartSaleTicketType())) {
+				drop.selectElementFromDropDownHiddenInput(
+						getByXpathForElementInDropDownList(options.getStartSaleTicketType()),
+						options.getStartSaleTicketType());
+			}
 		}
 	}
 
 	private void fillOutSaleEndOptions(AdditionalOptionsTicketType options) {
 		GenericDropDown dropDown = new GenericDropDown(driver, endSalesOptions, endSalesOptionsMenuDropDownContainer);
-		dropDown.selectElementFromDropDownHiddenInput(
-				getByXpathForElementInDropDownList(options.getSaleEnd().getLabel()), options.getSaleEnd().getLabel());
+		if (!dropDown.isOptionSelected(options.getSaleEnd().getLabel())) {
+			dropDown.selectElementFromDropDownHiddenInput(
+					getByXpathForElementInDropDownList(options.getSaleEnd().getLabel()), options.getSaleEnd().getLabel());
+		}
 		if (options.getSaleEnd().equals(SaleEnd.AT_SPECIFIC_TIME)) {
 			fillOutAtSpecificTimeDetails(endDate, endTime, options.getEndSaleDate(), options.getEndSaleTime());
 		}
@@ -156,13 +182,13 @@ public class AddTicketTypeComponent extends BaseComponent {
 	private By getByXpathForElementInDropDownList(String name) {
 		return By.xpath(".//li[contains(text(),'" + name + "')]");
 	}
-	
+
 	private void setMaxTicketsPerCustomer(String maxTickets) {
 		if (maxTickets != null) {
 			clickOnButtonWithLabel(MAX_TICKET_PER_CUSOMER_BUTTON_LABEL);
 			waitVisibilityAndClearFieldSendKeys(maxTicketsPerCustomerField, maxTickets);
 		}
 	}
-	
+
 
 }

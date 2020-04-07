@@ -93,7 +93,7 @@ public class MoveEventDatesToPastStepsIT extends BaseSteps {
 		FacadeProvider fp = new FacadeProvider(driver);
 		SoftAssert sa = new SoftAssert();
 		Event event = this.event;
-		fp.getLoginFacade().givenUserIsLogedIn(orgAdmin);
+		fp.getLoginFacade().givenAdminUserIsLogedIn(orgAdmin);
 		fp.getOrganizationFacade().givenOrganizationExist(event.getOrganization());
 		navigateAndRefundAllTickets(fp, event);
 		fp.getAdminEventStepsFacade().givenUserIsOnAdminEventsPage();
@@ -108,7 +108,7 @@ public class MoveEventDatesToPastStepsIT extends BaseSteps {
 		fp.getOrganizationFacade().givenOrganizationExist(event.getOrganization());
 		fp.getAdminEventStepsFacade().thenUserIsAtEventsPage();
 		EventSummaryComponent eventComp = fp.getAdminEventStepsFacade().findEventWithName(event);
-		eventComp.clickOnEditEvent(event);
+		eventComp.clickOnEditEvent();
 		fp.getAdminEventStepsFacade().whenUserExecutesMoveDatesToPastSteps(expectedResult, sa, startDaysSubtract,
 				endDaysSubtract);
 	}
@@ -153,7 +153,7 @@ public class MoveEventDatesToPastStepsIT extends BaseSteps {
 	private static Purchase preparePurchase() {
 		Purchase purchase = Purchase.generatePurchaseFromJson(DataConstants.REGULAR_USER_PURCHASE_KEY);
 		purchase.setNumberOfTickets(PURCHASE_QUANTITY);
-		purchase.setEvent(Event.generateEventFromJson(DataConstants.EVENT_DATA_STANARD_KEY, EVENT_NAME, false,
+		purchase.setEvent(Event.generateEventFromJson(DataConstants.EVENT_DATA_STANARD_KEY, EVENT_NAME, true,
 				START_DAY_OFFSET, DAYS_RANGE));
 		return purchase;
 	}

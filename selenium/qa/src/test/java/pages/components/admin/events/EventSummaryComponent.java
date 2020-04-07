@@ -12,6 +12,7 @@ import model.Event;
 import pages.BaseComponent;
 import pages.components.dialogs.CancelEventDialog;
 import pages.components.dialogs.DeleteEventDialog;
+import pages.components.dialogs.clone.CloneEventDialog;
 import utils.ProjectUtils;
 import utils.SeleniumUtils;
 
@@ -43,15 +44,12 @@ public class EventSummaryComponent extends BaseComponent {
 
 	private String relativeSoldToDivXPath = "./div/div[2]/div[2]/div[2]/div/div[p[text()='Sold']]/p[2]";
 
-	private String viewEventDDAction = "View event";
-
-	private String deleteEventDDAction = "Delete event";
-
-	private String editEventDDAction = "Edit event";
-
-	private String eventOverviewDDAction = "Event overview";
-
-	private String cancelEventDDAction = "Cancel event";
+	private final String VIEW_EVENT_DD_ACTION = "View event";
+	private final String DELETE_EVENT_DD_ACTION = "Delete event";
+	private final String EDIT_EVENT_DD_ACTION = "Edit event";
+	private final String EVENT_OVERVIEW_DD_ACTION = "Event overview";
+	private final String CANCEL_EVENT_DD_ACTION = "Cancel event";
+	private final String CLONE_EVENT_DD_ACTION = "Clone event";
 
 	public EventSummaryComponent(WebDriver driver, WebElement event) {
 		super(driver);
@@ -93,17 +91,17 @@ public class EventSummaryComponent extends BaseComponent {
 		return intElAmount;
 	}
 
-	public boolean cancelEvent() {
+	public boolean clickOnCancelEvent() {
 		openDropDown();
-		findActionAndClickInDropDown(dropDownXpathElement(cancelEventDDAction));
+		findActionAndClickInDropDown(dropDownXpathElement(CANCEL_EVENT_DD_ACTION));
 		CancelEventDialog dialog = new CancelEventDialog(driver);
 		dialog.clickOnCancelEventButton();
 		return dialog.isInvisible(1000);
 	}
 
-	public DeleteEventDialog deleteEvent(Event event) {
+	public DeleteEventDialog clickOnDeleteEvent(Event event) {
 		openDropDown();
-		findActionAndClickInDropDown(dropDownXpathElement(deleteEventDDAction));
+		findActionAndClickInDropDown(dropDownXpathElement(DELETE_EVENT_DD_ACTION));
 		waitForTime(2000);
 		DeleteEventDialog deleteDialog = new DeleteEventDialog(driver);
 		deleteDialog.clickOnDeleteButton(event.getEventName());
@@ -112,21 +110,32 @@ public class EventSummaryComponent extends BaseComponent {
 
 	public void clickOnEventOverview() {
 		openDropDown();
-		findActionAndClickInDropDown(dropDownXpathElement(eventOverviewDDAction));
+		findActionAndClickInDropDown(dropDownXpathElement(EVENT_OVERVIEW_DD_ACTION));
+	}
+
+	public void clickOnEditEvent() {
+		openDropDown();
+		findActionAndClickInDropDown(dropDownXpathElement(EDIT_EVENT_DD_ACTION));
+	}
+
+	public void clickOnCloneEvent(Event clone) {
+		openDropDown();
+		findActionAndClickInDropDown(dropDownXpathElement(CLONE_EVENT_DD_ACTION));
+		CloneEventDialog cloneEventDialog = new CloneEventDialog(driver);
+		cloneEventDialog.isVisible();
+		cloneEventDialog.fillFields(clone);
+		cloneEventDialog.clickOnCreateButton();
 	}
 
 	public String getEventName() {
 		return SeleniumUtils.getChildElementFromParentLocatedBy(event, By.xpath(relativeEventNameXpath), driver).getText();
 	}
 
-	public void clickOnEditEvent(Event event) {
-		openDropDown();
-		findActionAndClickInDropDown(dropDownXpathElement(editEventDDAction));
-	}
+
 
 	public void viewEvent() {
 		openDropDown();
-		findActionAndClickInDropDown(dropDownXpathElement(viewEventDDAction));
+		findActionAndClickInDropDown(dropDownXpathElement(VIEW_EVENT_DD_ACTION));
 	}
 
 	public void clickOnEvent() {

@@ -78,7 +78,7 @@ public class BoxOfficeSellCheckoutDialog extends DialogContainerComponent {
 		explicitWaitForVisibilityAndClickableWithClick(payWithCreditCardButton);
 		waitForTime(1500);
 	}
-	
+
 	public void clickOnCompleteOrderButton() {
 		explicitWaitForVisibilityAndClickableWithClick(completeOrderButton);
 	}
@@ -86,23 +86,23 @@ public class BoxOfficeSellCheckoutDialog extends DialogContainerComponent {
 	public void enterAmountToTenderedField(int amount) {
 		waitVisibilityAndClearFieldSendKeysF(cashTenederedField, amount + "");
 	}
-	
+
 	public void enterFirstName(String firstName) {
 		waitVisibilityAndSendKeys(firstNameField, firstName);
 	}
-	
+
 	public void enterLastName(String lastName) {
 		waitVisibilityAndSendKeys(lastNameField, lastName);
 	}
-	
+
 	public void enterEmailAddress(String email) {
 		waitVisibilityAndSendKeys(emailField, email);
 	}
-	
+
 	public void enterPhoneNumber(String phoneNumber) {
-		waitVisibilityAndSendKeysSlow(phoneNumberField, phoneNumber);
+		waitVisibilityAndClearFieldSendKeys(phoneNumberField, phoneNumber);
 	}
-	
+
 	public void enterOrderNote(String orderNode) {
 		waitVisibilityAndSendKeys(orderNoteTextArea, orderNode);
 	}

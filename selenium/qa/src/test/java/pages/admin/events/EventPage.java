@@ -13,7 +13,7 @@ import pages.BasePage;
 import pages.components.GenericDropDown;
 import pages.components.TimeMenuDropDown;
 import pages.components.admin.UploadImageComponent;
-import pages.components.admin.events.AddTicketTypeComponent;
+import pages.components.admin.events.TicketTypeComponent;
 import pages.components.admin.events.ArtistEventPageComponent;
 import utils.Constants;
 import utils.MsgConstants;
@@ -22,6 +22,7 @@ import utils.SeleniumUtils;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class EventPage extends BasePage {
 
@@ -110,6 +111,23 @@ public class EventPage extends BasePage {
 		uploadImage.uploadImageFromResources(imageLink, uploadEventImage);
 	}
 
+	public void enterArtistName(String artistName) {
+		waitForTime(1000);
+		waitVisibilityAndSendKeys(artistInputField, artistName);
+		waitForTime(2000);
+		WebElement select = driver.findElement(
+				By.xpath("//div[contains(@class,'menu')]//div[span[contains(text(),'" + artistName + "')]]"));
+		waitVisibilityAndClick(select);
+	}
+
+	public void enterEventName(String eventName) {
+		waitVisibilityAndClearFieldSendKeysF(eventNameField, eventName);
+	}
+
+	public String getEventName(){
+		return getAccessUtils().getTextOfElement(eventNameField);
+	}
+
 	/**
 	 * @param startDate format "mm/dd/yyyy"
 	 * @param endDate   format "mm/dd/yyyy"
@@ -125,7 +143,24 @@ public class EventPage extends BasePage {
 		selectTime(endTimeField, endTime);
 		waitForTime(1000);
 		selectDoorTime(doorTime);
+	}
 
+	public LocalDate getStartDateValue() {
+		String startDateStr = getAccessUtils().getValue(startDateField);
+		return getDate(startDateStr);
+	}
+
+	public LocalDate getEndDateValue() {
+		String endDateStr = getAccessUtils().getValue(endDateField);
+		return getDate(endDateStr);
+	}
+
+	public String getStartTime() {
+		return getAccessUtils().getValue(showTimeField);
+	}
+
+	public String getEndTime() {
+		return getAccessUtils().getValue(endTimeField);
 	}
 
 	public void enterDates(LocalDate startDate, LocalDate endDate) {
@@ -133,13 +168,17 @@ public class EventPage extends BasePage {
 		enterDate(endDateField, ProjectUtils.formatDate(ProjectUtils.DATE_FORMAT, endDate));
 	}
 
-	public void enterArtistName(String artistName) {
-		waitForTime(1000);
-		waitVisibilityAndSendKeys(artistInputField, artistName);
-		waitForTime(2000);
-		WebElement select = driver.findElement(
-				By.xpath("//div[contains(@class,'menu')]//div[span[contains(text(),'" + artistName + "')]]"));
-		waitVisibilityAndClick(select);
+	/**
+	 * Valid doorTime values are 0;0.5;1;1;2;3;4;5;6;7;8;9;10
+	 *
+	 * @param doorTime
+	 * @return
+	 */
+	public void selectDoorTime(String doorTime) {
+		if (doorTime != null && !doorTime.isEmpty()) {
+			GenericDropDown dropDown = new GenericDropDown(driver, doorTimeDropDownActivate, doorTimeMenuHoursContainer);
+			dropDown.selectElementFromDropDownNoValueCheck(By.xpath(".//ul//li[@data-value='" + doorTime + "']"));
+		}
 	}
 
 	public ArtistEventPageComponent getArtistComponentByName(String name) {
@@ -148,13 +187,6 @@ public class EventPage extends BasePage {
 				.map(el -> new ArtistEventPageComponent(driver, el))
 				.filter(art -> art.isArtistName(name)).findFirst().orElse(null);
 		return artistComponent;
-	}
-
-	public void enterEventName(String eventName) {
-		waitVisibilityAndClick(eventNameField);
-		SeleniumUtils.clearInputField(eventNameField, driver);
-		waitForTime(500);
-		waitVisibilityAndSendKeys(eventNameField, eventName);
 	}
 
 	public void selectVenue(String venueName) {
@@ -180,9 +212,16 @@ public class EventPage extends BasePage {
 		}
 	}
 
+	public TicketTypeComponent findTicketTypeComponent(Predicate<TicketTypeComponent> predicate) {
+		explicitWait(15, ExpectedConditions.visibilityOfAllElements(listOfTicketTypeRows));
+		TicketTypeComponent component = listOfTicketTypeRows.stream().map(el->new TicketTypeComponent(driver, el))
+				.filter(predicate).findFirst().orElse(null);
+		return component;
+	}
+
 	private void addNewTicketType(TicketType type) {
 		waitVisibilityAndBrowserCheckClick(addTicketTypeButton);
-		AddTicketTypeComponent ticketType = new AddTicketTypeComponent(driver);
+		TicketTypeComponent ticketType = new TicketTypeComponent(driver);
 		ticketType.addNewTicketType(type);
 	}
 
@@ -209,39 +248,12 @@ public class EventPage extends BasePage {
 		return isNotificationDisplayedWithMessage(MsgConstants.EVENT_SAVED_TO_DRAFT);
 	}
 
-	public LocalDate getStartDateValue() {
-		String startDateStr = getAccessUtils().getValue(startDateField);
-		return getDate(startDateStr);
-	}
-
-	public LocalDate getEndDateValue() {
-		String endDateStr = getAccessUtils().getValue(endDateField);
-		return getDate(endDateStr);
-	}
-
 	private LocalDate getDate(String dateStr) {
 		if (dateStr == null || dateStr.isEmpty()) {
 			throw new InvalidArgumentException("Value passed to getDate in " + getClass().getName() + " is invalid: " + dateStr);
 		}
 		LocalDate retVal = ProjectUtils.parseDate(ProjectUtils.DATE_FORMAT, dateStr);
 		return retVal;
-	}
-
-	private void clickOnUploadImage() {
-		waitVisibilityAndClick(uploadEventImage);
-	}
-
-	/**
-	 * Valid doorTime values are 0;0.5;1;1;2;3;4;5;6;7;8;9;10
-	 *
-	 * @param doorTime
-	 * @return
-	 */
-	public void selectDoorTime(String doorTime) {
-		if (doorTime != null && !doorTime.isEmpty()) {
-			GenericDropDown dropDown = new GenericDropDown(driver, doorTimeDropDownActivate, doorTimeMenuHoursContainer);
-			dropDown.selectElementFromDropDownNoValueCheck(By.xpath(".//ul//li[@data-value='" + doorTime + "']"));
-		}
 	}
 
 	/**
@@ -255,7 +267,6 @@ public class EventPage extends BasePage {
 	private void selectTime(WebElement element, String time) {
 		TimeMenuDropDown timeDropDown = new TimeMenuDropDown(driver);
 		timeDropDown.selectTime(element, time);
-
 	}
 
 }

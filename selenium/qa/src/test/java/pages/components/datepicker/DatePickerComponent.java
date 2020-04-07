@@ -41,6 +41,10 @@ public class DatePickerComponent extends BaseComponent {
 	}
 
 	public void selectDate(String target) {
+		String value = inputField.getAttribute("value");
+		if (value != null && value.equals(target)){
+			return;
+		}
 		LocalDate date = ProjectUtils.parseDate(ProjectUtils.DATE_FORMAT, target);
 		selectDate(date);
 	}

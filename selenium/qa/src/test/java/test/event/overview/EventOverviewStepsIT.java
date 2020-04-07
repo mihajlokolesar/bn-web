@@ -65,7 +65,7 @@ public class EventOverviewStepsIT extends BaseSteps {
 
 		fp.getAdminEventStepsFacade().givenUserIsOnAdminEventsPage();
 		EventSummaryComponent eventSummaryComponent = fp.getAdminEventStepsFacade().findEventWithName(editedEvent);
-		eventSummaryComponent.deleteEvent(editedEvent);
+		eventSummaryComponent.clickOnDeleteEvent(editedEvent);
 	}
 
 	@Test(dataProvider = "event_overview_data_provider" , priority = 106)
@@ -90,8 +90,14 @@ public class EventOverviewStepsIT extends BaseSteps {
 		sa.assertAll();
 		fp.getAdminEventStepsFacade().givenUserIsOnAdminEventsPage();
 		EventSummaryComponent eventSummaryComponent = fp.getAdminEventStepsFacade().findEventWithName(event);
-		eventSummaryComponent.deleteEvent(event);
+		eventSummaryComponent.clickOnDeleteEvent(event);
 	}
+
+	public void overviewShouldIncludeRealTimeSalesDetailsForEachTickeType(){
+
+	}
+
+
 
 	private String findEventAndGoToOverviewPage(FacadeProvider fp, Event event, Predicate<EventSummaryComponent> predicate) {
 		fp.getAdminEventStepsFacade().givenUserIsOnAdminEventsPage();

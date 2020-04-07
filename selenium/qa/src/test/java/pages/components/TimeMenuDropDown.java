@@ -27,6 +27,7 @@ public class TimeMenuDropDown extends BaseComponent {
 			waitForTime(1000);
 			waitVisibilityAndBrowserCheckClick(selectedTime);
 			explicitWait(5, ExpectedConditions.attributeToBe(element, "value", time));
+			waitForTime(600);
 		}
 	}
 }

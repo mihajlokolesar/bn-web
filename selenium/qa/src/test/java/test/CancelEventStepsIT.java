@@ -24,24 +24,24 @@ public class CancelEventStepsIT extends BaseSteps {
 		maximizeWindow();
 		LoginStepsFacade loginFacade = new LoginStepsFacade(driver);
 		AdminEventStepsFacade eventWrapper = new AdminEventStepsFacade(driver);
-		
-		
+
+
 		//given
 		LoginPage loginPage = loginFacade.givenAdminUserIsLogedIn(superuser);
 		boolean isOrganiztionPresent = organizationFacade.givenOrganizationExist(genericEvent.getOrganization());
 		Assert.assertTrue(isOrganiztionPresent);
 		eventWrapper.givenUserIsOnAdminEventsPage();
 		EventSummaryComponent selectedEvent = eventWrapper.givenEventExistAndIsNotCanceled(event);
-		
+
 		//when
-		selectedEvent.cancelEvent();
-		
+		selectedEvent.clickOnCancelEvent();
+
 		//then
 		boolean isEventCanceled = eventWrapper.thenEventShouldBeCanceled(event);
 		Assert.assertTrue(isEventCanceled);
-		
+
 		loginPage.logOut();
-	
+
 	}
 
 	@DataProvider(name = "cancel_event_steps")

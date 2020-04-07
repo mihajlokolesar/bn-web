@@ -13,7 +13,7 @@ public class CreditCardDetailsFrame extends BaseComponent {
 
 	@FindBy(name = "exp-date")
 	private WebElement expirationDateField;
-	
+
 	@FindBy(name = "cvc")
 	private WebElement cvcField;
 
@@ -25,11 +25,11 @@ public class CreditCardDetailsFrame extends BaseComponent {
 	}
 
 	public void enterCreditCardNumber(String number) {
-		waitVisibilityAndSendKeysSlow(cardNumberField, number);
+		waitVisibilityAndClearFieldSendKeys(cardNumberField, number);
 	}
 
 	public void enterExpirationDate(String expirationDate) {
-		waitVisibilityAndSendKeysSlow(expirationDateField, expirationDate);
+		waitVisibilityAndClearFieldSendKeys(expirationDateField, expirationDate);
 	}
 
 	public void enterCvc(String cvc) {
@@ -37,8 +37,8 @@ public class CreditCardDetailsFrame extends BaseComponent {
 	}
 
 	public void enterZip(String zip) {
-		waitForTime(1000);
-		waitVisibilityAndSendKeys(zipField, zip);
+		waitForTime(600);
+		waitVisibilityAndClearFieldSendKeys(zipField, zip);
 	}
 
 }

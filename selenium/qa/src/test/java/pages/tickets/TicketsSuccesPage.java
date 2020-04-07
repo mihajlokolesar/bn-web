@@ -153,11 +153,6 @@ public class TicketsSuccesPage extends BasePage implements DataHolderProvider {
 		return event;
 	}
 
-	public void enterPhoneNumberAndClickSend(String phoneNumber) {
-		waitVisibilityAndSendKeysSlow(mobileNumberField, phoneNumber);
-		waitVisibilityAndClick(sendMeTextButton);
-	}
-
 	public String getImageUrl() {
 		explicitWaitForVisiblity(eventImage);
 		return ProjectUtils.getImageUrlFromStyleAttribute(eventImage);

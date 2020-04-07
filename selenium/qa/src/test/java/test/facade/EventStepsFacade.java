@@ -282,10 +282,6 @@ public class EventStepsFacade extends BaseFacadeSteps {
 		}
 	}
 
-	public void whenUserEntersPhoneNumberAndClicksSend(String phoneNumber) {
-		this.succesPage.enterPhoneNumberAndClickSend(phoneNumber);
-	}
-
 	@Override
 	protected void setData(String key, Object value) {
 	}

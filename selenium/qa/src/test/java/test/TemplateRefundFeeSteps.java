@@ -33,7 +33,7 @@ public abstract class TemplateRefundFeeSteps extends BaseSteps {
 		navigateToOrderManage(purchase.getEvent());
 		//this method is abstract and must be implemented with custom logic in child classes
 		customSteps();
-		
+
 		cancelEvent(purchase.getEvent());
 		logOut();
 	}
@@ -51,7 +51,7 @@ public abstract class TemplateRefundFeeSteps extends BaseSteps {
 	public void selectOrganization(Organization org) throws Exception {
 		getOrganizationFacade().givenOrganizationExist(org);
 	}
-	
+
 	public void emptyShoppingBasketIfFull() {
 		getEventFacade().whenShoppingBasketFullEmptyIt();
 		getLoginFacade().whenUserClickOnHeaderLogo();
@@ -94,7 +94,7 @@ public abstract class TemplateRefundFeeSteps extends BaseSteps {
 			getAdminEventsFacade().whenUserRefreshesThePage();
 			getAdminEventsFacade().thenUserIsAtEventsPage();
 			EventSummaryComponent eventComponent = getAdminEventsFacade().findEventWithName(event);
-			eventComponent.cancelEvent();
+			eventComponent.clickOnCancelEvent();
 		} catch (Exception e) {
 			// log it once logger is added
 		}
@@ -108,7 +108,7 @@ public abstract class TemplateRefundFeeSteps extends BaseSteps {
 		}
 	}
 	private FacadeProvider getFacadeProvider() {
-		return this.facadeProvider != null ? this.facadeProvider : 
+		return this.facadeProvider != null ? this.facadeProvider :
 			(this.facadeProvider = new FacadeProvider(driver));
 	}
 
@@ -131,9 +131,9 @@ public abstract class TemplateRefundFeeSteps extends BaseSteps {
 	public AdminEventDashboardFacade getEventDashboardFacade() {
 		return getFacadeProvider().getEventDashboardFacade();
 	}
-	
+
 	public OrderManageFacade getOrderManageFacade() {
 		return getFacadeProvider().getOrderManageFacade();
 	}
-	
+
 }

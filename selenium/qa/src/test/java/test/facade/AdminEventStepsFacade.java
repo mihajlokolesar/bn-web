@@ -1,16 +1,10 @@
 package test.facade;
 
-import java.net.URISyntaxException;
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Predicate;
-
+import model.Event;
+import model.interfaces.IAssertableField;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
-
-import model.Event;
 import pages.admin.events.AdminEventsPage;
 import pages.admin.events.EventPage;
 import pages.components.admin.AdminSideBar;
@@ -19,6 +13,14 @@ import pages.components.dialogs.DeleteEventDialog;
 import utils.MsgConstants;
 import utils.ProjectUtils;
 import utils.SeleniumUtils;
+
+import java.net.URISyntaxException;
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Predicate;
 
 public class AdminEventStepsFacade extends BaseFacadeSteps {
 
@@ -50,7 +52,7 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 	}
 
 	public EventSummaryComponent findEventWithNameAndPredicate(Event event,
-			Predicate<EventSummaryComponent> predicate) {
+															   Predicate<EventSummaryComponent> predicate) {
 		EventSummaryComponent selectedEvent = adminEvents.findEvent(event.getEventName(), predicate);
 		return selectedEvent;
 	}
@@ -62,7 +64,7 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 	}
 
 	public EventSummaryComponent givenAnyEventWithPredicateExists(Event event,
-			Predicate<EventSummaryComponent> predicate) throws URISyntaxException {
+																  Predicate<EventSummaryComponent> predicate) throws URISyntaxException {
 		EventSummaryComponent selectedEvent = adminEvents.findEvent(predicate);
 		if (selectedEvent == null) {
 			createNewRandomEvent(event);
@@ -72,12 +74,12 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 	}
 
 	public EventSummaryComponent givenEventWithNameAndPredicateExists(Event event,
-			Predicate<EventSummaryComponent> predicate) throws URISyntaxException {
+																	  Predicate<EventSummaryComponent> predicate) throws URISyntaxException {
 		return givenEventWithNameAndPredicateExists(event, predicate, true);
 	}
 
 	public EventSummaryComponent givenEventWithNameAndPredicateExists(Event event,
-			Predicate<EventSummaryComponent> predicate, boolean randomizeName) throws URISyntaxException {
+																	  Predicate<EventSummaryComponent> predicate, boolean randomizeName) throws URISyntaxException {
 		EventSummaryComponent selectedEvent = adminEvents.findEvent(event.getEventName(), predicate);
 		if (selectedEvent == null) {
 			createNewEvent(event, randomizeName);
@@ -115,7 +117,7 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 
 	public boolean whenUserDeletesEvent(Event event) {
 		EventSummaryComponent component = adminEvents.findEventByName(event.getEventName());
-		DeleteEventDialog deleteDialog = component.deleteEvent(event);
+		DeleteEventDialog deleteDialog = component.clickOnDeleteEvent(event);
 		if (adminEvents.isNotificationDisplayedWithMessage(MsgConstants.EVENT_DELETION_FAILED, 4)) {
 			deleteDialog.clickOnKeepEvent();
 			return false;
@@ -130,7 +132,7 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		eventPage.waitForTime(1000);
 	}
 
-	public EventPage getEventPage(){
+	public EventPage getEventPage() {
 		return this.eventPage;
 	}
 
@@ -171,7 +173,11 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 	}
 
 	public boolean thenUserIsAtEditPage() {
-		return eventPage.isAtEditPage();
+		if(eventPage.isAtEditPage()){
+			eventPage.waitForTime(1500);
+			return true;
+		}
+		return false;
 	}
 
 	public boolean thenUserIsAtEventsPage() {
@@ -234,12 +240,25 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		}
 	}
 
+	public void whenUserChecksDataOnUpdatePage(Event clone, SoftAssert sa) {
+		Event event = new Event();
+		event.setEventName(eventPage.getEventName());
+		event.setStartDate(ProjectUtils.formatDate(ProjectUtils.DATE_FORMAT, eventPage.getStartDateValue()));
+		event.setEndDate(ProjectUtils.formatDate(ProjectUtils.DATE_FORMAT, eventPage.getEndDateValue()));
+		event.setStartTime(eventPage.getStartTime());
+		event.setEndTime(eventPage.getEndTime());
+		IAssertableField[] fields = new IAssertableField[]{Event.EventField.START_TIME,
+				Event.EventField.END_TIME, Event.EventField.START_DATE, Event.EventField.END_DATE};
+		List<IAssertableField> comparisonFields = Arrays.asList(fields);
+		clone.assertEquals(sa, event,comparisonFields);
+	}
+
 	public void attemptEventCancel(Event event) {
 		try {
 			givenUserIsOnAdminEventsPage();
 			EventSummaryComponent component = findEventWithName(event);
-			component.cancelEvent();
-		}catch (Exception e) {
+			component.clickOnCancelEvent();
+		} catch (Exception e) {
 		}
 	}
 

@@ -46,6 +46,7 @@ public class AccessabilityUtil {
 	}
 
 	public String getTextOfElement(WebElement element) {
+		waitVisiblity(element);
 		return element.getText().trim();
 	}
 
@@ -134,7 +135,7 @@ public class AccessabilityUtil {
 		WebElement el = getChildElementFromParentLocatedBy(parent, by);
 		return el.getText().trim();
 	}
-	
+
 	public String getValue(WebElement element) {
 		waitVisiblity(element);
 		String value = element.getAttribute("value");
@@ -220,11 +221,11 @@ public class AccessabilityUtil {
 			}
 		}
 	}
-	
+
 	private void waitVisiblity(WebElement element) {
 		waitVisibility(element, 10);
 	}
-	
+
 	private void waitVisibility(WebElement element, int timeInSec) {
 		new WebDriverWait(driver, timeInSec).until(ExpectedConditions.visibilityOf(element));
 	}

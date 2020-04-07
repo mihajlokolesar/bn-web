@@ -39,14 +39,14 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 	/**
 	 * Test for guest search on guest page task task #1769
 	 */
-	@Test(dataProvider = "guest_page_search_data", priority = 13, 
+	@Test(dataProvider = "guest_page_search_data", priority = 13,
 			 dependsOnMethods = {"userPurchasedTickets"}, alwaysRun = true, retryAnalyzer = utils.RetryAnalizer.class)
 	public void guestPageSearchTest(User superuser, User one, User two) throws Exception {
 		LoginStepsFacade loginFacade = new LoginStepsFacade(driver);
 		AdminBoxOfficeFacade boxOfficeFacade = new AdminBoxOfficeFacade(driver);
 		AdminEventStepsFacade adminEventFacade = new AdminEventStepsFacade(driver);
 		OrganizationStepsFacade organizationFacade = new OrganizationStepsFacade(driver);
-		
+
 		maximizeWindow();
 		loginFacade.givenAdminUserIsLogedIn(superuser);
 		adminEventFacade.givenUserIsOnAdminEventsPage();
@@ -70,11 +70,11 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 		User superUser = User.generateUserFromJson(DataConstants.SUPERUSER_DATA_KEY);
 		User userOne = User.generateUserFromJson(DataConstants.DISTINCT_USER_ONE_KEY);
 		User userTwo = User.generateUserFromJson(DataConstants.USER_STANDARD_KEY);
-		
+
 		return new Object[][] { { superUser, userOne, userTwo } };
 
 	}
-	
+
 	@Test(dataProvider = "purchase_data", priority = 13)
 	public void userPurchasedTickets(User user, Purchase purchase) throws Exception {
 		maximizeWindow();
@@ -108,19 +108,19 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 	@DataProvider(name = "purchase_data")
 	public static Object[][] data() {
 		Purchase purchase = preparePurchase();
-		
+
 		Purchase purchaseOne = preparePurchase();
 
 		User one = User.generateUserFromJson(DataConstants.DISTINCT_USER_ONE_KEY);
 		User two = User.generateUserFromJson(DataConstants.DISTINCT_USER_TWO_KEY);
 		purchaseOne.setNumberOfTickets(MULTIPLE_PURCHASE_QTY_FOR_ONE_USER);
-		
+
 		User three = User.generateUserFromJson(DataConstants.USER_STANDARD_KEY);
 		return new Object[][] { { one, purchaseOne }, { two, purchase }, { three, purchase } };
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * test for task  ,Automation: Big Neon : Test 23: Box Office: Search for the Sold tickets #1788
 	 */
 	@Test(dataProvider = "manage_orders_page_data", priority = 14, retryAnalyzer = utils.RetryAnalizer.class)
@@ -148,13 +148,13 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 		retVal &= dashboardFacade.whenUserChecksOrderQuantityForSpecificUser(customer, PURCHASE_QUANTITY);
 
 		Assert.assertTrue(retVal);
-		
+
 		loginFacade.logOut();
 
 	}
-	
+
 	/**
-	 *  Automation: Big Neon : Test 24: Box Office: Refund Tickets #1789 
+	 *  Automation: Big Neon : Test 24: Box Office: Refund Tickets #1789
 	 */
 	@Test(dataProvider = "manage_orders_page_data", priority = 15, retryAnalyzer = utils.RetryAnalizer.class)
 	public void manageOrdersSearchAndRefundTickets(User orgAdmin, User customer, User customerOne, Event event, Purchase purchase) throws Exception {
@@ -178,9 +178,9 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 		retVal &= dashboardFacade.whenUserDoesSearchCheckByLastName(customerOne);
 		retVal &= dashboardFacade.whenUserDoesSearchCheckByOrderNumber(orderNumber);
 		retVal &= dashboardFacade.whenUserChecksOrderQuantityForSpecificUser(customer, PURCHASE_QUANTITY);
-		
+
 		Assert.assertTrue(retVal);
-		
+
 		dashboardFacade.whenUserClicksOnOrderLinkOfGivenUser(customerOne, orderManageFacade);
 		boolean isExpanded = orderManageFacade.whenUserExpandOrderDetailsAndCheckIfExpanded();
 		Assert.assertTrue(isExpanded);
@@ -190,19 +190,19 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 		orderManageFacade.whenUserSelectRefundReasonAndClicksOnConfirmButton(refundReason);
 		orderManageFacade.thenRefundDialogShouldBeVisible();
 		orderManageFacade.whenUserClicksOnGotItButtonOnRefundSuccessDialog();
-		
+
 		adminEventFacade.givenUserIsOnAdminEventsPage();
-		
+
 		loginFacade.logOut();
 
 	}
-	
+
 	/**
 	 * Automation Big Neon: Test 28: Order Management: Order History/Activity Feed #1833
 	 */
 	@Test(dataProvider = "manage_orders_page_data", priority = 16, retryAnalyzer = utils.RetryAnalizer.class)
 	public void manageOrdersOrderHistoryActivity(User orgAdmin, User customer, User customerOne, Event event, Purchase purchase) throws Exception {
-		
+
 		LoginStepsFacade loginFacade = new LoginStepsFacade(driver);
 		AdminEventStepsFacade adminEventFacade = new AdminEventStepsFacade(driver);
 		OrganizationStepsFacade organizationFacade = new OrganizationStepsFacade(driver);
@@ -212,7 +212,7 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 	    maximizeWindow();
 
 	    loginPickOrgNavToManageOrders(loginFacade, adminEventFacade, organizationFacade, dashboardFacade, event, orgAdmin);
-	    
+
 		dashboardFacade.whenUserClicksOnOrderLinkOfGivenUser(customerOne, orderManageFacade);
 		//find a way to put this args in data
 		boolean isThereCorrectNumberInOrderHistory = orderManageFacade.thenThereShouldBeItemsInOrderHistory(NUMBER_OF_ACTIVITY_ITEMS_AFTER_REFUND);
@@ -222,17 +222,17 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 		boolean isEveryRowCollapsed = orderManageFacade.thenAllItemsShouldBeClosed();
 		Assert.assertTrue(isEveryRowCollapsed);
 
-	
+
 		loginFacade.logOut();
 	}
-		
+
 	/**
 	 *  Automation BigNeon : Order Management: Test 29: Activity Items/Purchased #1834
 	 *  Automation: Big Neon: Order Management: Test 30: ActivityItems/Refunded #1848
 	 */
 	@Test(dataProvider = "manage_orders_page_data", priority = 17, retryAnalyzer = utils.RetryAnalizer.class)
 	public void manageOrdersActivityItemsPurchasedAndRefundedCheck(User orgAdmin, User customer, User customerOne, Event event, Purchase purchase) throws Exception {
-		
+
 		LoginStepsFacade loginFacade = new LoginStepsFacade(driver);
 		AdminEventStepsFacade adminEventFacade = new AdminEventStepsFacade(driver);
 		OrganizationStepsFacade organizationFacade = new OrganizationStepsFacade(driver);
@@ -241,11 +241,11 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 
 	    maximizeWindow();
 
-	    boolean isInitialStepsComplete = loginPickOrgNavToManageOrders(loginFacade, adminEventFacade, 
+	    boolean isInitialStepsComplete = loginPickOrgNavToManageOrders(loginFacade, adminEventFacade,
 	    		organizationFacade, dashboardFacade, event, orgAdmin);
 	    Assert.assertTrue(isInitialStepsComplete);
 		dashboardFacade.whenUserClicksOnOrderLinkOfGivenUser(customerOne, orderManageFacade);
-		
+
 		boolean isTherePurchasedHistoryItem =  orderManageFacade.thenThereShouldBePurchasedHistoryItemWithNumberOfPurchases(customerOne, purchase, 3);
 		Assert.assertTrue(isTherePurchasedHistoryItem);
 		TicketType ticketType = event.getTicketTypes().stream().filter(tt->tt.getTicketTypeName().equals(ticketTypeName)).findFirst().get();
@@ -253,9 +253,9 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 		boolean isRefundDataValid = orderManageFacade.whenUserExpandsRefundedHistoryItemAndChecksData(purchase, 1, ticketType,refundReason);
 		Assert.assertTrue(isRefundDataValid, "Refunded history item data invalid");
 		loginFacade.logOut();
-		
+
 	}
-	
+
 	/*
 	 * Automation: BigNeon: Order Management: Test 31: ActivityItems/Note #1849
 	 */
@@ -267,32 +267,32 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 		AdminEventDashboardFacade dashboardFacade = new AdminEventDashboardFacade(driver);
 		OrderManageFacade orderManageFacade = new OrderManageFacade(driver);
 		maximizeWindow();
-		
-		boolean isInitialStepsComplete = loginPickOrgNavToManageOrders(loginFacade, adminEventFacade, 
+
+		boolean isInitialStepsComplete = loginPickOrgNavToManageOrders(loginFacade, adminEventFacade,
 	    		organizationFacade, dashboardFacade, event, orgAdmin);
 	    Assert.assertTrue(isInitialStepsComplete);
 	    dashboardFacade.whenUserClicksOnOrderLinkOfGivenUser(customerOne, orderManageFacade);
 	    orderManageFacade.whenUserAddsANote(purchase.getOrderNote());
 	    boolean isNotificationVisible = orderManageFacade.thenNotificationNoteAddedShouldBeVisible();
-	    
+
 	    boolean isNoteActivityItemVisible = orderManageFacade.thenUserShouldSeeNoteActivityItem(purchase.getOrderNote(), orgAdmin);
 	    Assert.assertTrue(isNoteActivityItemVisible, "Note activity item for creator: "+ orgAdmin.getEmailAddress() + " not present");
-	    
+
 	    adminEventFacade.givenUserIsOnAdminEventsPage();
-	    
+
 	    EventSummaryComponent eventComponent = adminEventFacade.findEventIsOpenedAndHasSoldItem(event);
 		if (eventComponent != null) {
-			eventComponent.cancelEvent();
+			eventComponent.clickOnCancelEvent();
 		}
 		loginFacade.logOut();
-	    	    
+
 	}
 	/**
 	 *  Automation: Big Neon : Test 27: Order Management: Order Page navigation #1809, used in most tests in this class
 	 */
 	private boolean loginPickOrgNavToManageOrders(LoginStepsFacade loginFacade,
 			AdminEventStepsFacade adminEventFacade,
-			OrganizationStepsFacade organizationStepsFacade, 
+			OrganizationStepsFacade organizationStepsFacade,
 			AdminEventDashboardFacade dashboardFacade, Event event, User user) throws Exception {
 		loginFacade.givenAdminUserIsLogedIn(user);
 		organizationStepsFacade.givenOrganizationExist(event.getOrganization());
@@ -303,7 +303,7 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 		dashboardFacade.givenUserIsOnManageOrdersPage();
 		return true;
 	}
-		
+
 
 	@DataProvider(name = "manage_orders_page_data")
 	public static Object[][] dataProvider() {
@@ -313,10 +313,10 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 		User orgAdminUser = User.generateUserFromJson(DataConstants.ORGANIZATION_ADMIN_USER_KEY);
 		User customer = User.generateUserFromJson(DataConstants.USER_STANDARD_KEY);
 		User one = User.generateUserFromJson(DataConstants.DISTINCT_USER_ONE_KEY);
-		
+
 		return new Object[][] { { orgAdminUser, customer, one, event, purchase } };
 	}
-	
+
 
 	private static Purchase preparePurchase() {
 		Purchase purchase = Purchase.generatePurchaseFromJson(DataConstants.REGULAR_USER_PURCHASE_KEY);
