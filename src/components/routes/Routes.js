@@ -179,14 +179,9 @@ const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => {
 
 @observer
 class Routes extends Component {
-	componentDidMount() {
-		// Signal that js is ready for prerendering
-		window.prerenderReady = true;
 
-		const startLoadTime = window.startLoadTime;
-		if (startLoadTime) {
-			analytics.trackPageLoadTime(Date.now() - startLoadTime);
-		}
+	constructor(props) {
+		super(props);
 		const { access_token, refresh_token, rnNavigation, ...params } = getAllUrlParams();
 		if (refresh_token) {
 			try {
@@ -213,6 +208,17 @@ class Routes extends Component {
 		} else if (rnNavigation === "0") {
 			localStorage.removeItem("rnNavigation");
 		}
+	}
+
+	componentDidMount() {
+		// Signal that js is ready for prerendering
+		window.prerenderReady = true;
+
+		const startLoadTime = window.startLoadTime;
+		if (startLoadTime) {
+			analytics.trackPageLoadTime(Date.now() - startLoadTime);
+		}
+
 	}
 
 	componentDidCatch(error, errorInfo) {
