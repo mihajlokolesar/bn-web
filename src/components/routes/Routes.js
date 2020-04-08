@@ -180,36 +180,6 @@ const PrivateRoute = ({ component: Component, isAuthenticated, ...rest }) => {
 @observer
 class Routes extends Component {
 
-	constructor(props) {
-		super(props);
-		const { access_token, refresh_token, rnNavigation, ...params } = getAllUrlParams();
-		if (refresh_token) {
-			try {
-				//Attempt to decode these, if they are not valid do not store them.
-				if (access_token) {
-					decodeJWT(access_token);
-					localStorage.setItem("access_token", access_token);
-				}
-
-				decodeJWT(refresh_token);
-				localStorage.setItem("refresh_token", refresh_token);
-				user.refreshUser();
-			} catch (e) {
-				console.error("Invalid access / refresh token provided");
-			}
-		}
-		// store url params data for campaign tracking
-		user.setCampaignTrackingData({
-			referrer: document.referrer,
-			...params
-		});
-		if (rnNavigation) {
-			localStorage.setItem("rnNavigation", "1");
-		} else if (rnNavigation === "0") {
-			localStorage.removeItem("rnNavigation");
-		}
-	}
-
 	componentDidMount() {
 		// Signal that js is ready for prerendering
 		window.prerenderReady = true;
@@ -218,6 +188,12 @@ class Routes extends Component {
 		if (startLoadTime) {
 			analytics.trackPageLoadTime(Date.now() - startLoadTime);
 		}
+		const { ...params } = getAllUrlParams();
+		// store url params data for campaign tracking
+		user.setCampaignTrackingData({
+			referrer: document.referrer,
+			...params
+		});
 
 	}
 
