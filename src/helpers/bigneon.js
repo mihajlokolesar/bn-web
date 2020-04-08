@@ -22,9 +22,9 @@ export const bigneonFactory = (options = {}, clientParams = {}, mockData, forceR
 			...clientParams
 		};
 		bigneon = new Bigneon.Server(options, clientParams, mockData);
-		const access_token = localStorage.getItem("access_token");
+		const access_token = localStorage.getItem("access_token") || "";
 		const refresh_token = localStorage.getItem("refresh_token") || null;
-		if (access_token) {
+		if (access_token || refresh_token) {
 			bigneon.client.setTokens({ access_token, refresh_token });
 		}
 		errorReporting.addBreadcrumb("Bigneon client instantiated.");
