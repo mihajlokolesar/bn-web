@@ -113,6 +113,7 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		givenUserIsOnAdminEventsPage();
 		EventSummaryComponent eventSummary = findEventWithNameAndPredicate(event, comp -> !comp.isEventCanceled());
 		eventSummary.clickOnEvent();
+
 	}
 
 	public boolean whenUserDeletesEvent(Event event) {

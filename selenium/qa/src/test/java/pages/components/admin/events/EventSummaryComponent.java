@@ -108,9 +108,11 @@ public class EventSummaryComponent extends BaseComponent {
 		return deleteDialog;
 	}
 
-	public void clickOnEventOverview() {
+	public String clickOnEventOverview() {
+		String eventName = getEventName();
 		openDropDown();
 		findActionAndClickInDropDown(dropDownXpathElement(EVENT_OVERVIEW_DD_ACTION));
+		return eventName;
 	}
 
 	public void clickOnEditEvent() {

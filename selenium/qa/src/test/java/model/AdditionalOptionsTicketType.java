@@ -34,7 +34,7 @@ public class AdditionalOptionsTicketType implements Serializable,IAssertable<Add
 		public String getValue() {
 			return value;
 		}
-		
+
 		@JsonCreator
 		static SaleStart findValue(@JsonProperty("label") String label, @JsonProperty("value") String value) {
 			return Arrays.stream(SaleStart.values()).filter(se -> se.label.equals(label) && se.value.equals(value)).findFirst().get();
@@ -45,7 +45,7 @@ public class AdditionalOptionsTicketType implements Serializable,IAssertable<Add
 	public enum SaleEnd {
 		DOOR_TIME("Door Time","door"), EVENT_START("Event Start","start"), EVENT_END("Event End","close"),
 		AT_SPECIFIC_TIME("At a specific time","custom");
-		
+
 		private String label;
 		private String value;
 
@@ -57,17 +57,17 @@ public class AdditionalOptionsTicketType implements Serializable,IAssertable<Add
 		public String getLabel() {
 			return label;
 		}
-		
+
 		public String getValue() {
 			return value;
 		}
-		
+
 		@JsonCreator
 		static SaleEnd findValue(@JsonProperty("label") String label, @JsonProperty("value") String value) {
 			return Arrays.stream(SaleEnd.values()).filter(se -> se.label.equals(label) && se.value.equals(value)).findFirst().get();
 		}
 	}
-	
+
 	private static final long serialVersionUID = -3276023451403139476L;
 	@JsonProperty("sale_start")
 	private SaleStart saleStart;
@@ -87,7 +87,7 @@ public class AdditionalOptionsTicketType implements Serializable,IAssertable<Add
 	private String endSaleTime;
 	@JsonProperty("max_tickets_per_customer")
 	private String maxTicketsPerCustomer;
-	
+
 	public enum AdditionalOptionsField implements IAssertableField {
 		SALE_START,
 		SALE_END,
@@ -97,8 +97,49 @@ public class AdditionalOptionsTicketType implements Serializable,IAssertable<Add
 		END_SALE_DATE,
 		END_SALE_TIME,
 		MAX_TICKETS_PER_CUST;
+
+		private SaleStart[] saleStartExcluded;
+		private SaleEnd[] saleEndExluded;
+
+		public boolean isSaleStartFieldExcluded(AdditionalOptionsTicketType.SaleStart saleStart) {
+			if (getSaleStartExcluded() != null) {
+				for(SaleStart start : getSaleStartExcluded()) {
+					if (start.equals(saleStart)){
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
+		public boolean isSaleEndFieldExcluded(AdditionalOptionsTicketType.SaleEnd saleEnd) {
+			if (getSaleEndExluded() != null) {
+				for(SaleEnd end : getSaleEndExluded()) {
+					if(end.equals(saleEnd)) {
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
+		public SaleEnd[] getSaleEndExluded() {
+			return saleEndExluded;
+		}
+
+		public SaleStart[] getSaleStartExcluded(){
+			return saleStartExcluded;
+		}
+
+		public void setSaleStartExcluded(SaleStart[] saleStartExcluded) {
+			this.saleStartExcluded = saleStartExcluded;
+		}
+
+		public void setSaleEndExluded(SaleEnd[] saleEndExluded) {
+			this.saleEndExluded = saleEndExluded;
+		}
 	}
-	
+
 	@Override
 	public void assertEquals(SoftAssert sa, Object obj, List<IAssertableField> fields) {
 		isCorrectType(obj);
@@ -106,10 +147,14 @@ public class AdditionalOptionsTicketType implements Serializable,IAssertable<Add
 		for(IAssertableField field : fields) {
 			switch((AdditionalOptionsField)field) {
 				case SALE_START:
-					assertEquals(sa, field, this.getSaleStart(), other.getSaleStart());
+					if (!((AdditionalOptionsField) field).isSaleStartFieldExcluded(this.getSaleStart())){
+						assertEquals(sa, field, this.getSaleStart(), other.getSaleStart());
+					}
 					break;
 				case SALE_END:
-					assertEquals(sa, field, this.getSaleEnd() , other.getSaleEnd());
+					if (!((AdditionalOptionsField) field).isSaleEndFieldExcluded(this.getSaleEnd())) {
+						assertEquals(sa, field, this.getSaleEnd(), other.getSaleEnd());
+					}
 					break;
 				case START_SALE_DATE:
 					assertEquals(sa, field, this.getStartSaleDate() , other.getStartSaleDate());
@@ -133,7 +178,7 @@ public class AdditionalOptionsTicketType implements Serializable,IAssertable<Add
 			}
 		}
 	}
-	
+
 	public SaleStart getSaleStart() {
 		return saleStart;
 	}

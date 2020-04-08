@@ -145,15 +145,15 @@
 				"capacity": "100",
 				"price": "1",
 				"additional_options": {
-					"max_tickets_per_customer":"50"
+					"max_tickets_per_customer":"100"
 				}
 			},
 			{
 				"ticket_type_name": "VIP",
-				"capacity": "70",
+				"capacity": "100",
 				"price": "2",
 				"additional_options": {
-					"max_tickets_per_customer":"50"
+					"max_tickets_per_customer":"100"
 				}
 			}
 		]

@@ -36,6 +36,7 @@ public class EmailTicketToBuyersUsingAnnouncement extends BaseSteps {
 		fp.getLoginFacade().givenAdminUserIsLogedIn(adminUser);
 		fp.getOrganizationFacade().givenOrganizationExist(event.getOrganization());
 		fp.getAdminEventStepsFacade().whenUserGoesToEventDashboard(event);
+		fp.getEventDashboardFacade().thenUserIsOnEventDashboardPage();
 		fp.getEventDashboardFacade().whenUserSelectsAnnouncementFromToolDropDown();
 		Assert.assertTrue(fp.getAnnauncementFacade().isOnAnnouncementPage(), "Not on announcement page");
 		softAssert.assertTrue(fp.getAnnauncementFacade().isAnnouncementTextValid(),

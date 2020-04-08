@@ -37,6 +37,12 @@ public class EventOverviewFacade extends BaseFacadeSteps {
 		getOverviewPage().selectOptionFromDD(EventOverviewPage.DD_MENU_EDIT_EVENT);
 	}
 
+	public void whenUserComparesGivenFieldsAndEvent(Map<Class, List<IAssertableField>> fieldMap, Event event, SoftAssert sa) {
+		event.setComparableDoorTime(event.calculateComparableDoorTime(ProjectUtils.TIME_FORMAT_FULL, event.getDoorTime()));
+		Event previewData = getOverviewPage().getAllEventInfo();
+		event.assertEquals(sa, previewData, fieldMap);
+	}
+
 	public void whenUserComparesInfoOnOverviewWithGivenEvent(Event data, SoftAssert sa) {
 		data.setComparableDoorTime(data.calculateComparableDoorTime(ProjectUtils.TIME_FORMAT_FULL, data.getDoorTime()));
 		Event preview = getOverviewPage().getAllEventInfo();

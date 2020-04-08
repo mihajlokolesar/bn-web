@@ -56,13 +56,14 @@ public class PaginationComponent extends BaseComponent {
 
 
 	public boolean isNavigationElementValid(WebElement navElement) {
-		WebElement imgEl = getAccessUtils().getChildElementFromParentLocatedBy(navElement, By.xpath("./img"));
-		if (imgEl != null) {
-			String display = imgEl.getAttribute("display");
-			return !"none".equals(display);
-		} else {
-			return false;
+		if (getAccessUtils().isChildElementVisibleFromParentLocatedBy(navElement, By.xpath("./img"))) {
+			WebElement imgEl = getAccessUtils().getChildElementFromParentLocatedBy(navElement, By.xpath("./img"));
+			if (imgEl != null) {
+				String display = imgEl.getAttribute("display");
+				return !"none".equals(display);
+			}
 		}
+		return false;
 	}
 
 	private WebElement getNavigationElement(String direction) {

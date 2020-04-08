@@ -37,6 +37,7 @@ public class CloneEventDialog extends DialogContainerComponent{
 	}
 
 	public void fillFields(Event event) {
+		waitForTime(300);
 		waitVisibilityAndClearFieldSendKeysF(eventNameField, event.getEventName());
 		enterDate(eventStartDateField, event.getStartDate());
 		enterDate(eventEndDateField, event.getEndDate());

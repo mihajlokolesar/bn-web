@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import model.Event;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -28,6 +29,8 @@ import org.testng.annotations.Parameters;
 import config.BrowserStackStatusEnum;
 import config.BrowsersEnum;
 import config.DriverFactory;
+import pages.components.admin.events.EventSummaryComponent;
+import test.facade.FacadeProvider;
 
 public class BaseSteps {
 
@@ -62,6 +65,27 @@ public class BaseSteps {
 		}
 	}
 
+	protected void deleteEvent(FacadeProvider fp, Event event) {
+		try {
+			fp.getAdminEventStepsFacade().givenUserIsOnAdminEventsPage();
+			EventSummaryComponent eventCard = fp.getAdminEventStepsFacade().findEventWithName(event);
+			eventCard.clickOnDeleteEvent(event);
+		} catch (Exception e) {
+			//LOG
+			e.printStackTrace();
+		}
+	}
+
+	protected void cancelEvent(FacadeProvider fp, Event event) {
+		try {
+			fp.getAdminEventStepsFacade().givenUserIsOnAdminEventsPage();
+			EventSummaryComponent eventCard = fp.getAdminEventStepsFacade().findEventWithName(event);
+			eventCard.clickOnCancelEvent();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	private void updateTestStatus(WebDriver driver, BrowserStackStatusEnum status, Map<String, String> parameters) {
 		try {
 			String sessionId = ((RemoteWebDriver) driver).getSessionId().toString();
@@ -78,7 +102,7 @@ public class BaseSteps {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private void analyzeLog() {
 		LogEntries logEntries = driver.manage().logs().get(LogType.BROWSER);
 		for (LogEntry entry : logEntries) {
@@ -96,7 +120,7 @@ public class BaseSteps {
 	public void maximizeWindow() {
 		driver.manage().window().maximize();
 	}
-	
+
 	public void setWindowDimension(int width, int height) {
 		Dimension d = new Dimension(width, height);
 		driver.manage().window().setSize(d);

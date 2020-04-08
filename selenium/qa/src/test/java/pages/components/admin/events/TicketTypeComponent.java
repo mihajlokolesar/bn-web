@@ -186,7 +186,8 @@ public class TicketTypeComponent extends BaseComponent {
 	private void setMaxTicketsPerCustomer(String maxTickets) {
 		if (maxTickets != null) {
 			clickOnButtonWithLabel(MAX_TICKET_PER_CUSOMER_BUTTON_LABEL);
-			waitVisibilityAndClearFieldSendKeys(maxTicketsPerCustomerField, maxTickets);
+			waitForTime(300);
+			waitVisibilityAndClearFieldSendKeysF(maxTicketsPerCustomerField, maxTickets);
 		}
 	}
 

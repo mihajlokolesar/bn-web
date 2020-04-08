@@ -67,12 +67,12 @@ public class AdminBoxOfficeFacade extends BaseFacadeSteps {
 
 	public void whenUserSellsTicketToCustomer(Purchase purchase, PaymentType paymentOption, User customer) {
 		Event event = purchase.getEvent();
-		
+
 		givenEventIsSelected(purchase.getEvent().getEventName());
 		TicketType ticketType = event.getTicketTypes().get(0);
 		TicketTypeRowComponent ticketTypeRow = whenUserSelectsTicketType(
 				ticketType.getTicketTypeName());
-		
+
 		whenUserAddsQuantityAndClicksCheckout(ticketTypeRow, purchase.getNumberOfTickets());
 		if (PaymentType.CREDIT_CARD.equals(paymentOption)) {
 			whenUserPicksCardOption();
@@ -91,41 +91,36 @@ public class AdminBoxOfficeFacade extends BaseFacadeSteps {
 		purchase.addBoxOfficeOrderLine(customer, orderNumber, paymentOption);
 	}
 
-	public boolean whenUserSearchesByUserName(User user) {
-		String searchValue = user.getFirstName();
-		return whenUserSearchesByUserParams(searchValue);
-	}
-
 	public boolean whenUserSearchesByLastName(User user) {
 		String lastname = user.getLastName();
 		return whenUserSearchesByUserParams(lastname);
 	}
-	
+
 	public boolean whenUserSearchesByFirstNameAndTicketNumber(User user) {
 		String firstname = user.getFirstName();
 		boolean isNameSearchValid = whenUserSearchesByUserParams(firstname);
 		String ticketNumber = guestPage.getTicketNumber(firstname);
  		guestPage.enterSearchParameters(ticketNumber);
- 		
+
  		boolean isTicketInSearchResults = guestPage.isTicketNumberInGuestResults(ticketNumber);
  		return isTicketInSearchResults && isNameSearchValid;
-		
+
 	}
-	
+
 	public boolean whenUserSearchesByEmail(User user) {
 		Integer allGuests = cleanSearchAndGetNumberOfResults();
 		guestPage.enterSearchParameters(user.getEmailAddress());
 		Integer searchResults = guestPage.getNumberOfResultsOfSearch(user.getFirstName());
 		return searchResults.compareTo(allGuests) < 0;
 	}
-	
+
 	private boolean whenUserSearchesByUserParams(String param) {
 		Integer allGuests = cleanSearchAndGetNumberOfResults();
 		guestPage.enterSearchParameters(param);
 		Integer searchResults = guestPage.getNumberOfResultsOfSearch(param);
 		return searchResults.compareTo(allGuests) < 0;
 	}
-	
+
 	private Integer cleanSearchAndGetNumberOfResults() {
 		guestPage.enterSearchParameters("");
 		Integer numberOfAllGuests = guestPage.getNumberOfAllGuestOnPage();
@@ -163,7 +158,7 @@ public class AdminBoxOfficeFacade extends BaseFacadeSteps {
 	public boolean thenCheckoutDialogIsVisible() {
 		return checkoutDialog.isVisible();
 	}
-	
+
 	public void whenUserClicksOnChangeTicketOnCheckoutDialog() {
 		checkoutDialog.clickOnChangeTicketLink();
 	}
@@ -171,17 +166,17 @@ public class AdminBoxOfficeFacade extends BaseFacadeSteps {
 	public void whenUserPicksCashOption() {
 		checkoutDialog.clickOnPayWithCash();
 	}
-	
+
 	public void whenUserPicksCardOption() {
 		checkoutDialog.clickOnPayWithCreditCard();
 	}
 
 	public boolean whenUserEntersTenderedAndChecksChangeDueIsCorrect(int tenderedAmount) {
 		checkoutDialog.enterAmountToTenderedField(tenderedAmount);
-		
+
 		Double doubleCheckoutDue = checkoutDialog.getChangeDueAmount();
 		Double doubleOrderTotal = checkoutDialog.getOrderTotal();
-		
+
 		BigDecimal doubleTendered = new BigDecimal(tenderedAmount);
 		BigDecimal checkDue = new BigDecimal(doubleCheckoutDue != null ? doubleCheckoutDue : 0);
 		BigDecimal orderTotal = new BigDecimal(doubleOrderTotal != null ? doubleOrderTotal : 0);
@@ -216,12 +211,12 @@ public class AdminBoxOfficeFacade extends BaseFacadeSteps {
 			return false;
 		}
 	}
-	
+
 	public String getOrderNumberFromCompleteDialog() {
 		BoxOfficeSellOrderCompleteDialog orderCompleteDialog = new BoxOfficeSellOrderCompleteDialog(driver);
 		return orderCompleteDialog.getOrderNumber();
 	}
-	
+
 	public void whenUserClickOnReturnToBoxOffice() {
 		BoxOfficeSellOrderCompleteDialog orderCompleteDialog = (BoxOfficeSellOrderCompleteDialog) getData(ORDER_COMPLETE_DIALOG_KEY);
 		orderCompleteDialog.clickOnReturnTOBoxOfficeButton();

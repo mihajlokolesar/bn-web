@@ -155,7 +155,7 @@ public class AbstractBase implements Serializable {
 
 	public void waitVisibilityAndClearFieldSendKeys(WebElement inputField, String value) {
 		if (value == null) {
-			throw new IllegalArgumentException("value argument is null");
+			return;
 		}
 		String text = inputField.getAttribute("value");
 		if (value.equals(text)){
@@ -174,7 +174,7 @@ public class AbstractBase implements Serializable {
 
 	public void waitVisibilityAndSendKeysSlow(WebElement element, String value) {
 		if (value == null) {
-			throw new IllegalArgumentException("value argument is null");
+			return;
 		}
 		explicitWaitForVisiblity(element);
 		explicitWaitForClickable(element);
