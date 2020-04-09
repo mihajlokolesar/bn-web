@@ -8,6 +8,7 @@ import notifications from "../../../../stores/notifications";
 import user from "../../../../stores/user";
 import Bigneon from "../../../../helpers/bigneon";
 import servedImage from "../../../../helpers/imagePathHelper";
+import { isReactNative, sendReactNativeMessage, useNewMessaging, MESSAGE_TYPES } from "../../../../helpers/reactNative";
 
 const styles = theme => ({
 	leftIcon: {
@@ -108,6 +109,14 @@ class FacebookButtonDisplay extends Component {
 					if (access_token) {
 						localStorage.setItem("access_token", access_token);
 						localStorage.setItem("refresh_token", refresh_token);
+
+						if (isReactNative() && useNewMessaging()) {
+							const loginData = {
+								refresh_token,
+								access_token
+							};
+							sendReactNativeMessage(loginData, MESSAGE_TYPES.AUTH);
+						}
 
 						//Pull user data with our new token
 						user.refreshUser(({ email }) => {
