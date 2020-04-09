@@ -29,7 +29,7 @@ const styles = theme => ({
 		width: 61,
 		marginLeft: -14,
 		[theme.breakpoints.down("sm")]: {
-			marginLeft: -24
+			marginLeft: -18
 		}
 	},
 
@@ -117,7 +117,7 @@ class SearchToolBarInput extends Component {
 				</div>
 				<Hidden smUp>
 					<img
-						alt="Search icon"
+						alt="Clear search icon"
 						className={classes.closeIcon}
 						src={servedImage("/icons/delete-gray.svg")}
 						onClick={this.props.onCloseClick}

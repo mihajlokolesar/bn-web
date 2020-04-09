@@ -14,6 +14,7 @@ import { urlPageParam } from "../../../elements/pagination";
 import Hidden from "@material-ui/core/Hidden";
 import { Link } from "react-router-dom";
 import analytics from "../../../../helpers/analytics";
+import { isReactNative } from "../../../../helpers/reactNative";
 
 const styles = theme => ({
 	root: {
@@ -106,7 +107,8 @@ class Results extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			shownEvents: 30
+			shownEvents: 30,
+			showTitle: !isReactNative()
 		};
 		this.loadMore = this.loadMore.bind(this);
 	}
@@ -151,7 +153,7 @@ class Results extends Component {
 	render() {
 		const { classes } = this.props;
 		const events = eventResults.filteredEvents;
-		const { shownEvents } = this.state;
+		const { shownEvents, showTitle } = this.state;
 
 		let hasResults = null;
 		if (events === null) {
@@ -168,12 +170,16 @@ class Results extends Component {
 
 		return (
 			<div className={classes.root}>
-				<Typography className={classes.eventHeading}>
-					Upcoming events
-				</Typography>
-
+				{showTitle ?
+					(
+						<Typography className={classes.eventHeading}>
+							Upcoming events
+						</Typography>
+					) :
+					(
+						<div style={{padding: 4}}>&nbsp;</div>
+					)}
 				{hasResults === true ? this.renderEventList(events) : null}
-
 				{hasResults === false ? (
 					<NoResults
 						classes={classes}
