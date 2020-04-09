@@ -266,7 +266,8 @@ class CheckoutSuccess extends Component {
 											src={servedImage("/site/images/big-neon-heart-logo.png")}
 										/>
 										<Typography className={classes.cardLargeText}>
-											Your Tickets are 2 Taps Away
+											{user.firstName}, Your Order is Confirmed! Now get the Big
+											Neon app to View your Tickets
 										</Typography>
 										<Typography className={classes.greySmallInfo}>
 											Your secure tickets are waiting for you in the Big Neon
@@ -446,17 +447,15 @@ const styles = theme => {
 			backgroundColor: "#FFFFFF"
 		},
 		mobileContent: {
-			// flex: 1,
 			flexDirection: "column",
 			paddingTop: 20,
-			background: "linear-gradient(180deg, #9C2D82 0%, #3965A6 40%)",
-			display: "flex"
+			background: "linear-gradient(180deg, #9C2D82 0%, #3965A6 50%)",
+			height: "auto"
 		},
 		mobiCardHolder: {
 			padding: 20
 		},
 		mobileTopContent: {
-			// flex: 1,
 			display: "flex",
 			flexDirection: "column",
 			justifyContent: "center",
@@ -523,8 +522,8 @@ const styles = theme => {
 			height: heroHeight
 		},
 		desktopEventPromoImg: {
-			height: "140px",
-			width: "273px",
+			height: "202px",
+			width: "391px",
 			borderRadius: "3px",
 			backgroundImage: "linear-gradient(255deg, #e53d96, #5491cc)",
 			backgroundRepeat: "no-repeat",
@@ -688,15 +687,16 @@ const styles = theme => {
 			marginRight: 10
 		},
 		heartLogo: {
-			height: 55,
-			width: 53,
+			height: 40,
+			width: 38,
 			marginTop: 25,
 			marginBottom: 25
 		},
 		cardLargeText: {
 			color: "#3C383F",
 			fontSize: 24,
-			fontFamily: fontFamilyBold,
+			fontFamily: fontFamilyDemiBold,
+			marginBottom: theme.spacing.unit * 2,
 			lineHeight: "28px",
 			[theme.breakpoints.down("md")]: {
 				fontSize: 22,
@@ -822,10 +822,11 @@ const styles = theme => {
 			textDecoration: "none",
 			lineHeight: "18px",
 			cursor: "pointer",
-			marginBottom: 20
+			marginBottom: 30
 		},
 		greySmallInfo: {
 			color: "#9BA3B5",
+			fontSize: 16,
 			lineHeight: "18px",
 			textAlign: "center"
 		}

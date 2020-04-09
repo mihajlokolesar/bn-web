@@ -20,13 +20,6 @@ const Hero = ({
 				containerStyle={{ maxWidth: 956 }}
 				col1={(
 					<div className={classes.desktopHeroContent}>
-						<Typography className={classes.desktopHeroTopLine}>
-							{firstName}, <br/> Your Big Neon order is confirmed!
-						</Typography>
-						<Typography className={classes.desktopHeroOrderTag}>
-							Order #{order.order_number} |&nbsp;{qty} Tickets
-						</Typography>
-
 						{promoImgStyle ? (
 							<div
 								className={classes.desktopEventPromoImg}
