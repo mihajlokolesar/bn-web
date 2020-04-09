@@ -224,7 +224,9 @@ class CheckoutConfirmation extends Component {
 				tickets.refreshTickets();
 				user.clearCampaignTrackingData();
 
-				if (id) {
+				if (isReactNative()) {
+					history.push(`/?purchase_successful=true`);
+				} else if (id) {
 					//If they're checking out for a specific event then we have a custom success page for them
 					history.push(
 						`/tickets/${slug}/tickets/success${window.location.search ||
