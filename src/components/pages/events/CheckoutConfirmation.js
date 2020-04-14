@@ -177,7 +177,15 @@ class CheckoutConfirmation extends Component {
 			return;
 		}
 
-		Bigneon()
+		const bigneon = Bigneon();
+		if (bigneon.client.tokenRefreshing) {
+			setTimeout(() => {
+				this.checkForAbandonedCart(id);
+			}, 250);
+			return;
+		}
+
+		bigneon
 			.cart.duplicate({
 				id
 			})

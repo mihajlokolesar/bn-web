@@ -177,7 +177,7 @@ class Results extends Component {
 						</Typography>
 					) :
 					(
-						<div style={{padding: 4}}>&nbsp;</div>
+						<div style={{ padding: 4 }}>&nbsp;</div>
 					)}
 				{hasResults === true ? this.renderEventList(events) : null}
 				{hasResults === false ? (
