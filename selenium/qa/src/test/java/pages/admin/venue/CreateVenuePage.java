@@ -207,6 +207,8 @@ public class CreateVenuePage extends BasePage {
 	}
 
 	public void clickOnUpdateButton() {
+		SeleniumUtils.jsScrollIntoView(updateButton,driver);
+		waitForTime(500);
 		waitVisibilityAndBrowserCheckClick(updateButton);
 	}
 

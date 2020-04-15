@@ -51,8 +51,7 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		return adminEvents.findEventByName(event.getEventName());
 	}
 
-	public EventSummaryComponent findEventWithNameAndPredicate(Event event,
-															   Predicate<EventSummaryComponent> predicate) {
+	public EventSummaryComponent findEventWithNameAndPredicate(Event event, Predicate<EventSummaryComponent> predicate) {
 		EventSummaryComponent selectedEvent = adminEvents.findEvent(event.getEventName(), predicate);
 		return selectedEvent;
 	}

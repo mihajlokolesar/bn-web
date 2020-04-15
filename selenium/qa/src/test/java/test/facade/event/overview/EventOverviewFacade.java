@@ -35,6 +35,7 @@ public class EventOverviewFacade extends BaseFacadeSteps {
 
 	public void whenUserSelectsEditEvent() {
 		getOverviewPage().selectOptionFromDD(EventOverviewPage.DD_MENU_EDIT_EVENT);
+		getOverviewPage().waitForTime(1500);
 	}
 
 	public void whenUserComparesGivenFieldsAndEvent(Map<Class, List<IAssertableField>> fieldMap, Event event, SoftAssert sa) {

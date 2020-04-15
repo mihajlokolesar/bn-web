@@ -133,8 +133,6 @@ public class EventSummaryComponent extends BaseComponent {
 		return SeleniumUtils.getChildElementFromParentLocatedBy(event, By.xpath(relativeEventNameXpath), driver).getText();
 	}
 
-
-
 	public void viewEvent() {
 		openDropDown();
 		findActionAndClickInDropDown(dropDownXpathElement(VIEW_EVENT_DD_ACTION));

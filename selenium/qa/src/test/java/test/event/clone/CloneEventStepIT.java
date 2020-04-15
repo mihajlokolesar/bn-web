@@ -24,7 +24,6 @@ import static model.AdditionalOptionsTicketType.*;
 
 public class CloneEventStepIT extends BaseSteps {
 
-
 	private static final int DATE_OFFSET = 0;
 	private static final int DATE_RANGE = 0;
 	private static final String EVENT_CLONE_TEMPLATE_NAME = "TestCloneTemplateName";
@@ -124,7 +123,6 @@ public class CloneEventStepIT extends BaseSteps {
 			mapClassFields, orgAdmin
 		}};
 	}
-
 
 	@DataProvider(name = "clone_event")
 	public static Object[][] cloneEventData() {

@@ -38,6 +38,7 @@ public class AnnouncementFacade extends BaseFacadeSteps{
 		announcementPage.enterMailContent(mail);
 		announcementPage.clickOnSendEmailButton();
 		AnnouncementSendToBuyersDialog buyersDialog = new AnnouncementSendToBuyersDialog(driver);
+		buyersDialog.isVisible();
 		buyersDialog.clickOnSendMailButton();
 		AnnouncementSendMailDialog sentDialog = new AnnouncementSendMailDialog(driver);
 		Assert.assertTrue(sentDialog.isAnnouncementTitleValid());

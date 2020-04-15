@@ -93,12 +93,6 @@ public class EventOverviewStepsIT extends BaseSteps {
 		eventSummaryComponent.deleteEvent(event);
 	}
 
-	public void overviewShouldIncludeRealTimeSalesDetailsForEachTickeType(){
-
-	}
-
-
-
 	private String findEventAndGoToOverviewPage(FacadeProvider fp, Event event, Predicate<EventSummaryComponent> predicate) {
 		fp.getAdminEventStepsFacade().givenUserIsOnAdminEventsPage();
 		EventSummaryComponent eventCard;
