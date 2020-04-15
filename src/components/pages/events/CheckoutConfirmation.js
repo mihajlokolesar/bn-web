@@ -165,7 +165,6 @@ class CheckoutConfirmation extends Component {
 				});
 			});
 			const order_id = getUrlParam("order_id");
-
 			this.checkForAbandonedCart(order_id);
 		} else {
 			//TODO return 404
@@ -185,8 +184,8 @@ class CheckoutConfirmation extends Component {
 			return;
 		}
 
-		bigneon
-			.cart.duplicate({
+		bigneon.cart
+			.duplicate({
 				id
 			})
 			.then(response => {
@@ -315,7 +314,7 @@ class CheckoutConfirmation extends Component {
 				tickets.refreshTickets();
 				user.clearCampaignTrackingData();
 
-				if(isReactNative()){
+				if (isReactNative()) {
 					history.push(`/?purchase_successful=true`);
 				} else if (id) {
 					//If they're checking out for a specific event then we have a custom success page for them
