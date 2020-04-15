@@ -34,7 +34,7 @@ public class CancelEventStepsIT extends BaseSteps {
 		EventSummaryComponent selectedEvent = eventWrapper.givenEventExistAndIsNotCanceled(event);
 
 		//when
-		selectedEvent.clickOnCancelEvent();
+		selectedEvent.cancelEvent();
 
 		//then
 		boolean isEventCanceled = eventWrapper.thenEventShouldBeCanceled(event);

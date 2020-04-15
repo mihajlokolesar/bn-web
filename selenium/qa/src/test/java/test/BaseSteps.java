@@ -69,7 +69,7 @@ public class BaseSteps {
 		try {
 			fp.getAdminEventStepsFacade().givenUserIsOnAdminEventsPage();
 			EventSummaryComponent eventCard = fp.getAdminEventStepsFacade().findEventWithName(event);
-			eventCard.clickOnDeleteEvent(event);
+			eventCard.deleteEvent(event);
 		} catch (Exception e) {
 			//LOG
 			e.printStackTrace();
@@ -80,7 +80,7 @@ public class BaseSteps {
 		try {
 			fp.getAdminEventStepsFacade().givenUserIsOnAdminEventsPage();
 			EventSummaryComponent eventCard = fp.getAdminEventStepsFacade().findEventWithName(event);
-			eventCard.clickOnCancelEvent();
+			eventCard.cancelEvent();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

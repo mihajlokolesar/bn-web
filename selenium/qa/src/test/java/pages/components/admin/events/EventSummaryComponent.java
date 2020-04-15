@@ -91,7 +91,7 @@ public class EventSummaryComponent extends BaseComponent {
 		return intElAmount;
 	}
 
-	public boolean clickOnCancelEvent() {
+	public boolean cancelEvent() {
 		openDropDown();
 		findActionAndClickInDropDown(dropDownXpathElement(CANCEL_EVENT_DD_ACTION));
 		CancelEventDialog dialog = new CancelEventDialog(driver);
@@ -99,7 +99,7 @@ public class EventSummaryComponent extends BaseComponent {
 		return dialog.isInvisible(1000);
 	}
 
-	public DeleteEventDialog clickOnDeleteEvent(Event event) {
+	public DeleteEventDialog deleteEvent(Event event) {
 		openDropDown();
 		findActionAndClickInDropDown(dropDownXpathElement(DELETE_EVENT_DD_ACTION));
 		waitForTime(2000);
@@ -108,7 +108,7 @@ public class EventSummaryComponent extends BaseComponent {
 		return deleteDialog;
 	}
 
-	public String clickOnEventOverview() {
+	public String eventOverview() {
 		String eventName = getEventName();
 		openDropDown();
 		findActionAndClickInDropDown(dropDownXpathElement(EVENT_OVERVIEW_DD_ACTION));
@@ -120,7 +120,7 @@ public class EventSummaryComponent extends BaseComponent {
 		findActionAndClickInDropDown(dropDownXpathElement(EDIT_EVENT_DD_ACTION));
 	}
 
-	public void clickOnCloneEvent(Event clone) {
+	public void cloneEvent(Event clone) {
 		openDropDown();
 		findActionAndClickInDropDown(dropDownXpathElement(CLONE_EVENT_DD_ACTION));
 		CloneEventDialog cloneEventDialog = new CloneEventDialog(driver);

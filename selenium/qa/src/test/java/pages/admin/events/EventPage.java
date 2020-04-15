@@ -196,6 +196,7 @@ public class EventPage extends BasePage {
 		dropDown.selectElementFromDropDownHiddenInput(
 				By.xpath(".//ul//li[contains(text(),'" + venueName + "')]"),
 				venueName);
+		waitForTime(400);
 	}
 
 	public void changeCategory(String category) {

@@ -23,8 +23,7 @@ import utils.DateRange;
 import utils.ProjectUtils;
 
 public class ReportBoxOfficeStepsIT extends BaseSteps {
-	
-	
+
 	private final static String PURCHASE_EST_ONE_KEY = "purchase_one";
 	private final static String PURCHASE_PST_TWO_KEY = "purchase_two";
 	private final static String PURCHASE_CST_THREE_KEY = "purchase_three";
@@ -33,10 +32,10 @@ public class ReportBoxOfficeStepsIT extends BaseSteps {
 	private Purchase firstBOPurchaseEST;
 	private Purchase secondBOPurchasePST;
 	private Purchase notBoxOfficePurchaseCST;
-	
+
 	@Test(priority = 32, retryAnalyzer = utils.RetryAnalizer.class, alwaysRun=true, dependsOnMethods = {"boxOfficeReportPrepareDataFixture"})
 	public void boxOfficeReportCanOnlyContainBoxOfficeTransactions() throws Exception {
-		
+
 		maximizeWindow();
 		Organization org = firstBOPurchaseEST.getEvent().getOrganization();
 		User orgAdmin = org.getTeam().getOrgAdminUser();
@@ -50,7 +49,7 @@ public class ReportBoxOfficeStepsIT extends BaseSteps {
 		Assert.assertFalse(isEventPresent,"There should be not tickets sold for this event in box office report" + notBoxOfficePurchaseCST.getEvent().getEventName());
 		fp.getLoginFacade().logOut();
 	}
-	
+
 	@Test(priority = 33, retryAnalyzer = utils.RetryAnalizer.class)
 	public void filterOnDateAndVerifyDataByCrossReferencingOnOrderManagePage() throws Exception {
 		maximizeWindow();
@@ -58,7 +57,7 @@ public class ReportBoxOfficeStepsIT extends BaseSteps {
 		navigateToReportsBoxOffice(fp, firstBOPurchaseEST);
 		DateRange range = ProjectUtils.getDateRangeWithSpecifiedRAngeInDaysWithStartOffset(0, 0);
 		fp.getReportsBoxOfficeFacade().enterDates(range);
-		
+
 		DataHolder dataHolder = fp.getReportsBoxOfficeFacade().getPageDataHolder();
 		boolean isDataInReport = fp.getReportsBoxOfficeFacade().whenUserChecksIfPurchaseEventsAreInReport(boxOfficePurchases(), dataHolder);
 		Assert.assertTrue(isDataInReport, "Data not found in report");
@@ -66,45 +65,45 @@ public class ReportBoxOfficeStepsIT extends BaseSteps {
 		fp.getEventReportsFacade().whenUserVerifiesOrdersForFoundEvents(dataHolder, boxOfficePurchases(), range);
 		fp.getLoginFacade().logOut();
 	}
-	
+
 	private List<Purchase> boxOfficePurchases() {
 		List<Purchase> purchases = new ArrayList<Purchase>();
 		purchases.add(this.firstBOPurchaseEST);
 		purchases.add(this.secondBOPurchasePST);
 		return purchases;
 	}
-	
+
 	@Test(priority = 34, retryAnalyzer = utils.RetryAnalizer.class)
 	public void verifyTransactionsAreSortedViaOperatorPerEventStartDate() throws Exception {
 		maximizeWindow();
 
 		FacadeProvider fp = new FacadeProvider(driver);
 		navigateToReportsBoxOffice(fp, firstBOPurchaseEST);
-		
+
 		DateRange range = ProjectUtils.getDateRangeWithSpecifiedRAngeInDaysWithStartOffset(0, 0);
 		fp.getReportsBoxOfficeFacade().enterDates(range);
-		
+
 		DataHolder dataHolder = fp.getReportsBoxOfficeFacade().getPageDataHolder();
 		fp.getReportsBoxOfficeFacade().thenThereShouldBeMultipeTablesWithCorrectOrder(dataHolder);
 		fp.getLoginFacade().logOut();
 	}
-	
+
 	@Test(priority = 35, retryAnalyzer = utils.RetryAnalizer.class)
 	public void verifyTransactionsAreSubTotaledByPaymentType() throws Exception {
 		maximizeWindow();
 		FacadeProvider fp = new FacadeProvider(driver);
 		navigateToReportsBoxOffice(fp, firstBOPurchaseEST);
-		
+
 		DateRange range = ProjectUtils.getDateRangeWithSpecifiedRAngeInDaysWithStartOffset(0, 0);
 		fp.getReportsBoxOfficeFacade().enterDates(range);
 		DataHolder dataHolder = fp.getReportsBoxOfficeFacade().getPageDataHolder();
 		fp.getEventReportsFacade().givenUserIsOnAdminEventsPage();
-		
+
 		fp.getEventReportsFacade().whenUserVerifiesMethodPaymentTotals(dataHolder, 2, range);
 		fp.getLoginFacade().logOut();
-		
+
 	}
-	
+
 	@Test(priority = 36, retryAnalyzer = utils.RetryAnalizer.class)
 	public void verifyReportUtilizesTimeZoneOfOrganization() throws Exception {
 		maximizeWindow();
@@ -115,9 +114,9 @@ public class ReportBoxOfficeStepsIT extends BaseSteps {
 		ZoneId orgTimeZone = ZoneId.of(firstBOPurchaseEST.getEvent().getOrganization().getTimeZone());
 		fp.getReportsBoxOfficeFacade().isZoneInRowsEqual(orgTimeZone);
 		fp.getLoginFacade().logOut();
-		
+
 	}
-	
+
 	private void navigateToReportsBoxOffice(FacadeProvider fp, Purchase purchase) throws Exception {
 		Organization organization = purchase.getEvent().getOrganization();
 		User orgAdmin = organization.getTeam().getOrgAdminUser();
@@ -125,7 +124,7 @@ public class ReportBoxOfficeStepsIT extends BaseSteps {
 		fp.getOrganizationFacade().givenOrganizationExist(organization);
 		fp.getReportsFacade().givenUserIsOnReportsBoxOfficePage();
 	}
-	
+
 	@Test(dataProvider = "prepare_box_offce_report_data_fixture", priority = 32)
 	public void boxOfficeReportPrepareDataFixture(Map<String, Object> data) throws Exception {
 		maximizeWindow();
@@ -136,26 +135,26 @@ public class ReportBoxOfficeStepsIT extends BaseSteps {
 		User boxOfficeUser = firstBOPurchaseEST.getEvent().getOrganization().getTeam().getBoxOfficeUsers().get(0);
 		User standardCustomer = (User) data.get(STANDARD_CUSTOMER_KEY);
 		User userOneCustomer = (User) data.get(CUSTOMER_KEY);
-		
+
 		FacadeProvider fp = new FacadeProvider(driver);
-		
+
 		fp.getLoginFacade().givenUserIsOnLoginPage();
-		
-		//create 3 events with orgadmin user (eventWithEST , eventWithJST, eventWithSAST)
+
+		//create 3 events with orgadmin user (eventWithEST , eventWithPST, eventWithCST)
 		fp.getLoginFacade().givenUserIsLogedIn(orgAdmin);
 		fp.getOrganizationFacade().givenOrganizationExist(firstBOPurchaseEST.getEvent().getOrganization());
 		fp.getAdminEventStepsFacade().givenEventExistAndIsNotCanceled(firstBOPurchaseEST.getEvent());
 		fp.getAdminEventStepsFacade().givenEventExistAndIsNotCanceled(secondBOPurchasePST.getEvent());
 		fp.getAdminEventStepsFacade().givenEventExistAndIsNotCanceled(notBoxOfficePurchaseCST.getEvent());
-		
+
 		//do box office sell (eventWithEST) with organization admin user to standard user -cash
-		//do box office sell (eventWithJST) with organization admin user to userOne user -credit card
+		//do box office sell (eventWithPST) with organization admin user to userOne user -credit card
 		fp.getBoxOfficeFacade().givenUserIsOnBoxOfficePage();
 		fp.getBoxOfficeFacade().whenUserSellsTicketToCustomer(firstBOPurchaseEST, PaymentType.CASH, standardCustomer);
 		fp.getBoxOfficeFacade().whenUserSellsTicketToCustomer(secondBOPurchasePST, PaymentType.CREDIT_CARD, userOneCustomer);
 		fp.getLoginFacade().logOut();
-		
-		//login with boxoffice user 
+
+		//login with boxoffice user
 		//do box office sell (eventWithJST) with boxoffice user to standard user - credit card
 		//do box office sell (eventWithEST) with boxoffice user to userOne user - cash
 		fp.getLoginFacade().givenUserIsLogedIn(boxOfficeUser);
@@ -167,13 +166,13 @@ public class ReportBoxOfficeStepsIT extends BaseSteps {
 		fp.getLoginFacade().logOut();
 
 		//login with standardUser
-		//find event (eventWithSAST) and do the purchase
+		//find event (eventWithCST) and do the purchase
 		fp.getEventFacade().givenUserIsOnHomePage();
 		fp.getEventFacade().whenUserDoesThePurchses(notBoxOfficePurchaseCST, standardCustomer);
 		fp.getLoginFacade().logOut();
-		
+
 	}
-	
+
 	@DataProvider(name = "prepare_box_offce_report_data_fixture")
 	public static Object[][] prepareBoxOffceReportDataFixture() {
 		Event estTzEvent = Event.generateEventFromJson(DataConstants.EVENT_EST_TZ_KEY, true, 1, 1);
@@ -183,17 +182,17 @@ public class ReportBoxOfficeStepsIT extends BaseSteps {
 		prchEST.setEvent(estTzEvent);
 		prchEST.setNumberOfTickets(2);
 		prchEST.setOrderNote("Box office reports");
-		
+
 		Purchase prchPST = Purchase.generatePurchaseFromJson(DataConstants.REGULAR_USER_PURCHASE_KEY);
 		prchPST.setEvent(pstTzEvent);
 		prchPST.setNumberOfTickets(2);
 		prchPST.setOrderNote("Box office reports");
-		
+
 		Purchase prch3 = Purchase.generatePurchaseFromJson(DataConstants.REGULAR_USER_PURCHASE_KEY);
 		prch3.setEvent(cstTzEvent);
 		prch3.setNumberOfTickets(2);
 		prch3.setOrderNote("Box office reports");
-		
+
 		User standardCustomer = User.generateUserFromJson(DataConstants.USER_STANDARD_KEY);
 		User userOneCustomer = User.generateUserFromJson(DataConstants.DISTINCT_USER_ONE_KEY);
 		Map<String,Object> data = new HashMap<>();

@@ -94,7 +94,7 @@ public abstract class TemplateRefundFeeSteps extends BaseSteps {
 			getAdminEventsFacade().whenUserRefreshesThePage();
 			getAdminEventsFacade().thenUserIsAtEventsPage();
 			EventSummaryComponent eventComponent = getAdminEventsFacade().findEventWithName(event);
-			eventComponent.clickOnCancelEvent();
+			eventComponent.cancelEvent();
 		} catch (Exception e) {
 			// log it once logger is added
 		}

@@ -118,7 +118,7 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 
 	public boolean whenUserDeletesEvent(Event event) {
 		EventSummaryComponent component = adminEvents.findEventByName(event.getEventName());
-		DeleteEventDialog deleteDialog = component.clickOnDeleteEvent(event);
+		DeleteEventDialog deleteDialog = component.deleteEvent(event);
 		if (adminEvents.isNotificationDisplayedWithMessage(MsgConstants.EVENT_DELETION_FAILED, 4)) {
 			deleteDialog.clickOnKeepEvent();
 			return false;
@@ -258,7 +258,7 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		try {
 			givenUserIsOnAdminEventsPage();
 			EventSummaryComponent component = findEventWithName(event);
-			component.clickOnCancelEvent();
+			component.cancelEvent();
 		} catch (Exception e) {
 		}
 	}

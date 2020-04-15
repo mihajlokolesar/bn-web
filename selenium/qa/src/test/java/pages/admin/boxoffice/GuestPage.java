@@ -16,7 +16,7 @@ public class GuestPage extends BasePage {
 	@FindBy(xpath = "//main//div//input[@name='Search']")
 	private WebElement searchField;
 
-	@FindBy(xpath = "//main/div/div/div")
+	@FindBy(xpath = "//main/div/div/div[div//input[@name='Search']]")
 	private WebElement container;
 
 	public GuestPage(WebDriver driver) {
@@ -33,16 +33,17 @@ public class GuestPage extends BasePage {
 		waitVisibilityAndSendKeys(searchField, value);
 		waitForTime(3000);
 	}
-	
+
 	public Integer getNumberOfAllGuestOnPage() {
 		return searchForAllGuestOnPage().size();
 	}
 
 	public List<WebElement> searchForAllGuestOnPage() {
 		List<WebElement> elements = container.findElements(By.xpath(".//img[contains(@src,'down-active.svg')]"));
+
 		return elements;
 	}
-	
+
 	public Integer getNumberOfResultsOfSearch(String searchedValue) {
 		return searchForResultsOfSearch(searchedValue).size();
 	}
@@ -52,7 +53,7 @@ public class GuestPage extends BasePage {
 				.findElements(By.xpath("./div[div//p[contains(text(),'" + searchedValue + "')]]"));
 		return elements;
 	}
-	
+
 	public String getTicketNumber(String searchedValue) {
 		WebElement element = container.findElement(
 				By.xpath(".//div[p[contains(text(),'" + searchedValue + "')]]/following-sibling::div/span/p"));
@@ -64,7 +65,7 @@ public class GuestPage extends BasePage {
 		}
 		return ticketNumber;
 	}
-	
+
 	public boolean isTicketNumberInGuestResults(String ticketNumber) {
 		List<WebElement> elements = container
 				.findElements(By.xpath(".//div/span/p[contains(text(),'" + ticketNumber + "')]"));

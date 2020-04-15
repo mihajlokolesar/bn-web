@@ -18,6 +18,7 @@ import test.facade.AdminBoxOfficeFacade;
 import test.facade.AdminEventDashboardFacade;
 import test.facade.AdminEventStepsFacade;
 import test.facade.EventStepsFacade;
+import test.facade.FacadeProvider;
 import test.facade.LoginStepsFacade;
 import test.facade.OrganizationStepsFacade;
 import test.facade.orders.order.OrderManageFacade;
@@ -41,11 +42,12 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 	 */
 	@Test(dataProvider = "guest_page_search_data", priority = 13,
 			 dependsOnMethods = {"userPurchasedTickets"}, alwaysRun = true, retryAnalyzer = utils.RetryAnalizer.class)
-	public void guestPageSearchTest(User superuser, User one, User two) throws Exception {
-		LoginStepsFacade loginFacade = new LoginStepsFacade(driver);
-		AdminBoxOfficeFacade boxOfficeFacade = new AdminBoxOfficeFacade(driver);
-		AdminEventStepsFacade adminEventFacade = new AdminEventStepsFacade(driver);
-		OrganizationStepsFacade organizationFacade = new OrganizationStepsFacade(driver);
+	public void guestPageSearchTest(User superuser, User one, User two) {
+		FacadeProvider fp = new FacadeProvider(driver);
+		LoginStepsFacade loginFacade = fp.getLoginFacade();
+		AdminBoxOfficeFacade boxOfficeFacade = fp.getBoxOfficeFacade();
+		AdminEventStepsFacade adminEventFacade = fp.getAdminEventStepsFacade();
+		OrganizationStepsFacade organizationFacade = fp.getOrganizationFacade();
 
 		maximizeWindow();
 		loginFacade.givenAdminUserIsLogedIn(superuser);
@@ -57,10 +59,10 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 		boxOfficeFacade.givenUserIsOnGuestPage();
 
 		boolean isLastNameTest = boxOfficeFacade.whenUserSearchesByLastName(one);
-		boolean isTicketInSearchResults = boxOfficeFacade.whenUserSearchesByFirstNameAndTicketNumber(one);
+		boolean isFirstNameTest = boxOfficeFacade.whenUserSearchesByFirstName(one);
 		boolean isEmailSearchTest = boxOfficeFacade.whenUserSearchesByEmail(two);
 
-		Assert.assertTrue(isLastNameTest && isTicketInSearchResults && isEmailSearchTest);
+		Assert.assertTrue(isLastNameTest && isFirstNameTest && isEmailSearchTest);
 		loginFacade.logOut();
 
 	}
@@ -78,7 +80,8 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 	@Test(dataProvider = "purchase_data", priority = 13)
 	public void userPurchasedTickets(User user, Purchase purchase) throws Exception {
 		maximizeWindow();
-		EventStepsFacade eventsFacade = new EventStepsFacade(driver);
+		FacadeProvider fp = new FacadeProvider(driver);
+		EventStepsFacade eventsFacade = fp.getEventFacade();
 
 		// given
 		eventsFacade.givenUserIsOnHomePage();
@@ -126,15 +129,13 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 	@Test(dataProvider = "manage_orders_page_data", priority = 14, retryAnalyzer = utils.RetryAnalizer.class)
 	public void manageOrdersPageSearchTest(User orgAdmin, User customer, User customerOne, Event event, Purchase purchase)
 			throws Exception {
-
-		LoginStepsFacade loginFacade = new LoginStepsFacade(driver);
-		AdminEventStepsFacade adminEventFacade = new AdminEventStepsFacade(driver);
-		OrganizationStepsFacade organizationFacade = new OrganizationStepsFacade(driver);
-		AdminEventDashboardFacade dashboardFacade = new AdminEventDashboardFacade(driver);
+		FacadeProvider fp = new FacadeProvider(driver);
+		LoginStepsFacade loginFacade = fp.getLoginFacade();
+		AdminEventDashboardFacade dashboardFacade = fp.getEventDashboardFacade();
 
 		maximizeWindow();
 
-		loginPickOrgNavToManageOrders(loginFacade, adminEventFacade, organizationFacade, dashboardFacade, event, orgAdmin);
+		loginPickOrgNavToManageOrders(fp, event, orgAdmin);
 
 		ManageOrderRow orderRow = dashboardFacade.getManageOrdersFirstOrder();
 
@@ -158,18 +159,16 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 	 */
 	@Test(dataProvider = "manage_orders_page_data", priority = 15, retryAnalyzer = utils.RetryAnalizer.class)
 	public void manageOrdersSearchAndRefundTickets(User orgAdmin, User customer, User customerOne, Event event, Purchase purchase) throws Exception {
-		LoginStepsFacade loginFacade = new LoginStepsFacade(driver);
-		AdminEventStepsFacade adminEventFacade = new AdminEventStepsFacade(driver);
-		OrganizationStepsFacade organizationFacade = new OrganizationStepsFacade(driver);
-		AdminEventDashboardFacade dashboardFacade = new AdminEventDashboardFacade(driver);
-		OrderManageFacade orderManageFacade = new OrderManageFacade(driver);
-
+		FacadeProvider fp = new FacadeProvider(driver);
+		LoginStepsFacade loginFacade = fp.getLoginFacade();
+		AdminEventStepsFacade adminEventFacade = fp.getAdminEventStepsFacade();
+		AdminEventDashboardFacade dashboardFacade = fp.getEventDashboardFacade();
+		OrderManageFacade orderManageFacade = fp.getOrderManageFacade();
 		maximizeWindow();
 
-		loginPickOrgNavToManageOrders(loginFacade, adminEventFacade, organizationFacade, dashboardFacade, event, orgAdmin);
+		loginPickOrgNavToManageOrders(fp, event, orgAdmin);
 
 		ManageOrderRow orderRow = dashboardFacade.getManageOrdersFirstOrder();
-
 		String orderNumber = orderRow.getOrderNumber();
 
 		boolean retVal = false;
@@ -203,15 +202,14 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 	@Test(dataProvider = "manage_orders_page_data", priority = 16, retryAnalyzer = utils.RetryAnalizer.class)
 	public void manageOrdersOrderHistoryActivity(User orgAdmin, User customer, User customerOne, Event event, Purchase purchase) throws Exception {
 
-		LoginStepsFacade loginFacade = new LoginStepsFacade(driver);
-		AdminEventStepsFacade adminEventFacade = new AdminEventStepsFacade(driver);
-		OrganizationStepsFacade organizationFacade = new OrganizationStepsFacade(driver);
-		AdminEventDashboardFacade dashboardFacade = new AdminEventDashboardFacade(driver);
-		OrderManageFacade orderManageFacade = new OrderManageFacade(driver);
+		FacadeProvider fp = new FacadeProvider(driver);
+		LoginStepsFacade loginFacade = fp.getLoginFacade();
+		AdminEventDashboardFacade dashboardFacade = fp.getEventDashboardFacade();
+		OrderManageFacade orderManageFacade = fp.getOrderManageFacade();
 
 	    maximizeWindow();
 
-	    loginPickOrgNavToManageOrders(loginFacade, adminEventFacade, organizationFacade, dashboardFacade, event, orgAdmin);
+	    loginPickOrgNavToManageOrders(fp, event, orgAdmin);
 
 		dashboardFacade.whenUserClicksOnOrderLinkOfGivenUser(customerOne, orderManageFacade);
 		//find a way to put this args in data
@@ -233,16 +231,14 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 	@Test(dataProvider = "manage_orders_page_data", priority = 17, retryAnalyzer = utils.RetryAnalizer.class)
 	public void manageOrdersActivityItemsPurchasedAndRefundedCheck(User orgAdmin, User customer, User customerOne, Event event, Purchase purchase) throws Exception {
 
-		LoginStepsFacade loginFacade = new LoginStepsFacade(driver);
-		AdminEventStepsFacade adminEventFacade = new AdminEventStepsFacade(driver);
-		OrganizationStepsFacade organizationFacade = new OrganizationStepsFacade(driver);
-		AdminEventDashboardFacade dashboardFacade = new AdminEventDashboardFacade(driver);
-		OrderManageFacade orderManageFacade = new OrderManageFacade(driver);
+		FacadeProvider fp = new FacadeProvider(driver);
+		LoginStepsFacade loginFacade = fp.getLoginFacade();
+		AdminEventDashboardFacade dashboardFacade = fp.getEventDashboardFacade();
+		OrderManageFacade orderManageFacade = fp.getOrderManageFacade();
 
 	    maximizeWindow();
 
-	    boolean isInitialStepsComplete = loginPickOrgNavToManageOrders(loginFacade, adminEventFacade,
-	    		organizationFacade, dashboardFacade, event, orgAdmin);
+	    boolean isInitialStepsComplete = loginPickOrgNavToManageOrders(fp, event, orgAdmin);
 	    Assert.assertTrue(isInitialStepsComplete);
 		dashboardFacade.whenUserClicksOnOrderLinkOfGivenUser(customerOne, orderManageFacade);
 
@@ -261,15 +257,14 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 	 */
 	@Test(dataProvider = "manage_orders_page_data", priority = 18, retryAnalyzer = utils.RetryAnalizer.class)
 	public void manageOrdersAddNoteAndCheckActivityItem(User orgAdmin, User customer, User customerOne, Event event, Purchase purchase) throws Exception {
-		LoginStepsFacade loginFacade = new LoginStepsFacade(driver);
-		AdminEventStepsFacade adminEventFacade = new AdminEventStepsFacade(driver);
-		OrganizationStepsFacade organizationFacade = new OrganizationStepsFacade(driver);
-		AdminEventDashboardFacade dashboardFacade = new AdminEventDashboardFacade(driver);
-		OrderManageFacade orderManageFacade = new OrderManageFacade(driver);
+		FacadeProvider fp = new FacadeProvider(driver);
+		LoginStepsFacade loginFacade = fp.getLoginFacade();
+		AdminEventStepsFacade adminEventFacade = fp.getAdminEventStepsFacade();
+		AdminEventDashboardFacade dashboardFacade = fp.getEventDashboardFacade();
+		OrderManageFacade orderManageFacade = fp.getOrderManageFacade();
 		maximizeWindow();
 
-		boolean isInitialStepsComplete = loginPickOrgNavToManageOrders(loginFacade, adminEventFacade,
-	    		organizationFacade, dashboardFacade, event, orgAdmin);
+		boolean isInitialStepsComplete = loginPickOrgNavToManageOrders(fp, event, orgAdmin);
 	    Assert.assertTrue(isInitialStepsComplete);
 	    dashboardFacade.whenUserClicksOnOrderLinkOfGivenUser(customerOne, orderManageFacade);
 	    orderManageFacade.whenUserAddsANote(purchase.getOrderNote());
@@ -282,7 +277,7 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 
 	    EventSummaryComponent eventComponent = adminEventFacade.findEventIsOpenedAndHasSoldItem(event);
 		if (eventComponent != null) {
-			eventComponent.clickOnCancelEvent();
+			eventComponent.cancelEvent();
 		}
 		loginFacade.logOut();
 
@@ -290,17 +285,14 @@ public class OrderManagmentSearchForOrdersStepsIT extends BaseSteps {
 	/**
 	 *  Automation: Big Neon : Test 27: Order Management: Order Page navigation #1809, used in most tests in this class
 	 */
-	private boolean loginPickOrgNavToManageOrders(LoginStepsFacade loginFacade,
-			AdminEventStepsFacade adminEventFacade,
-			OrganizationStepsFacade organizationStepsFacade,
-			AdminEventDashboardFacade dashboardFacade, Event event, User user) throws Exception {
-		loginFacade.givenAdminUserIsLogedIn(user);
-		organizationStepsFacade.givenOrganizationExist(event.getOrganization());
-		adminEventFacade.givenUserIsOnAdminEventsPage();
-		EventSummaryComponent eventComponent = adminEventFacade.findEventIsOpenedAndHasSoldItem(event);
+	private boolean loginPickOrgNavToManageOrders(FacadeProvider fp, Event event, User user) throws Exception {
+		fp.getLoginFacade().givenAdminUserIsLogedIn(user);
+		fp.getOrganizationFacade().givenOrganizationExist(event.getOrganization());
+		fp.getAdminEventStepsFacade().givenUserIsOnAdminEventsPage();
+		EventSummaryComponent eventComponent = fp.getAdminEventStepsFacade().findEventIsOpenedAndHasSoldItem(event);
 		Assert.assertNotNull(eventComponent, "No Event with name: " + event.getEventName() + " found");
 		eventComponent.clickOnEvent();
-		dashboardFacade.givenUserIsOnManageOrdersPage();
+		fp.getEventDashboardFacade().givenUserIsOnManageOrdersPage();
 		return true;
 	}
 

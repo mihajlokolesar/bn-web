@@ -11,18 +11,18 @@ import pages.components.dialogs.announcement.AnnouncementSendToBuyersDialog;
 import test.facade.BaseFacadeSteps;
 
 public class AnnouncementFacade extends BaseFacadeSteps{
-	
+
 	private AnnouncementPage announcementPage;
 
 	public AnnouncementFacade(WebDriver driver) {
 		super(driver);
 		this.announcementPage = new AnnouncementPage(driver);
 	}
-	
+
 	public boolean isOnAnnouncementPage() {
 		return this.announcementPage.isAtPage();
 	}
-	
+
 	public void sendPreviewMail(AnnouncementMail mail) {
 		announcementPage.enterMailContent(mail);
 		announcementPage.clickOnSendPreviewButton();
@@ -33,7 +33,7 @@ public class AnnouncementFacade extends BaseFacadeSteps{
 		Assert.assertTrue(sentDialog.isPreviewTitleValid(), "Not on preview sent mail confirmation dialog");
 		sentDialog.clickOnCloseButton();
 	}
-	
+
 	public void sendEmailToBuyers(AnnouncementMail mail) {
 		announcementPage.enterMailContent(mail);
 		announcementPage.clickOnSendEmailButton();
@@ -43,15 +43,15 @@ public class AnnouncementFacade extends BaseFacadeSteps{
 		Assert.assertTrue(sentDialog.isAnnouncementTitleValid());
 		sentDialog.clickOnCloseButton();
 	}
-	
+
 	public boolean isAnnouncementTextValid() {
 		return announcementPage.isAnnouncementTextValid();
 	}
-	
+
 	@Override
 	protected void setData(String key, Object value) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -59,6 +59,6 @@ public class AnnouncementFacade extends BaseFacadeSteps{
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 
 }

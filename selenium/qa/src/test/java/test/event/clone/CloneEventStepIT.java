@@ -64,7 +64,7 @@ public class CloneEventStepIT extends BaseSteps {
 		clone.setEventName(NAME_PREFIX + clone.getEventName());
 		this.clonedEvent = clone;
 		EventSummaryComponent eventCard = fp.getAdminEventStepsFacade().findEventWithName(originalEvent);
-		eventCard.clickOnCloneEvent(clone);
+		eventCard.cloneEvent(clone);
 		fp.getAdminEventStepsFacade().thenUserIsAtEditPage();
 		fp.getAdminEventStepsFacade().whenUserChecksDataOnUpdatePage(clone, sa);
 		fp.getAdminEventStepsFacade().givenUserIsOnAdminEventsPage();
@@ -85,7 +85,7 @@ public class CloneEventStepIT extends BaseSteps {
 		fp.getOrganizationFacade().givenOrganizationExist(clonedEvent.getOrganization());
 		fp.getAdminEventStepsFacade().givenUserIsOnAdminEventsPage();
 		EventSummaryComponent eventCard = fp.getAdminEventStepsFacade().findEventWithName(this.clonedEvent);
-		fp.getEventOverviewFacade().setEventOverviewPage(eventCard.clickOnEventOverview());
+		fp.getEventOverviewFacade().setEventOverviewPage(eventCard.eventOverview());
 		fp.getEventOverviewFacade().thenUserIsAtOverviewPage();
 		fp.getEventOverviewFacade().whenUserComparesGivenFieldsAndEvent(compareFields, originalEvent, sa);
 		AdditionalOptionsField.SALE_START.setSaleStartExcluded(new SaleStart[]{});

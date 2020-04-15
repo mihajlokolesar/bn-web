@@ -144,10 +144,6 @@ public class CreateVenuePage extends BasePage {
 		}
 	}
 
-	public void enterTimezone(Venue venue) {
-		enterTimezone(venue.getTimezone());
-	}
-
 	public void enterTimezone(String timezone) {
 		GenericDropDown dropDown = new GenericDropDown(driver, timezoneDropDownActivate, timezoneDropDownContainer);
 		dropDown.selectElementFromDropDownHiddenInput(dropDownListXpath(timezone), timezone);
@@ -214,10 +210,6 @@ public class CreateVenuePage extends BasePage {
 		waitVisibilityAndBrowserCheckClick(updateButton);
 	}
 
-	private boolean isElementVisible(WebElement element) {
-		return isExplicitlyWaitVisible(3, element);
-	}
-
 	private class LinkedOrganization extends BaseComponent {
 
 		private WebElement container;
@@ -240,7 +232,6 @@ public class CreateVenuePage extends BasePage {
 				return false;
 			}
 		}
-
 
 		public void deleteOrganization() {
 			WebElement deleteElement = getAccessUtils().getChildElementFromParentLocatedBy(container, By.xpath(relativeDeleteXpath));

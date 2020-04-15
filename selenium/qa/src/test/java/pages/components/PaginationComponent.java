@@ -73,7 +73,11 @@ public class PaginationComponent extends BaseComponent {
 		} else if (NEXT.equals(direction)) {
 			by = By.xpath(relativeNextXpath);
 		}
-		return getAccessUtils().getChildElementFromParentLocatedBy(container, by);
+		if (getAccessUtils().isChildElementVisibleFromParentLocatedBy(container, by,4)) {
+			return getAccessUtils().getChildElementFromParentLocatedBy(container, by);
+		} else {
+			return null;
+		}
 	}
 
 
