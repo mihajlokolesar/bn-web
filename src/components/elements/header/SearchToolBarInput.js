@@ -5,46 +5,10 @@ import eventResults from "../../../stores/eventResults";
 import changeUrlParam from "../../../helpers/changeUrlParam";
 import notifications from "../../../stores/notifications";
 import servedImage from "../../../helpers/imagePathHelper";
-import { Hidden } from "@material-ui/core";
+import { CircularProgress, Hidden } from "@material-ui/core";
 import { debounce } from "lodash";
 import { isReactNative } from "../../../helpers/reactNative";
-
-const styles = theme => ({
-	root: {
-		display: "flex",
-		justifyContent: "space-between",
-		width: "100%"
-	},
-	noClose: {
-		display: "flex",
-		alignItems: "center"
-	},
-	input: {
-		border: "none",
-		fontSize: 19,
-		color: "#9DA3B4",
-		outline: "none"
-	},
-	icon: {
-		marginRight: -8,
-		height: 61,
-		width: 61,
-		marginLeft: -14,
-		[theme.breakpoints.down("sm")]: {
-			marginLeft: -18
-		}
-	},
-	closeIcon: {
-		marginRight: 8,
-		marginLeft: -24
-	},
-	closeIconWebview: {
-		padding: 15
-	},
-	searchIconWebview: {
-		marginLeft: -8
-	}
-});
+import { secondaryHex } from "../../../config/theme";
 
 class SearchToolBarInput extends Component {
 	constructor(props) {
@@ -55,7 +19,7 @@ class SearchToolBarInput extends Component {
 			isSearching: false
 		};
 		this.handleClose = this.handleClose.bind(this);
-		this.onEventSearch = debounce(this.onEventSearch.bind(this), 200);
+		this.onEventSearch = debounce(this.onEventSearch.bind(this), 750);
 		this.handleInputChange = this.handleInputChange.bind(this);
 	}
 
@@ -91,6 +55,7 @@ class SearchToolBarInput extends Component {
 			{ query },
 			() => {
 				this.componentUnmounted || this.setState({ isSearching: false });
+				this.input.focus();
 			},
 			message => {
 				this.setState({ isSearching: false });
@@ -141,19 +106,69 @@ class SearchToolBarInput extends Component {
 					/>
 				</div>
 				<Hidden smUp>
-					<img
-						alt="Clear search icon"
-						className={
-							isReactNative() ? classes.closeIconWebview : classes.closeIcon
-						}
-						src={servedImage("/icons/delete-gray.svg")}
-						onClick={this.handleClose}
-					/>
+					{isSearching ? (
+						<CircularProgress size={24} className={classes.searchSpinner}/>
+					) : (
+						<img
+							alt="Clear search icon"
+							className={
+								isReactNative() ? classes.closeIconWebview : classes.closeIcon
+							}
+							src={servedImage("/icons/delete-gray.svg")}
+							onClick={this.handleClose}
+						/>
+					)}
+				</Hidden>
+				<Hidden smDown>
+					{isSearching && (
+						<CircularProgress size={24} className={classes.searchSpinner}/>
+					)}
 				</Hidden>
 			</form>
 		);
 	}
 }
+
+const styles = theme => ({
+	root: {
+		display: "flex",
+		justifyContent: "space-between",
+		width: "100%",
+		alignItems: "center"
+	},
+	noClose: {
+		display: "flex",
+		alignItems: "center"
+	},
+	input: {
+		border: "none",
+		fontSize: 19,
+		color: "#9DA3B4",
+		outline: "none"
+	},
+	icon: {
+		marginRight: -8,
+		height: 61,
+		width: 61,
+		marginLeft: -14,
+		[theme.breakpoints.down("sm")]: {
+			marginLeft: -18
+		}
+	},
+	closeIcon: {
+		marginRight: 8,
+		marginLeft: -24
+	},
+	closeIconWebview: {
+		padding: 15
+	},
+	searchIconWebview: {
+		marginLeft: -8
+	},
+	searchSpinner: {
+		color: secondaryHex
+	}
+});
 
 SearchToolBarInput.propTypes = {
 	classes: PropTypes.object.isRequired,
