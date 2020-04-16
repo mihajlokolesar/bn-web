@@ -26,7 +26,6 @@ class Home extends Component {
 
 	componentDidMount() {
 		const { query, page } = this.state;
-
 		eventResults.refreshResults(
 			{ query, page },
 

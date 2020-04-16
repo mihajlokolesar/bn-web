@@ -2,7 +2,8 @@ import getAllUrlParams from "./getAllUrlParams";
 
 export const MESSAGE_TYPES = {
 	STRIPE: "stripe",
-	NAVIGATION: "navigation"
+	NAVIGATION: "navigation",
+	AUTH: "auth"
 };
 
 export const isReactNative = () => {

@@ -12,6 +12,7 @@ import Bigneon from "../../helpers/bigneon";
 import { validPhone } from "../../validators";
 import BigneonPerksDialog from "../pages/events/BigneonPerksDialog";
 import { fontFamily, fontFamilyBold, secondaryHex } from "../../config/theme";
+import getUrlParam from "../../helpers/getUrlParam";
 
 @observer
 class SMSLinkForm extends Component {
@@ -22,6 +23,7 @@ class SMSLinkForm extends Component {
 			phone: "+1",
 			isSubmitting: false,
 			isSent: false,
+			isTransferFlow: false,
 			perksDialogOpen: false,
 			showConfirm: false
 		};
@@ -30,6 +32,10 @@ class SMSLinkForm extends Component {
 	}
 
 	componentDidMount() {
+		const transfer_flow = getUrlParam("transfer_flow");
+		if (transfer_flow) {
+			this.setState({ isTransferFlow: true });
+		}
 		setTimeout(() => {
 			const { phone } = user;
 			if (phone) {
@@ -89,17 +95,26 @@ class SMSLinkForm extends Component {
 			phone,
 			perksDialogOpen,
 			isSent,
+			isTransferFlow,
 			showConfirm,
 			isSubmitting
 		} = this.state;
 		const { classes, autoFocus } = this.props;
 
 		const cardTitle = showConfirm
-			? "Enter Your Phone Number"
-			: "Please Confirm Your Number";
+			? isTransferFlow
+				? "Confirm Your Number"
+				: "Please Confirm Your Number"
+			: isTransferFlow
+				? "Get Your Tickets Now"
+				: "Enter Your Phone Number";
 		const explainerText = showConfirm
-			? "We want to make sure we send the text link to download the Big Neon app to the right person."
-			: "We’ll send you a link to download the Big Neon App to View your Tickets. Don’t want to download the app? Just bring your photo ID to the event instead.";
+			? isTransferFlow
+				? "Double check to make sure we're sending the text to the correct number."
+				: "We want to make sure we send the text link to download the Big Neon app to the right person."
+			: isTransferFlow
+				? `Enter your phone number and we'll send you a text with a link to your tickets or tap the "Get My Tickets Now" button in your confirmation email on your device.`
+				: "We’ll send you a link to download the Big Neon App to View your Tickets. Don’t want to download the app? Just bring your photo ID to the event instead.";
 
 		const displayPhone = phone.indexOf("+") === 0 ? phone : `+1 ${phone}`;
 		return (
@@ -175,11 +190,13 @@ class SMSLinkForm extends Component {
 							)}
 						</form>
 					</div>
-					<div onClick={this.togglePerksDialog}>
-						<Typography className={classes.pinkLink}>
-							Why Life is Better with the Big Neon App
-						</Typography>
-					</div>
+					{!isTransferFlow && (
+						<div onClick={this.togglePerksDialog}>
+							<Typography className={classes.pinkLink}>
+								Why Life is Better with the Big Neon App
+							</Typography>
+						</div>
+					)}
 				</div>
 			</div>
 		);

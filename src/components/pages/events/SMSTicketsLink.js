@@ -104,7 +104,10 @@ const styles = theme => ({
 		display: "flex",
 		flexDirection: "column",
 		justifyContent: "center",
-		alignItems: "center"
+		alignItems: "center",
+		[theme.breakpoints.down("sm")]: {
+			width: "90vw"
+		}
 	},
 	formHolder: {
 		display: "flex",

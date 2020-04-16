@@ -17,6 +17,7 @@ import removePhoneFormatting from "../../../../helpers/removePhoneFormatting";
 import StyledLink from "../../../elements/StyledLink";
 import analytics from "../../../../helpers/analytics";
 import TermsAndConditionsLinks from "../TermsAndConditionsLinks";
+import { isReactNative, sendReactNativeMessage, useNewMessaging, MESSAGE_TYPES } from "../../../../helpers/reactNative";
 
 const styles = theme => ({});
 
@@ -125,6 +126,14 @@ class SignupForm extends Component {
 				if (access_token) {
 					localStorage.setItem("access_token", access_token);
 					localStorage.setItem("refresh_token", refresh_token);
+
+					if (isReactNative() && useNewMessaging()) {
+						const loginData = {
+							refresh_token,
+							access_token
+						};
+						sendReactNativeMessage(loginData, MESSAGE_TYPES.AUTH);
+					}
 
 					//Pull user data with our new token
 					user.refreshUser(newUser => {

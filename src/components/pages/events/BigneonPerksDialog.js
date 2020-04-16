@@ -20,7 +20,13 @@ class BigneonPerksDialog extends React.Component {
 		const { onClose, open, classes } = this.props;
 
 		return (
-			<Dialog open={open} onClose={onClose}>
+			<Dialog
+				classes={{
+					paper: classes.paper
+				}}
+				open={open}
+				onClose={onClose}
+			>
 				<div className={classes.root}>
 					<div className={classes.modalContainer}>
 						<Typography className={classes.dialogTitle}>
@@ -78,9 +84,16 @@ BigneonPerksDialog.propTypes = {
 };
 
 const styles = theme => ({
+	paper: {
+		margin: 0
+	},
 	root: {
 		width: 380,
-		padding: 45
+		padding: 45,
+		[theme.breakpoints.down("md")]: {
+			maxWidth: "90vw",
+			padding: 30
+		}
 	},
 	dialogTitle: {
 		color: "#32383E",

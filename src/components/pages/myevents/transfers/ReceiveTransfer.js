@@ -222,10 +222,17 @@ class ReceiveTransfer extends Component {
 					...rest
 				} = response.data;
 
-				this.setState({
-					ticketCount: ticket_ids.length,
-					transferStatus: status
-				});
+				this.setState(
+					{
+						ticketCount: ticket_ids.length,
+						transferStatus: status
+					},
+					() => {
+						if (this.state.transferStatus === "Completed") {
+							this.props.history.push("/send-download-link?transfer_flow=true");
+						}
+					}
+				);
 
 				//Should just have one event ID, but if there are more we'll just display the first event's image
 				if (event_ids && event_ids.length > 0) {
@@ -275,10 +282,15 @@ class ReceiveTransfer extends Component {
 		Bigneon()
 			.tickets.transfer.receive(transferAuth)
 			.then(response => {
-				this.setState({
-					receiveSuccess: true,
-					isClaiming: false
-				});
+				this.setState(
+					{
+						receiveSuccess: true,
+						isClaiming: false
+					},
+					() => {
+						this.props.history.push("/send-download-link?transfer_flow=true");
+					}
+				);
 			})
 			.catch(error => {
 				console.error(error);
@@ -480,46 +492,7 @@ class ReceiveTransfer extends Component {
 			</Link>
 		);
 
-		if (transferStatus === "Completed") {
-			explainer = (
-				<div className={classes.acceptedMsgContainer}>
-					<img
-						className={classes.logo}
-						alt="Big Neon Logo"
-						src={servedImage("/images/bn-logo-white.png")}
-					/>
-					<Typography className={classes.backgroundText}>
-						Looks like this transfer has been accepted - just login to the Big
-						Neon app to get it!
-					</Typography>
-				</div>
-			);
-			buttonLink = (
-				<div>
-					<Hidden smUp>
-						<Button
-							size={"mediumLarge"}
-							variant={"whiteCTA"}
-							style={{ width: "100%", marginTop: 40 }}
-							onClick={this.handleViewTicketsClick}
-						>
-							View Tickets
-						</Button>
-					</Hidden>
-					<Hidden smDown>
-						<Link to={"/login"}>
-							<Button
-								size={"mediumLarge"}
-								variant={"whiteCTA"}
-								style={{ width: "100%", marginTop: 40 }}
-							>
-								View Tickets
-							</Button>
-						</Link>
-					</Hidden>
-				</div>
-			);
-		} else if (transferStatus === "Cancelled") {
+		if (transferStatus === "Cancelled") {
 			explainer = (
 				<div>
 					<Typography className={classes.backgroundText}>
@@ -590,65 +563,6 @@ class ReceiveTransfer extends Component {
 			openedAppLink,
 			transferStatus
 		} = this.state;
-
-		if (receiveSuccess) {
-			return (
-				<div>
-					<Hidden smDown>
-						<EventCardContainer
-							title={
-								"Transfer Accepted!" +
-								"\n" +
-								"Login to the app to view your tickets."
-							}
-							name={"Download the Big Neon App."}
-							imageUrl={eventImageUrl}
-							address={eventAddress}
-							displayDate={eventDisplayTime}
-						>
-							<Typography className={classes.additionalText}>
-								To receive a link to download the app enter your mobile number
-								below.
-							</Typography>
-							<SMSLinkForm/>
-						</EventCardContainer>
-						<br/>
-						<Typography className={classes.noAppText}>
-							No app? No problem. Just show your ID at the door.
-						</Typography>
-					</Hidden>
-					<Hidden smUp>
-						<EventCardContainer
-							title={
-								"Transfer Accepted!" +
-								"\n" +
-								"Login to the app to view your tickets."
-							}
-							name={eventName}
-							imageUrl={eventImageUrl}
-							address={eventAddress}
-							displayDate={eventDisplayTime}
-						>
-							<Button
-								variant={"secondary"}
-								style={{
-									width: "80%",
-									margin: "20px auto",
-									display: "flex"
-								}}
-								onClick={this.handleViewTicketsClick}
-							>
-								View tickets
-							</Button>
-						</EventCardContainer>
-						<br/>
-						<Typography className={classes.noAppText}>
-							No app? No problem. Just show your ID at the door.
-						</Typography>
-					</Hidden>
-				</div>
-			);
-		}
 
 		if (
 			transferStatus === "Completed" ||

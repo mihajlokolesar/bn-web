@@ -13,6 +13,7 @@ import PasswordResetDialog from "../PasswordResetDialog";
 import Bigneon from "../../../../helpers/bigneon";
 import Recaptcha from "../../../common/Recaptcha";
 import analytics from "../../../../helpers/analytics";
+import { isReactNative, sendReactNativeMessage, useNewMessaging, MESSAGE_TYPES } from "../../../../helpers/reactNative";
 
 const styles = () => ({});
 
@@ -118,6 +119,14 @@ class LoginForm extends Component {
 						}
 
 						analytics.identify({ ...newUser, method: "login" });
+
+						if (isReactNative() && useNewMessaging()) {
+							const loginData = {
+								refresh_token,
+								access_token
+							};
+							sendReactNativeMessage(loginData, MESSAGE_TYPES.AUTH);
+						}
 
 						//If we have a security token, send them to the accept invite page first
 						const security_token = localStorage.getItem("security_token");

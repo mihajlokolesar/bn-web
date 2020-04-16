@@ -22,10 +22,15 @@ export const bigneonFactory = (options = {}, clientParams = {}, mockData, forceR
 			...clientParams
 		};
 		bigneon = new Bigneon.Server(options, clientParams, mockData);
-		const access_token = localStorage.getItem("access_token");
+		bigneon.client.tokenRefreshing = false;
+		const access_token = localStorage.getItem("access_token") || "";
 		const refresh_token = localStorage.getItem("refresh_token") || null;
-		if (access_token) {
+		if (access_token || refresh_token) {
 			bigneon.client.setTokens({ access_token, refresh_token });
+			if (!bigneon.client.isAuthed()) {
+				bigneon.client.tokenRefreshing = true;
+			}
+
 		}
 		errorReporting.addBreadcrumb("Bigneon client instantiated.");
 	}
@@ -38,6 +43,7 @@ const onTokenRefresh = async (server = {}, client = {}, data = {}) => {
 	localStorage.setItem("access_token", access_token);
 	localStorage.setItem("refresh_token", refresh_token);
 	client.setTokens(data.data);
+	client.tokenRefreshing = false;
 	return Promise.resolve(data);
 };
 

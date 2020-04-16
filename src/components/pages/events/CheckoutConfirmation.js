@@ -165,7 +165,6 @@ class CheckoutConfirmation extends Component {
 				});
 			});
 			const order_id = getUrlParam("order_id");
-
 			this.checkForAbandonedCart(order_id);
 		} else {
 			//TODO return 404
@@ -177,8 +176,16 @@ class CheckoutConfirmation extends Component {
 			return;
 		}
 
-		Bigneon()
-			.cart.duplicate({
+		const bigneon = Bigneon();
+		if (bigneon.client.tokenRefreshing) {
+			setTimeout(() => {
+				this.checkForAbandonedCart(id);
+			}, 250);
+			return;
+		}
+
+		bigneon.cart
+			.duplicate({
 				id
 			})
 			.then(response => {
@@ -224,7 +231,9 @@ class CheckoutConfirmation extends Component {
 				tickets.refreshTickets();
 				user.clearCampaignTrackingData();
 
-				if (id) {
+				if (isReactNative()) {
+					history.push(`/?purchase_successful=true`);
+				} else if (id) {
 					//If they're checking out for a specific event then we have a custom success page for them
 					history.push(
 						`/tickets/${slug}/tickets/success${window.location.search ||
@@ -305,7 +314,7 @@ class CheckoutConfirmation extends Component {
 				tickets.refreshTickets();
 				user.clearCampaignTrackingData();
 
-				if(isReactNative()){
+				if (isReactNative()) {
 					history.push(`/?purchase_successful=true`);
 				} else if (id) {
 					//If they're checking out for a specific event then we have a custom success page for them
