@@ -8,7 +8,6 @@ public class DriverFactory {
 
         DriverManager manager = null;
         try {
-
      		String browser = System.getProperty("browser");
             BrowsersEnum browserEnum = BrowsersEnum.getEnumForCode(browser);
 

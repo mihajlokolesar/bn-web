@@ -62,14 +62,29 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		return selectedEvent;
 	}
 
-	public EventSummaryComponent givenAnyEventWithPredicateExists(Event event,
-																  Predicate<EventSummaryComponent> predicate) throws URISyntaxException {
-		EventSummaryComponent selectedEvent = adminEvents.findEvent(predicate);
-		if (selectedEvent == null) {
-			createNewRandomEvent(event);
-			selectedEvent = adminEvents.findEvent(predicate);
+	public void cancelEventsWithName(Event event) {
+		givenUserIsOnAdminEventsPage();
+		boolean eventExists = true;
+		while (eventExists) {
+			EventSummaryComponent eventCard = adminEvents.findEvent(event.getEventName(), card -> !card.isEventCanceled());
+			if(eventCard == null){
+				eventExists = false;
+			} else {
+				eventCard.cancelEvent();
+			}
 		}
-		return selectedEvent;
+	}
+
+	public void deleteEventsWithName(Event event) {
+		boolean eventExists = true;
+		while (eventExists) {
+			EventSummaryComponent eventCard = adminEvents.findEvent(event.getEventName(), card -> (card.getSoldToAmount()==0));
+			if(eventCard == null){
+				eventExists = false;
+			} else {
+				eventCard.deleteEvent(event);
+			}
+		}
 	}
 
 	public EventSummaryComponent givenEventWithNameAndPredicateExists(Event event,
@@ -85,10 +100,6 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 			selectedEvent = adminEvents.findEvent(event.getEventName(), predicate);
 		}
 		return selectedEvent;
-	}
-
-	private Event createNewRandomEvent(Event event) throws URISyntaxException {
-		return createNewEvent(event, true);
 	}
 
 	private Event createNewEvent(Event event, boolean randomizeName) throws URISyntaxException {
@@ -112,7 +123,6 @@ public class AdminEventStepsFacade extends BaseFacadeSteps {
 		givenUserIsOnAdminEventsPage();
 		EventSummaryComponent eventSummary = findEventWithNameAndPredicate(event, comp -> !comp.isEventCanceled());
 		eventSummary.clickOnEvent();
-
 	}
 
 	public boolean whenUserDeletesEvent(Event event) {

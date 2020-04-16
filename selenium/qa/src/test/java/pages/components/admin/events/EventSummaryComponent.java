@@ -84,7 +84,7 @@ public class EventSummaryComponent extends BaseComponent {
 		}
 	}
 
-	private int getSoldToAmount() {
+	public int getSoldToAmount() {
 		WebElement amountElement = SeleniumUtils.getChildElementFromParentLocatedBy(event, By.xpath(relativeSoldToDivXPath), driver);
 		String elementAmount = amountElement.getText();
 		int intElAmount = Integer.parseInt(elementAmount);
@@ -104,7 +104,7 @@ public class EventSummaryComponent extends BaseComponent {
 		findActionAndClickInDropDown(dropDownXpathElement(DELETE_EVENT_DD_ACTION));
 		waitForTime(2000);
 		DeleteEventDialog deleteDialog = new DeleteEventDialog(driver);
-		deleteDialog.clickOnDeleteButton(event.getEventName());
+		deleteDialog.clickOnDeleteButton(getEventName());
 		return deleteDialog;
 	}
 

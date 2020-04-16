@@ -93,6 +93,20 @@ public class EventOverviewStepsIT extends BaseSteps {
 		eventSummaryComponent.deleteEvent(event);
 	}
 
+	@Test(dataProvider = "event_overview_data_provider",priority = 109)
+	private void cleanUp(Event event, User user){
+		maximizeWindow();
+		FacadeProvider fp = new FacadeProvider(driver);
+		if (this.fieldEvent == null) {
+			this.fieldEvent = event;
+		}
+		event.setEventName(EVENT_NAME);
+		fp.getLoginFacade().givenAdminUserIsLogedIn(user);
+		fp.getOrganizationFacade().givenOrganizationExist(event.getOrganization());
+		fp.getAdminEventStepsFacade().deleteEventsWithName(event);
+		fp.getAdminEventStepsFacade().cancelEventsWithName(event);
+	}
+
 	private String findEventAndGoToOverviewPage(FacadeProvider fp, Event event, Predicate<EventSummaryComponent> predicate) {
 		fp.getAdminEventStepsFacade().givenUserIsOnAdminEventsPage();
 		EventSummaryComponent eventCard;
